@@ -78,8 +78,6 @@ def build_scheduler(
         lambda: OpenDClient(cfg.opend.host, cfg.opend.port)
     )
 
-    sentiment_history: dict[str, float] = {}
-
     def with_client(
         job_fn: Callable[..., Any], *, kind: str | None = None
     ) -> Callable[[], Any]:
@@ -102,11 +100,11 @@ def build_scheduler(
         return runner
 
     def news_runner() -> Any:
+        # sentiment_history=None → use DB-backed sentiment_snapshots table.
         return run_news_pulse(
             factory=factory,
             cfg=cfg,
             watchlist=watchlist,
-            sentiment_history=sentiment_history,
         )
 
     news_runner.__name__ = "run_news_pulse"

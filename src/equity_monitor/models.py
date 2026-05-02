@@ -146,3 +146,26 @@ class Position(Base):
     updated_at: Mapped[datetime] = mapped_column(
         DateTime, nullable=False, server_default=func.now(), onupdate=func.now()
     )
+
+
+class SentimentSnapshotRow(Base):
+    """Persisted history of comment-sentiment temperature observations.
+
+    Used by `run_news_pulse` to load the previous baseline on cold start so
+    a runner restart doesn't reset baseline → spurious "first run = no push".
+    Insert one row per (symbol, observation ts).
+    """
+
+    __tablename__ = "sentiment_snapshots"
+    __table_args__ = (
+        UniqueConstraint("symbol_id", "ts", name="uq_sent_symbol_ts"),
+        Index("idx_sent_symbol_ts", "symbol_id", "ts"),
+    )
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    symbol_id: Mapped[int] = mapped_column(ForeignKey("symbols.id"), nullable=False)
+    ts: Mapped[datetime] = mapped_column(DateTime, nullable=False)
+    temperature: Mapped[float] = mapped_column(Float, nullable=False)
+    bullish_pct: Mapped[float | None] = mapped_column(Float, nullable=True)
+    bearish_pct: Mapped[float | None] = mapped_column(Float, nullable=True)
+    sample_size: Mapped[int | None] = mapped_column(Integer, nullable=True)
