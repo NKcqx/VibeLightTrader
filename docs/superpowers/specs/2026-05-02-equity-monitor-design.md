@@ -576,13 +576,27 @@ OpenD 安装：本 plan 的 Task 1 调用 `/install-futu-opend` 命令完成。
 
 ## 19. 验收清单（Phase 1 Done 标准）
 
+### Code-side / Pre-deploy (已通过)
+
+- [x] 全部 22 任务 + 1 增强（sentiment 持久化）完成，commit 历史干净
+- [x] 所有 unit test 绿（**126/126**，含 15 integration）
+- [x] CLI `db init / watchlist sync / watchlist list / db status` 实跑 OK
+- [x] `scheduler.runner` dry-run（FakeFutuClient 注入）成功构建 4 个 cron job 并打印 next-run
+- [x] README 包含从 0 到长驻的完整搭建步骤（OpenD → conda → DB → backfill → run）
+- [x] 端到端冒烟脚本 `scripts/smoke_e2e.py` 可用
+- [x] 自实现 RSI/MACD/Bollinger 通过对照 known_ohlc.csv 的数值断言
+- [x] Lark Card Jinja 模板用 `| tojson` 过滤，确保 newline 等 control char 不破坏 JSON
+- [x] `tenacity` retry 配 `reraise=True`，原始异常不被 `RetryError` 包裹
+- [x] OpenD 重连：`OpenDClient.snapshot/get_kline` 装饰 `@retry(stop=10次, wait=指数)`，连接断后自动重建 `OpenQuoteContext`
+- [x] sentiment baseline 持久化到 `sentiment_snapshots`，runner 重启不丢
+
+### Live-deploy (用户侧 24h 观察后勾选)
+
 - [ ] `equity-monitor run` 长驻 24h 不崩
 - [ ] watchlist 配置 ≥ 5 只标的，每只标的 24h 内至少落 ≥ 4 条 quotes、≥ 4 条 indicators
 - [ ] 飞书每天能收到至少 1 条 morning_brief + 1 条 closing_brief
 - [ ] 至少观察到一次 signal alert 卡片正确推送（人为构造或自然触发）
-- [ ] 所有 unit test 绿
-- [ ] README 包含从 0 到长驻的完整搭建步骤
-- [ ] OpenD 重启后系统能自动重连恢复
+- [ ] OpenD 重启后系统能自动重连恢复（拉一次 OpenD 看 30 分钟内能否自愈）
 
 ---
 
