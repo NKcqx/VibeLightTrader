@@ -19,7 +19,7 @@ from equity_monitor.models import Indicator
 from equity_monitor.models import Signal as SignalRow
 from equity_monitor.models import Symbol
 from equity_monitor.reports.lark import send_card
-from equity_monitor.reports.render import render_signal_alert
+from equity_monitor.reports.render import render_daily_brief, render_signal_alert
 from equity_monitor.signals.base import Signal
 from equity_monitor.signals.compose import deduplicate, split_by_severity
 from equity_monitor.signals.tech import detect_tech_signals
@@ -228,3 +228,101 @@ def run_intraday_check(
                 log.error("intraday_check.push_failed", code=code, error=str(e))
 
     return {"quotes": inserted_quotes, "signals": len(deduped), "pushed": pushed}
+
+
+def _aggregate_signal_count(session, sym_id: int, since: datetime) -> int:
+    return (
+        session.query(SignalRow)
+        .filter(SignalRow.symbol_id == sym_id, SignalRow.ts >= since)
+        .count()
+    )
+
+
+def run_brief(
+    *,
+    kind: str,
+    client: FutuClient,
+    factory: sessionmaker,
+    cfg: AppConfig,
+    watchlist: WatchlistConfig,
+    now_utc: datetime | None = None,
+    send_card_fn: SendCardFn = _default_sender,
+) -> dict[str, int]:
+    """Render and push a daily brief Lark card.
+
+    `kind` is the human-readable label ("开盘后1h盘点" / "收盘盘点").
+    Aggregates today's signal count per symbol from DB.
+    """
+    now_utc = now_utc or datetime.now(tz=timezone.utc)
+    codes = [s.code for s in watchlist.symbols]
+
+    snaps = {s.code: s for s in client.snapshot(codes)}
+
+    rows: list[dict[str, Any]] = []
+    summary_lines: list[str] = []
+    today_start = datetime.combine(now_utc.date(), datetime.min.time())
+
+    with session_scope(factory) as session:
+        for sc in watchlist.symbols:
+            snap = snaps.get(sc.code)
+            if snap is None:
+                continue
+            change_pct = (
+                (snap.last_price - snap.open_price) / snap.open_price
+                if snap.open_price
+                else 0.0
+            )
+            sym = (
+                session.query(Symbol)
+                .filter(Symbol.code == sc.code)
+                .one_or_none()
+            )
+            sig_count = (
+                _aggregate_signal_count(session, sym.id, today_start) if sym else 0
+            )
+            rows.append(
+                {
+                    "code": sc.code,
+                    "close": snap.last_price,
+                    "change_pct": change_pct,
+                    "signal_count": sig_count,
+                }
+            )
+
+    if rows:
+        gainers = sorted(rows, key=lambda r: r["change_pct"], reverse=True)[:3]
+        losers = sorted(rows, key=lambda r: r["change_pct"])[:3]
+        summary_lines.append(
+            "Top 涨: "
+            + ", ".join(f"{r['code']} {r['change_pct']:+.2%}" for r in gainers)
+        )
+        summary_lines.append(
+            "Top 跌: "
+            + ", ".join(f"{r['code']} {r['change_pct']:+.2%}" for r in losers)
+        )
+
+    card = render_daily_brief(
+        kind=kind,
+        date_str=now_utc.strftime("%Y-%m-%d"),
+        rows=rows,
+        summary_lines=summary_lines,
+    )
+    pushed = 0
+    try:
+        msg_id = send_card_fn(
+            card, cfg.lark.receiver.open_id, cfg.lark.receiver.type
+        )
+        pushed = 1
+        log.info("brief.push", kind=kind, msg_id=msg_id)
+    except Exception as e:
+        log.error("brief.push_failed", kind=kind, error=str(e))
+
+    return {"rows": len(rows), "pushed": pushed}
+
+
+def run_morning_brief(**kw: Any) -> dict[str, int]:
+    return run_brief(kind="开盘后1h盘点", **kw)
+
+
+def run_closing_brief(**kw: Any) -> dict[str, int]:
+    return run_brief(kind="收盘盘点", **kw)

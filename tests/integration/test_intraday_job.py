@@ -6,54 +6,13 @@ from typing import Any
 import pytest
 from sqlalchemy.orm import sessionmaker
 
-from equity_monitor.config import (
-    AppConfig,
-    DatabaseConfig,
-    JobCron,
-    LarkConfig,
-    LarkReceiver,
-    LoggingConfig,
-    OpenDConfig,
-    SchedulerConfig,
-    SignalsConfig,
-    SymbolConfig,
-    WatchlistConfig,
-)
+from equity_monitor.config import AppConfig, WatchlistConfig
 from equity_monitor.db import session_scope
 from equity_monitor.futu_client import Candle, FakeFutuClient, Snapshot
 from equity_monitor.models import Indicator
 from equity_monitor.models import Signal as SignalRow
 from equity_monitor.models import Symbol
 from equity_monitor.scheduler.jobs import run_intraday_check
-
-
-@pytest.fixture
-def app_cfg() -> AppConfig:
-    return AppConfig(
-        opend=OpenDConfig(),
-        database=DatabaseConfig(path=":memory:"),
-        scheduler=SchedulerConfig(
-            timezone="America/New_York",
-            jobs={"intraday_check": JobCron(cron="30 9-15 * * mon-fri")},
-        ),
-        lark=LarkConfig(receiver=LarkReceiver(type="chat", open_id="ou_test")),
-        signals=SignalsConfig(),
-        logging=LoggingConfig(),
-    )
-
-
-@pytest.fixture
-def watchlist() -> WatchlistConfig:
-    return WatchlistConfig(
-        symbols=[
-            SymbolConfig(
-                code="US.AAPL",
-                name="Apple",
-                upper_threshold=200.0,
-                lower_threshold=165.0,
-            )
-        ]
-    )
 
 
 def _make_candles(start_ts: datetime, n: int) -> list[Candle]:
