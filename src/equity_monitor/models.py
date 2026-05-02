@@ -97,6 +97,14 @@ class Signal(Base):
     delivered: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
     delivery_ts: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
     delivery_msg_id: Mapped[str | None] = mapped_column(String, nullable=True)
+    suggested_action: Mapped[str | None] = mapped_column(String, nullable=True)
+    suggested_qty: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    status: Mapped[str] = mapped_column(
+        String, nullable=False, default="pending", server_default="pending"
+    )
+    executed_trade_id: Mapped[int | None] = mapped_column(
+        ForeignKey("trades.id"), nullable=True
+    )
 
 
 class NewsDigest(Base):
