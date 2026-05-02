@@ -15,11 +15,17 @@ from equity_monitor.data.kline import fetch_kline_df
 from equity_monitor.data.quotes import sync_snapshots
 from equity_monitor.db import session_scope
 from equity_monitor.futu_client import FutuClient
-from equity_monitor.models import Indicator
+from equity_monitor.models import Indicator, NewsDigest
 from equity_monitor.models import Signal as SignalRow
 from equity_monitor.models import Symbol
+from equity_monitor.data.news import NewsItem, fetch_news_digest
+from equity_monitor.data.sentiment import SentimentSnapshot, fetch_sentiment
 from equity_monitor.reports.lark import send_card
-from equity_monitor.reports.render import render_daily_brief, render_signal_alert
+from equity_monitor.reports.render import (
+    render_daily_brief,
+    render_news_pulse,
+    render_signal_alert,
+)
 from equity_monitor.signals.base import Signal
 from equity_monitor.signals.compose import deduplicate, split_by_severity
 from equity_monitor.signals.tech import detect_tech_signals
@@ -326,3 +332,107 @@ def run_morning_brief(**kw: Any) -> dict[str, int]:
 
 def run_closing_brief(**kw: Any) -> dict[str, int]:
     return run_brief(kind="收盘盘点", **kw)
+
+
+def _persist_news(
+    session: Any, sym_id: int, items: list[NewsItem]
+) -> int:
+    n = 0
+    for it in items:
+        stmt = (
+            sqlite_insert(NewsDigest)
+            .values(
+                symbol_id=sym_id,
+                ts=it.ts,
+                source=it.source,
+                title=it.title,
+                url=it.url,
+                summary=it.summary,
+                sentiment_score=None,
+            )
+            .on_conflict_do_nothing(index_elements=["symbol_id", "url"])
+        )
+        result = session.execute(stmt)
+        if result.rowcount and result.rowcount > 0:
+            n += 1
+    return n
+
+
+FetchNewsFn = Callable[[list[str]], list[NewsItem]]
+FetchSentFn = Callable[[list[str]], list[SentimentSnapshot]]
+
+
+def run_news_pulse(
+    *,
+    factory: sessionmaker,
+    cfg: AppConfig,
+    watchlist: WatchlistConfig,
+    fetch_news: FetchNewsFn = fetch_news_digest,
+    fetch_sent: FetchSentFn = fetch_sentiment,
+    sentiment_history: dict[str, float] | None = None,
+    send_card_fn: SendCardFn = _default_sender,
+) -> dict[str, int]:
+    """Pull news + sentiment; persist news; push pulse card on burst events.
+
+    `sentiment_history` is a mutable dict mapping code → previous temperature.
+    Pass the same dict across invocations to detect burst (delta >= threshold).
+    On first observation of a code, no card is pushed (no baseline).
+    """
+    sentiment_history = sentiment_history if sentiment_history is not None else {}
+    codes = [s.code for s in watchlist.symbols]
+
+    news_items = fetch_news(codes)
+    sent_now = {s.code: s for s in fetch_sent(codes)}
+
+    inserted_news = 0
+    with session_scope(factory) as session:
+        sym_by_code = {
+            s.code: s
+            for s in session.query(Symbol).filter(Symbol.code.in_(codes))
+        }
+        by_code: dict[str, list[NewsItem]] = {}
+        for it in news_items:
+            by_code.setdefault(it.code, []).append(it)
+        for code, items in by_code.items():
+            sym = sym_by_code.get(code)
+            if sym is None:
+                continue
+            inserted_news += _persist_news(session, sym.id, items)
+
+    pushed = 0
+    for code, snap in sent_now.items():
+        prev = sentiment_history.get(code)
+        if prev is None:
+            sentiment_history[code] = snap.temperature
+            continue
+        delta = snap.temperature - prev
+        direction: str | None = None
+        if delta <= -cfg.signals.news_burst_drop:
+            direction = "negative"
+        elif delta >= cfg.signals.news_burst_rise:
+            direction = "positive"
+        if direction:
+            titles = [it.title for it in news_items if it.code == code][:3]
+            card = render_news_pulse(
+                code=code,
+                direction=direction,
+                temp_now=snap.temperature,
+                temp_prev=prev,
+                news_titles=titles,
+            )
+            try:
+                msg_id = send_card_fn(
+                    card, cfg.lark.receiver.open_id, cfg.lark.receiver.type
+                )
+                pushed += 1
+                log.info(
+                    "news_pulse.push",
+                    code=code,
+                    dir=direction,
+                    msg_id=msg_id,
+                )
+            except Exception as e:
+                log.error("news_pulse.push_failed", code=code, error=str(e))
+        sentiment_history[code] = snap.temperature
+
+    return {"news_inserted": inserted_news, "pushed": pushed}
