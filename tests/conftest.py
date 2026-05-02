@@ -40,13 +40,18 @@ def fake_futu() -> FakeFutuClient:
 
 
 @pytest.fixture
-def app_cfg() -> AppConfig:
+def app_cfg(tmp_path) -> AppConfig:
     return AppConfig(
         opend=OpenDConfig(),
-        database=DatabaseConfig(path=":memory:"),
+        database=DatabaseConfig(path=str(tmp_path / "test.db")),
         scheduler=SchedulerConfig(
             timezone="America/New_York",
-            jobs={"intraday_check": JobCron(cron="30 9-15 * * mon-fri")},
+            jobs={
+                "intraday_check": JobCron(cron="30 9-15 * * mon-fri"),
+                "morning_brief": JobCron(cron="30 10 * * mon-fri"),
+                "closing_brief": JobCron(cron="30 16 * * mon-fri"),
+                "news_pulse": JobCron(cron="*/30 9-15 * * mon-fri"),
+            },
         ),
         lark=LarkConfig(receiver=LarkReceiver(type="chat", open_id="ou_test")),
         signals=SignalsConfig(),
