@@ -14,6 +14,7 @@ import json
 import subprocess
 import time
 from collections.abc import Callable, Iterable, Iterator
+from datetime import datetime, timedelta, timezone
 from typing import Any
 
 import structlog
@@ -108,6 +109,7 @@ def dispatch_event(
         return None
     cmd = parse(text)
     if cmd is None:
+        log.debug("listener.unrecognized", text=text[:80])
         return None  # silent — user's casual chat shouldn't trigger replies
     try:
         reply = apply(cmd, factory)
@@ -119,16 +121,28 @@ def dispatch_event(
     except Exception:
         log.exception("listener.reply_failed")
         return None
+    log.info(
+        "listener.dispatched",
+        cmd=type(cmd).__name__,
+        text=text[:60],
+        sender=sender_id,
+    )
     return reply
 
 
-def stream_lark_events(
+def stream_lark_events_ws(
     *,
     cli_path: str = "lark-cli",
     identity: str = "bot",
     event_types: str = "im.message.receive_v1",
 ) -> Iterator[dict[str, Any]]:
-    """Spawn lark-cli event subscribe and yield parsed JSON events forever.
+    """WebSocket-based event stream (lark-cli event +subscribe).
+
+    NOTE: requires the Lark app to have `im.message.receive_v1` event
+    subscription enabled in the Open Platform console. Many ByteDance
+    internal lark-cli profiles do NOT have this turned on, in which case
+    the WebSocket connects fine but receives 0 events. Use the polling
+    backend (`stream_lark_events_polling`) when that's the case.
 
     Auto-restarts on subprocess crash with exponential backoff.
     """
@@ -144,7 +158,7 @@ def stream_lark_events(
             event_types,
             "--quiet",
         ]
-        log.info("listener.subprocess_start", cmd=cmd)
+        log.info("listener.ws_subprocess_start", cmd=cmd)
         proc = subprocess.Popen(
             cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True
         )
@@ -159,7 +173,7 @@ def stream_lark_events(
                 except json.JSONDecodeError as e:
                     log.warning("listener.bad_ndjson", error=str(e), line=line[:200])
             rc = proc.wait()
-            log.warning("listener.subprocess_exit", returncode=rc)
+            log.warning("listener.ws_subprocess_exit", returncode=rc)
         finally:
             with _safe():
                 proc.kill()
@@ -176,27 +190,199 @@ class _safe:
         return True  # swallow
 
 
+def _resolve_p2p_chat_id(
+    cli_path: str, identity: str, recipient_open_id: str
+) -> str:
+    """Resolve (or create) the bot⇆user p2p chat by sending a benign init ping.
+
+    Lark p2p chats are implicit: no "create chat" API needed; sending a
+    message returns the chat_id which is stable thereafter.
+    """
+    cmd = [
+        cli_path, "im", "+messages-send",
+        "--as", identity,
+        "--user-id", recipient_open_id,
+        "--text", "🟢 listener online",
+    ]
+    result = subprocess.run(
+        cmd, capture_output=True, text=True, timeout=15, check=False
+    )
+    if result.returncode != 0:
+        raise RuntimeError(
+            f"failed to resolve p2p chat_id: {result.stderr.strip()}"
+        )
+    j = json.loads(result.stdout)
+    chat_id = j.get("data", {}).get("chat_id")
+    if not chat_id:
+        raise RuntimeError(f"no chat_id in send response: {result.stdout[:200]}")
+    return chat_id
+
+
+def stream_lark_events_polling(
+    *,
+    cli_path: str,
+    identity: str,
+    chat_id: str,
+    bot_app_id: str,
+    poll_interval: int = 10,
+    initial_lookback_seconds: int = 30,
+) -> Iterator[dict[str, Any]]:
+    """Polling-based event stream — call lark-cli im +chat-messages-list every N s.
+
+    Yields synthetic im.message.receive_v1 events for each NEW text message
+    sent by anyone other than the bot itself. Uses message_id dedupe.
+
+    This works without `im.message.receive_v1` event subscription enabled —
+    only requires `im:message:readonly` (or `im:message`), which is in the
+    default lark-cli scope set.
+    """
+    seen_ids: set[str] = set()
+    # Seed `seen_ids` with current chat tail to avoid re-dispatching old messages
+    # at startup. Look back `initial_lookback_seconds` to be safe.
+    start_dt = datetime.now(timezone.utc) - timedelta(
+        seconds=initial_lookback_seconds
+    )
+
+    while True:
+        try:
+            messages = _fetch_messages(
+                cli_path=cli_path,
+                identity=identity,
+                chat_id=chat_id,
+                start_iso=start_dt.strftime("%Y-%m-%dT%H:%M:%SZ"),
+            )
+        except Exception:
+            log.exception("listener.poll_fetch_failed")
+            time.sleep(poll_interval)
+            continue
+
+        new_msgs: list[dict[str, Any]] = []
+        for m in messages:
+            mid = m.get("message_id")
+            if not mid or mid in seen_ids:
+                continue
+            seen_ids.add(mid)
+            sender = m.get("sender", {})
+            # Skip bot's own messages (sender.id == bot_app_id, sender_type=app)
+            if sender.get("id") == bot_app_id:
+                continue
+            if m.get("msg_type") != "text":
+                continue
+            new_msgs.append(m)
+
+        # Sort ascending so the earliest message is dispatched first
+        new_msgs.sort(key=lambda m: m.get("create_time", ""))
+        for m in new_msgs:
+            yield _msg_to_event(m, chat_id)
+
+        # On next iteration, only fetch since 5s before the latest seen msg
+        # to keep request small without losing late-arriving messages.
+        start_dt = datetime.now(timezone.utc) - timedelta(seconds=5)
+        time.sleep(poll_interval)
+
+
+def _fetch_messages(
+    *, cli_path: str, identity: str, chat_id: str, start_iso: str
+) -> list[dict[str, Any]]:
+    cmd = [
+        cli_path, "im", "+chat-messages-list",
+        "--as", identity,
+        "--chat-id", chat_id,
+        "--start", start_iso,
+        "--sort", "desc",
+        "--page-size", "20",
+    ]
+    result = subprocess.run(
+        cmd, capture_output=True, text=True, timeout=20, check=False
+    )
+    if result.returncode != 0:
+        raise RuntimeError(f"lark-cli list failed: {result.stderr.strip()[:300]}")
+    payload = json.loads(result.stdout)
+    if not payload.get("ok", False):
+        raise RuntimeError(f"lark-cli list not ok: {payload}")
+    return payload.get("data", {}).get("messages", []) or []
+
+
+def _msg_to_event(msg: dict[str, Any], chat_id: str) -> dict[str, Any]:
+    """Wrap a /im/v1/messages row into an im.message.receive_v1-shaped event.
+
+    Note `content` for text msgs from this API is the bare text, while the
+    receive_v1 webhook delivers it as JSON-encoded `{"text":"..."}`. We
+    re-wrap to match `dispatch_event`/`_extract_text`'s expectations.
+    """
+    text_body = msg.get("content", "")
+    return {
+        "event_type": "im.message.receive_v1",
+        "event": {
+            "sender": {
+                "sender_id": {
+                    "open_id": msg.get("sender", {}).get("id", ""),
+                },
+            },
+            "message": {
+                "message_id": msg.get("message_id", ""),
+                "chat_id": chat_id,
+                "chat_type": "p2p",
+                "message_type": msg.get("msg_type", "text"),
+                "content": json.dumps({"text": text_body}),
+            },
+        },
+    }
+
+
 def run_listener(
     *,
     cfg: AppConfig,
     factory: sessionmaker,
     events: Iterable[dict[str, Any]] | None = None,
+    backend: str = "polling",
+    poll_interval: int = 10,
 ) -> None:
     """Long-running entry point. Pair with `equity-monitor run`.
 
-    `events`: optional iterable to inject events for testing; defaults to live
-    `stream_lark_events()`. Iterating events forever blocks the caller.
+    Args:
+        backend: "polling" (default; works without event-subscription scope)
+                 or "websocket" (requires app to have im.message.receive_v1
+                 enabled in Open Platform console).
+        poll_interval: seconds between API polls when backend == "polling".
+        events: optional iterable injectable for tests.
     """
     allowed = cfg.lark.receiver.open_id
     sender = make_text_sender(
         cli_path=cfg.lark.cli_path, identity=cfg.lark.identity
     )
 
-    src = events if events is not None else stream_lark_events(
-        cli_path=cfg.lark.cli_path,
-        identity=cfg.lark.identity,
-    )
-    log.info("listener.start", allowed_open_id=allowed)
+    if events is not None:
+        src: Iterable[dict[str, Any]] = events
+    elif backend == "websocket":
+        src = stream_lark_events_ws(
+            cli_path=cfg.lark.cli_path,
+            identity=cfg.lark.identity,
+        )
+    elif backend == "polling":
+        if not allowed:
+            raise RuntimeError(
+                "polling backend needs lark.receiver.open_id in settings.yaml"
+            )
+        bot_app_id = _read_bot_app_id(cfg.lark.cli_path)
+        chat_id = _resolve_p2p_chat_id(cfg.lark.cli_path, cfg.lark.identity, allowed)
+        log.info(
+            "listener.polling_resolved",
+            chat_id=chat_id,
+            bot_app_id=bot_app_id,
+            poll_interval=poll_interval,
+        )
+        src = stream_lark_events_polling(
+            cli_path=cfg.lark.cli_path,
+            identity=cfg.lark.identity,
+            chat_id=chat_id,
+            bot_app_id=bot_app_id,
+            poll_interval=poll_interval,
+        )
+    else:
+        raise ValueError(f"unknown backend: {backend!r}")
+
+    log.info("listener.start", backend=backend, allowed_open_id=allowed)
     for ev in src:
         try:
             dispatch_event(
@@ -204,3 +390,20 @@ def run_listener(
             )
         except Exception:
             log.exception("listener.dispatch_crash")
+
+
+def _read_bot_app_id(cli_path: str) -> str:
+    """Get current bot app_id via `lark-cli auth scopes --format json`."""
+    result = subprocess.run(
+        [cli_path, "auth", "scopes", "--format", "json"],
+        capture_output=True, text=True, timeout=10, check=False,
+    )
+    try:
+        j = json.loads(result.stdout)
+    except json.JSONDecodeError:
+        # Fallback: pretty format writes "App ID: cli_xxx" to stderr.
+        import re
+
+        m = re.search(r"App\s*ID:\s*(\S+)", result.stderr)
+        return m.group(1) if m else ""
+    return str(j.get("appId", "") or j.get("app_id", ""))

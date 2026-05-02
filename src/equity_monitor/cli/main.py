@@ -73,20 +73,41 @@ def run(ctx: click.Context) -> None:
 
 
 @cli.command()
+@click.option(
+    "--backend",
+    type=click.Choice(["polling", "websocket"]),
+    default="polling",
+    show_default=True,
+    help=(
+        "polling = poll p2p chat history every --poll-interval s; works with "
+        "default lark-cli scopes. websocket = lark-cli event +subscribe; "
+        "requires the app to have im.message.receive_v1 enabled in the Open "
+        "Platform console."
+    ),
+)
+@click.option(
+    "--poll-interval",
+    type=int,
+    default=10,
+    show_default=True,
+    help="polling interval in seconds (only used when --backend polling)",
+)
 @click.pass_context
-def listen(ctx: click.Context) -> None:
+def listen(ctx: click.Context, backend: str, poll_interval: int) -> None:
     """Start the Lark message listener (blocking; SIGINT to stop).
 
-    Subscribes to im.message.receive_v1 events as the configured bot and
-    dispatches recognized commands (/add, /remove, /list, /threshold, /help).
+    Listens for user-sent text in p2p chat with the bot and dispatches
+    /add /remove /list /threshold /help (plus Chinese natural-language).
     Pair with `equity-monitor run` in another tmux pane.
     """
     from equity_monitor.events.listener import run_listener
 
     cfg = _get_cfg(ctx)
     factory = _make_factory(cfg)
-    click.echo("listener starting (Ctrl-C to stop)…")
-    run_listener(cfg=cfg, factory=factory)
+    click.echo(f"listener starting [backend={backend}] (Ctrl-C to stop)…")
+    run_listener(
+        cfg=cfg, factory=factory, backend=backend, poll_interval=poll_interval
+    )
 
 
 @cli.command()

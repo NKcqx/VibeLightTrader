@@ -8,7 +8,11 @@ import pytest
 from sqlalchemy.orm import sessionmaker
 
 from equity_monitor.db import init_schema, make_engine, make_sessionmaker, session_scope
-from equity_monitor.events.listener import _extract_text, dispatch_event
+from equity_monitor.events.listener import (
+    _extract_text,
+    _msg_to_event,
+    dispatch_event,
+)
 from equity_monitor.models import Symbol
 
 
@@ -149,6 +153,31 @@ def test_dispatch_sender_failure_returns_none(factory: sessionmaker) -> None:
         send_text=boom,
     )
     assert out is None
+
+
+def test_msg_to_event_wraps_text_to_receive_v1_shape() -> None:
+    """Polling-API row → synthetic im.message.receive_v1 event."""
+    msg = {
+        "content": "/list",
+        "create_time": "2026-05-02 22:55",
+        "deleted": False,
+        "message_id": "om_xx",
+        "msg_type": "text",
+        "sender": {"id": "ou_user1", "id_type": "open_id", "sender_type": "user"},
+    }
+    ev = _msg_to_event(msg, chat_id="oc_x")
+    assert ev["event_type"] == "im.message.receive_v1"
+    text, sender = _extract_text(ev)
+    assert text == "/list"
+    assert sender == "ou_user1"
+
+
+def test_msg_to_event_handles_missing_sender_id() -> None:
+    msg = {"content": "hi", "msg_type": "text", "message_id": "om_x", "sender": {}}
+    ev = _msg_to_event(msg, chat_id="oc_x")
+    text, sender = _extract_text(ev)
+    assert text == "hi"
+    assert sender == ""
 
 
 def test_run_listener_processes_injected_events(factory: sessionmaker) -> None:
