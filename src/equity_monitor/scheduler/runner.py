@@ -15,6 +15,7 @@ from equity_monitor.db import init_schema, make_engine, make_sessionmaker
 from equity_monitor.futu_client import FutuClient, OpenDClient
 from equity_monitor.scheduler.calendar import is_trading_day
 from equity_monitor.scheduler.jobs import (
+    _make_default_sender,
     run_closing_brief,
     run_intraday_check,
     run_morning_brief,
@@ -78,6 +79,10 @@ def build_scheduler(
         lambda: OpenDClient(cfg.opend.host, cfg.opend.port)
     )
 
+    sender = _make_default_sender(
+        cli_path=cfg.lark.cli_path, identity=cfg.lark.identity
+    )
+
     def with_client(
         job_fn: Callable[..., Any], *, kind: str | None = None
     ) -> Callable[[], Any]:
@@ -85,7 +90,11 @@ def build_scheduler(
             client = client_factory()
             try:
                 kw: dict[str, Any] = dict(
-                    client=client, factory=factory, cfg=cfg, watchlist=watchlist
+                    client=client,
+                    factory=factory,
+                    cfg=cfg,
+                    watchlist=watchlist,
+                    send_card_fn=sender,
                 )
                 if kind:
                     kw["kind"] = kind
@@ -105,6 +114,7 @@ def build_scheduler(
             factory=factory,
             cfg=cfg,
             watchlist=watchlist,
+            send_card_fn=sender,
         )
 
     news_runner.__name__ = "run_news_pulse"

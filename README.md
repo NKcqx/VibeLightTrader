@@ -37,11 +37,17 @@ cp config/watchlist.example.yaml config/watchlist.yaml
 # edit config/settings.yaml — set lark.receiver.open_id to your Lark open_id
 ```
 
-Find your Lark `open_id`:
+Find your Lark `open_id` (omit `--user-id` to query yourself):
 
 ```bash
-lark-cli contact +me
+lark-cli contact +get-user | jq -r '.data.user.open_id'
 ```
+
+> **Note on `lark.identity`** — Default `bot` works without extra setup (your
+> equity-monitor bot DMs you the cards). To send messages **as your own user
+> identity** instead, run
+> `lark-cli auth login --scope "im:message.send_as_user"` and set
+> `lark.identity: user` in `config/settings.yaml`.
 
 ### 3. Set up Python env + initialize DB
 

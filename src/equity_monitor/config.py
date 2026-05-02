@@ -53,6 +53,7 @@ class LarkReceiver(BaseModel):
 class LarkConfig(BaseModel):
     cli_path: str = "lark-cli"
     receiver: LarkReceiver
+    identity: Literal["bot", "user"] = "bot"
 
 
 class SignalsConfig(BaseModel):

@@ -38,8 +38,24 @@ log = structlog.get_logger(__name__)
 SendCardFn = Callable[[dict[str, Any], str, str], str]
 
 
-def _default_sender(card: dict[str, Any], open_id: str, receiver_type: str) -> str:
-    return send_card(card, open_id=open_id, receiver_type=receiver_type)
+def _make_default_sender(
+    cli_path: str = "lark-cli", identity: str = "bot"
+) -> SendCardFn:
+    """Build a default sender bound to a specific lark-cli path and identity."""
+
+    def _sender(card: dict[str, Any], open_id: str, receiver_type: str) -> str:
+        return send_card(
+            card,
+            open_id=open_id,
+            receiver_type=receiver_type,  # type: ignore[arg-type]
+            cli_path=cli_path,
+            identity=identity,  # type: ignore[arg-type]
+        )
+
+    return _sender
+
+
+_default_sender: SendCardFn = _make_default_sender()
 
 
 def _persist_indicator_row(
