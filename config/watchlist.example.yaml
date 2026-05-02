@@ -1,0 +1,12 @@
+symbols:
+  - code: US.AAPL
+    name: Apple
+    upper_threshold: 200.0
+    lower_threshold: 165.0
+    notes: "core position"
+  - code: US.NVDA
+    name: NVIDIA
+    upper_threshold: 150.0
+    lower_threshold: 110.0
+  - code: US.TSLA
+    name: Tesla

@@ -1,0 +1,41 @@
+opend:
+  host: 127.0.0.1
+  port: 11111
+
+database:
+  path: data/equity_monitor.db
+  wal_mode: true
+
+scheduler:
+  timezone: America/New_York
+  jobs:
+    intraday_check:
+      cron: "30 9-15 * * mon-fri"
+    morning_brief:
+      cron: "30 10 * * mon-fri"
+    closing_brief:
+      cron: "30 16 * * mon-fri"
+    news_pulse:
+      cron: "*/30 9-15 * * mon-fri"
+
+lark:
+  cli_path: lark-cli
+  receiver:
+    type: chat
+    open_id: "ou_REPLACE_ME"
+
+signals:
+  rsi_overbought: 70
+  rsi_oversold: 30
+  bollinger_period: 20
+  bollinger_std: 2
+  macd_fast: 12
+  macd_slow: 26
+  macd_signal: 9
+  dedupe_window_minutes: 60
+  news_burst_drop: 3.0
+  news_burst_rise: 3.0
+
+logging:
+  level: INFO
+  file: data/equity_monitor.log
