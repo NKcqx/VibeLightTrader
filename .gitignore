@@ -12,8 +12,8 @@ dist/
 config/watchlist.yaml
 config/settings.local.yaml
 
-# runtime data
-data/
+# runtime data (root-level only; src/equity_monitor/data/ is source code)
+/data/
 *.db
 *.db-journal
 *.db-wal
