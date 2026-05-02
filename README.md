@@ -13,12 +13,15 @@ Cards via `lark-cli`.
 - Self-implemented RSI(14) (Wilder), MACD(12/26/9), Bollinger Bands(20, 2σ) — no `pandas-ta`
 - Futu skill integrations: technical anomaly, capital anomaly, news, comment sentiment
 - Multi-source signal fusion + dedupe + severity split (INFO / WARN / CRITICAL)
+- **Card diagnostics block** — RSI/MACD/BOLL current values + Chinese interpretation, intraday + 30-bar return %, position P&L
+- **Phase 2:** rule-based suggested actions (BUY/SELL with quantity), `equity-monitor trade` CLI for paper-trading confirmation, P&L summary in briefs
+- **Phase 2.5:** Lark message-driven watchlist control (`/add`, `/remove`, `/list`, `/threshold`, plus Chinese natural-language equivalents)
 - DB-backed sentiment baseline survives runner restarts (`sentiment_snapshots`)
 - 4 cron jobs: `intraday_check`, `morning_brief`, `closing_brief`, `news_pulse`
 - NYSE calendar gating (holidays + DST handled by `pandas-market-calendars`)
 - Lark Interactive Card rendering via Jinja2 + push via `lark-cli`
 - Backfill historical OHLC + indicators idempotently
-- 126 unit + integration tests, all green
+- 257 unit + integration tests, all green
 
 ## Quickstart
 
@@ -79,21 +82,47 @@ python scripts/smoke_e2e.py
 ```bash
 tmux new -s equity
 conda activate fin
+# pane 1: scheduler
 equity-monitor run
-# Ctrl-B D to detach; Ctrl-B kill-session to fully stop
+# Ctrl-B " then in pane 2:
+equity-monitor listen
+# Ctrl-B D to detach; tmux kill-session -t equity to fully stop
 ```
+
+## Lark message control
+
+Once `equity-monitor listen` is up you can DM the bot in Lark to manage the
+watchlist. Both slash-style and Chinese natural-language phrases work:
+
+| Action | Examples |
+|---|---|
+| Add | `添加 US.AAPL 上限200 下限165` / `/add US.AAPL upper=200 lower=165` / `监控 TSLA` |
+| Remove | `删除 US.AAPL` / `取消 AAPL` / `/remove US.AAPL` |
+| Update thresholds | `阈值 US.AAPL 上限205` / `/threshold US.AAPL upper=205 lower=170` |
+| List | `列表` / `/list` |
+| Help | `帮助` / `/help` |
+
+Sender is gated by `lark.receiver.open_id` — only your configured account can
+mutate the watchlist (other senders are ignored).
 
 ## CLI Reference
 
 ```
 equity-monitor [--settings PATH] [--watchlist PATH]
 ├── run                                Start the long-running scheduler.
+├── listen                             Start the Lark message listener.
 ├── once --job intraday|morning|closing|news
 │                                      Run a single job once and print result.
 ├── backfill [--days N]                Backfill 60-min OHLC + indicators (default 30 days).
 ├── watchlist
 │   ├── list                           List active symbols in DB.
 │   └── sync                           Upsert config/watchlist.yaml → symbols table.
+├── trade
+│   ├── list [--status pending|...]    Show pending suggestions.
+│   ├── confirm SIGNAL_ID [--qty N]    Place paper-trade order for a suggestion.
+│   ├── cancel SIGNAL_ID               Mark suggestion as cancelled.
+│   ├── positions                      List current paper positions.
+│   └── pnl [--days N]                 Realized P&L by symbol.
 └── db
     ├── init                           Create SQLite schema.
     └── status                         Print row counts of all tables.

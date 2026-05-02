@@ -73,6 +73,23 @@ def run(ctx: click.Context) -> None:
 
 
 @cli.command()
+@click.pass_context
+def listen(ctx: click.Context) -> None:
+    """Start the Lark message listener (blocking; SIGINT to stop).
+
+    Subscribes to im.message.receive_v1 events as the configured bot and
+    dispatches recognized commands (/add, /remove, /list, /threshold, /help).
+    Pair with `equity-monitor run` in another tmux pane.
+    """
+    from equity_monitor.events.listener import run_listener
+
+    cfg = _get_cfg(ctx)
+    factory = _make_factory(cfg)
+    click.echo("listener starting (Ctrl-C to stop)…")
+    run_listener(cfg=cfg, factory=factory)
+
+
+@cli.command()
 @click.option(
     "--job",
     type=click.Choice(["intraday", "morning", "closing", "news"]),
