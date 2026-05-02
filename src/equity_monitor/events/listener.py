@@ -124,17 +124,33 @@ def make_card_reply(
     always gets feedback.
     """
     from equity_monitor.events.enrich import build_watchlist_rows, now_utc
-    from equity_monitor.reports.render import render_watchlist_card
+    from equity_monitor.reports.render import (
+        render_watchlist_card,
+        WatchlistCardRow,
+    )
 
     def _reply(cmd: Command, action_text: str, recipient: str) -> None:
         if isinstance(cmd, HelpCommand):
-            send_text(action_text, recipient)
+            # Render help as a card too (no OpenD lookup needed).
+            try:
+                card = render_watchlist_card(
+                    title="使用指南",
+                    action_text=action_text,
+                    rows=[],
+                    ts=now_utc(),
+                    color="purple",
+                    footer_md="💬 直接给我发文字即可，无需 @",
+                )
+                send_card(card, recipient)
+            except Exception:
+                log.exception("listener.help_card_failed_falling_back_to_text")
+                send_text(action_text, recipient)
             return
         try:
             rows, n = build_watchlist_rows(cfg=cfg, factory=factory, client=client)
             title, color = _title_color_for(cmd, n)
             footer = (
-                "💡 试试 `添加 US.TSLA 上限260 下限180` · `阈值 US.AAPL 上限290`"
+                "💡 试试 `添加 US.TSLA 上限260 下限180` · `阈值 US.AAPL 上限290`  ·  发 `帮助` 看完整指令"
                 if isinstance(cmd, ListCommand) else ""
             )
             card = render_watchlist_card(
