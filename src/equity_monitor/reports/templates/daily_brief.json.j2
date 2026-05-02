@@ -13,6 +13,11 @@
     {
       "tag": "div",
       "text": {"tag": "lark_md", "content": {{ summary_md | tojson }}}
-    }
+    }{% if pnl_md %},
+    {"tag": "hr"},
+    {
+      "tag": "div",
+      "text": {"tag": "lark_md", "content": {{ pnl_md | tojson }}}
+    }{% endif %}
   ]
 }

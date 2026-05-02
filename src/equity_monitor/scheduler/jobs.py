@@ -15,9 +15,10 @@ from equity_monitor.data.kline import fetch_kline_df
 from equity_monitor.data.quotes import sync_snapshots
 from equity_monitor.db import session_scope
 from equity_monitor.futu_client import FutuClient
-from equity_monitor.models import Indicator, NewsDigest, SentimentSnapshotRow
+from equity_monitor.models import Indicator, NewsDigest, Position, SentimentSnapshotRow
 from equity_monitor.models import Signal as SignalRow
 from equity_monitor.models import Symbol
+from equity_monitor.models import Trade
 from equity_monitor.data.news import NewsItem, fetch_news_digest
 from equity_monitor.data.sentiment import SentimentSnapshot, fetch_sentiment
 from equity_monitor.reports.lark import send_card
@@ -28,6 +29,10 @@ from equity_monitor.reports.render import (
 )
 from equity_monitor.signals.base import Signal
 from equity_monitor.signals.compose import deduplicate, split_by_severity
+from equity_monitor.signals.strategy_lite import (
+    SignalSuggest,
+    decide_actions_for_codes,
+)
 from equity_monitor.signals.tech import detect_tech_signals
 from equity_monitor.signals.threshold import detect_threshold_breach
 
@@ -72,13 +77,33 @@ def _persist_indicator_row(
     session.execute(stmt)
 
 
-def _persist_signal_rows(session, signals: list[Signal]) -> dict[int, str]:
-    """Insert dedup'd signals; return {row_id: signal_type} for delivered tracking."""
-    inserted: dict[int, str] = {}
+def _persist_signal_rows(
+    session,
+    signals: list[Signal],
+    suggestions: dict[str, SignalSuggest] | None = None,
+) -> dict[int, tuple[str, str]]:
+    """Insert dedup'd signals; return {row_id: (code, signal_type)}.
+
+    If `suggestions[code]` exists AND signal_type is in the suggestion's
+    triggering_signal_types, attach suggested_action/qty to the row.
+    Status defaults to 'pending'.
+    """
+    suggestions = suggestions or {}
+    inserted: dict[int, tuple[str, str]] = {}
     for s in signals:
         sym = session.query(Symbol).filter(Symbol.code == s.code).one_or_none()
         if sym is None:
             continue
+        sug = suggestions.get(s.code)
+        suggested_action: str | None = None
+        suggested_qty: int | None = None
+        if (
+            sug is not None
+            and s.signal_type in sug.triggering_signal_types
+            and sug.action != "HOLD"
+        ):
+            suggested_action = sug.action
+            suggested_qty = sug.qty
         stmt = (
             sqlite_insert(SignalRow)
             .values(
@@ -88,6 +113,9 @@ def _persist_signal_rows(session, signals: list[Signal]) -> dict[int, str]:
                 severity=s.severity.value,
                 payload_json=json.dumps(s.payload),
                 delivered=False,
+                suggested_action=suggested_action,
+                suggested_qty=suggested_qty,
+                status="pending",
             )
             .on_conflict_do_nothing(
                 index_elements=["symbol_id", "ts", "signal_type"]
@@ -95,8 +123,19 @@ def _persist_signal_rows(session, signals: list[Signal]) -> dict[int, str]:
         )
         result = session.execute(stmt)
         if result.inserted_primary_key:
-            inserted[result.inserted_primary_key[0]] = s.signal_type
+            inserted[result.inserted_primary_key[0]] = (s.code, s.signal_type)
     return inserted
+
+
+def _load_open_positions(session) -> dict[str, int]:
+    """Return {code: qty} for non-zero open positions (for strategy decisions)."""
+    rows = (
+        session.query(Symbol.code, Position.qty)
+        .join(Position, Position.symbol_id == Symbol.id)
+        .filter(Position.qty > 0)
+        .all()
+    )
+    return {code: qty for code, qty in rows}
 
 
 def _ts_to_pydatetime(raw: Any) -> datetime:
@@ -193,63 +232,159 @@ def run_intraday_check(
         all_sigs, window_minutes=cfg.signals.dedupe_window_minutes
     )
 
+    # P2: derive trade suggestions BEFORE persisting so they're written atomically
+    sigs_by_code: dict[str, list[Signal]] = {}
+    for sig in deduped:
+        sigs_by_code.setdefault(sig.code, []).append(sig)
+
     with session_scope(factory) as session:
-        ids = _persist_signal_rows(session, deduped)
-    log.info("intraday_check.signals", n=len(deduped), persisted=len(ids))
+        positions = _load_open_positions(session)
+        suggestions = decide_actions_for_codes(sigs_by_code, positions=positions)
+        ids = _persist_signal_rows(session, deduped, suggestions=suggestions)
+    log.info(
+        "intraday_check.signals",
+        n=len(deduped),
+        persisted=len(ids),
+        suggested=len([s for s in suggestions.values() if s.action != "HOLD"]),
+    )
+
+    # Build {(code, signal_type) -> signal_id} for card decoration
+    sigid_by_key: dict[tuple[str, str], int] = {key: sid for sid, key in ids.items()}
 
     crit, warn, _info = split_by_severity(deduped)
     pushed = 0
 
-    for sig in crit:
+    def _push_for_code(code: str, sigs: list[Signal]) -> None:
+        nonlocal pushed
+        close = next(
+            iter(s.payload.get("close", 0.0) for s in sigs if "close" in s.payload),
+            0.0,
+        )
+        ts_for_card = (
+            sigs[0].ts
+            if sigs[0].ts.tzinfo
+            else sigs[0].ts.replace(tzinfo=timezone.utc)
+        )
+        sug = suggestions.get(code)
+        # Find the signal_id for the most-actionable triggering signal_type.
+        sug_card_arg = None
+        signal_ids = [
+            sigid_by_key[(s.code, s.signal_type)]
+            for s in sigs
+            if (s.code, s.signal_type) in sigid_by_key
+        ]
+        if sug is not None:
+            trigger_id = next(
+                (
+                    sigid_by_key[(code, st)]
+                    for st in sug.triggering_signal_types
+                    if (code, st) in sigid_by_key
+                ),
+                None,
+            )
+            sug_card_arg = {
+                "action": sug.action,
+                "qty": sug.qty,
+                "reason": sug.reason,
+                "signal_id": trigger_id,
+            }
+
         card = render_signal_alert(
-            code=sig.code,
-            ts=sig.ts if sig.ts.tzinfo else sig.ts.replace(tzinfo=timezone.utc),
-            close=float(sig.payload.get("close", 0.0)),
+            code=code,
+            ts=ts_for_card,
+            close=float(close),
             change_pct=0.0,
-            signals=[sig],
+            signals=sigs,
+            signal_ids=signal_ids,
+            suggestion=sug_card_arg,
         )
         try:
             msg_id = send_card_fn(
                 card, cfg.lark.receiver.open_id, cfg.lark.receiver.type
             )
             pushed += 1
-            log.info("intraday_check.push", code=sig.code, msg_id=msg_id)
+            log.info(
+                "intraday_check.push",
+                code=code,
+                count=len(sigs),
+                has_suggestion=sug is not None,
+                msg_id=msg_id,
+            )
         except Exception as e:
-            log.error("intraday_check.push_failed", code=sig.code, error=str(e))
+            log.error("intraday_check.push_failed", code=code, error=str(e))
+
+    crit_by_code: dict[str, list[Signal]] = {}
+    for s in crit:
+        crit_by_code.setdefault(s.code, []).append(s)
+    for code, sigs in crit_by_code.items():
+        _push_for_code(code, sigs)
 
     if warn:
-        by_code: dict[str, list[Signal]] = {}
+        warn_by_code: dict[str, list[Signal]] = {}
         for s in warn:
-            by_code.setdefault(s.code, []).append(s)
-        for code, sigs in by_code.items():
-            close = next(
-                iter(s.payload.get("close", 0.0) for s in sigs if "close" in s.payload),
-                0.0,
-            )
-            ts_for_card = (
-                sigs[0].ts
-                if sigs[0].ts.tzinfo
-                else sigs[0].ts.replace(tzinfo=timezone.utc)
-            )
-            card = render_signal_alert(
-                code=code,
-                ts=ts_for_card,
-                close=float(close),
-                change_pct=0.0,
-                signals=sigs,
-            )
-            try:
-                msg_id = send_card_fn(
-                    card, cfg.lark.receiver.open_id, cfg.lark.receiver.type
-                )
-                pushed += 1
-                log.info(
-                    "intraday_check.push", code=code, count=len(sigs), msg_id=msg_id
-                )
-            except Exception as e:
-                log.error("intraday_check.push_failed", code=code, error=str(e))
+            warn_by_code.setdefault(s.code, []).append(s)
+        for code, sigs in warn_by_code.items():
+            if code in crit_by_code:
+                continue  # already pushed in crit batch
+            _push_for_code(code, sigs)
 
-    return {"quotes": inserted_quotes, "signals": len(deduped), "pushed": pushed}
+    return {
+        "quotes": inserted_quotes,
+        "signals": len(deduped),
+        "pushed": pushed,
+        "suggestions": sum(
+            1 for s in suggestions.values() if s.action != "HOLD"
+        ),
+    }
+
+
+def _build_pnl_lines(
+    factory: sessionmaker,
+    snaps: dict[str, Any],
+    today_start: datetime,
+) -> list[str]:
+    """Compose Paper P&L lines for brief cards.
+
+    One line per open position with mark-to-market unrealized P&L plus a
+    final aggregate (today's fills + cumulative realized).
+    """
+    lines: list[str] = []
+    with session_scope(factory) as session:
+        sym_by_id = {s.id: s for s in session.query(Symbol).all()}
+        positions = (
+            session.query(Position).filter(Position.qty > 0).all()
+        )
+        if not positions and not (
+            session.query(Trade).filter(Trade.ts >= today_start).count()
+        ):
+            return lines  # nothing trade-related to show
+
+        total_unreal = 0.0
+        for p in positions:
+            sym = sym_by_id.get(p.symbol_id)
+            if sym is None:
+                continue
+            snap = snaps.get(sym.code)
+            mark = snap.last_price if snap else None
+            if mark is not None:
+                unreal = (mark - p.avg_cost) * p.qty
+                total_unreal += unreal
+                lines.append(
+                    f"{sym.code} +{p.qty}@${p.avg_cost:.2f}  浮盈 {unreal:+.0f}  "
+                    f"(mark ${mark:.2f})"
+                )
+            else:
+                lines.append(f"{sym.code} +{p.qty}@${p.avg_cost:.2f}  (mark n/a)")
+
+        today_fills = (
+            session.query(Trade).filter(Trade.ts >= today_start).count()
+        )
+        total_realized = sum(p.realized_pnl or 0.0 for p in positions)
+        lines.append(
+            f"今日成交: {today_fills} 笔 · 已实现累计 {total_realized:+.0f}  "
+            f"· 浮盈合计 {total_unreal:+.0f}"
+        )
+    return lines
 
 
 def _aggregate_signal_count(session, sym_id: int, since: datetime) -> int:
@@ -323,11 +458,14 @@ def run_brief(
             + ", ".join(f"{r['code']} {r['change_pct']:+.2%}" for r in losers)
         )
 
+    pnl_lines = _build_pnl_lines(factory, snaps, today_start)
+
     card = render_daily_brief(
         kind=kind,
         date_str=now_utc.strftime("%Y-%m-%d"),
         rows=rows,
         summary_lines=summary_lines,
+        pnl_lines=pnl_lines,
     )
     pushed = 0
     try:

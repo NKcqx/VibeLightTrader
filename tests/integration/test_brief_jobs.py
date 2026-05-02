@@ -9,7 +9,7 @@ from sqlalchemy.orm import sessionmaker
 from equity_monitor.config import AppConfig, WatchlistConfig
 from equity_monitor.db import session_scope
 from equity_monitor.futu_client import FakeFutuClient, Snapshot
-from equity_monitor.models import Symbol
+from equity_monitor.models import Position, Symbol, Trade
 from equity_monitor.scheduler.jobs import run_closing_brief, run_morning_brief
 
 
@@ -159,3 +159,85 @@ def test_brief_summary_includes_top_gainers_losers(
     assert "Top 涨" in body
     assert "Top 跌" in body
     assert "US.NVDA" in body
+
+
+@pytest.mark.integration
+def test_brief_appends_paper_pnl_when_position_exists(
+    factory: sessionmaker,
+    fake_futu: FakeFutuClient,
+    app_cfg: AppConfig,
+    watchlist: WatchlistConfig,
+) -> None:
+    """When a Position row exists, brief card includes '纸面盘 P&L' section."""
+    with session_scope(factory) as s:
+        sym = Symbol(
+            code="US.AAPL", name="Apple", upper_threshold=200.0, lower_threshold=165.0
+        )
+        s.add(sym)
+        s.flush()
+        s.add(Position(symbol_id=sym.id, qty=10, avg_cost=180.0))
+        s.add(
+            Trade(
+                symbol_id=sym.id,
+                ts=datetime(2026, 5, 4, 13, 30, tzinfo=timezone.utc),
+                side="BUY",
+                qty=10,
+                price=180.0,
+                status="FILLED",
+                futu_order_id="po_test",
+            )
+        )
+
+    fake_futu.set_snapshot(_snap("US.AAPL", last=185.0, open_=180.0))
+
+    sent: list[dict[str, Any]] = []
+
+    def sender(card, *_):  # type: ignore[no-untyped-def]
+        sent.append(card)
+        return "om_pnl"
+
+    out = run_closing_brief(
+        client=fake_futu,
+        factory=factory,
+        cfg=app_cfg,
+        watchlist=watchlist,
+        send_card_fn=sender,
+        now_utc=datetime(2026, 5, 4, 21, 0, tzinfo=timezone.utc),
+    )
+    assert out["pushed"] == 1
+    body = str(sent[0])
+    assert "纸面盘 P&L" in body or "P&L" in body
+    assert "US.AAPL" in body
+    # mark = 185, avg_cost = 180, qty=10 → unrealized = +50
+    assert "+50" in body or "浮盈" in body
+
+
+@pytest.mark.integration
+def test_brief_omits_pnl_section_when_no_positions(
+    factory: sessionmaker,
+    fake_futu: FakeFutuClient,
+    app_cfg: AppConfig,
+    watchlist: WatchlistConfig,
+) -> None:
+    """No positions and no trades → no P&L section in card."""
+    with session_scope(factory) as s:
+        s.add(Symbol(code="US.AAPL", name="Apple"))
+
+    fake_futu.set_snapshot(_snap("US.AAPL", last=185.0, open_=180.0))
+
+    sent: list[dict[str, Any]] = []
+
+    def sender(card, *_):  # type: ignore[no-untyped-def]
+        sent.append(card)
+        return "om_x"
+
+    run_closing_brief(
+        client=fake_futu,
+        factory=factory,
+        cfg=app_cfg,
+        watchlist=watchlist,
+        send_card_fn=sender,
+        now_utc=datetime(2026, 5, 4, 21, 0, tzinfo=timezone.utc),
+    )
+    body = str(sent[0])
+    assert "纸面盘" not in body  # P&L section absent

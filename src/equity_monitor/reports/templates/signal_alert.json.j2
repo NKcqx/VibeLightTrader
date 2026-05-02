@@ -18,6 +18,11 @@
     {
       "tag": "div",
       "text": {"tag": "lark_md", "content": {{ ('**关键新闻:**\n' ~ news_md) | tojson }}}
+    }{% endif %}{% if suggestion_md %},
+    {"tag": "hr"},
+    {
+      "tag": "div",
+      "text": {"tag": "lark_md", "content": {{ suggestion_md | tojson }}}
     }{% endif %},
     {"tag": "note", "elements": [{"tag": "plain_text", "content": {{ ts_str | tojson }}}]}
   ]

@@ -158,6 +158,83 @@ def test_intraday_check_threshold_breach_pushes_critical_card(
 
 
 @pytest.mark.integration
+def test_intraday_check_writes_suggested_action_for_threshold_breach(
+    factory: sessionmaker,
+    fake_futu: FakeFutuClient,
+    app_cfg: AppConfig,
+    watchlist: WatchlistConfig,
+) -> None:
+    """Close < lower_threshold → strategy_lite suggests BUY → row has suggested_action=BUY."""
+    with session_scope(factory) as s:
+        s.add(
+            Symbol(
+                code="US.AAPL",
+                name="Apple",
+                upper_threshold=200.0,
+                lower_threshold=170.0,
+            )
+        )
+
+    base_ts = datetime(2026, 5, 2, 9, 30)
+    candles = _make_candles(base_ts, 40)
+    # Drop the last close below lower_threshold=170 to fire threshold_breach_lower
+    candles[-1] = Candle(
+        code="US.AAPL",
+        ts=candles[-1].ts,
+        open=180.0,
+        high=181.0,
+        low=160.0,
+        close=165.0,
+        volume=20_000,
+        turnover=3.3e6,
+    )
+    fake_futu.set_kline("US.AAPL", "K_60M", candles)
+    fake_futu.set_snapshot(
+        Snapshot(
+            code="US.AAPL",
+            last_price=165.0,
+            open_price=180.0,
+            high_price=181.0,
+            low_price=160.0,
+            volume=12_000_000,
+            turnover=2.0e9,
+            update_time=base_ts + timedelta(hours=39),
+        )
+    )
+
+    sent: list[dict[str, Any]] = []
+
+    def sender(card, open_id, receiver_type):  # type: ignore[no-untyped-def]
+        sent.append(card)
+        return "om_x"
+
+    out = run_intraday_check(
+        client=fake_futu,
+        factory=factory,
+        cfg=app_cfg,
+        watchlist=watchlist,
+        send_card_fn=sender,
+    )
+    assert out.get("suggestions", 0) >= 1, out
+
+    with session_scope(s_factory := factory) as s:
+        rows = (
+            s.query(SignalRow)
+            .filter(SignalRow.signal_type == "threshold_breach_lower")
+            .all()
+        )
+        assert len(rows) == 1
+        assert rows[0].suggested_action == "BUY"
+        assert rows[0].suggested_qty == 100
+        assert rows[0].status == "pending"
+
+    # Card should embed the trade confirm command
+    assert any(
+        "trade confirm" in str(card) for card in sent
+    ), f"no trade-confirm tip in any pushed card: {sent}"
+
+
+@pytest.mark.integration
 def test_intraday_check_skips_unknown_symbol_in_db(
     factory: sessionmaker,
     fake_futu: FakeFutuClient,

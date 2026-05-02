@@ -63,8 +63,14 @@ def render_signal_alert(
     change_pct: float,
     signals: Sequence[Signal],
     news_titles: Sequence[str] = (),
+    signal_ids: Sequence[int] = (),
+    suggestion: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
-    """Render a signal-alert Lark Interactive Card to a dict (ready for JSON)."""
+    """Render a signal-alert Lark Interactive Card to a dict (ready for JSON).
+
+    `suggestion` (optional, P2): {'action', 'qty', 'reason', 'signal_id'}
+    appended as a "建议动作" section with copy-paste confirm command.
+    """
     severity = max(
         (s.severity for s in signals),
         key=lambda x: _SEVERITY_RANK[x],
@@ -73,6 +79,30 @@ def render_signal_alert(
     signals_md = "\n".join(f"• {_signal_line(s)}" for s in signals)
     news_md = "\n".join(f"• {t}" for t in news_titles)
     change_str = f"{'▲' if change_pct >= 0 else '▼'} {change_pct:+.2%}"
+
+    suggestion_md = ""
+    if suggestion:
+        action = suggestion.get("action", "HOLD")
+        qty = suggestion.get("qty", 0)
+        reason = suggestion.get("reason", "")
+        sig_id = suggestion.get("signal_id")
+        if action == "HOLD":
+            suggestion_md = f"**📋 建议:** 观望  \n_{reason}_"
+        else:
+            cmd = (
+                f"`equity-monitor trade confirm {sig_id}`"
+                if sig_id is not None
+                else ""
+            )
+            suggestion_md = (
+                f"**📋 建议:** {action} {qty} 股  \n"
+                f"_{reason}_  \n"
+                + (f"确认下单: {cmd}" if cmd else "")
+            )
+    elif signal_ids:
+        # No suggestion but expose signal_ids so user can locate via `trade list`
+        sid_str = ", ".join(f"#{sid}" for sid in signal_ids)
+        suggestion_md = f"_signal_id: {sid_str}_"
 
     tpl = _env().from_string(_load_template("signal_alert.json.j2"))
     rendered = tpl.render(
@@ -84,6 +114,7 @@ def render_signal_alert(
         change_str=change_str,
         signals_md=signals_md,
         news_md=news_md,
+        suggestion_md=suggestion_md,
         ts_str=_ts_str(ts),
     )
     return json.loads(rendered)
@@ -95,7 +126,12 @@ def render_daily_brief(
     date_str: str,
     rows: Iterable[dict[str, Any]],
     summary_lines: Sequence[str] = (),
+    pnl_lines: Sequence[str] = (),
 ) -> dict[str, Any]:
+    """Render the morning/closing brief card.
+
+    `pnl_lines` (P2): if non-empty, appended as a "纸面盘 P&L" section.
+    """
     rows_md_lines = []
     for r in rows:
         rows_md_lines.append(
@@ -103,10 +139,17 @@ def render_daily_brief(
         )
     rows_md = "\n".join(rows_md_lines)
     summary_md = "\n".join(f"• {line}" for line in summary_lines)
+    pnl_md = ""
+    if pnl_lines:
+        pnl_md = "**📈 纸面盘 P&L:**\n" + "\n".join(f"• {line}" for line in pnl_lines)
 
     tpl = _env().from_string(_load_template("daily_brief.json.j2"))
     rendered = tpl.render(
-        kind=kind, date_str=date_str, rows_md=rows_md, summary_md=summary_md
+        kind=kind,
+        date_str=date_str,
+        rows_md=rows_md,
+        summary_md=summary_md,
+        pnl_md=pnl_md,
     )
     return json.loads(rendered)
 

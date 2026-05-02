@@ -20,9 +20,10 @@ scheduler:
 
 lark:
   cli_path: lark-cli
+  identity: bot              # "bot" needs no extra scope; "user" requires login --scope im:message.send_as_user
   receiver:
-    type: chat
-    open_id: "ou_REPLACE_ME"
+    type: user                # "user" → DM via --user-id ou_xxx; "chat" → group via --chat-id oc_xxx
+    open_id: "ou_2870dc0365b841b931f63f9fa769973f"
 
 signals:
   rsi_overbought: 70
