@@ -22,7 +22,15 @@ from sqlalchemy.orm import sessionmaker
 
 from equity_monitor.config import AppConfig
 from equity_monitor.events.apply import apply
-from equity_monitor.events.grammar import parse
+from equity_monitor.events.grammar import (
+    AddCommand,
+    Command,
+    HelpCommand,
+    ListCommand,
+    RemoveCommand,
+    ThresholdCommand,
+    parse,
+)
 
 log = structlog.get_logger(__name__)
 
@@ -30,21 +38,24 @@ log = structlog.get_logger(__name__)
 SendTextFn = Callable[[str, str], str]
 """(text, recipient_open_id) -> message_id."""
 
+SendCardFn = Callable[[dict[str, Any], str], str]
+"""(card_payload, recipient_open_id) -> message_id."""
+
+ReplyFn = Callable[[Command, str, str], None]
+"""(parsed_cmd, action_text, recipient_open_id) -> None.
+
+Implementations decide whether to send text or a Lark card."""
+
 
 def make_text_sender(cli_path: str = "lark-cli", identity: str = "bot") -> SendTextFn:
-    """Build a default sender that uses lark-cli +messages-send --text."""
+    """Build a default text sender via lark-cli +messages-send --markdown."""
 
     def _send(text: str, recipient: str) -> str:
         cmd = [
-            cli_path,
-            "im",
-            "+messages-send",
-            "--as",
-            identity,
-            "--user-id",
-            recipient,
-            "--markdown",
-            text,
+            cli_path, "im", "+messages-send",
+            "--as", identity,
+            "--user-id", recipient,
+            "--markdown", text,
         ]
         result = subprocess.run(
             cmd, capture_output=True, text=True, timeout=15, check=False
@@ -58,6 +69,88 @@ def make_text_sender(cli_path: str = "lark-cli", identity: str = "bot") -> SendT
             return result.stdout.strip()
 
     return _send
+
+
+def make_card_sender(cli_path: str = "lark-cli", identity: str = "bot") -> SendCardFn:
+    """Build a default card sender via lark-cli +messages-send --content / interactive."""
+
+    def _send(card: dict[str, Any], recipient: str) -> str:
+        cmd = [
+            cli_path, "im", "+messages-send",
+            "--as", identity,
+            "--user-id", recipient,
+            "--msg-type", "interactive",
+            "--content", json.dumps(card, ensure_ascii=False),
+        ]
+        result = subprocess.run(
+            cmd, capture_output=True, text=True, timeout=15, check=False
+        )
+        if result.returncode != 0:
+            raise RuntimeError(f"lark-cli card send failed: {result.stderr.strip()}")
+        try:
+            j = json.loads(result.stdout)
+            return str(j.get("data", {}).get("message_id", ""))
+        except json.JSONDecodeError:
+            return result.stdout.strip()
+
+    return _send
+
+
+def _title_color_for(cmd: Command, count: int) -> tuple[str, str]:
+    """Card header title + color from the parsed command."""
+    if isinstance(cmd, AddCommand):
+        return f"已添加 (共 {count} 个标的)", "green"
+    if isinstance(cmd, RemoveCommand):
+        return f"已删除 (剩 {count} 个标的)", "orange"
+    if isinstance(cmd, ThresholdCommand):
+        return f"阈值已更新 (共 {count} 个标的)", "blue"
+    if isinstance(cmd, ListCommand):
+        return f"监控列表 ({count} 个标的)", "blue"
+    return f"监控列表 ({count} 个标的)", "blue"
+
+
+def make_card_reply(
+    *,
+    cfg: AppConfig,
+    factory: sessionmaker,
+    client: Any,  # FutuClient — Any to avoid circular import for tests
+    send_text: SendTextFn,
+    send_card: SendCardFn,
+) -> ReplyFn:
+    """Compose live OpenD data + DB watchlist into a Lark card per reply.
+
+    Help replies fall back to plain markdown text (no data lookup needed).
+    On enrich/render exceptions, falls back to text reply so the user
+    always gets feedback.
+    """
+    from equity_monitor.events.enrich import build_watchlist_rows, now_utc
+    from equity_monitor.reports.render import render_watchlist_card
+
+    def _reply(cmd: Command, action_text: str, recipient: str) -> None:
+        if isinstance(cmd, HelpCommand):
+            send_text(action_text, recipient)
+            return
+        try:
+            rows, n = build_watchlist_rows(cfg=cfg, factory=factory, client=client)
+            title, color = _title_color_for(cmd, n)
+            footer = (
+                "💡 试试 `添加 US.TSLA 上限260 下限180` · `阈值 US.AAPL 上限290`"
+                if isinstance(cmd, ListCommand) else ""
+            )
+            card = render_watchlist_card(
+                title=title,
+                action_text=action_text,
+                rows=rows,
+                ts=now_utc(),
+                color=color,
+                footer_md=footer,
+            )
+            send_card(card, recipient)
+        except Exception:
+            log.exception("listener.card_render_failed_falling_back_to_text")
+            send_text(action_text, recipient)
+
+    return _reply
 
 
 def _extract_text(event: dict[str, Any]) -> tuple[str | None, str | None]:
@@ -88,17 +181,18 @@ def dispatch_event(
     *,
     factory: sessionmaker,
     allowed_open_id: str | None,
-    send_text: SendTextFn,
+    send_text: SendTextFn | None = None,
+    reply_fn: ReplyFn | None = None,
 ) -> str | None:
-    """Process one Lark event. Returns the reply text actually sent, else None.
+    """Process one Lark event. Returns the action text replied with, else None.
 
-    Behavior:
-      - Non-im.message.receive_v1 events: ignored (None).
-      - Non-text messages: ignored.
-      - Sender not in allowlist (when allowlist set): ignored.
-      - Recognized command: applied, reply text sent.
-      - Unrecognized text: silent ignore (avoid spam loops with self-replies).
+    Either `send_text` (text-only reply) or `reply_fn` (rich card reply) must
+    be provided. If both are given, `reply_fn` wins. The text-only path is
+    kept for tests / minimal deployments without OpenD.
     """
+    if reply_fn is None and send_text is None:
+        raise ValueError("dispatch_event needs either reply_fn or send_text")
+
     text, sender_id = _extract_text(event)
     if not text or not sender_id:
         return None
@@ -112,12 +206,16 @@ def dispatch_event(
         log.debug("listener.unrecognized", text=text[:80])
         return None  # silent — user's casual chat shouldn't trigger replies
     try:
-        reply = apply(cmd, factory)
+        action_text = apply(cmd, factory)
     except Exception as e:
         log.exception("listener.apply_failed")
-        reply = f"⚠️ 处理失败: {e}"
+        action_text = f"⚠️ 处理失败: {e}"
     try:
-        send_text(reply, sender_id)
+        if reply_fn is not None:
+            reply_fn(cmd, action_text, sender_id)
+        else:
+            assert send_text is not None
+            send_text(action_text, sender_id)
     except Exception:
         log.exception("listener.reply_failed")
         return None
@@ -127,7 +225,7 @@ def dispatch_event(
         text=text[:60],
         sender=sender_id,
     )
-    return reply
+    return action_text
 
 
 def stream_lark_events_ws(
@@ -225,23 +323,24 @@ def stream_lark_events_polling(
     chat_id: str,
     bot_app_id: str,
     poll_interval: int = 10,
+    fast_interval: int = 3,
+    fast_window_seconds: int = 60,
     initial_lookback_seconds: int = 30,
 ) -> Iterator[dict[str, Any]]:
-    """Polling-based event stream — call lark-cli im +chat-messages-list every N s.
+    """Adaptive polling — fast for `fast_window_seconds` after each new user msg.
 
-    Yields synthetic im.message.receive_v1 events for each NEW text message
-    sent by anyone other than the bot itself. Uses message_id dedupe.
+    - Idle baseline: poll every `poll_interval` s (default 10s).
+    - On a new user message, switch to `fast_interval` (default 3s) for the
+      next `fast_window_seconds` (default 60s) so a follow-up command is
+      noticed near-instantly.
 
-    This works without `im.message.receive_v1` event subscription enabled —
-    only requires `im:message:readonly` (or `im:message`), which is in the
-    default lark-cli scope set.
+    Yields synthetic im.message.receive_v1 events for each NEW user-sent text
+    message. Uses message_id dedupe and skips bot's own messages by app_id.
+    Requires only `im:message:readonly` scope (no event-subscription config).
     """
     seen_ids: set[str] = set()
-    # Seed `seen_ids` with current chat tail to avoid re-dispatching old messages
-    # at startup. Look back `initial_lookback_seconds` to be safe.
-    start_dt = datetime.now(timezone.utc) - timedelta(
-        seconds=initial_lookback_seconds
-    )
+    start_dt = datetime.now(timezone.utc) - timedelta(seconds=initial_lookback_seconds)
+    last_user_msg_at: datetime | None = None
 
     while True:
         try:
@@ -263,22 +362,34 @@ def stream_lark_events_polling(
                 continue
             seen_ids.add(mid)
             sender = m.get("sender", {})
-            # Skip bot's own messages (sender.id == bot_app_id, sender_type=app)
             if sender.get("id") == bot_app_id:
                 continue
             if m.get("msg_type") != "text":
                 continue
             new_msgs.append(m)
 
-        # Sort ascending so the earliest message is dispatched first
         new_msgs.sort(key=lambda m: m.get("create_time", ""))
         for m in new_msgs:
             yield _msg_to_event(m, chat_id)
 
-        # On next iteration, only fetch since 5s before the latest seen msg
-        # to keep request small without losing late-arriving messages.
-        start_dt = datetime.now(timezone.utc) - timedelta(seconds=5)
-        time.sleep(poll_interval)
+        if new_msgs:
+            last_user_msg_at = datetime.now(timezone.utc)
+
+        # Decide next sleep duration based on activity
+        now = datetime.now(timezone.utc)
+        in_fast_window = (
+            last_user_msg_at is not None
+            and (now - last_user_msg_at).total_seconds() < fast_window_seconds
+        )
+        sleep_for = fast_interval if in_fast_window else poll_interval
+
+        # Trim seen_ids to bounded size (~last 1000 msgs is plenty)
+        if len(seen_ids) > 2000:
+            # Keep the most recent half — order isn't tracked, so just clear and reseed
+            seen_ids.clear()
+
+        start_dt = now - timedelta(seconds=5)
+        time.sleep(sleep_for)
 
 
 def _fetch_messages(
@@ -337,6 +448,7 @@ def run_listener(
     events: Iterable[dict[str, Any]] | None = None,
     backend: str = "polling",
     poll_interval: int = 10,
+    rich_cards: bool = True,
 ) -> None:
     """Long-running entry point. Pair with `equity-monitor run`.
 
@@ -345,12 +457,47 @@ def run_listener(
                  or "websocket" (requires app to have im.message.receive_v1
                  enabled in Open Platform console).
         poll_interval: seconds between API polls when backend == "polling".
+        rich_cards: if True (default), replies are Lark Interactive Cards
+                    enriched with live OpenD price + RSI/MACD/BOLL diagnostics.
+                    Set False for plain markdown text replies (e.g. when OpenD
+                    is unavailable).
         events: optional iterable injectable for tests.
     """
     allowed = cfg.lark.receiver.open_id
-    sender = make_text_sender(
+    text_sender = make_text_sender(
         cli_path=cfg.lark.cli_path, identity=cfg.lark.identity
     )
+
+    reply_fn: ReplyFn
+    futu_client: Any = None
+    if rich_cards:
+        from equity_monitor.futu_client import OpenDClient
+
+        try:
+            futu_client = OpenDClient(cfg.opend.host, cfg.opend.port)
+        except Exception:
+            log.exception("listener.opend_init_failed_falling_back_to_text")
+            futu_client = None
+
+    if rich_cards and futu_client is not None:
+        card_sender = make_card_sender(
+            cli_path=cfg.lark.cli_path, identity=cfg.lark.identity
+        )
+        reply_fn = make_card_reply(
+            cfg=cfg,
+            factory=factory,
+            client=futu_client,
+            send_text=text_sender,
+            send_card=card_sender,
+        )
+        log.info("listener.replies_mode", mode="card")
+    else:
+        # Wrap text sender into ReplyFn signature (cmd ignored).
+        def _text_reply(cmd: Command, action_text: str, recipient: str) -> None:
+            text_sender(action_text, recipient)
+
+        reply_fn = _text_reply
+        log.info("listener.replies_mode", mode="text")
 
     if events is not None:
         src: Iterable[dict[str, Any]] = events
@@ -383,13 +530,21 @@ def run_listener(
         raise ValueError(f"unknown backend: {backend!r}")
 
     log.info("listener.start", backend=backend, allowed_open_id=allowed)
-    for ev in src:
-        try:
-            dispatch_event(
-                ev, factory=factory, allowed_open_id=allowed, send_text=sender
-            )
-        except Exception:
-            log.exception("listener.dispatch_crash")
+    try:
+        for ev in src:
+            try:
+                dispatch_event(
+                    ev,
+                    factory=factory,
+                    allowed_open_id=allowed,
+                    reply_fn=reply_fn,
+                )
+            except Exception:
+                log.exception("listener.dispatch_crash")
+    finally:
+        if futu_client is not None:
+            with _safe():
+                futu_client.close()
 
 
 def _read_bot_app_id(cli_path: str) -> str:

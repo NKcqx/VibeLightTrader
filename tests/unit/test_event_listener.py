@@ -180,6 +180,35 @@ def test_msg_to_event_handles_missing_sender_id() -> None:
     assert sender == ""
 
 
+def test_dispatch_with_card_reply_path(factory: sessionmaker) -> None:
+    """Card reply path: dispatch_event delegates to reply_fn instead of send_text."""
+    from equity_monitor.events.listener import dispatch_event
+
+    captured: list[tuple[str, str, str]] = []
+
+    def fake_reply(cmd, action_text, recipient):
+        captured.append((type(cmd).__name__, action_text, recipient))
+
+    out = dispatch_event(
+        _evt("/list"),
+        factory=factory,
+        allowed_open_id="ou_user1",
+        reply_fn=fake_reply,
+    )
+    assert out is not None
+    assert captured[0][0] == "ListCommand"
+    assert "监控列表" in captured[0][1]
+    assert captured[0][2] == "ou_user1"
+
+
+def test_dispatch_requires_either_text_or_reply_fn(factory: sessionmaker) -> None:
+    from equity_monitor.events.listener import dispatch_event
+    import pytest as _pt
+
+    with _pt.raises(ValueError):
+        dispatch_event(_evt("/list"), factory=factory, allowed_open_id="ou_user1")
+
+
 def test_run_listener_processes_injected_events(factory: sessionmaker) -> None:
     """End-to-end via injected event iterable (no subprocess)."""
     from equity_monitor.config import (
@@ -219,7 +248,8 @@ def test_run_listener_processes_injected_events(factory: sessionmaker) -> None:
         _evt("添加 US.AAPL 上限200 下限165"),
         _evt("/list"),
     ]
-    run_listener(cfg=cfg, factory=factory, events=iter(events))
+    # rich_cards=False keeps the test isolated from any live OpenD
+    run_listener(cfg=cfg, factory=factory, events=iter(events), rich_cards=False)
 
     assert len(sent) == 2
     assert "已添加" in sent[0][0]

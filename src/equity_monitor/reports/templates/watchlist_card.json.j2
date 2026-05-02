@@ -1,0 +1,31 @@
+{
+  "config": {"wide_screen_mode": true},
+  "header": {
+    "template": "{{ color }}",
+    "title": {"tag": "plain_text", "content": {{ ('📋 ' ~ title) | tojson }}}
+  },
+  "elements": [
+    {
+      "tag": "div",
+      "text": {"tag": "lark_md", "content": {{ action_text | tojson }}}
+    }
+    {% for r in rows %}
+    ,{"tag": "hr"},
+    {
+      "tag": "div",
+      "text": {"tag": "lark_md", "content": {{ r.body_md | tojson }}}
+    }
+    {% endfor %}
+    {% if footer_md %}
+    ,{"tag": "hr"},
+    {
+      "tag": "note",
+      "elements": [{"tag": "lark_md", "content": {{ footer_md | tojson }}}]
+    }
+    {% endif %}
+    ,{
+      "tag": "note",
+      "elements": [{"tag": "plain_text", "content": {{ ('📝 ' ~ ts_str) | tojson }}}]
+    }
+  ]
+}

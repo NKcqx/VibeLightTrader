@@ -9,6 +9,8 @@ from zoneinfo import ZoneInfo
 
 from jinja2 import Environment
 
+from dataclasses import dataclass
+
 from equity_monitor.reports.card import SEVERITY_COLOR, SEVERITY_EMOJI
 from equity_monitor.signals.base import Severity, Signal
 
@@ -243,5 +245,39 @@ def render_news_pulse(
         temp_now=f"{temp_now:.1f}",
         temp_prev=f"{temp_prev:.1f}",
         news_md=news_md,
+    )
+    return json.loads(rendered)
+
+
+@dataclass(frozen=True)
+class WatchlistCardRow:
+    """Pre-composed body markdown for one symbol on the watchlist card."""
+
+    code: str
+    body_md: str
+
+
+def render_watchlist_card(
+    *,
+    title: str,
+    action_text: str,
+    rows: Sequence[WatchlistCardRow],
+    ts: datetime,
+    color: str = "blue",
+    footer_md: str = "",
+) -> dict[str, Any]:
+    """Render a Lark card for /list, /add, /remove, /threshold replies.
+
+    `action_text` is the operation summary (e.g. "✅ 已添加 US.AAPL ...").
+    `rows` is the current full watchlist with per-symbol diagnostic markdown.
+    """
+    tpl = _env().from_string(_load_template("watchlist_card.json.j2"))
+    rendered = tpl.render(
+        title=title,
+        color=color,
+        action_text=action_text,
+        rows=rows,
+        footer_md=footer_md,
+        ts_str=_ts_str(ts),
     )
     return json.loads(rendered)
