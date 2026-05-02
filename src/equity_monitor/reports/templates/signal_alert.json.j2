@@ -1,0 +1,24 @@
+{
+  "config": {"wide_screen_mode": true},
+  "header": {
+    "template": {{ color | tojson }},
+    "title": {"tag": "plain_text", "content": {{ ((emoji ~ ' ' ~ code ~ ' · ' ~ severity)) | tojson }}}
+  },
+  "elements": [
+    {
+      "tag": "div",
+      "text": {"tag": "lark_md", "content": {{ ('**$' ~ ('%.2f' | format(close)) ~ '**  ' ~ change_str) | tojson }}}
+    },
+    {"tag": "hr"},
+    {
+      "tag": "div",
+      "text": {"tag": "lark_md", "content": {{ ('**触发信号:**\n' ~ signals_md) | tojson }}}
+    }{% if news_md %},
+    {"tag": "hr"},
+    {
+      "tag": "div",
+      "text": {"tag": "lark_md", "content": {{ ('**关键新闻:**\n' ~ news_md) | tojson }}}
+    }{% endif %},
+    {"tag": "note", "elements": [{"tag": "plain_text", "content": {{ ts_str | tojson }}}]}
+  ]
+}

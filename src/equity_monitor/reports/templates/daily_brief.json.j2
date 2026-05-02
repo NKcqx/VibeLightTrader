@@ -1,0 +1,18 @@
+{
+  "config": {"wide_screen_mode": true},
+  "header": {
+    "template": "blue",
+    "title": {"tag": "plain_text", "content": {{ ('📊 ' ~ kind ~ ' · ' ~ date_str) | tojson }}}
+  },
+  "elements": [
+    {
+      "tag": "div",
+      "text": {"tag": "lark_md", "content": {{ rows_md | tojson }}}
+    },
+    {"tag": "hr"},
+    {
+      "tag": "div",
+      "text": {"tag": "lark_md", "content": {{ summary_md | tojson }}}
+    }
+  ]
+}
