@@ -8,11 +8,16 @@
     {
       "tag": "div",
       "text": {"tag": "lark_md", "content": {{ ('**$' ~ ('%.2f' | format(close)) ~ '**  ' ~ change_str) | tojson }}}
-    },
+    }{% if diagnostics_md %},
     {"tag": "hr"},
     {
       "tag": "div",
-      "text": {"tag": "lark_md", "content": {{ ('**触发信号:**\n' ~ signals_md) | tojson }}}
+      "text": {"tag": "lark_md", "content": {{ diagnostics_md | tojson }}}
+    }{% endif %},
+    {"tag": "hr"},
+    {
+      "tag": "div",
+      "text": {"tag": "lark_md", "content": {{ ('**🚨 触发信号:**\n' ~ signals_md) | tojson }}}
     }{% if news_md %},
     {"tag": "hr"},
     {

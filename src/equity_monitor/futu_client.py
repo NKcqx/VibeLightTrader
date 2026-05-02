@@ -77,11 +77,24 @@ class OpenDClient:
 
     @retry(stop=stop_after_attempt(3), wait=wait_exponential(min=1, max=10))
     def kline(self, code: str, *, ktype: str, limit: int) -> list[Candle]:
+        """Fetch the *most recent* `limit` bars of the given ktype.
+
+        IMPORTANT: when no `start`/`end` is passed, OpenD returns the EARLIEST
+        bars from the user's quote-permission window — not the most recent.
+        We always pass an explicit `end=today` so we get the latest bars.
+        """
+        from datetime import datetime, timedelta
+
         from futu import KLType, RET_OK
 
         kt = {"K_60M": KLType.K_60M, "K_DAY": KLType.K_DAY}[ktype]
+        end = datetime.now().strftime("%Y-%m-%d")
+        # Lookback window: 60-min bars need ~30 trading days for `limit=200`;
+        # K_DAY needs `limit` calendar days. Pad generously.
+        lookback_days = max(60, limit) if ktype == "K_60M" else max(30, limit * 2)
+        start = (datetime.now() - timedelta(days=lookback_days)).strftime("%Y-%m-%d")
         ret, df, _ = self._ctx.request_history_kline(
-            code, ktype=kt, max_count=limit
+            code, ktype=kt, start=start, end=end, max_count=limit
         )
         if ret != RET_OK:
             raise RuntimeError(f"kline failed: {df}")

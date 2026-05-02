@@ -21,6 +21,13 @@ from equity_monitor.models import Symbol
 from equity_monitor.models import Trade
 from equity_monitor.data.news import NewsItem, fetch_news_digest
 from equity_monitor.data.sentiment import SentimentSnapshot, fetch_sentiment
+from equity_monitor.reports.interpret import (
+    IndicatorReading,
+    PositionSummary,
+    ReturnSummary,
+    build_diagnostics_md,
+    reading_from_row,
+)
 from equity_monitor.reports.lark import send_card
 from equity_monitor.reports.render import (
     render_daily_brief,
@@ -159,8 +166,12 @@ def run_intraday_check(
     codes = [s.code for s in watchlist.symbols]
 
     inserted_quotes = sync_snapshots(client, factory, codes=codes)
+    snapshots_by_code = {s.code: s for s in client.snapshot(codes)}
 
     all_sigs: list[Signal] = []
+    # Cache per-code data for card decoration after the signal pipeline runs.
+    indicator_readings: dict[str, IndicatorReading] = {}
+    return_summaries: dict[str, ReturnSummary] = {}
 
     for sym_cfg in watchlist.symbols:
         df = fetch_kline_df(client, sym_cfg.code, ktype="K_60M", limit=200)
@@ -177,6 +188,23 @@ def run_intraday_check(
         )
         last = ind_df.iloc[-1]
         last_ts = _ts_to_pydatetime(ind_df.index[-1])
+
+        # Capture indicator + return readings for card diagnostics
+        indicator_readings[sym_cfg.code] = reading_from_row(
+            last.to_dict(), close=float(last["close"])
+        )
+        snap = snapshots_by_code.get(sym_cfg.code)
+        intraday_pct: float | None = None
+        if snap is not None and snap.open_price:
+            intraday_pct = (snap.last_price - snap.open_price) / snap.open_price
+        last_30_pct: float | None = None
+        if len(ind_df) > 30:
+            ref_close = float(ind_df.iloc[-31]["close"])
+            if ref_close > 0:
+                last_30_pct = (float(last["close"]) - ref_close) / ref_close
+        return_summaries[sym_cfg.code] = ReturnSummary(
+            intraday=intraday_pct, last_30_bars=last_30_pct
+        )
 
         with session_scope(factory) as session:
             sym = (
@@ -213,10 +241,17 @@ def run_intraday_check(
                 },
             )
 
+        # Threshold breach uses LIVE snapshot price (not stale kline close)
+        snap_for_threshold = snapshots_by_code.get(sym_cfg.code)
+        threshold_price = (
+            float(snap_for_threshold.last_price)
+            if snap_for_threshold is not None
+            else float(last["close"])
+        )
         sigs = detect_threshold_breach(
             code=sym_cfg.code,
             ts=last_ts,
-            close=float(last["close"]),
+            close=threshold_price,
             upper=sym_cfg.upper_threshold,
             lower=sym_cfg.lower_threshold,
         )
@@ -250,6 +285,21 @@ def run_intraday_check(
 
     # Build {(code, signal_type) -> signal_id} for card decoration
     sigid_by_key: dict[tuple[str, str], int] = {key: sid for sid, key in ids.items()}
+
+    # Load current paper positions once for position-summary card decoration.
+    with session_scope(factory) as session:
+        sym_lookup = {s.code: s.id for s in session.query(Symbol).all()}
+        pos_rows = (
+            session.query(Position).filter(Position.qty > 0).all()
+            if sym_lookup
+            else []
+        )
+        positions_by_code: dict[str, tuple[int, float]] = {}
+        sym_id_to_code = {sid: code for code, sid in sym_lookup.items()}
+        for p in pos_rows:
+            code = sym_id_to_code.get(p.symbol_id)
+            if code:
+                positions_by_code[code] = (p.qty, p.avg_cost)
 
     crit, warn, _info = split_by_severity(deduped)
     pushed = 0
@@ -289,14 +339,37 @@ def run_intraday_check(
                 "signal_id": trigger_id,
             }
 
+        # Compose diagnostics block (indicators + returns + position).
+        ind_reading = indicator_readings.get(code)
+        ret_summary = return_summaries.get(code)
+        pos_summary: PositionSummary | None = None
+        if code in positions_by_code:
+            qty, avg = positions_by_code[code]
+            snap = snapshots_by_code.get(code)
+            if snap is not None:
+                pos_summary = PositionSummary(
+                    qty=qty, avg_cost=avg, mark=snap.last_price
+                )
+        diagnostics_md = build_diagnostics_md(
+            indicator=ind_reading,
+            returns=ret_summary,
+            position=pos_summary,
+        )
+        # Use intraday change for header line if available
+        change_pct_for_header = (
+            ret_summary.intraday if ret_summary and ret_summary.intraday is not None
+            else 0.0
+        )
+
         card = render_signal_alert(
             code=code,
             ts=ts_for_card,
             close=float(close),
-            change_pct=0.0,
+            change_pct=change_pct_for_header,
             signals=sigs,
             signal_ids=signal_ids,
             suggestion=sug_card_arg,
+            diagnostics_md=diagnostics_md,
         )
         try:
             msg_id = send_card_fn(

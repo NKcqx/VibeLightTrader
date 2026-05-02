@@ -65,6 +65,7 @@ def render_signal_alert(
     news_titles: Sequence[str] = (),
     signal_ids: Sequence[int] = (),
     suggestion: dict[str, Any] | None = None,
+    diagnostics_md: str = "",
 ) -> dict[str, Any]:
     """Render a signal-alert Lark Interactive Card to a dict (ready for JSON).
 
@@ -115,9 +116,63 @@ def render_signal_alert(
         signals_md=signals_md,
         news_md=news_md,
         suggestion_md=suggestion_md,
+        diagnostics_md=diagnostics_md,
         ts_str=_ts_str(ts),
     )
     return json.loads(rendered)
+
+
+def interpret_indicators(
+    *,
+    close: float | None,
+    rsi: float | None = None,
+    macd: float | None = None,
+    macd_signal: float | None = None,
+    macd_hist: float | None = None,
+    boll_upper: float | None = None,
+    boll_mid: float | None = None,
+    boll_lower: float | None = None,
+) -> str:
+    """Produce a one-line Chinese interpretation of indicator state.
+
+    Empty string if no values are available (caller decides whether to omit).
+    """
+    parts: list[str] = []
+    if rsi is not None:
+        if rsi >= 70:
+            parts.append(f"RSI {rsi:.0f} (超买)")
+        elif rsi >= 60:
+            parts.append(f"RSI {rsi:.0f} (偏强)")
+        elif rsi <= 30:
+            parts.append(f"RSI {rsi:.0f} (超卖)")
+        elif rsi <= 40:
+            parts.append(f"RSI {rsi:.0f} (偏弱)")
+        else:
+            parts.append(f"RSI {rsi:.0f} (中性)")
+    if macd is not None and macd_signal is not None:
+        bias = "多头" if macd > macd_signal else "空头"
+        cross = ""
+        if macd_hist is not None:
+            if macd_hist > 0 and macd_hist > 0.05:
+                cross = " · 柱线扩张"
+            elif macd_hist < 0 and macd_hist < -0.05:
+                cross = " · 空头扩张"
+        parts.append(f"MACD {bias}{cross}")
+    if (
+        close is not None
+        and boll_upper is not None
+        and boll_mid is not None
+        and boll_lower is not None
+    ):
+        if close > boll_upper:
+            parts.append("BOLL 突破上轨")
+        elif close < boll_lower:
+            parts.append("BOLL 跌破下轨")
+        elif close > boll_mid:
+            parts.append("BOLL 中轨上方")
+        else:
+            parts.append("BOLL 中轨下方")
+    return " · ".join(parts)
 
 
 def render_daily_brief(
@@ -130,13 +185,27 @@ def render_daily_brief(
 ) -> dict[str, Any]:
     """Render the morning/closing brief card.
 
-    `pnl_lines` (P2): if non-empty, appended as a "纸面盘 P&L" section.
+    Each row dict supports the following optional fields beyond the basics:
+        analysis (str): indicator interpretation line
+        pnl_str  (str): per-symbol position + unrealized P&L summary
+        sentiment (str): one-line sentiment note (skipped if absent)
+
+    `pnl_lines` (P2 aggregate): if non-empty, appended as a "纸面盘 P&L" section.
     """
-    rows_md_lines = []
+    rows_md_lines: list[str] = []
     for r in rows:
-        rows_md_lines.append(
-            f"[{r['code']}] **${r['close']:.2f}**  {r['change_pct']:+.2%}  信号:{r['signal_count']}"
+        change_arrow = "▲" if r["change_pct"] >= 0 else "▼"
+        head = (
+            f"**[{r['code']}]** **${r['close']:.2f}**  "
+            f"{change_arrow} {r['change_pct']:+.2%}  信号:{r.get('signal_count', 0)}"
         )
+        rows_md_lines.append(head)
+        if r.get("analysis"):
+            rows_md_lines.append(f"  📊 {r['analysis']}")
+        if r.get("pnl_str"):
+            rows_md_lines.append(f"  💰 {r['pnl_str']}")
+        if r.get("sentiment"):
+            rows_md_lines.append(f"  💬 {r['sentiment']}")
     rows_md = "\n".join(rows_md_lines)
     summary_md = "\n".join(f"• {line}" for line in summary_lines)
     pnl_md = ""
