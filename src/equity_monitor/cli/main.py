@@ -6,6 +6,7 @@ from typing import Any
 import click
 
 from equity_monitor.config import load_settings, load_watchlist
+from equity_monitor.data.backfill import backfill_all
 from equity_monitor.db import init_schema, make_engine, make_sessionmaker, session_scope
 from equity_monitor.futu_client import OpenDClient
 from equity_monitor.models import Symbol
@@ -204,6 +205,37 @@ def db_status(ctx: click.Context) -> None:
         click.echo(f"signals:           {s.query(SignalRow).count()}")
         click.echo(f"news_digest:       {s.query(NewsDigest).count()}")
         click.echo(f"sentiment_snapshots: {s.query(SentimentSnapshotRow).count()}")
+
+
+@cli.command()
+@click.option(
+    "--days",
+    default=30,
+    show_default=True,
+    type=int,
+    help="How many calendar days of 60-min K-line to pull (~7 bars per US trading day).",
+)
+@click.pass_context
+def backfill(ctx: click.Context, days: int) -> None:
+    """Backfill historical 60-min OHLC + indicators for the entire watchlist."""
+    cfg = _get_cfg(ctx)
+    wl = _get_watchlist(ctx)
+    factory = _make_factory(cfg)
+
+    client = OpenDClient(cfg.opend.host, cfg.opend.port)
+    try:
+        out = backfill_all(
+            client=client,
+            factory=factory,
+            codes=[s.code for s in wl.symbols],
+            days=days,
+        )
+    finally:
+        client.close()
+    for code, stats in out.items():
+        click.echo(
+            f"{code}: quotes={stats['quotes']} indicators={stats['indicators']}"
+        )
 
 
 if __name__ == "__main__":
