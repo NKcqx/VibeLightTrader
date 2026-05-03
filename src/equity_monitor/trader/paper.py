@@ -363,12 +363,14 @@ class OpenDSecTrader:
         order_type: OrderType = "MARKET",
         limit_price: float | None = None,
     ) -> PaperOrderResult:
+        # futu SDK renamed `OrderSide` → `TrdSide` in newer releases; use
+        # `TrdSide` and keep our internal `OrderSide` literal for typing.
         from futu import (  # type: ignore[import-not-found]
-            OrderSide as FOrderSide,
             OrderType as FOrderType,
+            TrdSide,
         )
 
-        side_enum = FOrderSide.BUY if side == "BUY" else FOrderSide.SELL
+        side_enum = TrdSide.BUY if side == "BUY" else TrdSide.SELL
         type_enum = (
             FOrderType.MARKET if order_type == "MARKET" else FOrderType.NORMAL
         )

@@ -216,21 +216,52 @@ def chart(ctx: click.Context, code: str, freq: str, out_dir: str, push: bool) ->
     required=True,
     help="Which single job to run.",
 )
+@click.option(
+    "--auto-trade/--no-auto-trade",
+    "auto_trade",
+    default=None,
+    help=(
+        "Override cfg.trader.auto_execute for this run only. "
+        "Only meaningful for --job intraday."
+    ),
+)
 @click.pass_context
-def once(ctx: click.Context, job: str) -> None:
+def once(ctx: click.Context, job: str, auto_trade: bool | None) -> None:
     """Run a single job once and print the result dict."""
     cfg = _get_cfg(ctx)
     wl = _get_watchlist(ctx)
     factory = _make_factory(cfg)
 
+    if auto_trade is not None:
+        cfg.trader.auto_execute = auto_trade
+
     if job == "news":
         res = run_news_pulse(factory=factory, cfg=cfg, watchlist=wl)
     else:
         client = OpenDClient(cfg.opend.host, cfg.opend.port)
+        paper_trader: Any | None = None
         try:
             if job == "intraday":
+                if cfg.trader.auto_execute:
+                    from equity_monitor.trader.paper import OpenDSecTrader
+
+                    try:
+                        paper_trader = OpenDSecTrader(
+                            host=cfg.opend.host, port=cfg.opend.port
+                        )
+                    except Exception as e:
+                        click.echo(
+                            f"warning: paper trader init failed; "
+                            f"auto-trade skipped this run ({e})",
+                            err=True,
+                        )
+                        paper_trader = None
                 res = run_intraday_check(
-                    client=client, factory=factory, cfg=cfg, watchlist=wl
+                    client=client,
+                    factory=factory,
+                    cfg=cfg,
+                    watchlist=wl,
+                    paper_trader=paper_trader,
                 )
             elif job == "morning":
                 res = run_morning_brief(
@@ -242,6 +273,11 @@ def once(ctx: click.Context, job: str) -> None:
                 )
         finally:
             client.close()
+            if paper_trader is not None:
+                try:
+                    paper_trader.close()
+                except Exception:
+                    pass
     click.echo(res)
 
 
@@ -396,63 +432,20 @@ def trade_list(ctx: click.Context, status: str) -> None:
 def _execute_paper_trade(
     s: Any, sig: SignalRow, sym: Symbol, qty: int, trader: Any
 ) -> int:
-    """Place order via trader, persist Trade row, update Position, mutate sig.
+    """CLI-side wrapper: delegate to trader.execute and translate errors.
 
-    Returns the new trade.id. Raises on rejection.
+    Lifts SignalExecutionError → click.ClickException so the standard CLI
+    error rendering kicks in.
     """
-    side = sig.suggested_action
-    if side not in ("BUY", "SELL"):
-        raise click.ClickException(
-            f"signal {sig.id} suggested_action={side!r} is not actionable"
-        )
-
-    result = trader.place_order(code=sym.code, side=side, qty=qty)
-    if result.status == "REJECTED":
-        sig.status = "cancelled"
-        raise click.ClickException(
-            f"order rejected by paper broker: {result.error}"
-        )
-
-    trade_row = Trade(
-        symbol_id=sym.id,
-        ts=result.submitted_at,
-        side=side,
-        qty=result.filled_qty,
-        price=result.avg_fill_price,
-        futu_order_id=result.order_id,
-        signal_id=sig.id,
-        status=result.status,
+    from equity_monitor.trader.execute import (
+        SignalExecutionError,
+        execute_signal_trade,
     )
-    s.add(trade_row)
-    s.flush()  # populate trade_row.id
 
-    pos = s.query(Position).filter(Position.symbol_id == sym.id).one_or_none()
-    if side == "BUY":
-        if pos is None:
-            s.add(
-                Position(
-                    symbol_id=sym.id,
-                    qty=qty,
-                    avg_cost=result.avg_fill_price,
-                )
-            )
-        else:
-            new_qty = pos.qty + qty
-            pos.avg_cost = (
-                (pos.qty * pos.avg_cost) + (qty * result.avg_fill_price)
-            ) / new_qty
-            pos.qty = new_qty
-    else:  # SELL
-        assert pos is not None and pos.qty >= qty, "oversold past broker check?"
-        realized = (result.avg_fill_price - pos.avg_cost) * qty
-        pos.realized_pnl = (pos.realized_pnl or 0.0) + realized
-        pos.qty -= qty
-        if pos.qty == 0:
-            pos.avg_cost = 0.0
-
-    sig.status = "executed"
-    sig.executed_trade_id = trade_row.id
-    return trade_row.id
+    try:
+        return execute_signal_trade(s, sig, sym, qty, trader)
+    except SignalExecutionError as e:
+        raise click.ClickException(str(e)) from e
 
 
 @trade.command("confirm")

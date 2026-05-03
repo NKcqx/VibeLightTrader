@@ -159,7 +159,11 @@ def _persist_signal_rows(
             )
         )
         result = session.execute(stmt)
-        if result.inserted_primary_key:
+        # NOTE: SQLAlchemy on SQLite emits a fake `inserted_primary_key`
+        # even for ON CONFLICT DO NOTHING rows (it returns the cursor's
+        # lastrowid which is the most recent *real* insert). Gate on
+        # rowcount instead so we only count rows that actually changed.
+        if result.rowcount > 0 and result.inserted_primary_key:
             inserted[result.inserted_primary_key[0]] = (s.code, s.signal_type)
     return inserted
 
@@ -173,6 +177,129 @@ def _load_open_positions(session) -> dict[str, int]:
         .all()
     )
     return {code: qty for code, qty in rows}
+
+
+def _execute_suggestions(
+    session,
+    inserted: dict[int, tuple[str, str]],
+    suggestions: dict[str, SignalSuggest],
+    paper_trader: Any,
+) -> dict[int, int]:
+    """Auto-execute BUY/SELL suggestions for newly-inserted signals.
+
+    Idempotency: relies on `_persist_signal_rows` returning ONLY the
+    primary-keys of *newly inserted* rows (ON CONFLICT DO NOTHING). A
+    repeat run with no new signals yields an empty `inserted` and thus no
+    trades.
+
+    Per-symbol dedupe: a SignalSuggest can be triggered by multiple
+    signal_types (e.g. RSI oversold + MACD golden cross both feed BUY 50).
+    We trade once per code; the highest-priority signal_type (threshold
+    breach > tech combo) lands first thanks to deduplicate() ordering.
+
+    Errors are logged and isolated — one rejection / mismatch must not
+    abort the rest of the run.
+
+    Returns {signal_id: trade_id} for successfully placed orders.
+    """
+    from equity_monitor.trader.execute import (
+        SignalExecutionError,
+        execute_signal_trade,
+    )
+
+    executed: dict[int, int] = {}
+    done_codes: set[str] = set()
+
+    for sid, (code, signal_type) in inserted.items():
+        if code in done_codes:
+            log.debug("auto_exec.skip_done_code", sid=sid, code=code)
+            continue
+        sug = suggestions.get(code)
+        if sug is None:
+            log.debug("auto_exec.skip_no_suggestion", sid=sid, code=code)
+            continue
+        if sug.action == "HOLD" or sug.qty <= 0:
+            log.debug(
+                "auto_exec.skip_hold_or_zero",
+                sid=sid,
+                code=code,
+                action=sug.action,
+                qty=sug.qty,
+            )
+            continue
+        if signal_type not in sug.triggering_signal_types:
+            log.debug(
+                "auto_exec.skip_wrong_type",
+                sid=sid,
+                code=code,
+                signal_type=signal_type,
+                triggers=list(sug.triggering_signal_types),
+            )
+            continue
+
+        sig = session.query(SignalRow).filter(SignalRow.id == sid).one_or_none()
+        if sig is None or sig.suggested_action is None:
+            log.debug(
+                "auto_exec.skip_sig_missing_or_no_action",
+                sid=sid,
+                code=code,
+                sig_present=sig is not None,
+            )
+            continue
+        # Belt-and-suspenders idempotency: SQLAlchemy's ON CONFLICT DO
+        # NOTHING on SQLite leaks the existing row's PK back through
+        # `inserted_primary_key`, so a re-run can re-surface a signal we
+        # already executed. Skip anything not in 'pending'.
+        if sig.status != "pending":
+            log.debug(
+                "auto_exec.skip_non_pending",
+                sid=sid,
+                code=code,
+                status=sig.status,
+            )
+            continue
+        sym = session.query(Symbol).filter(Symbol.id == sig.symbol_id).one()
+        log.info(
+            "auto_exec.attempting",
+            sid=sid,
+            code=code,
+            side=sug.action,
+            qty=sig.suggested_qty or sug.qty,
+        )
+
+        try:
+            trade_id = execute_signal_trade(
+                session, sig, sym, sig.suggested_qty or sug.qty, paper_trader
+            )
+            executed[sid] = trade_id
+            done_codes.add(code)
+            log.info(
+                "intraday_check.auto_executed",
+                signal_id=sid,
+                code=code,
+                side=sug.action,
+                qty=sug.qty,
+                trade_id=trade_id,
+            )
+        except SignalExecutionError as e:
+            log.warning(
+                "intraday_check.auto_execute_failed",
+                signal_id=sid,
+                code=code,
+                side=sug.action,
+                qty=sug.qty,
+                error=str(e),
+            )
+        except Exception as e:
+            log.error(
+                "intraday_check.auto_execute_crash",
+                signal_id=sid,
+                code=code,
+                exc_type=type(e).__name__,
+                error=repr(e),
+            )
+
+    return executed
 
 
 def _ts_to_pydatetime(raw: Any) -> datetime:
@@ -189,10 +316,19 @@ def run_intraday_check(
     send_card_fn: SendCardFn = _default_sender,
     send_image_fn: SendImageFn | None = None,
     snapshot_dir: Path | None = None,
+    paper_trader: Any | None = None,
 ) -> dict[str, int]:
     """One pass of intraday_check.
 
-    Returns {'quotes': N, 'signals': M, 'pushed': P}.
+    Args:
+        paper_trader: optional PaperTrader. When supplied AND
+            cfg.trader.auto_execute is True, BUY/SELL suggestions for
+            newly-inserted signals are placed automatically and recorded
+            as Trade/Position rows. When None, suggestions are still
+            shown in the alert card but never executed (manual confirm
+            via `equity-monitor trade confirm <signal_id>`).
+
+    Returns {'quotes': N, 'signals': M, 'pushed': P, 'executed': E}.
     """
     if now_utc is None:
         now_utc = datetime.now(tz=timezone.utc)
@@ -307,15 +443,21 @@ def run_intraday_check(
     for sig in deduped:
         sigs_by_code.setdefault(sig.code, []).append(sig)
 
+    executed: dict[int, int] = {}
     with session_scope(factory) as session:
         positions = _load_open_positions(session)
         suggestions = decide_actions_for_codes(sigs_by_code, positions=positions)
         ids = _persist_signal_rows(session, deduped, suggestions=suggestions)
+        if paper_trader is not None and cfg.trader.auto_execute:
+            executed = _execute_suggestions(
+                session, ids, suggestions, paper_trader
+            )
     log.info(
         "intraday_check.signals",
         n=len(deduped),
         persisted=len(ids),
         suggested=len([s for s in suggestions.values() if s.action != "HOLD"]),
+        executed=len(executed),
     )
 
     # Build {(code, signal_type) -> signal_id} for card decoration
@@ -529,6 +671,7 @@ def run_intraday_check(
         "suggestions": sum(
             1 for s in suggestions.values() if s.action != "HOLD"
         ),
+        "executed": len(executed),
     }
 
 

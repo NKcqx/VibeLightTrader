@@ -17,6 +17,7 @@ Cards via `lark-cli`.
 - **Phase 2:** rule-based suggested actions (BUY/SELL with quantity), `equity-monitor trade` CLI for paper-trading confirmation, P&L summary in briefs
 - **Phase 2.5:** Lark message-driven watchlist control (`/add`, `/remove`, `/list`, `/threshold`, plus Chinese natural-language equivalents)
 - **Phase 3 (scoped):** K-line snapshot PNG with trade markers / cost line / live price; auto-attached after intraday Lark cards when configured; on-demand `/chart` in Lark + `equity-monitor chart`
+- **Phase B (auto paper-trade):** every `intraday_check` cron auto-executes its own BUY/SELL suggestions through Futu's SIMULATE account when `trader.auto_execute=true` (default ON). Trade rows record both FILLED and after-hours PENDING orders; Position rows are only mutated on FILLED. Toggle per-run via `equity-monitor once --job intraday --no-auto-trade`.
 - DB-backed sentiment baseline survives runner restarts (`sentiment_snapshots`)
 - 4 cron jobs: `intraday_check`, `morning_brief`, `closing_brief`, `news_pulse`
 - NYSE calendar gating (holidays + DST handled by `pandas-market-calendars`)
@@ -163,8 +164,10 @@ mutate the watchlist (other senders are ignored).
 equity-monitor [--settings PATH] [--watchlist PATH]
 ├── run                                Start the long-running scheduler.
 ├── listen                             Start the Lark message listener.
-├── once --job intraday|morning|closing|news
+├── once --job intraday|morning|closing|news [--auto-trade/--no-auto-trade]
 │                                      Run a single job once and print result.
+│                                      `--auto-trade` overrides cfg.trader.auto_execute
+│                                      for this run (default follows config).
 ├── backfill [--days N]                Backfill 60-min OHLC + indicators (default 30 days).
 ├── watchlist
 │   ├── list                           List active symbols in DB.

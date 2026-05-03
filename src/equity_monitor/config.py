@@ -74,6 +74,24 @@ class LoggingConfig(BaseModel):
     file: str | None = None
 
 
+class TraderConfig(BaseModel):
+    """Paper-trading auto-execution settings."""
+
+    auto_execute: bool = True
+    """If True, run_intraday_check executes BUY/SELL suggestions through
+    the paper broker and persists Trade/Position rows automatically. If
+    False, suggestions are only displayed in the alert card; user runs
+    `equity-monitor trade confirm <signal_id>` to execute manually.
+    """
+
+    simulate_only: bool = True
+    """Hard guard: refuse to operate against any non-SIMULATE account.
+    Currently always honored by OpenDSecTrader; flipping False is a
+    deliberate, user-acknowledged step toward live trading. Phase 2 keeps
+    it pinned True.
+    """
+
+
 class AppConfig(BaseModel):
     opend: OpenDConfig
     database: DatabaseConfig
@@ -81,6 +99,7 @@ class AppConfig(BaseModel):
     lark: LarkConfig
     signals: SignalsConfig
     logging: LoggingConfig
+    trader: TraderConfig = Field(default_factory=TraderConfig)
 
 
 def load_watchlist(path: str | Path) -> WatchlistConfig:

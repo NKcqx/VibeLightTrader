@@ -23,6 +23,7 @@ from equity_monitor.scheduler.jobs import (
     run_morning_brief,
     run_news_pulse,
 )
+from equity_monitor.trader.paper import OpenDSecTrader
 
 
 def _setup_logging(level: str = "INFO", file_path: str | None = None) -> None:
@@ -88,11 +89,29 @@ def build_scheduler(
         cli_path=cfg.lark.cli_path, identity=cfg.lark.identity
     )
 
+    def _make_paper_trader() -> Any | None:
+        """Build the auto-trade broker, or None if disabled in cfg."""
+        if not cfg.trader.auto_execute:
+            return None
+        log_local = structlog.get_logger("scheduler.runner")
+        try:
+            return OpenDSecTrader(host=cfg.opend.host, port=cfg.opend.port)
+        except Exception:
+            log_local.exception(
+                "scheduler.paper_trader_init_failed_auto_trade_disabled"
+            )
+            return None
+
     def with_client(
         job_fn: Callable[..., Any], *, kind: str | None = None
     ) -> Callable[[], Any]:
         def runner() -> Any:
             client = client_factory()
+            paper_trader = (
+                _make_paper_trader()
+                if job_fn.__name__ == "run_intraday_check"
+                else None
+            )
             try:
                 kw: dict[str, Any] = dict(
                     client=client,
@@ -106,12 +125,18 @@ def build_scheduler(
                 if job_fn.__name__ == "run_intraday_check":
                     kw["send_image_fn"] = image_sender
                     kw["snapshot_dir"] = Path("var/snapshots").resolve()
+                    kw["paper_trader"] = paper_trader
                 return job_fn(**kw)
             finally:
                 try:
                     client.close()
                 except Exception:
                     pass
+                if paper_trader is not None:
+                    try:
+                        paper_trader.close()
+                    except Exception:
+                        pass
 
         runner.__name__ = job_fn.__name__
         return runner

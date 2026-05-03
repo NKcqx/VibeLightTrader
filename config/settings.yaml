@@ -40,3 +40,13 @@ signals:
 logging:
   level: INFO
   file: data/equity_monitor.log
+
+trader:
+  # If true, run_intraday_check auto-executes BUY/SELL suggestions
+  # through the paper broker and persists Trade/Position rows.
+  # If false, suggestions are only shown in the alert card; you confirm
+  # them manually via `equity-monitor trade confirm <signal_id>`.
+  auto_execute: true
+  # Always true in Phase 2 — refuses non-SIMULATE accounts even if
+  # OpenD's default account context says otherwise.
+  simulate_only: true
