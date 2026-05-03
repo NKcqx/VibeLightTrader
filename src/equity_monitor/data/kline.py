@@ -1,8 +1,12 @@
 from __future__ import annotations
 
 import pandas as pd
+import structlog
 
 from equity_monitor.futu_client import FREQ_TO_KTYPE, FutuClient
+
+
+log = structlog.get_logger(__name__)
 
 
 def fetch_kline_df(
@@ -43,12 +47,13 @@ def fetch_klines_multi(
 ) -> dict[str, pd.DataFrame]:
     """Return one OHLCV DataFrame per requested frequency.
 
-    Frequencies not present in `FREQ_TO_KTYPE` are silently skipped.
+    Frequencies not present in `FREQ_TO_KTYPE` are skipped after logging a warning.
     """
     out: dict[str, pd.DataFrame] = {}
     for freq in freqs:
         ktype = FREQ_TO_KTYPE.get(freq)
         if ktype is None:
+            log.warning("kline.unknown_freq_skipped", freq=freq, code=code)
             continue
         out[freq] = fetch_kline_df(client, code, ktype=ktype, limit=limit)
     return out

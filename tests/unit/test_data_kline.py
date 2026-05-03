@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from datetime import datetime
 
+import structlog.testing
+
 from equity_monitor.data.kline import fetch_kline_df, fetch_klines_multi
 from equity_monitor.futu_client import Candle, FakeFutuClient, FREQ_TO_KTYPE
 
@@ -96,12 +98,15 @@ def test_fetch_klines_multi_returns_dict_keyed_by_freq(fake_futu: FakeFutuClient
 
 def test_fetch_klines_multi_skips_unknown_freq(fake_futu: FakeFutuClient) -> None:
     fake_futu.set_kline("US.AAPL", "K_60M", _candles(3))
-    out = fetch_klines_multi(
-        fake_futu, "US.AAPL", freqs=["60m", "bogus", "D"], limit=200
-    )
-    # bogus is silently skipped (not present in FREQ_TO_KTYPE)
+    with structlog.testing.capture_logs() as cap:
+        out = fetch_klines_multi(
+            fake_futu, "US.AAPL", freqs=["60m", "bogus", "D"], limit=200
+        )
     assert "bogus" not in out
     assert "60m" in out
-    # D was not pre-populated, so it's an empty DF — present but empty
     assert "D" in out
     assert out["D"].empty
+    # Default structlog does not emit to stdlib LoggingHandler; capture_logs observes events.
+    assert any(
+        r.get("event") == "kline.unknown_freq_skipped" for r in cap
+    )

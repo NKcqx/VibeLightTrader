@@ -8,6 +8,9 @@ from typing import Protocol
 from tenacity import retry, stop_after_attempt, wait_exponential
 
 
+# Public translation between user-facing freq strings (used in /chart, the CLI,
+# and config) and the OpenD ktype namespace. Add a corresponding entry to
+# `_BARS_PER_TRADING_DAY` below if you add an intraday key.
 FREQ_TO_KTYPE: dict[str, str] = {
     "1m": "K_1M",
     "5m": "K_5M",
@@ -16,6 +19,18 @@ FREQ_TO_KTYPE: dict[str, str] = {
     "60m": "K_60M",
     "D": "K_DAY",
     "W": "K_WEEK",
+}
+
+# Bars per trading day (US RTH ≈ 6.5h):
+#   1m → 390   5m → 78   15m → 26   30m → 13
+#   60m → ~7   D → 1     W → handled separately in OpenDClient.kline
+_BARS_PER_TRADING_DAY: dict[str, int] = {
+    "K_1M": 390,
+    "K_5M": 78,
+    "K_15M": 26,
+    "K_30M": 13,
+    "K_60M": 7,
+    "K_DAY": 1,
 }
 
 
@@ -109,14 +124,16 @@ class OpenDClient:
         }[ktype]
         end = datetime.now().strftime("%Y-%m-%d")
         # How many calendar days to pull so OpenD will return at least `limit` bars.
-        if ktype in {"K_1M", "K_5M", "K_15M", "K_30M"}:
-            lookback_days = max(20, limit // 60 + 1)  # tight intraday window
-        elif ktype == "K_60M":
-            lookback_days = max(60, limit)  # ~6.5h trading * 5 trading days/wk
+        if ktype in _BARS_PER_TRADING_DAY:
+            bpd = _BARS_PER_TRADING_DAY[ktype]
+            trading_days = max(1, limit // bpd + 1)
+            # 1.5× converts trading days to calendar days (weekends + holidays);
+            # floor of 20 keeps very small queries from picking up stale bars.
+            lookback_days = max(20, int(trading_days * 1.5))
         elif ktype == "K_WEEK":
-            lookback_days = max(180, limit * 7)  # ~52 weeks ≈ 1 year
-        else:  # K_DAY (and any unhandled future ktype)
-            lookback_days = max(30, limit * 2)
+            lookback_days = max(180, limit * 7)
+        else:
+            raise RuntimeError(f"unsupported ktype for lookback: {ktype}")
         start = (datetime.now() - timedelta(days=lookback_days)).strftime("%Y-%m-%d")
         ret, df, _ = self._ctx.request_history_kline(
             code, ktype=kt, start=start, end=end, max_count=limit
