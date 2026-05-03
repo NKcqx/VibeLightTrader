@@ -4,6 +4,7 @@ import logging
 import signal
 from collections.abc import Callable
 from datetime import datetime, timezone
+from pathlib import Path
 from typing import Any
 
 import structlog
@@ -15,6 +16,7 @@ from equity_monitor.db import init_schema, make_engine, make_sessionmaker
 from equity_monitor.futu_client import FutuClient, OpenDClient
 from equity_monitor.scheduler.calendar import is_trading_day
 from equity_monitor.scheduler.jobs import (
+    _default_image_sender,
     _make_default_sender,
     run_closing_brief,
     run_intraday_check,
@@ -98,6 +100,9 @@ def build_scheduler(
                 )
                 if kind:
                     kw["kind"] = kind
+                if job_fn.__name__ == "run_intraday_check":
+                    kw["send_image_fn"] = _default_image_sender
+                    kw["snapshot_dir"] = Path("var/snapshots")
                 return job_fn(**kw)
             finally:
                 try:

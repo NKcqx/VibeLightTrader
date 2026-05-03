@@ -2,7 +2,8 @@ from __future__ import annotations
 
 import json
 from collections.abc import Callable
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
+from pathlib import Path
 from typing import Any
 
 import structlog
@@ -29,10 +30,16 @@ from equity_monitor.reports.interpret import (
     reading_from_row,
 )
 from equity_monitor.reports.lark import send_card
+from equity_monitor.reports.lark_image import send_image as _send_image
 from equity_monitor.reports.render import (
     render_daily_brief,
     render_news_pulse,
     render_signal_alert,
+)
+from equity_monitor.reports.snapshot import (
+    SnapshotRequest,
+    TradeMarker,
+    render_snapshot,
 )
 from equity_monitor.signals.base import Signal
 from equity_monitor.signals.compose import deduplicate, split_by_severity
@@ -68,6 +75,15 @@ def _make_default_sender(
 
 
 _default_sender: SendCardFn = _make_default_sender()
+
+
+SendImageFn = Callable[[Path, str, str], str]
+
+
+def _default_image_sender(path: Path, open_id: str, receiver_type: str) -> str:
+    return _send_image(
+        path, open_id=open_id, receiver_type=receiver_type
+    )  # type: ignore[arg-type]
 
 
 def _persist_indicator_row(
@@ -157,6 +173,8 @@ def run_intraday_check(
     watchlist: WatchlistConfig,
     now_utc: datetime | None = None,
     send_card_fn: SendCardFn = _default_sender,
+    send_image_fn: SendImageFn | None = None,
+    snapshot_dir: Path | None = None,
 ) -> dict[str, int]:
     """One pass of intraday_check.
 
@@ -371,11 +389,13 @@ def run_intraday_check(
             suggestion=sug_card_arg,
             diagnostics_md=diagnostics_md,
         )
+        card_ok = False
         try:
             msg_id = send_card_fn(
                 card, cfg.lark.receiver.open_id, cfg.lark.receiver.type
             )
             pushed += 1
+            card_ok = True
             log.info(
                 "intraday_check.push",
                 code=code,
@@ -385,6 +405,77 @@ def run_intraday_check(
             )
         except Exception as e:
             log.error("intraday_check.push_failed", code=code, error=str(e))
+
+        if send_image_fn is None or not card_ok:
+            return
+
+        try:
+            trade_window_start = now_utc - timedelta(days=30)
+            markers: list[TradeMarker] = []
+            with session_scope(factory) as session:
+                sym = session.query(Symbol).filter(Symbol.code == code).one_or_none()
+                if sym is not None:
+                    rows = (
+                        session.query(Trade)
+                        .filter(
+                            Trade.symbol_id == sym.id,
+                            Trade.ts >= trade_window_start,
+                        )
+                        .order_by(Trade.ts.asc())
+                        .all()
+                    )
+                    for r in rows:
+                        ts_raw = _ts_to_pydatetime(r.ts)
+                        ts_trade = (
+                            ts_raw if ts_raw.tzinfo else ts_raw.replace(tzinfo=timezone.utc)
+                        )
+                        markers.append(
+                            TradeMarker(
+                                ts=ts_trade,
+                                side="buy"
+                                if r.side.strip().upper() == "BUY"
+                                else "sell",
+                                qty=r.qty,
+                                price=r.price,
+                            )
+                        )
+
+            avg_cost: float | None = None
+            if code in positions_by_code:
+                avg_cost = positions_by_code[code][1]
+
+            snap_live = snapshots_by_code.get(code)
+            current_price = (
+                float(snap_live.last_price) if snap_live is not None else None
+            )
+
+            # TODO(p4-perf): hoist df cache to avoid 2x kline fetch.
+            df_for_chart = fetch_kline_df(client, code, ktype="K_60M", limit=200)
+            req = SnapshotRequest(
+                code=code,
+                freq="60m",
+                df=df_for_chart,
+                markers=markers,
+                avg_cost=avg_cost,
+                current_price=current_price,
+                out_dir=snapshot_dir,
+            )
+            png_path = render_snapshot(req)
+            img_msg_id = send_image_fn(
+                png_path, cfg.lark.receiver.open_id, cfg.lark.receiver.type
+            )
+            log.info(
+                "intraday_check.snapshot_pushed",
+                code=code,
+                msg_id=img_msg_id,
+                markers=len(markers),
+            )
+        except Exception as e:
+            log.error(
+                "intraday_check.snapshot_failed",
+                code=code,
+                error=str(e),
+            )
 
     crit_by_code: dict[str, list[Signal]] = {}
     for s in crit:
