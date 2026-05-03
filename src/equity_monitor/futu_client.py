@@ -8,6 +8,17 @@ from typing import Protocol
 from tenacity import retry, stop_after_attempt, wait_exponential
 
 
+FREQ_TO_KTYPE: dict[str, str] = {
+    "1m": "K_1M",
+    "5m": "K_5M",
+    "15m": "K_15M",
+    "30m": "K_30M",
+    "60m": "K_60M",
+    "D": "K_DAY",
+    "W": "K_WEEK",
+}
+
+
 @dataclass(frozen=True, slots=True)
 class Snapshot:
     code: str
@@ -87,11 +98,25 @@ class OpenDClient:
 
         from futu import KLType, RET_OK
 
-        kt = {"K_60M": KLType.K_60M, "K_DAY": KLType.K_DAY}[ktype]
+        kt = {
+            "K_1M": KLType.K_1M,
+            "K_5M": KLType.K_5M,
+            "K_15M": KLType.K_15M,
+            "K_30M": KLType.K_30M,
+            "K_60M": KLType.K_60M,
+            "K_DAY": KLType.K_DAY,
+            "K_WEEK": KLType.K_WEEK,
+        }[ktype]
         end = datetime.now().strftime("%Y-%m-%d")
-        # Lookback window: 60-min bars need ~30 trading days for `limit=200`;
-        # K_DAY needs `limit` calendar days. Pad generously.
-        lookback_days = max(60, limit) if ktype == "K_60M" else max(30, limit * 2)
+        # How many calendar days to pull so OpenD will return at least `limit` bars.
+        if ktype in {"K_1M", "K_5M", "K_15M", "K_30M"}:
+            lookback_days = max(20, limit // 60 + 1)  # tight intraday window
+        elif ktype == "K_60M":
+            lookback_days = max(60, limit)  # ~6.5h trading * 5 trading days/wk
+        elif ktype == "K_WEEK":
+            lookback_days = max(180, limit * 7)  # ~52 weeks ≈ 1 year
+        else:  # K_DAY (and any unhandled future ktype)
+            lookback_days = max(30, limit * 2)
         start = (datetime.now() - timedelta(days=lookback_days)).strftime("%Y-%m-%d")
         ret, df, _ = self._ctx.request_history_kline(
             code, ktype=kt, start=start, end=end, max_count=limit

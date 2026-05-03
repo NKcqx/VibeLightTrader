@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pandas as pd
 
-from equity_monitor.futu_client import FutuClient
+from equity_monitor.futu_client import FREQ_TO_KTYPE, FutuClient
 
 
 def fetch_kline_df(
@@ -32,3 +32,23 @@ def fetch_kline_df(
     ]
     df = pd.DataFrame(rows).set_index("ts").sort_index()
     return df
+
+
+def fetch_klines_multi(
+    client: FutuClient,
+    code: str,
+    freqs: list[str],
+    *,
+    limit: int = 200,
+) -> dict[str, pd.DataFrame]:
+    """Return one OHLCV DataFrame per requested frequency.
+
+    Frequencies not present in `FREQ_TO_KTYPE` are silently skipped.
+    """
+    out: dict[str, pd.DataFrame] = {}
+    for freq in freqs:
+        ktype = FREQ_TO_KTYPE.get(freq)
+        if ktype is None:
+            continue
+        out[freq] = fetch_kline_df(client, code, ktype=ktype, limit=limit)
+    return out
