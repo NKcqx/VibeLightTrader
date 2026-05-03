@@ -49,7 +49,15 @@ def cli(ctx: click.Context, settings_path: str, watchlist_path: str) -> None:
 
 def _get_cfg(ctx: click.Context) -> Any:
     if "cfg" not in ctx.obj:
-        ctx.obj["cfg"] = load_settings(ctx.obj["settings_path"])
+        path = ctx.obj["settings_path"]
+        if not Path(path).exists():
+            raise click.UsageError(
+                f"Settings file not found: {path!r}. "
+                f"Either `cd` into the equity-monitor repo (so 'config/settings.yaml' "
+                f"resolves), or pass an absolute path: "
+                f"`equity-monitor --settings /abs/path/to/settings.yaml ...`."
+            )
+        ctx.obj["cfg"] = load_settings(path)
     return ctx.obj["cfg"]
 
 
@@ -133,7 +141,7 @@ def listen(
 
 
 @cli.command()
-@click.argument("code")
+@click.argument("code", metavar="TICKER")
 @click.option(
     "--freq",
     default="60m",
@@ -154,7 +162,15 @@ def listen(
 )
 @click.pass_context
 def chart(ctx: click.Context, code: str, freq: str, out_dir: str, push: bool) -> None:
-    """Render a K-line snapshot PNG. Optionally push it to Lark."""
+    """Render a K-line snapshot PNG. Optionally push it to Lark.
+
+    \b
+    TICKER is a Futu-style symbol such as US.AAPL, US.NVDA, HK.00700.
+    Examples:
+      equity-monitor chart US.AAPL
+      equity-monitor chart US.NVDA --freq D
+      equity-monitor chart US.AAPL --freq 15m --push
+    """
     from pathlib import Path
 
     from equity_monitor.events.apply import apply_chart
