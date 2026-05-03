@@ -105,7 +105,7 @@ def build_scheduler(
                     kw["kind"] = kind
                 if job_fn.__name__ == "run_intraday_check":
                     kw["send_image_fn"] = image_sender
-                    kw["snapshot_dir"] = Path("var/snapshots")
+                    kw["snapshot_dir"] = Path("var/snapshots").resolve()
                 return job_fn(**kw)
             finally:
                 try:

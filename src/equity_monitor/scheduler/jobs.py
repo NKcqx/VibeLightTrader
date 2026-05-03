@@ -4,7 +4,7 @@ import json
 from collections.abc import Callable
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
 
 import structlog
 from sqlalchemy.dialects.sqlite import insert as sqlite_insert
@@ -194,7 +194,10 @@ def run_intraday_check(
 
     Returns {'quotes': N, 'signals': M, 'pushed': P}.
     """
-    now_utc = now_utc or datetime.now(tz=timezone.utc)
+    if now_utc is None:
+        now_utc = datetime.now(tz=timezone.utc)
+    elif now_utc.tzinfo is None:
+        now_utc = now_utc.replace(tzinfo=timezone.utc)
     codes = [s.code for s in watchlist.symbols]
 
     inserted_quotes = sync_snapshots(client, factory, codes=codes)
@@ -443,12 +446,23 @@ def run_intraday_check(
                         ts_trade = (
                             ts_raw if ts_raw.tzinfo else ts_raw.replace(tzinfo=timezone.utc)
                         )
+                        side_normalized = r.side.strip().upper()
+                        if side_normalized == "BUY":
+                            side_lit: Literal["buy", "sell"] = "buy"
+                        elif side_normalized == "SELL":
+                            side_lit = "sell"
+                        else:
+                            log.warning(
+                                "intraday_check.snapshot.unknown_trade_side",
+                                code=code,
+                                trade_id=r.id,
+                                side=r.side,
+                            )
+                            continue
                         markers.append(
                             TradeMarker(
                                 ts=ts_trade,
-                                side="buy"
-                                if r.side.strip().upper() == "BUY"
-                                else "sell",
+                                side=side_lit,
                                 qty=r.qty,
                                 price=r.price,
                             )
@@ -488,7 +502,9 @@ def run_intraday_check(
             log.error(
                 "intraday_check.snapshot_failed",
                 code=code,
+                exc_type=type(e).__name__,
                 error=str(e),
+                error_repr=repr(e),
             )
 
     crit_by_code: dict[str, list[Signal]] = {}

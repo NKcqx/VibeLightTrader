@@ -254,3 +254,53 @@ def test_image_send_failure_does_not_block_alert(
     )
     log_events = [r.get("event") for r in cap]
     assert "intraday_check.snapshot_failed" in log_events
+
+
+@pytest.mark.integration
+def test_unknown_trade_side_is_skipped_with_warning(
+    fake_client: FakeFutuClient,
+    factory: sessionmaker,
+    tmp_path: Path,
+) -> None:
+    """Trades with side neither BUY nor SELL must be skipped (with warning)."""
+    with factory() as session:
+        sym = Symbol(
+            code="US.AAPL",
+            name="Apple",
+            upper_threshold=200.0,
+            lower_threshold=100.0,
+        )
+        session.add(sym)
+        session.flush()
+        session.add(
+            Trade(
+                symbol_id=sym.id,
+                ts=datetime(2026, 5, 1, 12, 0, tzinfo=timezone.utc),
+                side="UNKNOWN",
+                qty=100,
+                price=150.0,
+                status="filled",
+            )
+        )
+        session.commit()
+
+    sent_images: list = []
+
+    def fake_image_sender(path, open_id, receiver_type):  # type: ignore[no-untyped-def]
+        sent_images.append(path)
+        return "om_img_zzz"
+
+    with structlog.testing.capture_logs() as cap:
+        run_intraday_check(
+            client=fake_client,
+            factory=factory,
+            cfg=_make_cfg(tmp_path),
+            watchlist=_make_watchlist(),
+            send_card_fn=lambda *a, **k: "om_card",
+            send_image_fn=fake_image_sender,
+            snapshot_dir=tmp_path,
+        )
+
+    assert len(sent_images) >= 1, "image is still sent (markerless)"
+    events = [r.get("event") for r in cap]
+    assert "intraday_check.snapshot.unknown_trade_side" in events
