@@ -17,7 +17,7 @@
 ```
 📈 美股 hourly 监控 + 信号告警机器人。
 
-实时拉取报价、60 分钟 K 线，计算 RSI/MACD/BOLL 三件套指标，价格穿越阈值或出现金叉/死叉等异常时主动推送飞书卡片。支持模拟交易建议、纸面 P&L 跟踪。
+实时拉取报价、60 分钟 K 线，计算 RSI/MACD/BOLL 三件套指标，价格穿越阈值或出现金叉/死叉等异常时主动推送飞书卡片；支持按需 `/chart` K 线 PNG 快照。支持模拟交易建议、纸面 P&L 跟踪。
 
 直接 DM 我即可增删监控标的，发「帮助」查看指令清单。
 ```
@@ -37,6 +37,8 @@
 • 卡片含「建议动作」(BUY/SELL N 股) — CLI 一行命令确认即下模拟单
 • 模拟账户接 Futu OpenD（acc_id=19145941，$1M 起始资金）
 
+• 按需 `/chart` / `图` 生成 K 线 PNG（告警成功推卡后亦可自动附图，视部署配置）
+
 【飞书指令】(直接 DM 我即可，无需 @)
 
 📋 列表 / list / ls
@@ -51,6 +53,11 @@
    /threshold AAPL upper=290 lower=200
    别名：阈值 / 修改 / 更新 / /threshold
 
+📈 /chart <标的> [周期]
+   `/chart US.AAPL` （默认 60m）· `/chart AAPL D` · `图 TSLA`
+   约 200 根 K·近 30 天纸面 BUY/SELL 标记·开仓成本橙色虚线·现价钢蓝虚线
+   周期：5m / 15m / 30m / 60m / D（日）/ W（周）；1m 不支持
+
 🗑 删除 US.AAPL / 取消 AAPL / /remove AAPL
    别名：删除 / 取消 / 停止 / 不监控 / /remove
 
@@ -64,6 +71,28 @@
 
 【数据来源】Futu OpenD (本地 11111 端口) — 实时报价 / K 线 / 模拟交易 API
 ```
+
+### `/chart <code> [freq]` — K-line snapshot（K 线 PNG）
+
+按需渲染标的 `<code>` 的约 **200-bar** K 线图并作为 PNG 发出，图层包括：
+
+- 近 **30** 天内纸面 **BUY / SELL** 成交标记
+- 持仓成本（若有开仓）橙色虚线
+- 当前价钢蓝色虚线
+
+**Frequencies**: `5m`, `15m`, `30m`, `60m`（默认）, `D`（日线）, `W`（周线）。
+
+**Examples**:
+
+- `/chart US.AAPL` — 默认 60m
+- `/chart AAPL D` — 日线（裸代码自动转为 `US.`）
+- `图 TSLA` — 中文别名触发同一路径
+
+**Failure modes**:
+
+- **未知频率**（如 `bogus`、`1m`）→ **静默**（不回复）。
+- OpenD **不可达或未启用图片发送** → 文案：「⚠️ /chart 当前不可用 (OpenD 未连接或未启用图片发送)。」
+- **渲染/K 线拉取失败** → 「⚠️ /chart 失败: {error}」
 
 ---
 
@@ -98,4 +127,7 @@ equity-monitor trade confirm SIGNAL_ID [--qty N]  # 下单确认
 equity-monitor trade cancel SIGNAL_ID             # 取消建议
 equity-monitor trade positions                    # 当前持仓
 equity-monitor trade pnl [--days N]               # 已实现 P&L
+
+# K 线与快照（Phase 3）
+equity-monitor chart US.AAPL [--freq 60m] [--out-dir var/snapshots] [--push]  # 终端渲染 PNG，可加推送到 Lark
 ```

@@ -16,12 +16,59 @@ Cards via `lark-cli`.
 - **Card diagnostics block** — RSI/MACD/BOLL current values + Chinese interpretation, intraday + 30-bar return %, position P&L
 - **Phase 2:** rule-based suggested actions (BUY/SELL with quantity), `equity-monitor trade` CLI for paper-trading confirmation, P&L summary in briefs
 - **Phase 2.5:** Lark message-driven watchlist control (`/add`, `/remove`, `/list`, `/threshold`, plus Chinese natural-language equivalents)
+- **Phase 3 (scoped):** K-line snapshot PNG with trade markers / cost line / live price; auto-attached after intraday Lark cards when configured; on-demand `/chart` in Lark + `equity-monitor chart`
 - DB-backed sentiment baseline survives runner restarts (`sentiment_snapshots`)
 - 4 cron jobs: `intraday_check`, `morning_brief`, `closing_brief`, `news_pulse`
 - NYSE calendar gating (holidays + DST handled by `pandas-market-calendars`)
 - Lark Interactive Card rendering via Jinja2 + push via `lark-cli`
 - Backfill historical OHLC + indicators idempotently
-- 257 unit + integration tests, all green
+
+## Phase 3 (scoped) — K-line snapshot visualization
+
+**TL;DR**: Every signal alert can carry a static PNG snapshot of the K-line
+(default **60-minute** bars), with BUY/SELL paper-trade markers overlaid, the
+position’s average cost as an orange dashed line, and the live price as a
+steel-blue dashed line. You can request the same snapshot on demand with
+`/chart <code> [freq]` in Lark or `equity-monitor chart <code>` in the shell.
+
+### What landed
+
+1. **Snapshot renderer** (`equity_monitor.reports.snapshot.render_snapshot`)
+   uses mplfinance to draw OHLCV + markers + reference lines and writes a
+   PNG under `var/snapshots/` (or a custom `--out-dir`).
+2. **Lark image sender** (`equity_monitor.reports.lark_image.send_image`)
+   wraps `lark-cli im +messages-send --image <abs-path>` with the same
+   retry / error contract as the existing card sender (`reports/lark.py`).
+3. **Multi-frequency K-line support**: `5m`, `15m`, `30m`, `60m`, `D`, `W`
+   are valid `--freq` values. `1m` is intentionally excluded (too noisy
+   for visual inspection).
+4. **Auto-attach to alerts**: `run_intraday_check` sends the snapshot
+   automatically after each successful card push when both `send_image_fn`
+   and `snapshot_dir` are configured. Image send is **non-fatal** —
+   failures are logged but do not block subsequent alerts.
+5. **`/chart` on-demand** in Lark: `/chart US.AAPL`, `/chart AAPL D`,
+   `图 TSLA`. Available on both websocket and polling listener backends.
+6. **`equity-monitor chart` CLI**: `equity-monitor chart US.AAPL --freq 60m
+   [--push]` for ad-hoc rendering / sharing from the terminal.
+
+### Quick smoke test
+
+```bash
+conda activate fin
+python scripts/smoke_phase3.py        # render-only (no Lark traffic)
+python scripts/smoke_phase3.py --push # also send the PNG to your Lark
+```
+
+### What’s NOT in Phase 3 (deferred)
+
+- Strategy abstraction layer (per-strategy P&L, max drawdown, equity curves).
+- `/positions`, `/pnl`, `/history` listener commands and their dedicated card
+  rendering (beyond existing brief summaries).
+- QuantStats tearsheet.
+- `BackfillState` cursor for incremental K-line pulls.
+- An interactive web dashboard (Streamlit / Plotly Dash).
+
+These may arrive in a later phase if needed.
 
 ## Quickstart
 
@@ -75,6 +122,9 @@ equity-monitor backfill --days 30
 ```bash
 python scripts/smoke_e2e.py
 # Verify 4 Lark cards arrive in your IM (intraday / morning / closing / news pulse)
+
+# K-line snapshot pipeline (Phase 3; needs OpenD + DB; add --push for lark-cli send)
+python scripts/smoke_phase3.py
 ```
 
 ### 6. Run forever
@@ -92,7 +142,8 @@ equity-monitor listen
 ## Lark message control
 
 Once `equity-monitor listen` is up you can DM the bot in Lark to manage the
-watchlist. Both slash-style and Chinese natural-language phrases work:
+watchlist and request `/chart` snapshots. Slash-style commands, Chinese aliases,
+and natural-language phrases work:
 
 | Action | Examples |
 |---|---|
@@ -100,6 +151,7 @@ watchlist. Both slash-style and Chinese natural-language phrases work:
 | Remove | `删除 US.AAPL` / `取消 AAPL` / `/remove US.AAPL` |
 | Update thresholds | `阈值 US.AAPL 上限205` / `/threshold US.AAPL upper=205 lower=170` |
 | List | `列表` / `/list` |
+| Chart (K-line PNG) | `/chart US.AAPL` / `/chart AAPL D` / `图 TSLA` |
 | Help | `帮助` / `/help` |
 
 Sender is gated by `lark.receiver.open_id` — only your configured account can
@@ -123,6 +175,8 @@ equity-monitor [--settings PATH] [--watchlist PATH]
 │   ├── cancel SIGNAL_ID               Mark suggestion as cancelled.
 │   ├── positions                      List current paper positions.
 │   └── pnl [--days N]                 Realized P&L by symbol.
+├── chart CODE [--freq 60m|5m|...] [--out-dir ...] [--push]
+│                                      Render K-line snapshot PNG (+ optional Lark).
 └── db
     ├── init                           Create SQLite schema.
     └── status                         Print row counts of all tables.
@@ -164,8 +218,8 @@ push.
 ## Testing
 
 ```bash
-pytest                                 # all 126 tests (~3s)
-pytest -m "not integration"            # unit only (~1.5s)
+pytest                                 # full suite (~3s); 301 tests as of Phase 3
+pytest -m "not integration"            # unit-only slice
 pytest tests/integration/ -v           # integration with FakeFutuClient + in-mem DB
 ```
 
@@ -200,15 +254,17 @@ src/equity_monitor/
     render.py                Jinja2 → Lark Interactive Card JSON
     templates/*.j2           card templates (signal_alert / daily_brief / news_pulse)
     lark.py                  send_card via lark-cli subprocess + tenacity retry
+    snapshot.py              mplfinance K-line PNG snapshots
+    lark_image.py            send_image via lark-cli (--image), tenacity retry
   cli/
-    main.py                  click subcommands (run/once/backfill/watchlist/db)
+    main.py                  click subcommands (run/listen/once/chart/backfill/watchlist/trade/db)
 ```
 
 ## Architecture
 
 See `docs/superpowers/specs/2026-05-02-equity-monitor-design.md` for the full
 design spec, including the data-flow diagram, SQLite schema, signal fusion
-rules, and Phase 2/3 roadmap (paper trading, fully-auto execution).
+rules, and backlog for paper trading automation and dashboards.
 
 ## License
 
