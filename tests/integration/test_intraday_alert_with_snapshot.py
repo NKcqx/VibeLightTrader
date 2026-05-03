@@ -6,6 +6,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import pytest
+import structlog
 from sqlalchemy.orm import sessionmaker
 
 from equity_monitor.config import (
@@ -135,14 +136,17 @@ def test_send_image_fn_fired_after_card_when_signal_triggers(
         )
         session.commit()
 
+    events: list[str] = []
     sent_cards: list = []
     sent_images: list = []
 
     def fake_card_sender(card, open_id, receiver_type):  # type: ignore[no-untyped-def]
+        events.append("card")
         sent_cards.append({"card": card, "to": open_id, "rt": receiver_type})
         return "om_card_xxx"
 
     def fake_image_sender(path, open_id, receiver_type):  # type: ignore[no-untyped-def]
+        events.append("image")
         sent_images.append({"path": path, "to": open_id, "rt": receiver_type})
         return "om_img_xxx"
 
@@ -159,6 +163,9 @@ def test_send_image_fn_fired_after_card_when_signal_triggers(
     assert res["pushed"] >= 1, "card should have been pushed for threshold breach"
     assert len(sent_cards) >= 1
     assert len(sent_images) >= 1, "image should follow the card"
+    assert events.index("card") < events.index("image"), (
+        "card should be sent before image"
+    )
     img = sent_images[0]
     assert img["to"] == "ou_test"
     assert img["rt"] == "user"
@@ -232,13 +239,18 @@ def test_image_send_failure_does_not_block_alert(
     def angry_image_sender(*a: object, **kw: object) -> str:
         raise RuntimeError("boom")
 
-    res = run_intraday_check(
-        client=fake_client,
-        factory=factory,
-        cfg=_make_cfg(tmp_path),
-        watchlist=_make_watchlist(),
-        send_card_fn=fake_card_sender,
-        send_image_fn=angry_image_sender,
-        snapshot_dir=tmp_path,
+    with structlog.testing.capture_logs() as cap:
+        res = run_intraday_check(
+            client=fake_client,
+            factory=factory,
+            cfg=_make_cfg(tmp_path),
+            watchlist=_make_watchlist(),
+            send_card_fn=fake_card_sender,
+            send_image_fn=angry_image_sender,
+            snapshot_dir=tmp_path,
+        )
+    assert res["pushed"] >= 1, (
+        "card-push count should be unaffected by image failure"
     )
-    assert res["pushed"] >= 1, "card-push count should be unaffected by image failure"
+    log_events = [r.get("event") for r in cap]
+    assert "intraday_check.snapshot_failed" in log_events

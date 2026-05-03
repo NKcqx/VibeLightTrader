@@ -80,10 +80,24 @@ _default_sender: SendCardFn = _make_default_sender()
 SendImageFn = Callable[[Path, str, str], str]
 
 
-def _default_image_sender(path: Path, open_id: str, receiver_type: str) -> str:
-    return _send_image(
-        path, open_id=open_id, receiver_type=receiver_type
-    )  # type: ignore[arg-type]
+def _make_default_image_sender(
+    cli_path: str = "lark-cli", identity: str = "bot"
+) -> SendImageFn:
+    """Build a default image sender bound to lark-cli path and identity."""
+
+    def _sender(path: Path, open_id: str, receiver_type: str) -> str:
+        return _send_image(
+            path,
+            open_id=open_id,
+            receiver_type=receiver_type,  # type: ignore[arg-type]
+            cli_path=cli_path,
+            identity=identity,  # type: ignore[arg-type]
+        )
+
+    return _sender
+
+
+_default_image_sender: SendImageFn = _make_default_image_sender()
 
 
 def _persist_indicator_row(

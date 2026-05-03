@@ -16,7 +16,7 @@ from equity_monitor.db import init_schema, make_engine, make_sessionmaker
 from equity_monitor.futu_client import FutuClient, OpenDClient
 from equity_monitor.scheduler.calendar import is_trading_day
 from equity_monitor.scheduler.jobs import (
-    _default_image_sender,
+    _make_default_image_sender,
     _make_default_sender,
     run_closing_brief,
     run_intraday_check,
@@ -84,6 +84,9 @@ def build_scheduler(
     sender = _make_default_sender(
         cli_path=cfg.lark.cli_path, identity=cfg.lark.identity
     )
+    image_sender = _make_default_image_sender(
+        cli_path=cfg.lark.cli_path, identity=cfg.lark.identity
+    )
 
     def with_client(
         job_fn: Callable[..., Any], *, kind: str | None = None
@@ -101,7 +104,7 @@ def build_scheduler(
                 if kind:
                     kw["kind"] = kind
                 if job_fn.__name__ == "run_intraday_check":
-                    kw["send_image_fn"] = _default_image_sender
+                    kw["send_image_fn"] = image_sender
                     kw["snapshot_dir"] = Path("var/snapshots")
                 return job_fn(**kw)
             finally:
