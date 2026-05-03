@@ -75,14 +75,16 @@ def run(ctx: click.Context) -> None:
 @cli.command()
 @click.option(
     "--backend",
-    type=click.Choice(["polling", "websocket"]),
-    default="polling",
+    type=click.Choice(["websocket", "polling"]),
+    default="websocket",
     show_default=True,
     help=(
-        "polling = poll p2p chat history adaptively (3s after activity, 10s "
-        "idle baseline); works with default lark-cli scopes. websocket = "
-        "lark-cli event +subscribe; requires the app to have "
-        "im.message.receive_v1 enabled in the Open Platform console."
+        "websocket = lark-cli event +subscribe long-connection (recommended; "
+        "needs im.message.receive_v1 registered under 事件与回调). "
+        "polling = adaptive p2p chat-history polling (3s after activity, 10s "
+        "idle); fallback when websocket can't be configured. "
+        "Note: only one websocket subscriber per bot — kill stray "
+        "lark-cli event processes first or you'll lose events to round-robin."
     ),
 )
 @click.option(

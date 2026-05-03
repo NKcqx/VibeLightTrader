@@ -252,12 +252,17 @@ def stream_lark_events_ws(
 ) -> Iterator[dict[str, Any]]:
     """WebSocket-based event stream (lark-cli event +subscribe).
 
-    NOTE: requires the Lark app to have `im.message.receive_v1` event
-    subscription enabled in the Open Platform console. Many ByteDance
-    internal lark-cli profiles do NOT have this turned on, in which case
-    the WebSocket connects fine but receives 0 events. Use the polling
-    backend (`stream_lark_events_polling`) when that's the case.
+    Requires the bot's Lark app to have `im.message.receive_v1` registered
+    under "事件与回调" in the Open Platform console (long-connection mode).
 
+    Caveat (observed): if multiple `lark-cli event +subscribe` processes
+    bind the same bot at once, the Lark backend round-robins events
+    across them, so an individual instance may appear silent. This iterator
+    is intended to be the SOLE subscriber per bot — kill any stray
+    subscribers (`pgrep -f 'lark-cli event'`) before relying on it.
+
+    Yields one parsed event dict per NDJSON line on stdout. Status lines
+    (e.g. "Connecting…", "Connected.", "[SDK Info]") are skipped quietly.
     Auto-restarts on subprocess crash with exponential backoff.
     """
     backoff = 1.0
@@ -270,17 +275,27 @@ def stream_lark_events_ws(
             identity,
             "--event-types",
             event_types,
-            "--quiet",
         ]
         log.info("listener.ws_subprocess_start", cmd=cmd)
+        # Stderr → stdout so [SDK Info]/status lines don't backpressure;
+        # filter them out by leading-{ check below. Requires lark-cli
+        # >= 1.0.23 (older builds suppress NDJSON when stdout is a pipe).
         proc = subprocess.Popen(
-            cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True
+            cmd,
+            stdin=subprocess.DEVNULL,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True,
+            bufsize=1,
         )
         try:
             assert proc.stdout is not None
-            for line in proc.stdout:
-                line = line.strip()
+            for raw in proc.stdout:
+                line = raw.strip()
                 if not line:
+                    continue
+                if not line.startswith("{"):
+                    log.debug("listener.ws_status", line=line[:200])
                     continue
                 try:
                     yield json.loads(line)
@@ -462,16 +477,17 @@ def run_listener(
     cfg: AppConfig,
     factory: sessionmaker,
     events: Iterable[dict[str, Any]] | None = None,
-    backend: str = "polling",
+    backend: str = "websocket",
     poll_interval: int = 10,
     rich_cards: bool = True,
 ) -> None:
     """Long-running entry point. Pair with `equity-monitor run`.
 
     Args:
-        backend: "polling" (default; works without event-subscription scope)
-                 or "websocket" (requires app to have im.message.receive_v1
-                 enabled in Open Platform console).
+        backend: "websocket" (default; uses lark-cli event +subscribe long
+                 connection — requires `im.message.receive_v1` registered
+                 in Open Platform "事件与回调") or "polling" (fallback that
+                 reads chat history; works with `im:message:readonly` only).
         poll_interval: seconds between API polls when backend == "polling".
         rich_cards: if True (default), replies are Lark Interactive Cards
                     enriched with live OpenD price + RSI/MACD/BOLL diagnostics.
@@ -518,6 +534,13 @@ def run_listener(
     if events is not None:
         src: Iterable[dict[str, Any]] = events
     elif backend == "websocket":
+        # Send a one-shot "online" ping so the user knows the listener is
+        # actually up before they start typing commands. Also doubles as a
+        # smoke test for outbound credentials.
+        if allowed:
+            with _safe():
+                _resolve_p2p_chat_id(cfg.lark.cli_path, cfg.lark.identity, allowed)
+                log.info("listener.online_ping_sent", recipient=allowed)
         src = stream_lark_events_ws(
             cli_path=cfg.lark.cli_path,
             identity=cfg.lark.identity,
