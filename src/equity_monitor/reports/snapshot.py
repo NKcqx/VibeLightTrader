@@ -14,13 +14,19 @@ app on phone or desktop.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Literal
 
-import matplotlib.pyplot as plt
-import mplfinance as mpf
-import pandas as pd
+import matplotlib
+
+matplotlib.use("Agg")  # headless PNG; must run before pyplot/mplfinance bind a backend
+
+import matplotlib.pyplot as plt  # noqa: E402 — after backend selection
+import mplfinance as mpf  # noqa: E402
+import pandas as pd  # noqa: E402
+
+_OHLCV_COLS = frozenset({"open", "high", "low", "close", "volume"})
 
 
 @dataclass(frozen=True)
@@ -54,13 +60,30 @@ def _markers_series(
         idx = df.index.get_indexer([pd.Timestamp(m.ts)], method="ffill")
         if idx[0] == -1:
             continue
+        # TODO(p4): stack same-bar markers; currently last-wins.
         s.iloc[idx[0]] = m.price
     return s
 
 
 def _safe_filename(code: str, freq: str) -> str:
     safe = code.replace(".", "_").replace("/", "_")
-    return f"{safe}_{freq}_{datetime.utcnow():%Y%m%d_%H%M%S}.png"
+    return f"{safe}_{freq}_{datetime.now(tz=timezone.utc):%Y%m%d_%H%M%S}.png"
+
+
+def _save_placeholder_png(out_path: Path, message: str) -> None:
+    fig, ax = plt.subplots(figsize=(8, 4.5), dpi=110)
+    ax.text(0.5, 0.5, message, ha="center", va="center", fontsize=14)
+    ax.axis("off")
+    fig.savefig(out_path, bbox_inches="tight")
+    plt.close(fig)
+
+
+def _validate_ohlcv_df(df: pd.DataFrame) -> bool:
+    if not _OHLCV_COLS.issubset(df.columns):
+        return False
+    if not isinstance(df.index, pd.DatetimeIndex):
+        return False
+    return True
 
 
 def render_snapshot(req: SnapshotRequest) -> Path:
@@ -70,15 +93,18 @@ def render_snapshot(req: SnapshotRequest) -> Path:
     out_path = out_dir / _safe_filename(req.code, req.freq)
 
     if req.df.empty:
-        fig, ax = plt.subplots(figsize=(8, 4.5), dpi=110)
-        ax.text(
-            0.5, 0.5,
+        _save_placeholder_png(
+            out_path,
             f"{req.code} ({req.freq}) — 暂无 K 线数据",
-            ha="center", va="center", fontsize=14,
         )
-        ax.axis("off")
-        fig.savefig(out_path, bbox_inches="tight")
-        plt.close(fig)
+        return out_path
+
+    if not _validate_ohlcv_df(req.df):
+        cols_repr = "[" + ",".join(req.df.columns.astype(str).tolist()) + "]"
+        _save_placeholder_png(
+            out_path,
+            f"{req.code} ({req.freq}) — 数据格式异常 (cols={cols_repr})",
+        )
         return out_path
 
     addplots: list = []
@@ -129,5 +155,9 @@ def render_snapshot(req: SnapshotRequest) -> Path:
         plot_kw["hlines"] = hlines
 
     mpf.plot(req.df, **plot_kw)
-    plt.close("all")
+    # Close only mplfinance's current figure so we don't call `plt.close("all")`
+    # (which destroys figures owned elsewhere). mplfinance exposes one implicit
+    # current figure via savefig/gcf(); if newer mplfinance attaches extra dormant
+    # figures, those could leak—we accept that trade-off in CLI/server snapshots.
+    plt.close(plt.gcf())
     return out_path

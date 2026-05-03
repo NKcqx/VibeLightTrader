@@ -74,3 +74,30 @@ def test_render_snapshot_empty_df_returns_placeholder(tmp_path) -> None:
     )
     out_path = render_snapshot(req)
     assert out_path.exists()  # placeholder PNG with "no data" message
+    assert out_path.stat().st_size > 200  # actual PNG, not zero-byte
+    assert out_path.read_bytes()[:8] == b"\x89PNG\r\n\x1a\n"  # PNG magic
+
+
+def test_render_snapshot_with_malformed_df_falls_back(tmp_path) -> None:
+    df = pd.DataFrame(
+        {
+            "open": [100.0],
+            "high": [101.0],
+            "low": [99.0],
+            "close": [100.5],
+            "volume": [100],
+        },
+        index=[0],
+    )
+    req = SnapshotRequest(
+        code="US.BAD",
+        freq="D",
+        df=df,
+        markers=[],
+        avg_cost=None,
+        current_price=None,
+        out_dir=tmp_path,
+    )
+    out_path = render_snapshot(req)
+    assert out_path.exists()
+    assert out_path.stat().st_size > 200
