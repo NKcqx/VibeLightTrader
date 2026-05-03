@@ -15,15 +15,17 @@ import subprocess
 import time
 from collections.abc import Callable, Iterable, Iterator
 from datetime import datetime, timedelta, timezone
+from pathlib import Path
 from typing import Any
 
 import structlog
 from sqlalchemy.orm import sessionmaker
 
 from equity_monitor.config import AppConfig
-from equity_monitor.events.apply import apply
+from equity_monitor.events.apply import apply, apply_chart
 from equity_monitor.events.grammar import (
     AddCommand,
+    ChartCommand,
     Command,
     HelpCommand,
     ListCommand,
@@ -31,6 +33,7 @@ from equity_monitor.events.grammar import (
     ThresholdCommand,
     parse,
 )
+from equity_monitor.futu_client import FutuClient
 
 log = structlog.get_logger(__name__)
 
@@ -40,6 +43,9 @@ SendTextFn = Callable[[str, str], str]
 
 SendCardFn = Callable[[dict[str, Any], str], str]
 """(card_payload, recipient_open_id) -> message_id."""
+
+SendImageFn = Callable[[Path, str], str]
+"""(image_path, recipient_open_id) -> message_id."""
 
 ReplyFn = Callable[[Command, str, str], None]
 """(parsed_cmd, action_text, recipient_open_id) -> None.
@@ -199,6 +205,9 @@ def dispatch_event(
     allowed_open_id: str | None,
     send_text: SendTextFn | None = None,
     reply_fn: ReplyFn | None = None,
+    client: FutuClient | None = None,
+    send_image: SendImageFn | None = None,
+    snapshot_dir: Path | None = None,
 ) -> str | None:
     """Process one Lark event. Returns the action text replied with, else None.
 
@@ -221,6 +230,45 @@ def dispatch_event(
     if cmd is None:
         log.debug("listener.unrecognized", text=text[:80])
         return None  # silent — user's casual chat shouldn't trigger replies
+
+    if isinstance(cmd, ChartCommand):
+        if client is None or send_image is None:
+            action_text = "⚠️ /chart 当前不可用 (OpenD 未连接或未启用图片发送)。"
+            if send_text is not None:
+                try:
+                    send_text(action_text, sender_id)
+                except Exception:
+                    log.exception("listener.chart_fallback_send_failed")
+            return action_text
+        try:
+            action_text, payload = apply_chart(
+                cmd, factory, client=client, snapshot_dir=snapshot_dir
+            )
+        except Exception as e:
+            log.exception("listener.chart_apply_failed")
+            action_text = f"⚠️ /chart 失败: {e}"
+            if send_text is not None:
+                with _safe():
+                    send_text(action_text, sender_id)
+            return action_text
+        if send_text is not None:
+            try:
+                send_text(action_text, sender_id)
+            except Exception:
+                log.exception("listener.chart_text_send_failed")
+        try:
+            send_image(payload.image_path, sender_id)
+        except Exception:
+            log.exception("listener.chart_image_send_failed")
+        log.info(
+            "listener.dispatched",
+            cmd="ChartCommand",
+            code=cmd.code,
+            freq=cmd.freq,
+            sender=sender_id,
+        )
+        return action_text
+
     try:
         action_text = apply(cmd, factory)
     except Exception as e:
@@ -500,6 +548,19 @@ def run_listener(
         cli_path=cfg.lark.cli_path, identity=cfg.lark.identity
     )
 
+    image_sender: SendImageFn | None = None
+    if rich_cards:
+        from equity_monitor.scheduler.jobs import (
+            _make_default_image_sender as _mk_img,
+        )
+
+        def _img_send(path: Path, recipient: str) -> str:
+            return _mk_img(
+                cli_path=cfg.lark.cli_path, identity=cfg.lark.identity
+            )(path, recipient, "user")
+
+        image_sender = _img_send
+
     reply_fn: ReplyFn
     futu_client: Any = None
     if rich_cards:
@@ -577,6 +638,10 @@ def run_listener(
                     factory=factory,
                     allowed_open_id=allowed,
                     reply_fn=reply_fn,
+                    send_text=text_sender,
+                    client=futu_client,
+                    send_image=image_sender,
+                    snapshot_dir=Path("var/snapshots").resolve(),
                 )
             except Exception:
                 log.exception("listener.dispatch_crash")

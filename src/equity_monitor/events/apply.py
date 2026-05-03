@@ -6,20 +6,27 @@ errors raise so the listener can format an error reply.
 
 from __future__ import annotations
 
-from typing import Any
+from dataclasses import dataclass
+from datetime import datetime, timedelta, timezone
+from pathlib import Path
+from typing import Literal
 
 from sqlalchemy.orm import sessionmaker
 
+from equity_monitor.data.kline import fetch_kline_df
 from equity_monitor.db import session_scope
 from equity_monitor.events.grammar import (
     AddCommand,
+    ChartCommand,
     Command,
     HelpCommand,
     ListCommand,
     RemoveCommand,
     ThresholdCommand,
 )
-from equity_monitor.models import Symbol
+from equity_monitor.futu_client import FREQ_TO_KTYPE, FutuClient
+from equity_monitor.models import Position, Symbol, Trade
+from equity_monitor.reports.snapshot import SnapshotRequest, TradeMarker, render_snapshot
 
 
 HELP_TEXT = (
@@ -43,12 +50,108 @@ HELP_TEXT = (
     "  • `删除 US.AAPL` / `取消 AAPL` / `/remove AAPL`\n"
     "  • 别名：`删除` / `取消` / `停止` / `不监控` / `/remove`\n"
     "\n"
+    "📈 **K 线快照**\n"
+    "  • `/chart US.AAPL` — 60m 默认；显示买卖点 + 成本线 + 现价线\n"
+    "  • `/chart US.AAPL D` — 日 K，可选 5m/15m/30m/60m/D/W\n"
+    "  • 别名：`/chart` / `chart` / `图`\n"
+    "\n"
     "ℹ️ **使用说明**\n"
     "  • 标的代码：`US.AAPL` / `HK.0700`，裸代码 `AAPL` 自动加 `US.` 前缀\n"
     "  • 阈值关键词：`上限/下限`、`阻力位/支撑位`、`upper/lower`\n"
     "  • 三种风格通用：中文自然语言 / 英文关键字 / `/` 命令\n"
     "  • 当前价 ≥ 上限或 ≤ 下限会自动推送 CRITICAL 信号卡"
 )
+
+
+@dataclass(frozen=True)
+class ChartReplyPayload:
+    image_path: Path
+
+
+def apply_chart(
+    cmd: ChartCommand,
+    factory: sessionmaker,
+    *,
+    client: FutuClient,
+    snapshot_dir: Path | None = None,
+    now_utc: datetime | None = None,
+) -> tuple[str, ChartReplyPayload]:
+    """Render a K-line snapshot for `cmd.code` at `cmd.freq`.
+
+    Returns (markdown reply text, payload with PNG path).
+    Raises on data fetch / render failure — caller logs & fallbacks.
+    """
+    if now_utc is None:
+        now_utc = datetime.now(tz=timezone.utc)
+    elif now_utc.tzinfo is None:
+        now_utc = now_utc.replace(tzinfo=timezone.utc)
+
+    ktype = FREQ_TO_KTYPE.get(cmd.freq)
+    if ktype is None:
+        raise ValueError(f"unsupported freq for chart: {cmd.freq!r}")
+
+    df = fetch_kline_df(client, cmd.code, ktype=ktype, limit=200)
+
+    trade_window_start = now_utc - timedelta(days=30)
+    markers: list[TradeMarker] = []
+    avg_cost: float | None = None
+    with session_scope(factory) as session:
+        sym = session.query(Symbol).filter(Symbol.code == cmd.code).one_or_none()
+        if sym is not None:
+            trade_rows = (
+                session.query(Trade)
+                .filter(
+                    Trade.symbol_id == sym.id,
+                    Trade.ts >= trade_window_start,
+                )
+                .order_by(Trade.ts.asc())
+                .all()
+            )
+            for r in trade_rows:
+                side_norm = r.side.strip().upper()
+                if side_norm == "BUY":
+                    side_lit: Literal["buy", "sell"] = "buy"
+                elif side_norm == "SELL":
+                    side_lit = "sell"
+                else:
+                    continue
+                ts = r.ts if r.ts.tzinfo else r.ts.replace(tzinfo=timezone.utc)
+                markers.append(
+                    TradeMarker(ts=ts, side=side_lit, qty=r.qty, price=r.price)
+                )
+            position = (
+                session.query(Position)
+                .filter(Position.symbol_id == sym.id, Position.qty > 0)
+                .one_or_none()
+            )
+            if position is not None:
+                avg_cost = position.avg_cost
+
+    try:
+        snap = next(iter(client.snapshot([cmd.code])), None)
+    except Exception:
+        snap = None
+    current_price = float(snap.last_price) if snap is not None else None
+
+    req = SnapshotRequest(
+        code=cmd.code,
+        freq=cmd.freq,
+        df=df,
+        markers=markers,
+        avg_cost=avg_cost,
+        current_price=current_price,
+        out_dir=snapshot_dir,
+    )
+    png = render_snapshot(req)
+
+    bits: list[str] = [f"📈 `{cmd.code}` · {cmd.freq}"]
+    if current_price is not None:
+        bits.append(f"现价 ${current_price:.2f}")
+    if avg_cost is not None:
+        bits.append(f"成本 ${avg_cost:.2f}")
+    bits.append(f"{len(markers)} 笔近 30 日交易")
+    text = " · ".join(bits)
+    return text, ChartReplyPayload(image_path=png)
 
 
 def apply(cmd: Command, factory: sessionmaker) -> str:

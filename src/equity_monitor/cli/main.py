@@ -132,6 +132,67 @@ def listen(
 
 
 @cli.command()
+@click.argument("code")
+@click.option(
+    "--freq",
+    default="60m",
+    show_default=True,
+    type=click.Choice(["5m", "15m", "30m", "60m", "D", "W"]),
+)
+@click.option(
+    "--out-dir",
+    default="var/snapshots",
+    show_default=True,
+    type=click.Path(),
+)
+@click.option(
+    "--push/--no-push",
+    default=False,
+    show_default=True,
+    help="Also push the PNG to Lark via lark-cli.",
+)
+@click.pass_context
+def chart(ctx: click.Context, code: str, freq: str, out_dir: str, push: bool) -> None:
+    """Render a K-line snapshot PNG. Optionally push it to Lark."""
+    from pathlib import Path
+
+    from equity_monitor.events.apply import apply_chart
+    from equity_monitor.events.grammar import ChartCommand, _normalize_code
+    from equity_monitor.reports.lark_image import send_image
+
+    cfg = _get_cfg(ctx)
+    factory = _make_factory(cfg)
+    out_path_dir = Path(out_dir).resolve()
+
+    client = OpenDClient(cfg.opend.host, cfg.opend.port)
+    try:
+        text, payload = apply_chart(
+            ChartCommand(code=_normalize_code(code), freq=freq),
+            factory,
+            client=client,
+            snapshot_dir=out_path_dir,
+        )
+    finally:
+        try:
+            client.close()
+        except Exception:
+            pass
+
+    click.echo(text)
+    click.echo(f"snapshot: {payload.image_path}")
+
+    if push:
+        msg_id = send_image(
+            payload.image_path,
+            open_id=cfg.lark.receiver.open_id,
+            receiver_type=cfg.lark.receiver.type,  # type: ignore[arg-type]
+            cli_path=cfg.lark.cli_path,
+            identity=cfg.lark.identity,  # type: ignore[arg-type]
+        )
+        click.echo(f"pushed: {msg_id}")
+
+
+@cli.command()
 @click.option(
     "--job",
     type=click.Choice(["intraday", "morning", "closing", "news"]),

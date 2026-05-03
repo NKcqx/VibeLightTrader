@@ -43,7 +43,23 @@ class HelpCommand:
     pass
 
 
-Command = AddCommand | RemoveCommand | ListCommand | ThresholdCommand | HelpCommand
+@dataclass(frozen=True)
+class ChartCommand:
+    code: str
+    freq: str = "60m"
+
+
+ALLOWED_CHART_FREQS: frozenset[str] = frozenset({"5m", "15m", "30m", "60m", "D", "W"})
+
+
+Command = (
+    AddCommand
+    | RemoveCommand
+    | ListCommand
+    | ThresholdCommand
+    | HelpCommand
+    | ChartCommand
+)
 
 
 # US.AAPL, HK.0700, AAPL → captured then uppercased by _normalize_code
@@ -95,6 +111,10 @@ def parse(text: str) -> Command | None:
     th = _try_parse_threshold(s)
     if th is not None:
         return th
+
+    ch = _try_parse_chart(s)
+    if ch is not None:
+        return ch
 
     return None
 
@@ -212,3 +232,27 @@ def _try_parse_threshold(s: str) -> ThresholdCommand | None:
     return ThresholdCommand(
         code=_normalize_code(code_m.group(1)), upper=upper, lower=lower
     )
+
+
+_CHART_PREFIXES = re.compile(r"^(?:/chart|chart|图)\b\s*", re.I)
+
+
+def _try_parse_chart(s: str) -> ChartCommand | None:
+    m = _CHART_PREFIXES.match(s)
+    if not m:
+        return None
+    rest = s[m.end():].strip()
+    if not rest:
+        return None
+    parts = rest.split()
+    code_m = _CODE_RE.search(parts[0])
+    if not code_m:
+        return None
+    code = _normalize_code(code_m.group(1))
+    freq = "60m"
+    if len(parts) >= 2:
+        candidate = parts[1].strip()
+        if candidate not in ALLOWED_CHART_FREQS:
+            return None
+        freq = candidate
+    return ChartCommand(code=code, freq=freq)
