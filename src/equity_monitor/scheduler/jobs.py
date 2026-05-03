@@ -50,6 +50,7 @@ from equity_monitor.signals.strategy_base import (
 )
 from equity_monitor.signals.strategy_lite import SignalSuggest
 import equity_monitor.signals.strategy_rule  # noqa: F401  (registers "rule")
+import equity_monitor.signals.strategy_llm   # noqa: F401  (registers "llm")
 from equity_monitor.signals.tech import detect_tech_signals
 from equity_monitor.signals.threshold import detect_threshold_breach
 

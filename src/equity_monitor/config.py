@@ -84,10 +84,18 @@ class StrategyRuleConfig(BaseModel):
 
 
 class StrategyLLMConfig(BaseModel):
-    """LLM-driven strategy. Skeleton only — the actual LLMStrategy lands in C2.
+    """LLM-driven strategy. Implemented in `signals/strategy_llm.py:LLMStrategy`.
 
-    Kept here so settings.yaml is forward-compatible: users can author
-    these blocks today and they'll start being honored when C2 lands.
+    Switch from rule → llm by setting `trader.strategy.type: llm` AND
+    exporting the API key the chosen provider needs:
+
+      - provider=anthropic       → ANTHROPIC_API_KEY
+      - provider=openai_compat   → whatever you set `api_key_env` to
+                                   (OPENAI_API_KEY, DEEPSEEK_API_KEY,
+                                    ARK_API_KEY, OPENROUTER_API_KEY, ...)
+
+    Local Ollama / vLLM servers don't need a key — leave `api_key_env`
+    empty (the Authorization header is then omitted).
     """
 
     provider: Literal["anthropic", "openai_compat"] = "anthropic"
@@ -100,18 +108,34 @@ class StrategyLLMConfig(BaseModel):
     temperature: float = 0.0
     timeout_s: int = 30
     retries: int = 2
+    """Reserved — current LLMStrategy does NOT retry. Add when we see
+    real rate-limit pressure in production logs."""
 
     max_position_per_symbol: int = 200
     min_trade_size: int = 10
     min_confidence: float = 0.6
+    """Below this confidence, decisions are demoted to HOLD regardless
+    of what the LLM said. Sane default: 0.6 (refuse coin-flips)."""
+
     fallback_on_error: Literal["rule", "hold"] = "rule"
+    """When the LLM call/parse/constraint check fails, `rule` falls back
+    to RuleStrategy (preserve trading on bad weather). `hold` returns
+    HOLD instead — safer if you don't trust the rules either."""
+
+    audit_log_path: str = "data/llm_decisions.jsonl"
+    """Append-only NDJSON. One line per decision (LLM-driven OR fallback).
+    Inspect with `tail -f data/llm_decisions.jsonl`."""
 
     kline_window: int = 200
     news_window_minutes: int = 30
     news_top_k: int = 3
+    """Reserved for C2b — `_run_strategy_per_code` will fill the
+    StrategyContext with this many bars / minutes / news items."""
 
     cache_seconds: int = 300
     max_concurrent: int = 5
+    """`max_concurrent` is reserved (today the strategy runs serially per
+    symbol). Will matter once we parallelise LLM calls."""
 
 
 class StrategyEnsembleConfig(BaseModel):

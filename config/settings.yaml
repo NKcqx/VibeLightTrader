@@ -54,7 +54,7 @@ trader:
   # Active strategy + per-strategy knobs. Only the sub-block matching
   # `type` is consumed; others are dormant and forward-compatible.
   strategy:
-    type: rule          # rule | llm | ensemble    (llm/ensemble land in C2/C3)
+    type: rule          # rule | llm | ensemble    (ensemble lands in C3)
 
     rule:
       max_position_per_symbol: 200
@@ -62,27 +62,38 @@ trader:
       warn_size: 50                   # tech combo BUY/SELL size
       rsi_extreme: 30.0
 
-    # Skeleton — not active until C2 ships LLMStrategy.
-    # Set trader.strategy.type to `llm` and export $ANTHROPIC_API_KEY
-    # (or whichever api_key_env points to) to enable.
+    # LLM-driven strategy. To enable:
+    #   1. Flip `strategy.type` above to `llm`
+    #   2. Export the API key for your chosen provider:
+    #        - anthropic       → export ANTHROPIC_API_KEY=sk-ant-...
+    #        - openai/openai_compat:
+    #              OpenAI       → export OPENAI_API_KEY=sk-...
+    #              DeepSeek     → export DEEPSEEK_API_KEY=sk-...   + base_url=https://api.deepseek.com
+    #              Doubao(火山) → export ARK_API_KEY=...           + base_url=https://ark.cn-beijing.volces.com/api/v3
+    #              OpenRouter   → export OPENROUTER_API_KEY=sk-or- + base_url=https://openrouter.ai/api/v1
+    #              Ollama       → (no key needed)                  + base_url=http://localhost:11434/v1
+    # On any LLM error / parse failure / constraint violation we fall back
+    # per `fallback_on_error` (default: rule). Every decision is logged
+    # to `audit_log_path` (NDJSON, append-only).
     llm:
       provider: anthropic             # anthropic | openai_compat
       model: claude-3-5-sonnet-20241022
       api_key_env: ANTHROPIC_API_KEY
-      base_url: null                  # required for openai_compat (DeepSeek/Doubao/OpenRouter/Ollama)
+      base_url: null                  # required for openai_compat
       max_tokens: 512
       temperature: 0.0
       timeout_s: 30
-      retries: 2
+      retries: 2                      # reserved (no retry today)
       max_position_per_symbol: 200
       min_trade_size: 10
-      min_confidence: 0.6
+      min_confidence: 0.6             # below this → demote to HOLD
       fallback_on_error: rule         # rule | hold
-      kline_window: 200
-      news_window_minutes: 30
-      news_top_k: 3
-      cache_seconds: 300
-      max_concurrent: 5
+      audit_log_path: data/llm_decisions.jsonl
+      kline_window: 200               # reserved (C2b)
+      news_window_minutes: 30         # reserved (C2b)
+      news_top_k: 3                   # reserved (C2b)
+      cache_seconds: 300              # 0 disables in-memory cache
+      max_concurrent: 5               # reserved (today: serial)
 
     # Skeleton — C3.
     ensemble:
