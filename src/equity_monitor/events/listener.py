@@ -301,41 +301,46 @@ def stream_lark_events_ws(
     *,
     cli_path: str = "lark-cli",
     identity: str = "bot",
-    event_types: str = "im.message.receive_v1",
+    event_key: str = "im.message.receive_v1",
 ) -> Iterator[dict[str, Any]]:
-    """WebSocket-based event stream (lark-cli event +subscribe).
+    """WebSocket-based event stream via lark-cli's event-bus daemon.
 
-    Requires the bot's Lark app to have `im.message.receive_v1` registered
-    under "事件与回调" in the Open Platform console (long-connection mode).
+    Uses `lark-cli event consume <EventKey>` (lark-cli ≥1.0.23). The
+    daemon auto-spawns and auto-exits 30s after the last consumer; no
+    single-instance lock to clear. The legacy `event +subscribe` API
+    is rejected by the new server with "another subscribe instance is
+    already running".
 
-    Caveat (observed): if multiple `lark-cli event +subscribe` processes
-    bind the same bot at once, the Lark backend round-robins events
-    across them, so an individual instance may appear silent. This iterator
-    is intended to be the SOLE subscriber per bot — kill any stray
-    subscribers (`pgrep -f 'lark-cli event'`) before relying on it.
+    Requires the bot's Lark app to have `im.message.receive_v1` declared
+    in the Open Platform console (long-connection mode).
 
     Yields one parsed event dict per NDJSON line on stdout. Status lines
-    (e.g. "Connecting…", "Connected.", "[SDK Info]") are skipped quietly.
-    Auto-restarts on subprocess crash with exponential backoff.
+    (e.g. "[event] ready", "[source] feishu-websocket: connected") are
+    skipped quietly. Auto-restarts on subprocess crash with exponential
+    backoff.
     """
     backoff = 1.0
     while True:
         cmd = [
             cli_path,
             "event",
-            "+subscribe",
+            "consume",
+            event_key,
             "--as",
             identity,
-            "--event-types",
-            event_types,
         ]
         log.info("listener.ws_subprocess_start", cmd=cmd)
         # Stderr → stdout so [SDK Info]/status lines don't backpressure;
         # filter them out by leading-{ check below. Requires lark-cli
         # >= 1.0.23 (older builds suppress NDJSON when stdout is a pipe).
+        #
+        # IMPORTANT: stdin=PIPE (NOT DEVNULL). `event consume` treats stdin
+        # EOF as an exit signal ("wired for AI subprocess callers"), so
+        # DEVNULL closes immediately and the daemon shuts down. PIPE leaves
+        # the write-end open for as long as Popen lives, keeping consume up.
         proc = subprocess.Popen(
             cmd,
-            stdin=subprocess.DEVNULL,
+            stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             text=True,
