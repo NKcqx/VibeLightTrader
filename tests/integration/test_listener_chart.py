@@ -142,3 +142,73 @@ def test_chart_with_unknown_freq_returns_none(
     )
     assert res is None
     assert not sent_text  # silent
+
+
+def test_chart_apply_failure_sends_error_text(
+    factory: sessionmaker, tmp_path: Path
+) -> None:
+    """If apply_chart raises, the listener sends an error text via send_text."""
+
+    class AngryClient:
+        def snapshot(self, codes):
+            return []
+
+        def kline(self, code, *, ktype, limit):
+            raise RuntimeError("OpenD blew up")
+
+        def close(self):
+            pass
+
+    sent_text: list[str] = []
+
+    def fake_send_text(text: str, recipient: str) -> str:
+        sent_text.append(text)
+        return "om_text"
+
+    res = dispatch_event(
+        _make_event("/chart AAPL"),
+        factory=factory,
+        allowed_open_id="ou_caller",
+        send_text=fake_send_text,
+        client=AngryClient(),
+        send_image=lambda p, r: "om_img",
+        snapshot_dir=tmp_path,
+    )
+    assert res is not None
+    assert sent_text, "error text should still be sent"
+    assert "/chart 失败" in sent_text[0]
+    # No PNG should exist
+    assert not list(tmp_path.glob("*.png"))
+
+
+def test_chart_image_send_failure_does_not_block_text(
+    fake_client: FakeFutuClient,
+    factory: sessionmaker,
+    tmp_path: Path,
+) -> None:
+    """If send_image raises, the caption text is still considered delivered."""
+    with factory() as s:
+        s.add(Symbol(code="US.AAPL", name="Apple"))
+        s.commit()
+
+    sent_text: list[str] = []
+
+    def fake_send_text(text: str, recipient: str) -> str:
+        sent_text.append(text)
+        return "om_text"
+
+    def angry_send_image(path: Path, recipient: str) -> str:
+        raise RuntimeError("lark-cli image send failed")
+
+    res = dispatch_event(
+        _make_event("/chart AAPL"),
+        factory=factory,
+        allowed_open_id="ou_caller",
+        send_text=fake_send_text,
+        client=fake_client,
+        send_image=angry_send_image,
+        snapshot_dir=tmp_path,
+    )
+
+    assert res is not None
+    assert sent_text and "AAPL" in sent_text[0]  # caption already delivered

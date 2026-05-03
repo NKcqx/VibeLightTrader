@@ -6,6 +6,7 @@ from typing import Any
 import click
 
 from equity_monitor.config import load_settings, load_watchlist
+from equity_monitor.events.grammar import ALLOWED_CHART_FREQS
 from equity_monitor.data.backfill import backfill_all
 from equity_monitor.db import init_schema, make_engine, make_sessionmaker, session_scope
 from equity_monitor.futu_client import OpenDClient
@@ -137,7 +138,7 @@ def listen(
     "--freq",
     default="60m",
     show_default=True,
-    type=click.Choice(["5m", "15m", "30m", "60m", "D", "W"]),
+    type=click.Choice(sorted(ALLOWED_CHART_FREQS)),
 )
 @click.option(
     "--out-dir",

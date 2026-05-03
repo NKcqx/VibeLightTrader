@@ -212,8 +212,13 @@ def dispatch_event(
     """Process one Lark event. Returns the action text replied with, else None.
 
     Either `send_text` (text-only reply) or `reply_fn` (rich card reply) must
-    be provided. If both are given, `reply_fn` wins. The text-only path is
-    kept for tests / minimal deployments without OpenD.
+    be provided. If both are given, `reply_fn` wins for watchlist/help commands.
+    The text-only path is kept for tests / minimal deployments without OpenD.
+
+    Note: ChartCommand is dispatched out-of-band — it always uses `send_text`
+    for the markdown caption and `send_image` for the PNG, regardless of
+    whether `reply_fn` is supplied. The card path is for the watchlist
+    commands only.
     """
     if reply_fn is None and send_text is None:
         raise ValueError("dispatch_event needs either reply_fn or send_text")
@@ -557,7 +562,7 @@ def run_listener(
         def _img_send(path: Path, recipient: str) -> str:
             return _mk_img(
                 cli_path=cfg.lark.cli_path, identity=cfg.lark.identity
-            )(path, recipient, "user")
+            )(path, recipient, cfg.lark.receiver.type)
 
         image_sender = _img_send
 

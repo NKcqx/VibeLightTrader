@@ -166,6 +166,10 @@ def apply(cmd: Command, factory: sessionmaker) -> str:
         return _do_remove(cmd, factory)
     if isinstance(cmd, ThresholdCommand):
         return _do_threshold(cmd, factory)
+    if isinstance(cmd, ChartCommand):
+        raise TypeError(
+            "ChartCommand must be dispatched via apply_chart, not apply()."
+        )
     raise TypeError(f"unknown command type: {type(cmd).__name__}")
 
 
