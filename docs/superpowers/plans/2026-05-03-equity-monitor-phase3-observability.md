@@ -6,7 +6,7 @@
 
 **Architecture:**
 1. `mplfinance` produces a single PNG per snapshot. All K-line data is fetched on-demand from OpenD; no DB caching, no schema changes.
-2. `lark-cli im +messages-send --type image` uploads + sends. The image is a separate message that follows the existing alert card.
+2. `lark-cli im +messages-send --image <abs-path>` (with `--user-id` / `--chat-id`) uploads + sends; `msg-type` is inferred. The image is a separate message that follows the existing alert card.
 3. A new `/chart <code> [freq]` listener command parses, fetches, renders, and sends an on-demand snapshot.
 
 **Tech Stack:**
@@ -359,74 +359,19 @@ git commit -m "feat(p3): mplfinance snapshot renderer with BUY/SELL markers + co
 - Create: `src/equity_monitor/reports/lark_image.py`
 - Test: `tests/unit/test_reports_lark_image.py`
 
-`lark-cli` exposes image-message sending via `im +messages-send --type image --content @<path>` (the `@` prefix tells lark-cli to upload the file and substitute the resulting `image_key`). Same retry / error semantics as `reports/lark.py:send_card`.
+`lark-cli` (≥1.0.23) sends image messages via `im +messages-send --as bot|user`, recipient `--user-id ou_xxx` (DM) or `--chat-id oc_xxx` (group), and `--image <absolute_path>` (CLI infers image message type; no `@path`/`--format json`). Same retry / error semantics as `reports/lark.py:send_card`; errors raise `LarkImageError`.
 
 - [ ] **Step 1: Confirm the lark-cli flag shape**
 
 ```bash
-lark-cli im +messages-send --help 2>&1 | grep -E "type|content|image" | head -20
+lark-cli im +messages-send --help 2>&1 | grep -E "image|user-id|chat-id|--as"
 ```
 
-Read the output. The expected flags are `--type image` + `--content @<absolute_path>`. If the actual flag for image attachments differs (e.g. some versions want `--image <path>` instead of `--content @<path>`), update Step 4's implementation and Step 2's expected `args` accordingly. Document the actual form you confirmed in the docstring.
+Expect `--image`, `--user-id`, `--chat-id`. Document confirmed flags in `lark_image.py` module docstring.
 
 - [ ] **Step 2: Write failing test**
 
-Create `tests/unit/test_reports_lark_image.py`:
-
-```python
-import subprocess
-
-import pytest
-
-from equity_monitor.reports.lark_image import LarkImageError, send_image
-
-
-def test_send_image_invokes_lark_cli_and_returns_msg_id(tmp_path, monkeypatch) -> None:
-    img = tmp_path / "x.png"
-    img.write_bytes(b"\x89PNG\r\n\x1a\n" + b"0" * 64)
-    captured: dict = {}
-
-    class FakeRes:
-        returncode = 0
-        stdout = '{"message_id": "om_xxx"}\n'
-        stderr = ""
-
-    def fake_run(args, **kw):
-        captured["args"] = args
-        return FakeRes()
-
-    monkeypatch.setattr(subprocess, "run", fake_run)
-    msg_id = send_image(img, open_id="ou_abc", receiver_type="open_id")
-    assert msg_id == "om_xxx"
-    assert "im" in captured["args"]
-    cmdline = " ".join(captured["args"])
-    assert "image" in cmdline
-    assert str(img.absolute()) in cmdline
-
-
-def test_send_image_raises_on_nonzero_rc(tmp_path, monkeypatch) -> None:
-    img = tmp_path / "x.png"
-    img.write_bytes(b"\x89PNG")
-
-    class BadRes:
-        returncode = 7
-        stdout = ""
-        stderr = "boom\n"
-
-    def fake_run(args, **kw):
-        return BadRes()
-
-    monkeypatch.setattr(subprocess, "run", fake_run)
-    with pytest.raises(LarkImageError, match="boom"):
-        send_image(img, open_id="ou_abc", receiver_type="open_id")
-
-
-def test_send_image_raises_on_missing_file() -> None:
-    from pathlib import Path
-    with pytest.raises(LarkImageError, match="file not found"):
-        send_image(Path("/tmp/nonexistent_xyz.png"),
-                   open_id="ou", receiver_type="open_id")
-```
+Implement `tests/unit/test_reports_lark_image.py`: monkeypatch `subprocess.run`, assert argv is `["lark-cli","im","+messages-send", "--as","bot"|"user", "--user-id"|"--chat-id", <id>, "--image", <abs path>]`, JSON success body `{"ok": true, "data": {"message_id": ...}}`; cover nonzero exit and `{"ok": false, "error": {...}}`, non-JSON stdout, missing file, unknown receiver; assert `stop_after_attempt(3)` retries on nonzero rc (parity with `test_reports_lark.py`).
 
 - [ ] **Step 3: Run test, expect FAIL**
 
@@ -438,15 +383,17 @@ Expected: `ModuleNotFoundError`.
 
 - [ ] **Step 4: Implement `reports/lark_image.py`**
 
+> Updated 2026-05-03 to match real lark-cli 1.0.23 flags.
+
 Create `src/equity_monitor/reports/lark_image.py`:
 
 ```python
 """Send a PNG/JPG to Lark via lark-cli (Phase 3 image messages).
 
-Mirrors the retry / error contract of `reports/lark.py:send_card`. The
-underlying `lark-cli im +messages-send --type image --content @<path>`
-command both uploads the file and sends it as a single image message;
-no separate upload/key dance is required at the caller.
+Mirrors the retry / error contract of `reports/lark.py:send_card`. Actual
+CLI: `lark-cli im +messages-send --as <identity> (--user-id <ou_xxx>
+| --chat-id <oc_xxx>) --image <abs-path>` uploads and sends in one step (no
+separate upload/key dance at the caller).
 """
 
 from __future__ import annotations
@@ -458,6 +405,8 @@ from typing import Literal
 
 from tenacity import retry, stop_after_attempt, wait_exponential
 
+from equity_monitor.reports.lark import ReceiverType
+
 
 class LarkImageError(RuntimeError):
     pass
@@ -465,44 +414,61 @@ class LarkImageError(RuntimeError):
 
 @retry(
     stop=stop_after_attempt(3),
-    wait=wait_exponential(min=1, max=8),
+    wait=wait_exponential(min=1, max=10),
     reraise=True,
 )
 def send_image(
     path: Path,
     *,
     open_id: str,
-    receiver_type: Literal["open_id", "chat_id", "user_id", "email"] = "open_id",
+    receiver_type: ReceiverType = "user",
     cli_path: str = "lark-cli",
     identity: Literal["bot", "user"] = "bot",
+    timeout: int = 30,
 ) -> str:
-    """Upload `path` and send as an image message. Returns the message_id."""
+    """Upload `path` and send it as an image message. Returns the lark message_id."""
     if not path.exists():
         raise LarkImageError(f"file not found: {path}")
-    args = [
-        cli_path, "im", "+messages-send",
-        "--receive-id-type", receiver_type,
-        "--receive-id", open_id,
-        "--type", "image",
-        "--content", f"@{path.absolute()}",
-        "--as", identity,
-        "--format", "json",
+    if receiver_type == "user":
+        recipient_flag = "--user-id"
+    elif receiver_type == "chat":
+        recipient_flag = "--chat-id"
+    else:
+        raise LarkImageError(f"unknown receiver_type: {receiver_type!r}")
+
+    cmd = [
+        cli_path,
+        "im",
+        "+messages-send",
+        "--as",
+        identity,
+        recipient_flag,
+        open_id,
+        "--image",
+        str(path.absolute()),
     ]
-    res = subprocess.run(args, capture_output=True, text=True)
-    if res.returncode != 0:
+    result = subprocess.run(
+        cmd, capture_output=True, text=True, timeout=timeout, check=False
+    )
+    if result.returncode != 0:
         raise LarkImageError(
-            f"lark-cli image send failed (rc={res.returncode}): "
-            f"{res.stderr.strip()}"
+            f"lark-cli exit={result.returncode}: "
+            f"{result.stderr.strip() or result.stdout.strip()}"
         )
+    out = result.stdout.strip()
     try:
-        body = json.loads(res.stdout)
+        parsed = json.loads(out)
     except json.JSONDecodeError as e:
+        raise LarkImageError(f"non-JSON response from lark-cli: {out[:200]}") from e
+    if not parsed.get("ok", False):
+        err = parsed.get("error", {})
         raise LarkImageError(
-            f"unparseable lark-cli response: {res.stdout!r}"
-        ) from e
-    msg_id = body.get("message_id") or body.get("data", {}).get("message_id")
+            f"lark-cli failed: {err.get('type', 'unknown')}: "
+            f"{err.get('message', '')}"
+        )
+    msg_id = parsed.get("data", {}).get("message_id")
     if not msg_id:
-        raise LarkImageError(f"no message_id in response: {body}")
+        raise LarkImageError(f"lark-cli response missing message_id: {out[:200]}")
     return str(msg_id)
 ```
 
@@ -512,7 +478,7 @@ def send_image(
 pytest tests/unit/test_reports_lark_image.py -v
 ```
 
-Expected: 3 PASS.
+Expected: 8 PASS (or current count under `tests/unit/test_reports_lark_image.py`).
 
 - [ ] **Step 6: Commit**
 

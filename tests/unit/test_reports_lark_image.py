@@ -82,6 +82,26 @@ def test_send_image_raises_on_nonzero_rc(tmp_path, monkeypatch) -> None:
         send_image(img, open_id="ou_abc", receiver_type="user")
 
 
+def test_send_image_retries_three_times_on_nonzero_rc(tmp_path, monkeypatch) -> None:
+    img = tmp_path / "x.png"
+    img.write_bytes(b"\x89PNG")
+    calls = {"n": 0}
+
+    class BadRes:
+        returncode = 7
+        stdout = ""
+        stderr = "boom\n"
+
+    def fake_run(*a, **kw):
+        calls["n"] += 1
+        return BadRes()
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+    with pytest.raises(LarkImageError):
+        send_image(img, open_id="ou", receiver_type="user")
+    assert calls["n"] == 3, "tenacity should retry exactly stop_after_attempt(3) times"
+
+
 def test_send_image_raises_on_ok_false_response(tmp_path, monkeypatch) -> None:
     img = tmp_path / "x.png"
     img.write_bytes(b"\x89PNG")
