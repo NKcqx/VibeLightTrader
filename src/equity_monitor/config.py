@@ -74,6 +74,67 @@ class LoggingConfig(BaseModel):
     file: str | None = None
 
 
+class StrategyRuleConfig(BaseModel):
+    """Knobs for the hard-coded rule strategy (a.k.a. strategy_lite)."""
+
+    max_position_per_symbol: int = 200
+    critical_size: int = 100
+    warn_size: int = 50
+    rsi_extreme: float = 30.0
+
+
+class StrategyLLMConfig(BaseModel):
+    """LLM-driven strategy. Skeleton only — the actual LLMStrategy lands in C2.
+
+    Kept here so settings.yaml is forward-compatible: users can author
+    these blocks today and they'll start being honored when C2 lands.
+    """
+
+    provider: Literal["anthropic", "openai_compat"] = "anthropic"
+    model: str = "claude-3-5-sonnet-20241022"
+    api_key_env: str = "ANTHROPIC_API_KEY"
+    base_url: str | None = None
+    """Required for `openai_compat`; ignored by `anthropic`."""
+
+    max_tokens: int = 512
+    temperature: float = 0.0
+    timeout_s: int = 30
+    retries: int = 2
+
+    max_position_per_symbol: int = 200
+    min_trade_size: int = 10
+    min_confidence: float = 0.6
+    fallback_on_error: Literal["rule", "hold"] = "rule"
+
+    kline_window: int = 200
+    news_window_minutes: int = 30
+    news_top_k: int = 3
+
+    cache_seconds: int = 300
+    max_concurrent: int = 5
+
+
+class StrategyEnsembleConfig(BaseModel):
+    """Ensemble strategy. Skeleton only — actual implementation in C3."""
+
+    strategies: list[str] = Field(default_factory=lambda: ["rule"])
+    voting: Literal["majority", "weighted", "unanimous"] = "weighted"
+    weights: dict[str, float] = Field(default_factory=lambda: {"rule": 1.0})
+
+
+class StrategyConfig(BaseModel):
+    """Active-strategy selector + per-strategy knobs.
+
+    Only the sub-block matching `type` is consumed; the others sit dormant
+    and forward-compatible.
+    """
+
+    type: Literal["rule", "llm", "ensemble"] = "rule"
+    rule: StrategyRuleConfig = Field(default_factory=StrategyRuleConfig)
+    llm: StrategyLLMConfig = Field(default_factory=StrategyLLMConfig)
+    ensemble: StrategyEnsembleConfig = Field(default_factory=StrategyEnsembleConfig)
+
+
 class TraderConfig(BaseModel):
     """Paper-trading auto-execution settings."""
 
@@ -89,6 +150,13 @@ class TraderConfig(BaseModel):
     Currently always honored by OpenDSecTrader; flipping False is a
     deliberate, user-acknowledged step toward live trading. Phase 2 keeps
     it pinned True.
+    """
+
+    strategy: StrategyConfig = Field(default_factory=StrategyConfig)
+    """Which strategy decides BUY/SELL/HOLD and with what knobs.
+
+    Default `type=rule` preserves Phase 2 behaviour. Set `type=llm` once
+    C2 ships LLMStrategy + you've exported the right API key.
     """
 
 

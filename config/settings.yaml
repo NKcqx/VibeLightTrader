@@ -50,3 +50,43 @@ trader:
   # Always true in Phase 2 — refuses non-SIMULATE accounts even if
   # OpenD's default account context says otherwise.
   simulate_only: true
+
+  # Active strategy + per-strategy knobs. Only the sub-block matching
+  # `type` is consumed; others are dormant and forward-compatible.
+  strategy:
+    type: rule          # rule | llm | ensemble    (llm/ensemble land in C2/C3)
+
+    rule:
+      max_position_per_symbol: 200
+      critical_size: 100              # threshold-breach BUY/SELL size
+      warn_size: 50                   # tech combo BUY/SELL size
+      rsi_extreme: 30.0
+
+    # Skeleton — not active until C2 ships LLMStrategy.
+    # Set trader.strategy.type to `llm` and export $ANTHROPIC_API_KEY
+    # (or whichever api_key_env points to) to enable.
+    llm:
+      provider: anthropic             # anthropic | openai_compat
+      model: claude-3-5-sonnet-20241022
+      api_key_env: ANTHROPIC_API_KEY
+      base_url: null                  # required for openai_compat (DeepSeek/Doubao/OpenRouter/Ollama)
+      max_tokens: 512
+      temperature: 0.0
+      timeout_s: 30
+      retries: 2
+      max_position_per_symbol: 200
+      min_trade_size: 10
+      min_confidence: 0.6
+      fallback_on_error: rule         # rule | hold
+      kline_window: 200
+      news_window_minutes: 30
+      news_top_k: 3
+      cache_seconds: 300
+      max_concurrent: 5
+
+    # Skeleton — C3.
+    ensemble:
+      strategies: [rule]
+      voting: weighted                # majority | weighted | unanimous
+      weights:
+        rule: 1.0

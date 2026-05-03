@@ -43,10 +43,13 @@ from equity_monitor.reports.snapshot import (
 )
 from equity_monitor.signals.base import Signal
 from equity_monitor.signals.compose import deduplicate, split_by_severity
-from equity_monitor.signals.strategy_lite import (
-    SignalSuggest,
-    decide_actions_for_codes,
+from equity_monitor.signals.strategy_base import (
+    Strategy,
+    StrategyContext,
+    build_strategy,
 )
+from equity_monitor.signals.strategy_lite import SignalSuggest
+import equity_monitor.signals.strategy_rule  # noqa: F401  (registers "rule")
 from equity_monitor.signals.tech import detect_tech_signals
 from equity_monitor.signals.threshold import detect_threshold_breach
 
@@ -177,6 +180,56 @@ def _load_open_positions(session) -> dict[str, int]:
         .all()
     )
     return {code: qty for code, qty in rows}
+
+
+def _build_strategy_from_cfg(cfg: AppConfig) -> Strategy:
+    """Resolve `cfg.trader.strategy.type` into a concrete Strategy via the
+    Registry (see signals/strategy_base.py).
+
+    The matching sub-block (`cfg.trader.strategy.<type>`) is dumped to dict
+    and passed to the registered builder. Unknown strategy types raise
+    KeyError listing the registered names.
+    """
+    sc = cfg.trader.strategy
+    sub = getattr(sc, sc.type)
+    return build_strategy(sc.type, sub.model_dump())
+
+
+def _run_strategy_per_code(
+    strategy: Strategy,
+    sigs_by_code: dict[str, list[Signal]],
+    *,
+    positions: dict[str, int],
+    snapshots_by_code: dict[str, Any] | None = None,
+) -> dict[str, SignalSuggest]:
+    """Build a `StrategyContext` per code and collect non-None decisions.
+
+    Strategy errors are isolated: a crash on one symbol must not abort the
+    rest of the cron tick. Failed symbols simply produce no suggestion.
+    """
+    snapshots_by_code = snapshots_by_code or {}
+    out: dict[str, SignalSuggest] = {}
+    for code, sigs in sigs_by_code.items():
+        ctx = StrategyContext(
+            code=code,
+            signals=sigs,
+            position_qty=positions.get(code, 0),
+            snapshot=snapshots_by_code.get(code),
+        )
+        try:
+            decision = strategy.decide(ctx)
+        except Exception as e:
+            log.error(
+                "strategy.decide_crash",
+                strategy=strategy.name,
+                code=code,
+                exc_type=type(e).__name__,
+                error=repr(e),
+            )
+            continue
+        if decision is not None:
+            out[code] = decision
+    return out
 
 
 def _execute_suggestions(
@@ -443,10 +496,16 @@ def run_intraday_check(
     for sig in deduped:
         sigs_by_code.setdefault(sig.code, []).append(sig)
 
+    strategy = _build_strategy_from_cfg(cfg)
     executed: dict[int, int] = {}
     with session_scope(factory) as session:
         positions = _load_open_positions(session)
-        suggestions = decide_actions_for_codes(sigs_by_code, positions=positions)
+        suggestions = _run_strategy_per_code(
+            strategy,
+            sigs_by_code,
+            positions=positions,
+            snapshots_by_code=snapshots_by_code,
+        )
         ids = _persist_signal_rows(session, deduped, suggestions=suggestions)
         if paper_trader is not None and cfg.trader.auto_execute:
             executed = _execute_suggestions(
