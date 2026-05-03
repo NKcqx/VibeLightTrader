@@ -19,3 +19,7 @@ config/settings.local.yaml
 *.db-wal
 *.db-shm
 *.log
+
+# Phase 3 snapshot output
+var/snapshots/*.png
+!var/snapshots/.gitkeep
