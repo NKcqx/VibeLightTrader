@@ -1,9 +1,14 @@
 """Send a PNG/JPG to Lark via lark-cli (Phase 3 image messages).
 
 Mirrors the retry / error contract of `reports/lark.py:send_card`. The
-underlying `lark-cli im +messages-send --image <abs-path>` command both
+underlying `lark-cli im +messages-send --image <name>` command both
 uploads the file and sends it as a single image message; no separate
 upload/key dance is required at the caller.
+
+Note on path handling: lark-cli ≥1.0.23 rejects absolute paths for
+`--image` ("--file must be a relative path within the current directory").
+We work around that by spawning lark-cli with `cwd=path.parent` and
+passing only `path.name` — works regardless of the caller's cwd.
 """
 
 from __future__ import annotations
@@ -52,6 +57,7 @@ def send_image(
     else:
         raise LarkImageError(f"unknown receiver_type: {receiver_type!r}")
 
+    abs_path = path.resolve()
     cmd = [
         cli_path,
         "im",
@@ -61,10 +67,15 @@ def send_image(
         recipient_flag,
         open_id,
         "--image",
-        str(path.absolute()),
+        abs_path.name,
     ]
     result = subprocess.run(
-        cmd, capture_output=True, text=True, timeout=timeout, check=False
+        cmd,
+        capture_output=True,
+        text=True,
+        timeout=timeout,
+        check=False,
+        cwd=str(abs_path.parent),
     )
     if result.returncode != 0:
         raise LarkImageError(

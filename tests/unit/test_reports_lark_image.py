@@ -29,20 +29,28 @@ def test_send_image_invokes_lark_cli_and_returns_msg_id(tmp_path, monkeypatch) -
 
     def fake_run(args, **kw):
         captured["args"] = args
+        captured["kw"] = kw
         return FakeRes()
 
     monkeypatch.setattr(subprocess, "run", fake_run)
     msg_id = send_image(img, open_id="ou_abc", receiver_type="user")
     assert msg_id == "om_xxx"
-    # Argv must include the lark-cli command, the user-id flag, and --image with the absolute path
+    # Argv must include the lark-cli command, the user-id flag, and --image with
+    # the *basename only* (lark-cli ≥1.0.23 rejects absolute paths for --image).
     args = captured["args"]
     assert args[0:3] == ["lark-cli", "im", "+messages-send"]
     assert "--user-id" in args
     assert args[args.index("--user-id") + 1] == "ou_abc"
     assert "--image" in args
-    assert args[args.index("--image") + 1] == str(img.absolute())
+    assert args[args.index("--image") + 1] == img.name
+    assert args[args.index("--image") + 1] != str(img.absolute()), (
+        "must not pass absolute path to --image"
+    )
     assert "--as" in args
     assert args[args.index("--as") + 1] == "bot"
+    # subprocess.run must be invoked with cwd=parent so lark-cli sees the file
+    # in the current directory.
+    assert captured["kw"].get("cwd") == str(img.resolve().parent)
 
 
 def test_send_image_chat_receiver_uses_chat_id_flag(tmp_path, monkeypatch) -> None:
