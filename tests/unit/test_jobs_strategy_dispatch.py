@@ -69,3 +69,68 @@ def test_none_decisions_are_excluded_from_output() -> None:
         positions={"US.AAPL": 50},
     )
     assert out == {}
+
+
+# ---------------------------------------------------------------------------
+# C2b: ctx population — verify the extra fields are wired through.
+# ---------------------------------------------------------------------------
+
+
+class _CtxRecorder:
+    """Captures the StrategyContext passed to decide(); always returns None."""
+
+    name = "recorder"
+
+    def __init__(self) -> None:
+        self.captured: list[StrategyContext] = []
+
+    def decide(self, ctx: StrategyContext) -> SignalSuggest | None:
+        self.captured.append(ctx)
+        return None
+
+
+def test_run_strategy_per_code_propagates_full_ctx() -> None:
+    """C2b: kline_dfs / position_details / return_summaries must reach ctx."""
+    import pandas as pd
+
+    from equity_monitor.reports.interpret import ReturnSummary
+
+    df = pd.DataFrame({"close": [100.0, 101.0]})
+    rec = _CtxRecorder()
+    _run_strategy_per_code(
+        rec,
+        {"US.AAPL": [_sig("US.AAPL")]},
+        positions={"US.AAPL": 100},
+        kline_dfs={"US.AAPL": df},
+        position_details={"US.AAPL": (100, 175.50, 1234.0)},
+        return_summaries={
+            "US.AAPL": ReturnSummary(intraday=0.012, last_30_bars=-0.025)
+        },
+    )
+    assert len(rec.captured) == 1
+    ctx = rec.captured[0]
+    assert ctx.code == "US.AAPL"
+    assert ctx.position_qty == 100
+    assert ctx.avg_cost == 175.50
+    assert ctx.realized_pnl == 1234.0
+    assert ctx.intraday_return == 0.012
+    assert ctx.last_30_bar_return == -0.025
+    assert ctx.kline_60m is df
+
+
+def test_run_strategy_per_code_falls_back_to_positions_when_no_details() -> None:
+    """`position_details` is optional; positions dict alone still yields qty."""
+    rec = _CtxRecorder()
+    _run_strategy_per_code(
+        rec,
+        {"US.AAPL": [_sig("US.AAPL")]},
+        positions={"US.AAPL": 50},
+        # no position_details/kline_dfs/return_summaries
+    )
+    ctx = rec.captured[0]
+    assert ctx.position_qty == 50
+    assert ctx.avg_cost == 0.0
+    assert ctx.realized_pnl == 0.0
+    assert ctx.intraday_return is None
+    assert ctx.last_30_bar_return is None
+    assert ctx.kline_60m is None

@@ -183,6 +183,24 @@ def _load_open_positions(session) -> dict[str, int]:
     return {code: qty for code, qty in rows}
 
 
+def _load_open_positions_full(session) -> dict[str, tuple[int, float, float]]:
+    """Return {code: (qty, avg_cost, realized_pnl)} for ALL Position rows.
+
+    Includes zero-qty positions (closed) so `realized_pnl` history isn't
+    lost; the StrategyContext consumer is expected to ignore qty=0.
+
+    Used by `_run_strategy_per_code` to populate `StrategyContext.avg_cost`
+    / `StrategyContext.realized_pnl` — the LLM strategy reads these to
+    explain HOLD/SELL recommendations like "已盈利 12% 落袋为安".
+    """
+    rows = (
+        session.query(Symbol.code, Position.qty, Position.avg_cost, Position.realized_pnl)
+        .join(Position, Position.symbol_id == Symbol.id)
+        .all()
+    )
+    return {code: (qty, avg, real or 0.0) for code, qty, avg, real in rows}
+
+
 def _build_strategy_from_cfg(cfg: AppConfig) -> Strategy:
     """Resolve `cfg.trader.strategy.type` into a concrete Strategy via the
     Registry (see signals/strategy_base.py).
@@ -202,20 +220,48 @@ def _run_strategy_per_code(
     *,
     positions: dict[str, int],
     snapshots_by_code: dict[str, Any] | None = None,
+    kline_dfs: dict[str, Any] | None = None,
+    position_details: dict[str, tuple[int, float, float]] | None = None,
+    return_summaries: dict[str, ReturnSummary] | None = None,
 ) -> dict[str, SignalSuggest]:
     """Build a `StrategyContext` per code and collect non-None decisions.
 
     Strategy errors are isolated: a crash on one symbol must not abort the
     rest of the cron tick. Failed symbols simply produce no suggestion.
+
+    Args:
+        positions: {code: qty}. Required.
+        snapshots_by_code: {code: Snapshot}. Optional — provides
+            last_price / open_price for prompt rendering.
+        kline_dfs: {code: indicator_df}. Optional — DataFrames already
+            computed by `run_intraday_check` (with RSI/MACD/Bollinger
+            columns). RuleStrategy ignores this; LLMStrategy reads the
+            last bar to fill the indicators block of its prompt.
+        position_details: {code: (qty, avg_cost, realized_pnl)}. Optional;
+            avg_cost/realized_pnl default to 0.0 when absent.
+        return_summaries: {code: ReturnSummary}. Optional — provides
+            intraday and 30-bar return percentages.
     """
     snapshots_by_code = snapshots_by_code or {}
+    kline_dfs = kline_dfs or {}
+    position_details = position_details or {}
+    return_summaries = return_summaries or {}
     out: dict[str, SignalSuggest] = {}
     for code, sigs in sigs_by_code.items():
+        qty, avg_cost, realized_pnl = position_details.get(
+            code, (positions.get(code, 0), 0.0, 0.0)
+        )
+        ret = return_summaries.get(code)
         ctx = StrategyContext(
             code=code,
             signals=sigs,
-            position_qty=positions.get(code, 0),
+            position_qty=qty,
             snapshot=snapshots_by_code.get(code),
+            kline_60m=kline_dfs.get(code),
+            avg_cost=avg_cost,
+            realized_pnl=realized_pnl,
+            intraday_return=ret.intraday if ret else None,
+            last_30_bar_return=ret.last_30_bars if ret else None,
         )
         try:
             decision = strategy.decide(ctx)
@@ -394,9 +440,10 @@ def run_intraday_check(
     snapshots_by_code = {s.code: s for s in client.snapshot(codes)}
 
     all_sigs: list[Signal] = []
-    # Cache per-code data for card decoration after the signal pipeline runs.
+    # Cache per-code data for card decoration AND strategy ctx expansion.
     indicator_readings: dict[str, IndicatorReading] = {}
     return_summaries: dict[str, ReturnSummary] = {}
+    kline_dfs: dict[str, Any] = {}
 
     for sym_cfg in watchlist.symbols:
         df = fetch_kline_df(client, sym_cfg.code, ktype="K_60M", limit=200)
@@ -430,6 +477,7 @@ def run_intraday_check(
         return_summaries[sym_cfg.code] = ReturnSummary(
             intraday=intraday_pct, last_30_bars=last_30_pct
         )
+        kline_dfs[sym_cfg.code] = ind_df
 
         with session_scope(factory) as session:
             sym = (
@@ -501,11 +549,15 @@ def run_intraday_check(
     executed: dict[int, int] = {}
     with session_scope(factory) as session:
         positions = _load_open_positions(session)
+        position_details = _load_open_positions_full(session)
         suggestions = _run_strategy_per_code(
             strategy,
             sigs_by_code,
             positions=positions,
             snapshots_by_code=snapshots_by_code,
+            kline_dfs=kline_dfs,
+            position_details=position_details,
+            return_summaries=return_summaries,
         )
         ids = _persist_signal_rows(session, deduped, suggestions=suggestions)
         if paper_trader is not None and cfg.trader.auto_execute:
