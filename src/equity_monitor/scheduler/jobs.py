@@ -713,7 +713,8 @@ def run_intraday_check(
                 "intraday_check.push",
                 code=code,
                 count=len(sigs),
-                has_suggestion=sug is not None,
+                suggestion=(sug.action if sug is not None else None),
+                qty=(sug.qty if sug is not None else None),
                 msg_id=msg_id,
             )
         except Exception as e:
