@@ -51,6 +51,7 @@ from equity_monitor.signals.strategy_base import (
 from equity_monitor.signals.strategy_lite import SignalSuggest
 import equity_monitor.signals.strategy_rule  # noqa: F401  (registers "rule")
 import equity_monitor.signals.strategy_llm   # noqa: F401  (registers "llm")
+import equity_monitor.signals.strategy_hitl  # noqa: F401  (registers "hitl")
 from equity_monitor.signals.tech import detect_tech_signals
 from equity_monitor.signals.threshold import detect_threshold_breach
 
@@ -201,17 +202,58 @@ def _load_open_positions_full(session) -> dict[str, tuple[int, float, float]]:
     return {code: (qty, avg, real or 0.0) for code, qty, avg, real in rows}
 
 
-def _build_strategy_from_cfg(cfg: AppConfig) -> Strategy:
+def _build_strategy_from_cfg(
+    cfg: AppConfig, *, send_card_fn: SendCardFn = _default_sender
+) -> Strategy:
     """Resolve `cfg.trader.strategy.type` into a concrete Strategy via the
     Registry (see signals/strategy_base.py).
 
     The matching sub-block (`cfg.trader.strategy.<type>`) is dumped to dict
     and passed to the registered builder. Unknown strategy types raise
     KeyError listing the registered names.
+
+    For HITL strategy specifically: post-construction we inject a
+    callable that converts the strategy's markdown summary into a Lark
+    card and pushes it via the configured sender. The strategy uses
+    this best-effort to nudge the user when a packet drops.
     """
     sc = cfg.trader.strategy
     sub = getattr(sc, sc.type)
-    return build_strategy(sc.type, sub.model_dump())
+    strat = build_strategy(sc.type, sub.model_dump())
+
+    if sc.type == "hitl":
+        from equity_monitor.signals.strategy_hitl import HITLStrategy
+
+        if isinstance(strat, HITLStrategy):
+            recv = cfg.lark.receiver
+            strat.lark_push = lambda md_body: send_card_fn(
+                _hitl_packet_card(md_body), recv.open_id, recv.type
+            )
+    return strat
+
+
+def _hitl_packet_card(md_body: str) -> dict[str, Any]:
+    """One-element Lark card carrying the HITL packet summary.
+
+    Inline to keep the templates folder uncluttered; this card has no
+    branding, just the raw lark_md body the strategy already produced.
+    """
+    return {
+        "config": {"wide_screen_mode": True},
+        "header": {
+            "template": "yellow",
+            "title": {
+                "tag": "plain_text",
+                "content": "🎯 HITL 决策待办",
+            },
+        },
+        "elements": [
+            {
+                "tag": "div",
+                "text": {"tag": "lark_md", "content": md_body},
+            }
+        ],
+    }
 
 
 def _run_strategy_per_code(
@@ -545,7 +587,7 @@ def run_intraday_check(
     for sig in deduped:
         sigs_by_code.setdefault(sig.code, []).append(sig)
 
-    strategy = _build_strategy_from_cfg(cfg)
+    strategy = _build_strategy_from_cfg(cfg, send_card_fn=send_card_fn)
     executed: dict[int, int] = {}
     with session_scope(factory) as session:
         positions = _load_open_positions(session)

@@ -108,6 +108,41 @@ equity-monitor listen                    # 飞书消息听器
 
 数量、阈值都写在 `signals/strategy_lite.py` 顶部的常量里，要改去那里改。
 
+### HITL 策略（Human-in-the-Loop · 借用 Cursor / Claude 订阅当 LLM）
+
+如果你**没有**独立 LLM API Key，但订阅了 Cursor / Claude.app / Codex 这类 IDE，
+HITL 策略让你免费接入 LLM 决策：
+
+1. 设置 `config/settings.yaml` 里 `trader.strategy.type: hitl`
+2. 每次事件触发时，equity-monitor 把决策上下文渲染成一份 markdown
+   "decision packet"，写到 `var/decisions/pending/<id>.md`，**同时推一张
+   Lark 卡片**告诉你 packet ID
+3. 你打开 Cursor → 让 Claude 读这个文件 (`Read /path/to/<id>.md`)
+4. Packet 里写好了 self-instructions：让 Claude 先 grep transcript 召回
+   MEMORY，再读 README/audit log，最后输出固定 schema 的决策 JSON
+5. 你（或 Claude 直写）跑：
+
+   ```bash
+   equity-monitor decide submit <id> --json '<paste decision JSON here>'
+   ```
+
+   系统过同样的硬约束（`max_position` / `min_trade_size` /
+   `min_confidence`），通过则下单，拒绝则记录原因。
+
+为什么这么设计：发送 packet 的我（在 cron 里）和接收 packet 的 Claude（在
+Cursor 里）是同款模型，所以 packet 的 prompt 可以"自己写给自己"——能精
+准引导接收方调用 Read/Grep 工具召回 conversation 上下文，这是任何外部 API 都
+做不到的。
+
+`equity-monitor decide` 子命令：
+
+```text
+decide list  [--state pending|submitted|executed|cancelled|all]
+decide show  <packet_id>
+decide submit <packet_id> --json '...' | --file decision.json [--no-execute]
+decide cancel <packet_id> [--reason "..."]
+```
+
 ### 安全护栏
 
 - **SIMULATE-only**：`OpenDSecTrader` 启动时主动找 SIMULATE 账户；找不到直接 raise，绝不碰真实钱包

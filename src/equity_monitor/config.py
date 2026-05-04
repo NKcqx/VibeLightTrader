@@ -146,6 +146,31 @@ class StrategyEnsembleConfig(BaseModel):
     weights: dict[str, float] = Field(default_factory=lambda: {"rule": 1.0})
 
 
+class StrategyHITLConfig(BaseModel):
+    """Human-in-the-loop strategy.
+
+    Each event triggers writing a decision packet to `var_dir`. The user
+    pastes the markdown prompt into Cursor / Claude.app where another
+    instance of the same model decides; the user then submits the JSON
+    decision via `equity-monitor decide submit`. No API key needed —
+    drives entirely off whatever LLM-subscription IDE the user already
+    has.
+    """
+
+    var_dir: str = "var/decisions"
+    """Where pending/submitted/executed/cancelled packets live."""
+
+    repo_root: str | None = None
+    """Absolute path used in the packet's submit-command. None →
+    rendered using cwd at packet-creation time."""
+
+    max_position_per_symbol: int = 200
+    min_trade_size: int = 10
+    min_confidence: float = 0.6
+    """Same hard-constraint knobs as the LLM strategy. Mirrored into
+    every packet so the user / receiver knows the rails."""
+
+
 class StrategyConfig(BaseModel):
     """Active-strategy selector + per-strategy knobs.
 
@@ -153,9 +178,10 @@ class StrategyConfig(BaseModel):
     and forward-compatible.
     """
 
-    type: Literal["rule", "llm", "ensemble"] = "rule"
+    type: Literal["rule", "llm", "hitl", "ensemble"] = "rule"
     rule: StrategyRuleConfig = Field(default_factory=StrategyRuleConfig)
     llm: StrategyLLMConfig = Field(default_factory=StrategyLLMConfig)
+    hitl: StrategyHITLConfig = Field(default_factory=StrategyHITLConfig)
     ensemble: StrategyEnsembleConfig = Field(default_factory=StrategyEnsembleConfig)
 
 

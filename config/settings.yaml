@@ -95,6 +95,19 @@ trader:
       cache_seconds: 300              # 0 disables in-memory cache
       max_concurrent: 5               # reserved (today: serial)
 
+    # Human-in-the-Loop. No API key needed — uses your Cursor/Claude
+    # subscription. Each event triggers writing a decision packet (markdown)
+    # to var_dir; you paste it into Cursor where Claude reads MEMORY +
+    # decides; then submit back via:
+    #   equity-monitor decide submit <id> --json '<paste>'
+    # Set strategy.type: hitl to enable.
+    hitl:
+      var_dir: var/decisions
+      repo_root: null                 # null → rendered using cwd at runtime
+      max_position_per_symbol: 200
+      min_trade_size: 10
+      min_confidence: 0.6
+
     # Skeleton — C3.
     ensemble:
       strategies: [rule]

@@ -615,5 +615,273 @@ def backfill(ctx: click.Context, days: int) -> None:
         )
 
 
+# ---------------------------------------------------------------------------
+# HITL decide CLI — receive decisions submitted by Claude via Cursor.
+# ---------------------------------------------------------------------------
+
+
+def _make_packet_store(cfg: Any) -> Any:
+    """Resolve the configured PacketStore. Centralised so tests can patch."""
+    from equity_monitor.decisions.store import PacketStore
+
+    var_dir = Path(cfg.trader.strategy.hitl.var_dir)
+    return PacketStore(var_dir)
+
+
+@cli.group("decide")
+def decide_group() -> None:
+    """Human-in-the-Loop decision pipeline.
+
+    HITL strategy writes a packet to var/decisions/pending/ on each event;
+    you paste it into Cursor/Claude (which has access to MEMORY + tools);
+    Claude outputs a decision JSON; you submit it back via `decide submit`
+    and the system places the paper trade.
+    """
+
+
+@decide_group.command("list")
+@click.option(
+    "--state",
+    type=click.Choice(["pending", "submitted", "executed", "cancelled", "all"]),
+    default="pending",
+    show_default=True,
+)
+@click.pass_context
+def decide_list(ctx: click.Context, state: str) -> None:
+    """Show packets in the requested state, oldest first."""
+    from equity_monitor.decisions.store import PacketState
+
+    cfg = _get_cfg(ctx)
+    store = _make_packet_store(cfg)
+
+    states = list(PacketState) if state == "all" else [PacketState(state)]
+    found = False
+    for s in states:
+        for sp in store.list(state=s):
+            found = True
+            p = sp.packet
+            price = "n/a"
+            if p.snapshot and p.snapshot.get("last_price") is not None:
+                try:
+                    price = f"${float(p.snapshot['last_price']):.2f}"
+                except (TypeError, ValueError):
+                    pass
+            triggers = ",".join(p.triggering_signal_types) or "(none)"
+            click.echo(
+                f"[{s.value:9s}] {p.id}  {p.code:8s}  price={price:8s}  "
+                f"qty={p.position_qty:>4}  triggers={triggers}"
+            )
+    if not found:
+        click.echo(f"(no packets in state={state})")
+
+
+@decide_group.command("show")
+@click.argument("packet_id")
+@click.pass_context
+def decide_show(ctx: click.Context, packet_id: str) -> None:
+    """Print a packet's markdown prompt to stdout (paste into Cursor)."""
+    cfg = _get_cfg(ctx)
+    store = _make_packet_store(cfg)
+    sp = store.get(packet_id)
+    if sp is None:
+        raise click.ClickException(f"packet {packet_id!r} not found")
+    click.echo(sp.markdown())
+
+
+@decide_group.command("submit")
+@click.argument("packet_id")
+@click.option(
+    "--json",
+    "json_str",
+    type=str,
+    default=None,
+    help="Decision JSON inline (use shell single-quotes around the whole arg).",
+)
+@click.option(
+    "--file",
+    "json_file",
+    type=click.Path(exists=True),
+    default=None,
+    help="Read decision JSON from a file instead of --json.",
+)
+@click.option(
+    "--no-execute",
+    is_flag=True,
+    default=False,
+    help="Just record the decision, don't actually place a paper trade.",
+)
+@click.pass_context
+def decide_submit(
+    ctx: click.Context,
+    packet_id: str,
+    json_str: str | None,
+    json_file: str | None,
+    no_execute: bool,
+) -> None:
+    """Submit Claude's decision JSON for a pending packet, then trade."""
+    import json as _json
+
+    from equity_monitor.decisions.store import PacketState
+    from equity_monitor.signals.strategy_llm import (
+        ConstraintViolation,
+        enforce_constraints,
+    )
+    from equity_monitor.llm.prompt import ParsedDecision
+
+    if (json_str is None) == (json_file is None):
+        raise click.UsageError("provide exactly one of --json or --file")
+
+    raw = json_str if json_str is not None else Path(json_file).read_text()
+    try:
+        decision = _json.loads(raw)
+    except _json.JSONDecodeError as e:
+        raise click.ClickException(f"invalid JSON: {e}") from e
+
+    cfg = _get_cfg(ctx)
+    factory = _make_factory(cfg)
+    store = _make_packet_store(cfg)
+
+    sp = store.get(packet_id)
+    if sp is None:
+        raise click.ClickException(f"packet {packet_id!r} not found")
+    if sp.state != PacketState.PENDING:
+        raise click.ClickException(
+            f"packet {packet_id!r} is in state={sp.state.value}, "
+            f"can only submit while pending"
+        )
+
+    # Step 1: persist the raw decision (transitions PENDING → SUBMITTED).
+    try:
+        sp = store.submit(packet_id, decision)
+    except ValueError as e:
+        raise click.ClickException(str(e)) from e
+    click.echo("✓ recorded decision; packet now in state=submitted")
+
+    if no_execute:
+        click.echo("--no-execute set; stopping before paper trade")
+        return
+
+    # Step 2: validate against the same constraints LLMStrategy uses.
+    p = sp.packet
+    try:
+        parsed = ParsedDecision(
+            action=decision["action"],
+            qty=int(decision["qty"]),
+            confidence=float(decision["confidence"]),
+            reason=str(decision["reason"]),
+        )
+    except (KeyError, ValueError, TypeError) as e:
+        store.mark_executed(
+            packet_id,
+            execution={"status": "REJECTED", "error": f"bad decision shape: {e}"},
+        )
+        raise click.ClickException(f"decision invalid: {e}") from e
+
+    constraints = p.constraints or {}
+    try:
+        suggest = enforce_constraints(
+            parsed,
+            position_qty=p.position_qty,
+            max_position=int(constraints.get("max_position", 200)),
+            min_trade_size=int(constraints.get("min_trade_size", 10)),
+            min_confidence=float(constraints.get("min_confidence", 0.6)),
+        )
+    except ConstraintViolation as e:
+        store.mark_executed(
+            packet_id,
+            execution={
+                "status": "REJECTED",
+                "error": f"constraint violation: {e}",
+            },
+        )
+        raise click.ClickException(f"constraint violation: {e}") from e
+
+    if suggest.action == "HOLD":
+        store.mark_executed(
+            packet_id,
+            execution={
+                "status": "HOLD",
+                "reason": suggest.reason,
+            },
+        )
+        click.echo(f"✓ HOLD recorded (no trade placed): {suggest.reason}")
+        return
+
+    # Step 3: place the paper trade. We need a fresh SignalRow to attach
+    # the trade to; HITL doesn't carry one (it returns None from decide).
+    # So we synthesise one tagged with the packet id, mark it 'pending',
+    # and reuse execute_signal_trade.
+    from datetime import datetime, timezone
+
+    from equity_monitor.trader.execute import (
+        SignalExecutionError,
+        execute_signal_trade,
+    )
+
+    trader = _make_trader(cfg)
+    try:
+        with session_scope(factory) as s:
+            sym = s.query(Symbol).filter(Symbol.code == p.code).one_or_none()
+            if sym is None:
+                raise click.ClickException(
+                    f"symbol {p.code!r} not in DB; run `equity-monitor watchlist sync` first"
+                )
+            sig = SignalRow(
+                symbol_id=sym.id,
+                ts=datetime.now(tz=timezone.utc),
+                signal_type=f"hitl:{packet_id}",
+                severity="WARN",
+                payload_json="{}",
+                delivered=False,
+                suggested_action=suggest.action,
+                suggested_qty=suggest.qty,
+                status="pending",
+            )
+            s.add(sig)
+            s.flush()
+            try:
+                trade_id = execute_signal_trade(s, sig, sym, suggest.qty, trader)
+            except SignalExecutionError as e:
+                store.mark_executed(
+                    packet_id,
+                    execution={"status": "REJECTED", "error": str(e)},
+                )
+                raise click.ClickException(str(e)) from e
+            store.mark_executed(
+                packet_id,
+                execution={
+                    "status": "FILLED_OR_PENDING",
+                    "trade_id": trade_id,
+                    "side": suggest.action,
+                    "qty": suggest.qty,
+                    "reason": suggest.reason,
+                },
+            )
+            click.echo(
+                f"✓ paper trade placed: trade_id={trade_id} "
+                f"{suggest.action} {suggest.qty} {p.code}"
+            )
+    finally:
+        try:
+            trader.close()
+        except Exception:
+            pass
+
+
+@decide_group.command("cancel")
+@click.argument("packet_id")
+@click.option("--reason", default="user-cancelled", show_default=True)
+@click.pass_context
+def decide_cancel(ctx: click.Context, packet_id: str, reason: str) -> None:
+    """Cancel a pending or submitted packet without trading."""
+    cfg = _get_cfg(ctx)
+    store = _make_packet_store(cfg)
+    try:
+        store.cancel(packet_id, reason=reason)
+    except FileNotFoundError as e:
+        raise click.ClickException(str(e)) from e
+    click.echo(f"✓ cancelled packet {packet_id} ({reason})")
+
+
 if __name__ == "__main__":
     cli()
