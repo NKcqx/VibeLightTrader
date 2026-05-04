@@ -135,8 +135,27 @@ class HITLStrategy:
 
         return None  # explicitly: no programmatic suggestion this tick
 
-    def _build_lark_summary(self, md_path: Path, packet: Any) -> str:
-        """One-screen summary the user actually skims on phone."""
+    def _build_lark_summary(
+        self, md_path: Path, packet: Any, *, repo_root: Path | None = None
+    ) -> str:
+        """One-screen summary the user actually skims on phone.
+
+        Layout invariant: every block of text the user is supposed to
+        COPY is wrapped in a fenced ``` block of its own. No prose
+        instructions are mixed inside a copyable block. The user
+        long-presses → "select code block" → paste; nothing to read,
+        nothing to trim.
+
+        Two copyable blocks:
+
+          - Block A: prompt for the Cursor-side Claude. The user
+            pastes this into Cursor's chat. Claude reads the packet,
+            decides, and (if it has shell access) submits via CLI.
+
+          - Block B: the literal CLI command. Used when Claude can't
+            run shell, or when the user wants to type the JSON
+            themselves.
+        """
         triggers = ", ".join(packet.triggering_signal_types) or "(无信号)"
         price = "n/a"
         if packet.snapshot:
@@ -151,18 +170,48 @@ class HITLStrategy:
             sign = "▲" if packet.intraday_return >= 0 else "▼"
             intraday = f" · 日内 {sign} {packet.intraday_return:+.2%}"
 
+        repo = str(repo_root or self.repo_root or Path.cwd())
+        # md_path is whatever PacketStore wrote — usually relative when
+        # the scheduler ran from the repo root. The Cursor-side Claude
+        # may have a different cwd, so we resolve to absolute.
+        abs_md_path = str(Path(md_path).resolve())
+
+        # Block A: the Cursor prompt. Self-contained — gives Claude the
+        # packet path, the repo root, the submit command template.
+        # Use a `text` fence (not bash) so flat-rendering clients don't
+        # syntax-highlight the prose.
+        cursor_prompt = (
+            f"请帮我处理 equity-monitor 决策 packet `{packet.id}`：\n"
+            f"1. 用 Read 工具读 `{abs_md_path}` 看完整 prompt；\n"
+            f"2. 按 packet 里第 1-4 步的 self-instructions 做决策（含 grep MEMORY）；\n"
+            f"3. 用 Shell 工具在 `{repo}` 目录下执行：\n"
+            f"   equity-monitor decide submit {packet.id} --json '<你的决策 JSON>'"
+        )
+
+        # Block B: the literal command. Single line so mobile copy
+        # doesn't break it into pieces.
+        submit_cmd = (
+            f"cd {repo} && equity-monitor decide submit {packet.id} "
+            f"--json '<paste Claude 的 JSON 这里>'"
+        )
+
         return (
             f"🎯 **HITL 决策待办** · `{packet.code}`\n\n"
             f"**Packet ID**: `{packet.id}`\n"
             f"**触发信号**: {triggers}\n"
             f"**当前价**: {price}{intraday}\n"
             f"**持仓**: {packet.position_qty} 股 @ ${packet.avg_cost:.2f}\n\n"
-            f"**下一步**: 在 Cursor 里跑 `cat {md_path}` 把 prompt 粘给 Claude，"
-            f"决策 JSON 复制后跑：\n\n"
-            f"```bash\n"
-            f"equity-monitor decide submit {packet.id} --json '<paste>'\n"
+            f"---\n"
+            f"**操作 A — 自动模式（推荐）**：复制下面整段 → 粘到 Cursor 对话框 → 让 Claude 自己处理\n\n"
+            f"```text\n"
+            f"{cursor_prompt}\n"
             f"```\n\n"
-            f"或 Claude 直接写到: `var/decisions/submitted/{packet.id}.json`"
+            f"---\n"
+            f"**操作 B — 手动模式**：把 packet 文件内容贴给任何 LLM 拿到 JSON 后，复制下面这条命令到终端，"
+            f"把 `<paste Claude 的 JSON 这里>` 替换为 JSON 字符串（注意保留外层单引号）\n\n"
+            f"```bash\n"
+            f"{submit_cmd}\n"
+            f"```"
         )
 
 

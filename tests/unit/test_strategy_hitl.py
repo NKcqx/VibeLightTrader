@@ -86,10 +86,36 @@ def test_lark_push_called_with_summary(tmp_path: Path) -> None:
     assert "HITL 决策待办" in body
     assert "US.NVDA" in body
     assert "equity-monitor decide submit" in body
-    # The packet id appears in both the submit command and the suggested
-    # write-path; just sanity-check it's there
     pending = next(iter(store.list(state=PacketState.PENDING)))
     assert pending.packet.id in body
+
+
+def test_lark_summary_has_two_distinct_copy_blocks(tmp_path: Path) -> None:
+    """Card layout invariant: exactly two fenced ``` blocks (one for
+    the Cursor prompt, one for the shell command). Mixing prose into
+    a copy block is what makes "下一步" ambiguous — guard against
+    regressing to that."""
+    captured: list[str] = []
+
+    def fake_push(body: str) -> str:
+        captured.append(body)
+        return "ok"
+
+    store = PacketStore(tmp_path)
+    strat = HITLStrategy(store=store, lark_push=fake_push)
+    strat.decide(_ctx())
+    body = captured[0]
+
+    # Two opening fences (```text and ```bash) and two closing ones
+    assert body.count("```") == 4, (
+        f"expected exactly 4 fence markers (2 blocks), got {body.count('```')}: {body!r}"
+    )
+    assert "```text" in body, "Cursor-prompt block should be ```text fenced"
+    assert "```bash" in body, "shell-command block should be ```bash fenced"
+
+    # The two operation modes must be labelled
+    assert "操作 A" in body
+    assert "操作 B" in body
 
 
 def test_lark_push_failure_doesnt_kill_packet(tmp_path: Path) -> None:

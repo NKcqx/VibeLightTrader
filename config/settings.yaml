@@ -54,7 +54,7 @@ trader:
   # Active strategy + per-strategy knobs. Only the sub-block matching
   # `type` is consumed; others are dormant and forward-compatible.
   strategy:
-    type: rule          # rule | llm | ensemble    (ensemble lands in C3)
+    type: hitl          # rule | llm | hitl | ensemble    (ensemble lands in C3)
 
     rule:
       max_position_per_symbol: 200

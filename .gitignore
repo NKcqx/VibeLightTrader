@@ -23,3 +23,9 @@ config/settings.local.yaml
 # Phase 3 snapshot output
 var/snapshots/*.png
 !var/snapshots/.gitkeep
+
+# HITL decision packets (runtime artifacts)
+var/decisions/
+
+# Scheduler stdout from `nohup equity-monitor run`
+var/scheduler.log
