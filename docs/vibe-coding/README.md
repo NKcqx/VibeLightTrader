@@ -13,8 +13,8 @@
 | [A](./A-kickoff.md) | 立项与心智设定 | 一句话目标怎么写、资源怎么扔给 AI、自动化档位别一上来就最高 |
 | [B](./B-meta-skills.md) | 7 个 meta-skill | 不说就会出问题的 7 个动作（含飞书 listener 真实卡点） |
 | [C](./C-evolution-timeline.md) | 项目是怎么长出来的 | 8 个真实转折，每个标记是谁拍板的、当下踏不踏实 |
-| [D](./D-decision-points.md) | 6 个关键决策点 | 数据源 / 数据库 / 策略抽象 / LLM 选型 / 通知 / 模拟交易 — 每处展开（待写） |
-| [E](./E-ai-cant-do-this.md) | "AI 写不出来"的清单 | 必须自己干的事——投资 thesis / 平台 OAuth / 订阅决策 / 装机（待写） |
+| [D](./D-decision-points.md) | 6 个关键决策点 | 数据源 / 数据库 / 策略抽象 / LLM 选型 / 通知 / 模拟交易 — 每处展开纠结 |
+| [E](./E-ai-cant-do-this.md) | "AI 写不出来"的清单 | 必须自己干的 6 类事——thesis / OAuth / 订阅 / 装机 / 不踏实 / 收尾 |
 | [F](./F-skeleton.md) | 最小骨架 + 30 行 demo | 直接复制走、跟你自己的 AI 一起填肉的起点 |
 | [附录](./appendix-conversations.md) | 对话精简版 | 正文里引用过的 8 段真实对话原文 |
 
