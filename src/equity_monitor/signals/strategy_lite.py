@@ -29,12 +29,40 @@ class SignalSuggest:
 
     `triggering_signal_types`: the signal_types that actually drove the
     decision — used in the Lark card "reason" line.
+
+    The `*_meta` block below is filled by LLM-backed strategies and stays
+    None for rule-based ones. We keep it on the suggestion object (rather
+    than carrying a separate object) so downstream consumers (Lark cards,
+    journal writer, audit hooks) can read or ignore it without touching
+    the strategy contract. All fields are optional — RuleStrategy and any
+    pre-LLM caller continues to compile unchanged.
     """
 
     action: Literal["BUY", "SELL", "HOLD"]
     qty: int
     reason: str
     triggering_signal_types: tuple[str, ...]
+
+    # Optional LLM/strategy metadata — populated by LLMStrategy, None elsewhere.
+    confidence: float | None = None
+    """0.0..1.0 if the strategy reports one (e.g. LLM). None for rule-based."""
+
+    raw_llm_text: str | None = None
+    """Verbatim assistant reply (pre-parse). For audit / journal display.
+    Truncated to ~2KB by callers if needed; we don't truncate here."""
+
+    latency_ms: int | None = None
+    """End-to-end strategy.decide() wall time. None when not measured."""
+
+    client_name: str | None = None
+    """Stable strategy / client identifier for the journal:
+    'cursor-agent:default', 'anthropic:claude-3-5-sonnet-20241022',
+    'rule', 'rule(fallback)', 'llm-fallback:hold'."""
+
+    fallback_used: bool = False
+    """True iff the suggestion came from the strategy's fallback path
+    (e.g. LLM timed out → RuleStrategy ran). Lets the journal mark
+    'degraded' decisions distinctly."""
 
 
 def decide_action(

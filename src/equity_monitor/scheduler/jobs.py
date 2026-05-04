@@ -53,6 +53,12 @@ import equity_monitor.signals.strategy_rule  # noqa: F401  (registers "rule")
 import equity_monitor.signals.strategy_llm   # noqa: F401  (registers "llm")
 import equity_monitor.signals.strategy_hitl  # noqa: F401  (registers "hitl")
 from equity_monitor.signals.tech import detect_tech_signals
+from equity_monitor.journal import (
+    JournalEntry,
+    append_event,
+    refresh_overview_only,
+)
+from equity_monitor.journal.writer import compute_overview
 from equity_monitor.signals.threshold import detect_threshold_breach
 
 
@@ -200,6 +206,131 @@ def _load_open_positions_full(session) -> dict[str, tuple[int, float, float]]:
         .all()
     )
     return {code: (qty, avg, real or 0.0) for code, qty, avg, real in rows}
+
+
+def _write_journal_entry(
+    *,
+    code: str,
+    code_to_name: dict[str, str | None],
+    ts_for_card: datetime,
+    signals: list[Signal],
+    suggestion: SignalSuggest | None,
+    indicator_readings: dict[str, IndicatorReading],
+    return_summaries: dict[str, ReturnSummary],
+    snapshots_by_code: dict[str, Any],
+    position_details: dict[str, tuple[int, float, float]],
+    watchlist_by_code: dict[str, tuple[float | None, float | None]],
+    png_path: Path | None,
+    journal_dir: Path,
+    audit_log_path_str: str | None,
+) -> None:
+    """Build a JournalEntry + OverviewSnapshot for one code and append.
+
+    Pure orchestration — pulls fields from the cron loop's closure-state
+    dicts and hands them to the journal module. Never raises (the caller
+    catches; we keep this function side-effect-only for clarity).
+    """
+    ind = indicator_readings.get(code)
+    ret = return_summaries.get(code)
+    snap = snapshots_by_code.get(code)
+    qty, avg_cost, _real = position_details.get(code, (0, 0.0, 0.0))
+    upper, lower = watchlist_by_code.get(code, (None, None))
+
+    last_price = float(snap.last_price) if snap is not None else None
+    intraday_pct = ret.intraday if ret is not None else None
+
+    unrealized: float | None = None
+    if qty > 0 and last_price is not None and avg_cost:
+        unrealized = (last_price - avg_cost) * qty
+
+    chart_rel: str | None = None
+    if png_path is not None:
+        try:
+            chart_rel = str(Path(png_path).resolve().relative_to(Path.cwd().resolve()))
+        except ValueError:
+            chart_rel = str(png_path)
+
+    entry = JournalEntry(
+        code=code,
+        ts=ts_for_card,
+        last_price=last_price,
+        intraday_pct=intraday_pct,
+        last_30_bar_pct=(ret.last_30_bars if ret is not None else None),
+        rsi_14=(ind.rsi_14 if ind is not None else None),
+        macd=(ind.macd if ind is not None else None),
+        macd_signal=(ind.macd_signal if ind is not None else None),
+        macd_hist=(ind.macd_hist if ind is not None else None),
+        boll_upper=(ind.boll_upper if ind is not None else None),
+        boll_mid=(ind.boll_mid if ind is not None else None),
+        boll_lower=(ind.boll_lower if ind is not None else None),
+        position_qty=qty,
+        avg_cost=(avg_cost if qty > 0 else None),
+        unrealized_pnl=unrealized,
+        signals=signals,
+        suggestion=suggestion,
+        audit_log_path=audit_log_path_str,
+        chart_image_path=chart_rel,
+    )
+
+    overview = compute_overview(
+        code=code,
+        display_name=code_to_name.get(code),
+        last_check_ts=ts_for_card,
+        last_price=last_price,
+        intraday_pct=intraday_pct,
+        upper_threshold=upper,
+        lower_threshold=lower,
+        position_qty=qty,
+        avg_cost=(avg_cost if qty > 0 else None),
+        unrealized_pnl=unrealized,
+        journal_dir=journal_dir,
+        new_entry=entry,
+    )
+
+    append_event(journal_dir=journal_dir, overview=overview, entry=entry)
+
+
+def _refresh_journal_overview_for_quiet_code(
+    *,
+    code: str,
+    code_to_name: dict[str, str | None],
+    now_utc: datetime,
+    snapshots_by_code: dict[str, Any],
+    return_summaries: dict[str, ReturnSummary],
+    position_details: dict[str, tuple[int, float, float]],
+    watchlist_by_code: dict[str, tuple[float | None, float | None]],
+    journal_dir: Path,
+) -> None:
+    """For a code that produced NO signals this tick: just bump the overview.
+
+    Same Hybrid-mode commitment as `_write_journal_entry` — the file's
+    overview always reflects "last check ran successfully at <ts>" so
+    the user can verify the loop is alive without grepping logs.
+    """
+    snap = snapshots_by_code.get(code)
+    ret = return_summaries.get(code)
+    qty, avg_cost, _real = position_details.get(code, (0, 0.0, 0.0))
+    upper, lower = watchlist_by_code.get(code, (None, None))
+    last_price = float(snap.last_price) if snap is not None else None
+    intraday_pct = ret.intraday if ret is not None else None
+    unrealized: float | None = None
+    if qty > 0 and last_price is not None and avg_cost:
+        unrealized = (last_price - avg_cost) * qty
+    overview = compute_overview(
+        code=code,
+        display_name=code_to_name.get(code),
+        last_check_ts=now_utc,
+        last_price=last_price,
+        intraday_pct=intraday_pct,
+        upper_threshold=upper,
+        lower_threshold=lower,
+        position_qty=qty,
+        avg_cost=(avg_cost if qty > 0 else None),
+        unrealized_pnl=unrealized,
+        journal_dir=journal_dir,
+        new_entry=None,
+    )
+    refresh_overview_only(journal_dir=journal_dir, overview=overview)
 
 
 def _build_strategy_from_cfg(
@@ -478,6 +609,19 @@ def run_intraday_check(
         now_utc = now_utc.replace(tzinfo=timezone.utc)
     codes = [s.code for s in watchlist.symbols]
 
+    # Journal lookup tables: per-code display name + threshold pair, used
+    # by both the entry-writer and the no-signal overview-refresh path.
+    code_to_name: dict[str, str | None] = {
+        s.code: s.name for s in watchlist.symbols
+    }
+    watchlist_by_code: dict[str, tuple[float | None, float | None]] = {
+        s.code: (s.upper_threshold, s.lower_threshold) for s in watchlist.symbols
+    }
+    journal_dir = Path("data/journal")
+    audit_log_path_str: str | None = None
+    if cfg.trader.strategy.type == "llm":
+        audit_log_path_str = cfg.trader.strategy.llm.audit_log_path or None
+
     inserted_quotes = sync_snapshots(client, factory, codes=codes)
     snapshots_by_code = {s.code: s for s in client.snapshot(codes)}
 
@@ -720,88 +864,115 @@ def run_intraday_check(
         except Exception as e:
             log.error("intraday_check.push_failed", code=code, error=str(e))
 
-        if send_image_fn is None or not card_ok:
-            return
+        # Chart snapshot — best-effort. Failures here MUST NOT stop the
+        # journal write below; a missing PNG just means the entry has no
+        # image link, the rest of the data is still useful.
+        png_path: Path | None = None
+        if send_image_fn is not None and card_ok:
+            try:
+                trade_window_start = now_utc - timedelta(days=30)
+                markers: list[TradeMarker] = []
+                with session_scope(factory) as session:
+                    sym = session.query(Symbol).filter(Symbol.code == code).one_or_none()
+                    if sym is not None:
+                        rows = (
+                            session.query(Trade)
+                            .filter(
+                                Trade.symbol_id == sym.id,
+                                Trade.ts >= trade_window_start,
+                            )
+                            .order_by(Trade.ts.asc())
+                            .all()
+                        )
+                        for r in rows:
+                            ts_raw = _ts_to_pydatetime(r.ts)
+                            ts_trade = (
+                                ts_raw if ts_raw.tzinfo else ts_raw.replace(tzinfo=timezone.utc)
+                            )
+                            side_normalized = r.side.strip().upper()
+                            if side_normalized == "BUY":
+                                side_lit: Literal["buy", "sell"] = "buy"
+                            elif side_normalized == "SELL":
+                                side_lit = "sell"
+                            else:
+                                log.warning(
+                                    "intraday_check.snapshot.unknown_trade_side",
+                                    code=code,
+                                    trade_id=r.id,
+                                    side=r.side,
+                                )
+                                continue
+                            markers.append(
+                                TradeMarker(
+                                    ts=ts_trade,
+                                    side=side_lit,
+                                    qty=r.qty,
+                                    price=r.price,
+                                )
+                            )
 
+                avg_cost_chart: float | None = None
+                if code in positions_by_code:
+                    avg_cost_chart = positions_by_code[code][1]
+
+                snap_live = snapshots_by_code.get(code)
+                current_price = (
+                    float(snap_live.last_price) if snap_live is not None else None
+                )
+
+                # TODO(p4-perf): hoist df cache to avoid 2x kline fetch.
+                df_for_chart = fetch_kline_df(client, code, ktype="K_60M", limit=200)
+                req = SnapshotRequest(
+                    code=code,
+                    freq="60m",
+                    df=df_for_chart,
+                    markers=markers,
+                    avg_cost=avg_cost_chart,
+                    current_price=current_price,
+                    out_dir=snapshot_dir,
+                )
+                png_path = render_snapshot(req)
+                img_msg_id = send_image_fn(
+                    png_path, cfg.lark.receiver.open_id, cfg.lark.receiver.type
+                )
+                log.info(
+                    "intraday_check.snapshot_pushed",
+                    code=code,
+                    msg_id=img_msg_id,
+                    markers=len(markers),
+                )
+            except Exception as e:
+                log.error(
+                    "intraday_check.snapshot_failed",
+                    code=code,
+                    exc_type=type(e).__name__,
+                    error=str(e),
+                    error_repr=repr(e),
+                )
+
+        # Journal write — independent of card / chart success.
         try:
-            trade_window_start = now_utc - timedelta(days=30)
-            markers: list[TradeMarker] = []
-            with session_scope(factory) as session:
-                sym = session.query(Symbol).filter(Symbol.code == code).one_or_none()
-                if sym is not None:
-                    rows = (
-                        session.query(Trade)
-                        .filter(
-                            Trade.symbol_id == sym.id,
-                            Trade.ts >= trade_window_start,
-                        )
-                        .order_by(Trade.ts.asc())
-                        .all()
-                    )
-                    for r in rows:
-                        ts_raw = _ts_to_pydatetime(r.ts)
-                        ts_trade = (
-                            ts_raw if ts_raw.tzinfo else ts_raw.replace(tzinfo=timezone.utc)
-                        )
-                        side_normalized = r.side.strip().upper()
-                        if side_normalized == "BUY":
-                            side_lit: Literal["buy", "sell"] = "buy"
-                        elif side_normalized == "SELL":
-                            side_lit = "sell"
-                        else:
-                            log.warning(
-                                "intraday_check.snapshot.unknown_trade_side",
-                                code=code,
-                                trade_id=r.id,
-                                side=r.side,
-                            )
-                            continue
-                        markers.append(
-                            TradeMarker(
-                                ts=ts_trade,
-                                side=side_lit,
-                                qty=r.qty,
-                                price=r.price,
-                            )
-                        )
-
-            avg_cost: float | None = None
-            if code in positions_by_code:
-                avg_cost = positions_by_code[code][1]
-
-            snap_live = snapshots_by_code.get(code)
-            current_price = (
-                float(snap_live.last_price) if snap_live is not None else None
-            )
-
-            # TODO(p4-perf): hoist df cache to avoid 2x kline fetch.
-            df_for_chart = fetch_kline_df(client, code, ktype="K_60M", limit=200)
-            req = SnapshotRequest(
+            _write_journal_entry(
                 code=code,
-                freq="60m",
-                df=df_for_chart,
-                markers=markers,
-                avg_cost=avg_cost,
-                current_price=current_price,
-                out_dir=snapshot_dir,
-            )
-            png_path = render_snapshot(req)
-            img_msg_id = send_image_fn(
-                png_path, cfg.lark.receiver.open_id, cfg.lark.receiver.type
-            )
-            log.info(
-                "intraday_check.snapshot_pushed",
-                code=code,
-                msg_id=img_msg_id,
-                markers=len(markers),
+                code_to_name=code_to_name,
+                ts_for_card=ts_for_card,
+                signals=sigs,
+                suggestion=sug,
+                indicator_readings=indicator_readings,
+                return_summaries=return_summaries,
+                snapshots_by_code=snapshots_by_code,
+                position_details=position_details,
+                watchlist_by_code=watchlist_by_code,
+                png_path=png_path,
+                journal_dir=journal_dir,
+                audit_log_path_str=audit_log_path_str,
             )
         except Exception as e:
             log.error(
-                "intraday_check.snapshot_failed",
+                "intraday_check.journal_failed",
                 code=code,
                 exc_type=type(e).__name__,
                 error=str(e),
-                error_repr=repr(e),
             )
 
     crit_by_code: dict[str, list[Signal]] = {}
@@ -818,6 +989,34 @@ def run_intraday_check(
             if code in crit_by_code:
                 continue  # already pushed in crit batch
             _push_for_code(code, sigs)
+
+    # Hybrid trigger: codes that produced NO signals this tick still get
+    # their overview refreshed so the journal file's "最近检查" line is
+    # always current. This is the user's "the loop is alive" indicator.
+    touched_by_signals: set[str] = set(crit_by_code.keys()) | {
+        c for c in (sigs_by_code.keys()) if c in {s.code for s in deduped}
+    }
+    for sym_cfg in watchlist.symbols:
+        if sym_cfg.code in touched_by_signals:
+            continue
+        try:
+            _refresh_journal_overview_for_quiet_code(
+                code=sym_cfg.code,
+                code_to_name=code_to_name,
+                now_utc=now_utc,
+                snapshots_by_code=snapshots_by_code,
+                return_summaries=return_summaries,
+                position_details=position_details,
+                watchlist_by_code=watchlist_by_code,
+                journal_dir=journal_dir,
+            )
+        except Exception as e:  # never let a journal write break a tick
+            log.error(
+                "intraday_check.journal_overview_failed",
+                code=sym_cfg.code,
+                exc_type=type(e).__name__,
+                error=str(e),
+            )
 
     return {
         "quotes": inserted_quotes,

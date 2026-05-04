@@ -140,6 +140,13 @@ def test_happy_path_returns_buy_decision_and_writes_audit(tmp_path: Path) -> Non
     assert rows[0]["parsed"]["action"] == "BUY"
     assert rows[0]["decision"]["qty"] == 50
 
+    # Metadata stamped on SignalSuggest for the journal/Lark layer.
+    assert out.confidence == 0.85
+    assert out.client_name == "fake:fake-model"
+    assert out.fallback_used is False
+    assert out.latency_ms is not None and out.latency_ms >= 0
+    assert out.raw_llm_text and "BUY" in out.raw_llm_text
+
 
 def test_no_signals_returns_none_without_calling_llm(tmp_path: Path) -> None:
     audit = tmp_path / "decisions.jsonl"
@@ -203,6 +210,12 @@ def test_parse_error_falls_back_to_rule(tmp_path: Path) -> None:
     assert rows[0]["fallback_used"] is True
     assert rows[0]["error"]["type"] == "LLMParseError"
     assert rows[0]["fallback_path"] == "rule"
+
+    # SignalSuggest from the fallback path is tagged so downstream
+    # (journal, Lark) can render a "⚠️ fallback" badge.
+    assert out.fallback_used is True
+    assert out.client_name and "→rule" in out.client_name
+    assert out.latency_ms is not None
 
 
 # ---------------------------------------------------------------------------

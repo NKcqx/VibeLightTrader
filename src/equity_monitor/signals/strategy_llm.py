@@ -39,7 +39,7 @@ from __future__ import annotations
 import hashlib
 import json
 import time
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from pathlib import Path
 from typing import Any
 
@@ -157,6 +157,45 @@ def _append_audit(path: Path, record: dict[str, Any]) -> None:
         log.warning("llm_audit.write_failed", path=str(path), error=repr(e))
 
 
+def _decorate(
+    decision: SignalSuggest | None,
+    *,
+    client_name: str,
+    confidence: float | None = None,
+    raw_text: str | None = None,
+    latency_ms: int | None = None,
+    fallback_used: bool = False,
+) -> SignalSuggest | None:
+    """Stamp LLM/strategy metadata onto a SignalSuggest before returning.
+
+    Used both on the LLM happy path and on the fallback path so journal /
+    audit / Lark consumers can reliably inspect *who decided this* and
+    *was a fallback used*. SignalSuggest is frozen, so we replace().
+
+    `confidence` is *not* overridden if the underlying decision already
+    carries one (the constraint demotion path may set its own); only
+    fill when the source said nothing. `raw_text` is truncated to 4 KB
+    to keep the journal markdown readable — full text remains in the
+    audit log if needed.
+    """
+    if decision is None:
+        return None
+    raw = raw_text
+    if raw is not None and len(raw) > 4096:
+        raw = raw[:4096] + "…(truncated)"
+    new_confidence = (
+        decision.confidence if decision.confidence is not None else confidence
+    )
+    return replace(
+        decision,
+        confidence=new_confidence,
+        raw_llm_text=raw,
+        latency_ms=latency_ms,
+        client_name=client_name,
+        fallback_used=fallback_used,
+    )
+
+
 # ---------------------------------------------------------------------------
 # Strategy.
 # ---------------------------------------------------------------------------
@@ -236,10 +275,12 @@ class LLMStrategy:
             return self._cache[ck]
 
         prompt = self._build_messages(ctx)
+        client_name = getattr(self.client, "name", "?")
+        t0 = time.monotonic()
         record: dict[str, Any] = {
             "ts_unix": time.time(),
             "code": ctx.code,
-            "client": getattr(self.client, "name", "?"),
+            "client": client_name,
             "model": getattr(self.client, "model", "?"),
             "position_qty": ctx.position_qty,
             "signals": [s.signal_type for s in ctx.signals],
@@ -271,6 +312,14 @@ class LLMStrategy:
                 min_trade_size=self.min_trade_size,
                 min_confidence=self.min_confidence,
             )
+            decision = _decorate(
+                decision,
+                client_name=client_name,
+                confidence=parsed.confidence,
+                raw_text=response.text,
+                latency_ms=int((time.monotonic() - t0) * 1000),
+                fallback_used=False,
+            )
             record["decision"] = {
                 "action": decision.action,
                 "qty": decision.qty,
@@ -284,6 +333,12 @@ class LLMStrategy:
                 "message": str(e)[:500],
             }
             decision = self._fallback_decision(ctx)
+            decision = _decorate(
+                decision,
+                client_name=f"{client_name}→{self.fallback_on_error}",
+                latency_ms=int((time.monotonic() - t0) * 1000),
+                fallback_used=True,
+            )
             record["fallback_used"] = True
             record["fallback_path"] = self.fallback_on_error
             record["decision"] = (
