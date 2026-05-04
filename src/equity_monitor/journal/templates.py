@@ -84,6 +84,17 @@ class OverviewSnapshot:
     last_decision_client: str | None  # 'cursor-agent:default', 'rule', etc.
     last_decision_confidence: float | None
 
+    # Optional decoration. Empty list / None → section is omitted. Lets
+    # the writer pass these through without compute_overview() needing
+    # to know about metrics/errors modules (avoids a circular import).
+    hit_rate_lines: tuple[str, ...] = ()
+    """Already-formatted bullet strings, one per window. Caller produces
+    these via `metrics.render_hit_rate_lines(...)`."""
+
+    error_probe_lines: tuple[str, ...] = ()
+    """Already-formatted bullet strings; empty when the symbol is
+    healthy. Caller produces these via `errors.render_probe_lines(...)`."""
+
 
 def _fmt_price(p: float | None) -> str:
     return f"${p:.2f}" if p is not None else "—"
@@ -155,22 +166,29 @@ def render_overview(ov: OverviewSnapshot) -> str:
     else:
         last_decision_line = "—（尚无决策事件）"
 
-    body = "\n".join(
-        [
-            f"# {ov.code} · {name} 监控日志",
-            "",
-            OVERVIEW_BEGIN,
-            "## 当前状态",
-            "",
-            f"- **最新价**：{_fmt_price(ov.last_price)}（{_fmt_ts(ov.last_check_ts)}，日内 {_fmt_pct(ov.intraday_pct)}）",
-            f"- **持仓**：{held_line}",
-            f"- **阈值区间**：{threshold_line}",
-            f"- **累计事件**：{counts_line}",
-            f"- **最近决策**：{last_decision_line}",
-            OVERVIEW_END,
-        ]
-    )
-    return body + "\n"
+    lines: list[str] = [
+        f"# {ov.code} · {name} 监控日志",
+        "",
+        OVERVIEW_BEGIN,
+        "## 当前状态",
+        "",
+        f"- **最新价**：{_fmt_price(ov.last_price)}（{_fmt_ts(ov.last_check_ts)}，日内 {_fmt_pct(ov.intraday_pct)}）",
+        f"- **持仓**：{held_line}",
+        f"- **阈值区间**：{threshold_line}",
+        f"- **累计事件**：{counts_line}",
+        f"- **最近决策**：{last_decision_line}",
+    ]
+
+    if ov.hit_rate_lines:
+        lines.append("")
+        lines.append("**决策胜率**")
+        lines.extend(ov.hit_rate_lines)
+    if ov.error_probe_lines:
+        lines.append("")
+        lines.extend(ov.error_probe_lines)
+
+    lines.append(OVERVIEW_END)
+    return "\n".join(lines) + "\n"
 
 
 # ---------------------------------------------------------------------------

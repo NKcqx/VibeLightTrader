@@ -255,6 +255,11 @@ class LLMStrategy:
     audit_log_path: Path = field(default_factory=lambda: Path("data/llm_decisions.jsonl"))
     fallback_on_error: str = "rule"  # "rule" | "hold"
 
+    dev_log_path: Path = field(default_factory=lambda: Path("data/dev_log.md"))
+    """Where to append a Markdown entry on every error / fallback. The
+    file is created lazily and is for engineers, not end users — see
+    `journal.errors` for the format."""
+
     system_prompt: str = DEFAULT_SYSTEM_PROMPT
     user_template: str = DEFAULT_USER_TEMPLATE
 
@@ -357,6 +362,7 @@ class LLMStrategy:
                 fallback=self.fallback_on_error,
                 error=str(e)[:200],
             )
+            self._write_dev_log(ctx, e, client_name)
 
         _append_audit(self.audit_log_path, record)
         if ck and decision is not None:
@@ -425,6 +431,45 @@ class LLMStrategy:
             log.error("llm_strategy.fallback_crash", error=repr(e))
             return None
 
+    def _write_dev_log(
+        self,
+        ctx: StrategyContext,
+        exc: Exception,
+        client_name: str,
+    ) -> None:
+        """Append a Markdown incident entry for engineers.
+
+        Lazy import keeps the LLM strategy independent of the journal
+        layer at module-load time (avoids a cycle if a future journal
+        component imports this module).
+        """
+        try:
+            from datetime import datetime, timezone
+
+            from equity_monitor.journal.errors import (
+                DevLogEntry,
+                append_dev_log_entry,
+                classify_exception,
+            )
+
+            raw_excerpt: str | None = None
+            # If we have an LLMResponse-like object on the exception
+            # chain, surface its raw text. Most errors don't carry that
+            # so this is best-effort.
+            cause_msg = (str(exc) or repr(exc))[:300]
+            entry = DevLogEntry(
+                ts=datetime.now(tz=timezone.utc),
+                code=ctx.code,
+                category=classify_exception(exc),
+                client=client_name,
+                error_type=type(exc).__name__,
+                message=cause_msg,
+                raw_excerpt=raw_excerpt,
+            )
+            append_dev_log_entry(dev_log_path=self.dev_log_path, entry=entry)
+        except Exception as e:  # pragma: no cover — never let the dev-log writer kill a tick
+            log.warning("llm_strategy.dev_log_failed", error=repr(e))
+
 
 def _opt_float(v: Any) -> float | None:
     """Return float(v) or None if v is NaN / None / not numeric."""
@@ -481,6 +526,7 @@ def _build_llm_strategy(config: dict[str, Any]) -> Strategy:
     )
 
     audit_path = Path(cfg.pop("audit_log_path", "data/llm_decisions.jsonl"))
+    dev_log_path = Path(cfg.pop("dev_log_path", "data/dev_log.md"))
 
     return LLMStrategy(
         client=client,
@@ -493,6 +539,7 @@ def _build_llm_strategy(config: dict[str, Any]) -> Strategy:
         timeout_s=float(cfg.pop("timeout_s", 30)),
         cache_seconds=cfg.pop("cache_seconds", 300),
         audit_log_path=audit_path,
+        dev_log_path=dev_log_path,
         fallback_on_error=fallback_on_error,
         # Skeleton fields from StrategyLLMConfig that we don't use today
         # are silently ignored — keeps yaml forward-compat. (kline_window,

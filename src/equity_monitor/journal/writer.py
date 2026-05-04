@@ -162,6 +162,8 @@ def compute_overview(
     unrealized_pnl: float | None,
     journal_dir: Path,
     new_entry: JournalEntry | None = None,
+    hit_rate_lines: tuple[str, ...] = (),
+    error_probe_lines: tuple[str, ...] = (),
 ) -> OverviewSnapshot:
     """Build an OverviewSnapshot by scanning history + folding in a new entry.
 
@@ -219,6 +221,8 @@ def compute_overview(
         last_decision_ts=last_decision_ts,
         last_decision_client=last_decision_client,
         last_decision_confidence=last_decision_confidence,
+        hit_rate_lines=tuple(hit_rate_lines),
+        error_probe_lines=tuple(error_probe_lines),
     )
 
 

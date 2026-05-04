@@ -58,6 +58,14 @@ from equity_monitor.journal import (
     append_event,
     refresh_overview_only,
 )
+from equity_monitor.journal.errors import (
+    render_probe_lines,
+    scan_recent_failures,
+)
+from equity_monitor.journal.metrics import (
+    compute_hit_rates,
+    render_hit_rate_lines,
+)
 from equity_monitor.journal.writer import compute_overview
 from equity_monitor.signals.threshold import detect_threshold_breach
 
@@ -208,6 +216,41 @@ def _load_open_positions_full(session) -> dict[str, tuple[int, float, float]]:
     return {code: (qty, avg, real or 0.0) for code, qty, avg, real in rows}
 
 
+def _compute_overview_decorations(
+    *, code: str, factory: sessionmaker, audit_log_path_str: str | None,
+    now_utc: datetime,
+) -> tuple[tuple[str, ...], tuple[str, ...]]:
+    """Build the two optional bullet-line groups for the overview block.
+
+    Returns (hit_rate_lines, error_probe_lines). Either may be empty —
+    `render_overview` then omits the corresponding section.
+
+    Anything that raises here is swallowed: a missing audit log or an
+    unreadable Quote table just means the overview lacks the extra
+    sections this tick — it must NOT prevent journal write.
+    """
+    hit_lines: list[str] = []
+    probe_lines: list[str] = []
+    if audit_log_path_str:
+        path = Path(audit_log_path_str)
+        try:
+            stats = compute_hit_rates(
+                audit_log_path=path,
+                factory=factory,
+                code=code,
+                cutoff=now_utc,
+            )
+            hit_lines = render_hit_rate_lines(stats)
+        except Exception as e:  # pragma: no cover - defensive
+            log.warning("journal.metrics_failed", code=code, error=repr(e))
+        try:
+            probe = scan_recent_failures(audit_log_path=path, code=code)
+            probe_lines = render_probe_lines(probe)
+        except Exception as e:  # pragma: no cover - defensive
+            log.warning("journal.error_probe_failed", code=code, error=repr(e))
+    return tuple(hit_lines), tuple(probe_lines)
+
+
 def _write_journal_entry(
     *,
     code: str,
@@ -223,6 +266,8 @@ def _write_journal_entry(
     png_path: Path | None,
     journal_dir: Path,
     audit_log_path_str: str | None,
+    factory: sessionmaker | None = None,
+    now_utc: datetime | None = None,
 ) -> None:
     """Build a JournalEntry + OverviewSnapshot for one code and append.
 
@@ -272,6 +317,17 @@ def _write_journal_entry(
         chart_image_path=chart_rel,
     )
 
+    hit_lines, probe_lines = (
+        _compute_overview_decorations(
+            code=code,
+            factory=factory,
+            audit_log_path_str=audit_log_path_str,
+            now_utc=now_utc or ts_for_card,
+        )
+        if factory is not None
+        else ((), ())
+    )
+
     overview = compute_overview(
         code=code,
         display_name=code_to_name.get(code),
@@ -285,6 +341,8 @@ def _write_journal_entry(
         unrealized_pnl=unrealized,
         journal_dir=journal_dir,
         new_entry=entry,
+        hit_rate_lines=hit_lines,
+        error_probe_lines=probe_lines,
     )
 
     append_event(journal_dir=journal_dir, overview=overview, entry=entry)
@@ -300,6 +358,8 @@ def _refresh_journal_overview_for_quiet_code(
     position_details: dict[str, tuple[int, float, float]],
     watchlist_by_code: dict[str, tuple[float | None, float | None]],
     journal_dir: Path,
+    factory: sessionmaker | None = None,
+    audit_log_path_str: str | None = None,
 ) -> None:
     """For a code that produced NO signals this tick: just bump the overview.
 
@@ -316,6 +376,18 @@ def _refresh_journal_overview_for_quiet_code(
     unrealized: float | None = None
     if qty > 0 and last_price is not None and avg_cost:
         unrealized = (last_price - avg_cost) * qty
+
+    hit_lines, probe_lines = (
+        _compute_overview_decorations(
+            code=code,
+            factory=factory,
+            audit_log_path_str=audit_log_path_str,
+            now_utc=now_utc,
+        )
+        if factory is not None
+        else ((), ())
+    )
+
     overview = compute_overview(
         code=code,
         display_name=code_to_name.get(code),
@@ -329,6 +401,8 @@ def _refresh_journal_overview_for_quiet_code(
         unrealized_pnl=unrealized,
         journal_dir=journal_dir,
         new_entry=None,
+        hit_rate_lines=hit_lines,
+        error_probe_lines=probe_lines,
     )
     refresh_overview_only(journal_dir=journal_dir, overview=overview)
 
@@ -966,6 +1040,8 @@ def run_intraday_check(
                 png_path=png_path,
                 journal_dir=journal_dir,
                 audit_log_path_str=audit_log_path_str,
+                factory=factory,
+                now_utc=now_utc,
             )
         except Exception as e:
             log.error(
@@ -1009,6 +1085,8 @@ def run_intraday_check(
                 position_details=position_details,
                 watchlist_by_code=watchlist_by_code,
                 journal_dir=journal_dir,
+                factory=factory,
+                audit_log_path_str=audit_log_path_str,
             )
         except Exception as e:  # never let a journal write break a tick
             log.error(
