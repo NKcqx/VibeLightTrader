@@ -50,7 +50,11 @@ def test_signal_alert_card_structure_warn() -> None:
     assert card["header"]["title"]["content"].startswith("⚠️ US.NVDA")
     body = _texts(card)
     assert "RSI 超卖" in body
-    assert "rsi=28.4" in body
+    # New format: "RSI 28.40 低于 30" (was: "rsi=28.4")
+    assert "28.40" in body
+    assert "低于 30" in body
+    # Meaning line must accompany feature line
+    assert "反弹" in body
     assert "$135.42" in body
     assert "-2.30%" in body
     assert "NVDA Q3 指引下调" in body

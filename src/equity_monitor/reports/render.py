@@ -51,10 +51,117 @@ _SIGNAL_NAME = {
 }
 
 
-def _signal_line(s: Signal) -> str:
+# Each entry: (header_template, meaning_string).
+# `header_template` may use {close}, {upper}, {lower}, {rsi}, {boll_upper},
+# {boll_lower} placeholders; missing payload keys render as "n/a".
+# Keep meanings ≤ ~60 字 — long lines wrap awkwardly in Lark cards.
+_SIGNAL_EXPLAIN: dict[str, tuple[str, str]] = {
+    "threshold_breach_upper": (
+        "现价 {close} 已突破你设的卖出预警线 {upper}",
+        "按你的阈值规则进入止盈/减仓窗口；技术面通常也视作超买信号",
+    ),
+    "threshold_breach_lower": (
+        "现价 {close} 已跌破你设的买入观察线 {lower}",
+        "按你的阈值规则进入加仓/抄底窗口；技术面通常也视作超跌信号",
+    ),
+    "rsi_overbought": (
+        "RSI {rsi} 高于 70",
+        "短线动能可能见顶，回调风险上升（>70 常被视作超买区间）",
+    ),
+    "rsi_oversold": (
+        "RSI {rsi} 低于 30",
+        "短线动能可能见底，反弹机会上升（<30 常被视作超卖区间）",
+    ),
+    "macd_golden_cross": (
+        "MACD 上穿信号线（金叉）",
+        "中短期动量由空转多，常被视作初步多头信号",
+    ),
+    "macd_death_cross": (
+        "MACD 下穿信号线（死叉）",
+        "中短期动量由多转空，常被视作初步空头信号",
+    ),
+    "boll_upper_break": (
+        "收盘 {close} 突破布林带上轨 {boll_upper}",
+        "价格偏离 20 周期均值约 +2σ，处于统计意义上的高位区间",
+    ),
+    "boll_lower_break": (
+        "收盘 {close} 跌破布林带下轨 {boll_lower}",
+        "价格偏离 20 周期均值约 -2σ，处于统计意义上的低位区间",
+    ),
+    "futu_tech_anomaly": (
+        "富途行情端检测到技术面异动",
+        "由富途侧推送的实时技术面信号，具体类型见 payload",
+    ),
+    "futu_capital_anomaly": (
+        "富途行情端检测到资金面异动",
+        "大单/北向资金等异常成交聚集，注意主力资金动向",
+    ),
+    "news_negative_burst": (
+        "短时间内出现多条负面新闻",
+        "舆情温度骤降，情绪降温；警惕避险盘流出",
+    ),
+    "news_positive_burst": (
+        "短时间内出现多条正面新闻",
+        "舆情温度骤升，情绪升温；注意短线追高风险",
+    ),
+}
+
+
+def _fmt_price(v: Any) -> str:
+    """`$198.45` if numeric, else `n/a`."""
+    try:
+        return f"${float(v):.2f}"
+    except (TypeError, ValueError):
+        return "n/a"
+
+
+def _fmt_num(v: Any, *, decimals: int = 2) -> str:
+    """Plain decimal — for RSI / MACD / Bollinger band values that aren't prices."""
+    try:
+        return f"{float(v):.{decimals}f}"
+    except (TypeError, ValueError):
+        return "n/a"
+
+
+def explain_signal(s: Signal) -> str:
+    """Two-line markdown explanation of one signal:
+
+        **<中文名>** — <关键数字组合>
+          ↳ <一句话含义>
+
+    For unknown signal_type or missing payload keys we degrade gracefully
+    — `(详情: k=v, ...)` fallback so we never lose information.
+
+    Pure / deterministic: no clock, no env, no IO. Trivially unit-testable.
+    """
     name = _SIGNAL_NAME.get(s.signal_type, s.signal_type)
-    detail = ", ".join(f"{k}={v}" for k, v in s.payload.items())
-    return f"{name} ({detail})" if detail else name
+    spec = _SIGNAL_EXPLAIN.get(s.signal_type)
+
+    if spec is None:
+        detail = ", ".join(f"{k}={v}" for k, v in s.payload.items())
+        return f"**{name}** ({detail})" if detail else f"**{name}**"
+
+    header_tpl, meaning = spec
+    p = s.payload
+    fields = {
+        "close": _fmt_price(p.get("close")),
+        "upper": _fmt_price(p.get("upper")),
+        "lower": _fmt_price(p.get("lower")),
+        "boll_upper": _fmt_price(p.get("boll_upper")),
+        "boll_lower": _fmt_price(p.get("boll_lower")),
+        "rsi": _fmt_num(p.get("rsi"), decimals=2),
+    }
+    try:
+        header = header_tpl.format(**fields)
+    except KeyError:  # pragma: no cover — defensive: missing template var
+        header = header_tpl
+
+    return f"**{name}** — {header}\n  ↳ {meaning}"
+
+
+def _signal_line(s: Signal) -> str:
+    """Backward-compat wrapper preserved for any external callers."""
+    return explain_signal(s)
 
 
 def render_signal_alert(
@@ -79,7 +186,9 @@ def render_signal_alert(
         key=lambda x: _SEVERITY_RANK[x],
         default=Severity.INFO,
     )
-    signals_md = "\n".join(f"• {_signal_line(s)}" for s in signals)
+    # Empty line between bullets — pairs of (feature line, meaning line)
+    # become much easier to read with a paragraph break between signals.
+    signals_md = "\n\n".join(f"• {explain_signal(s)}" for s in signals)
     news_md = "\n".join(f"• {t}" for t in news_titles)
     change_str = f"{'▲' if change_pct >= 0 else '▼'} {change_pct:+.2%}"
 
