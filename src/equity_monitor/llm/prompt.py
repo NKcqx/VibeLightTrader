@@ -45,6 +45,9 @@ Hard rules — violating any disqualifies your response:
   4. Never recommend SELL with qty > current position size.
   5. Never recommend BUY that would push total position above max_position.
   6. qty MUST be 0 when action is HOLD.
+  7. When an "Investor profile" block is present in the user message,
+     weight your decision toward that horizon and risk tolerance — do
+     NOT short-term-scalp a multi-month thesis.
 
 You will be evaluated on (a) JSON validity, (b) constraint adherence, and
 (c) decision quality vs hand-coded rules over many trading days.
@@ -53,6 +56,17 @@ You will be evaluated on (a) JSON validity, (b) constraint adherence, and
 
 DEFAULT_USER_TEMPLATE = """\
 Symbol: {{ code }}
+{%- if profile %}
+
+Investor profile (medium-term framing):
+  - horizon:                 {{ profile.horizon_months_min }}-{{ profile.horizon_months_max }} months ({{ profile.style }})
+  - thesis:                  {{ profile.theme }}
+  - budget per symbol:       ${{ '%.0f' % profile.budget_per_symbol_usd }}
+  - max drawdown tolerated:  {{ profile.drawdown_tolerance_pct }}%
+  - max single-symbol concentration: {{ profile.max_concentration_pct }}% of deployed capital
+  - entry policy:            initial buy = {{ profile.initial_entry_pct }}% of budget; up to {{ profile.max_batches }} accumulating buys; add-on requires ≥{{ profile.add_on_dip_pct }}% dip and ≥{{ profile.add_cooldown_days }}d cooldown; prefer_dip_buy={{ profile.prefer_dip_buy }}
+  - exit policy:             take-profit at +{{ profile.take_profit_pct }}% (trim {{ profile.take_profit_trim_pct }}%); hard-stop at -{{ profile.hard_stop_pct }}%; min_holding_days={{ profile.min_holding_days }}
+{%- endif %}
 
 Live quote:
 {%- if snapshot %}
@@ -113,6 +127,7 @@ def render_user_prompt(
     min_trade_size: int,
     min_confidence: float,
     dedupe_window_minutes: int = 60,
+    profile: Any | None = None,
     template: str = DEFAULT_USER_TEMPLATE,
 ) -> str:
     """Render the user message for one decision.
@@ -121,7 +136,13 @@ def render_user_prompt(
     pre-summarise the payload in a Chinese-friendly form.
     `indicators` keys: rsi_14 / macd / macd_signal / macd_hist /
     boll_upper / boll_mid / boll_lower (any may be None).
+    `profile`: an `InvestmentProfileConfig` (or any object exposing the
+    same field names). When non-None and `profile.enabled`, the LLM
+    receives the medium-term thesis framing block. Pass None to keep the
+    legacy short-term framing.
     """
+    if profile is not None and not getattr(profile, "enabled", True):
+        profile = None
     tpl = Template(template, undefined=StrictUndefined)
     return tpl.render(
         code=code,
@@ -137,6 +158,7 @@ def render_user_prompt(
         min_trade_size=min_trade_size,
         min_confidence=min_confidence,
         dedupe_window_minutes=dedupe_window_minutes,
+        profile=profile,
     )
 
 

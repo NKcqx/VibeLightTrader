@@ -394,6 +394,243 @@ def _make_trader(cfg: Any) -> Any:
     return OpenDSecTrader(host=cfg.opend.host, port=cfg.opend.port)
 
 
+# ---------------------------------------------------------------------------
+# `analyze` — user-triggered LLM analysis (vs the cron-triggered pipeline)
+# ---------------------------------------------------------------------------
+
+
+@cli.command()
+@click.option(
+    "--code",
+    "codes",
+    multiple=True,
+    help="Symbol code (e.g. US.NVDA). Repeat to analyze several. "
+    "Default: full active watchlist.",
+)
+@click.option(
+    "--horizon-min",
+    type=int,
+    default=None,
+    help="Min holding months (override cfg.trader.investment_profile).",
+)
+@click.option(
+    "--horizon-max",
+    type=int,
+    default=None,
+    help="Max holding months (override cfg.trader.investment_profile).",
+)
+@click.option(
+    "--budget",
+    type=float,
+    default=None,
+    help="Per-symbol budget in USD (override cfg).",
+)
+@click.option(
+    "--drawdown",
+    type=float,
+    default=None,
+    help="Drawdown tolerance % (override cfg).",
+)
+@click.option(
+    "--theme",
+    type=str,
+    default=None,
+    help="Free-text thesis (override cfg.theme).",
+)
+@click.option(
+    "--execute",
+    is_flag=True,
+    default=False,
+    help="Place paper orders for non-HOLD decisions (writes Signal+Trade rows, "
+    "submits to OpenD SIMULATE account). Skipped on parse/LLM errors.",
+)
+@click.option(
+    "--json",
+    "json_output",
+    is_flag=True,
+    default=False,
+    help="Print JSON results instead of human-friendly output.",
+)
+@click.pass_context
+def analyze(
+    ctx: click.Context,
+    codes: tuple[str, ...],
+    horizon_min: int | None,
+    horizon_max: int | None,
+    budget: float | None,
+    drawdown: float | None,
+    theme: str | None,
+    execute: bool,
+    json_output: bool,
+) -> None:
+    """Run LLM analysis on demand (no signal trigger required).
+
+    Examples:
+
+      equity-monitor analyze
+      equity-monitor analyze --code US.NVDA --code US.MSFT
+      equity-monitor analyze --code US.NVDA --budget 30000 --drawdown 15
+      equity-monitor analyze --execute       # main use case: act on the LLM
+    """
+    import json as _json
+    from datetime import datetime as _dt
+
+    from equity_monitor.analyze import analyze_symbols
+
+    cfg = _get_cfg(ctx)
+    wl = _get_watchlist(ctx)
+    factory = _make_factory(cfg)
+
+    if codes:
+        target_codes = list(codes)
+    else:
+        target_codes = [s.code for s in wl.symbols]
+
+    overrides: dict[str, Any] = {}
+    if horizon_min is not None:
+        overrides["horizon_months_min"] = horizon_min
+    if horizon_max is not None:
+        overrides["horizon_months_max"] = horizon_max
+    if budget is not None:
+        overrides["budget_per_symbol_usd"] = budget
+    if drawdown is not None:
+        overrides["drawdown_tolerance_pct"] = drawdown
+    if theme is not None:
+        overrides["theme"] = theme
+
+    with session_scope(factory) as s:
+        results = analyze_symbols(
+            s,
+            cfg=cfg,
+            codes=target_codes,
+            profile_overrides=overrides or None,
+        )
+
+        if json_output:
+            payload = []
+            for r in results:
+                d = r.decision
+                payload.append(
+                    {
+                        "code": r.code,
+                        "name": r.name,
+                        "last_close": r.last_close,
+                        "position_qty": r.position_qty,
+                        "avg_cost": r.avg_cost,
+                        "decision": (
+                            None if d is None else {
+                                "action": d.action,
+                                "qty": d.qty,
+                                "confidence": d.confidence,
+                                "reason": d.reason,
+                            }
+                        ),
+                        "latency_ms": r.latency_ms,
+                        "error": r.error,
+                    }
+                )
+            click.echo(_json.dumps(payload, ensure_ascii=False, indent=2))
+        else:
+            for r in results:
+                click.echo("─" * 60)
+                click.echo(f"  {r.code} ({r.name}) · last close ${r.last_close:.2f}")
+                click.echo(
+                    f"  position: {r.position_qty} @ ${r.avg_cost:.2f}"
+                    f"  realized PnL ${r.realized_pnl:.2f}"
+                )
+                if r.error:
+                    click.echo(f"  ❌ {r.error}")
+                    continue
+                d = r.decision
+                if d is None:
+                    click.echo("  (no decision)")
+                    continue
+                emoji = "🟢" if d.action == "BUY" else "🔴" if d.action == "SELL" else "⚪"
+                notional = d.qty * r.last_close
+                click.echo(
+                    f"  {emoji} {d.action} {d.qty} (conf {d.confidence:.2f})"
+                    + (f"  ≈${notional:,.0f}" if d.qty else "")
+                )
+                click.echo(f"  💬 {d.reason}")
+                click.echo(f"  ({r.latency_ms}ms)")
+            click.echo("─" * 60)
+
+        if execute:
+            _execute_analysis_results(s, cfg, results)
+
+
+def _execute_analysis_results(
+    session: Any, cfg: Any, results: list[Any]
+) -> None:
+    """For each non-HOLD analyze result, materialise a manual Signal +
+    paper trade. Mirrors the logic of `equity-monitor trade confirm`,
+    minus the human-confirmation handshake.
+    """
+    import json as _json
+    from datetime import datetime as _dt
+
+    from equity_monitor.trader.execute import (
+        SignalExecutionError,
+        execute_signal_trade,
+    )
+
+    actionable = [
+        r for r in results if r.decision and r.decision.action in ("BUY", "SELL")
+    ]
+    if not actionable:
+        click.echo("(no actionable decisions to execute)")
+        return
+
+    trader = _make_trader(cfg)
+    try:
+        for r in actionable:
+            sym = (
+                session.query(Symbol)
+                .filter(Symbol.code == r.code, Symbol.is_active.is_(True))
+                .one_or_none()
+            )
+            if sym is None:
+                click.echo(f"  skip {r.code}: not in DB")
+                continue
+            d = r.decision
+            sig = SignalRow(
+                symbol_id=sym.id,
+                ts=_dt.utcnow(),
+                signal_type="llm_analyze_manual",
+                severity="INFO",
+                payload_json=_json.dumps(
+                    {
+                        "source": "analyze_cli",
+                        "confidence": d.confidence,
+                        "reason": d.reason,
+                        "last_close": r.last_close,
+                    },
+                    ensure_ascii=False,
+                ),
+                delivered=0,
+                suggested_action=d.action,
+                suggested_qty=d.qty,
+                status="pending",
+            )
+            session.add(sig)
+            session.flush()
+            try:
+                trade_id = execute_signal_trade(
+                    session, sig, sym, d.qty, trader
+                )
+                click.echo(
+                    f"  ✅ {r.code}: signal_id={sig.id} trade_id={trade_id} "
+                    f"{d.action} {d.qty} @ ~${r.last_close:.2f}"
+                )
+            except SignalExecutionError as e:
+                click.echo(f"  ❌ {r.code}: {e}")
+    finally:
+        try:
+            trader.close()
+        except Exception:
+            pass
+
+
 @cli.group()
 def trade() -> None:
     """Phase 2 paper-trading subcommands."""

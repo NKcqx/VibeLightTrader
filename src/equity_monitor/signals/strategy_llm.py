@@ -263,6 +263,12 @@ class LLMStrategy:
     system_prompt: str = DEFAULT_SYSTEM_PROMPT
     user_template: str = DEFAULT_USER_TEMPLATE
 
+    investment_profile: Any | None = None
+    """Optional InvestmentProfileConfig (or any object exposing the same
+    field names). When set + `enabled`, every prompt carries the
+    medium-term thesis framing block. None = legacy short-term framing.
+    """
+
     _cache: dict[str, SignalSuggest] = field(default_factory=dict, init=False, repr=False)
 
     def decide(self, ctx: StrategyContext) -> SignalSuggest | None:
@@ -409,6 +415,7 @@ class LLMStrategy:
             max_position=self.max_position,
             min_trade_size=self.min_trade_size,
             min_confidence=self.min_confidence,
+            profile=self.investment_profile,
             template=self.user_template,
         )
         return [
@@ -528,6 +535,11 @@ def _build_llm_strategy(config: dict[str, Any]) -> Strategy:
     audit_path = Path(cfg.pop("audit_log_path", "data/llm_decisions.jsonl"))
     dev_log_path = Path(cfg.pop("dev_log_path", "data/dev_log.md"))
 
+    # Pop the optional investor profile (passed via build_strategy by the
+    # scheduler / CLI). Tests that drive _build_llm_strategy directly
+    # without a profile keep their existing behaviour.
+    profile = cfg.pop("investment_profile", None)
+
     return LLMStrategy(
         client=client,
         fallback=fallback,
@@ -541,6 +553,7 @@ def _build_llm_strategy(config: dict[str, Any]) -> Strategy:
         audit_log_path=audit_path,
         dev_log_path=dev_log_path,
         fallback_on_error=fallback_on_error,
+        investment_profile=profile,
         # Skeleton fields from StrategyLLMConfig that we don't use today
         # are silently ignored — keeps yaml forward-compat. (kline_window,
         # news_window_minutes, news_top_k, max_concurrent, retries)

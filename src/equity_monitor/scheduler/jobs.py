@@ -424,7 +424,15 @@ def _build_strategy_from_cfg(
     """
     sc = cfg.trader.strategy
     sub = getattr(sc, sc.type)
-    strat = build_strategy(sc.type, sub.model_dump())
+    sub_dict = sub.model_dump()
+    # Cross-strategy investor profile is shared at trader-level. LLM uses
+    # it to frame the prompt; rule/HITL ignore the unknown key today (and
+    # for forward-compat we pop it before HITL so its config dict stays
+    # tight).
+    profile = cfg.trader.investment_profile
+    if sc.type == "llm":
+        sub_dict["investment_profile"] = profile
+    strat = build_strategy(sc.type, sub_dict)
 
     if sc.type == "hitl":
         from equity_monitor.signals.strategy_hitl import HITLStrategy

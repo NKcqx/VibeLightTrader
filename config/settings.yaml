@@ -128,3 +128,42 @@ trader:
       voting: weighted                # majority | weighted | unanimous
       weights:
         rule: 1.0
+
+  # ---- Cross-strategy investor profile ------------------------------------
+  # Fed into every LLM prompt and used by rule-side safety nets. Independent
+  # of which strategy is active. Default = "Balanced" mid-term tech swing.
+  # See docs/mid-term-investing.md for保守 / 平衡 / 进取 ready-made profiles.
+  investment_profile:
+    enabled: true
+
+    # Horizon & style
+    horizon_months_min: 3
+    horizon_months_max: 6
+    style: growth                     # growth | value | blend | income | speculative
+    theme: "AI-infrastructure & cloud-incumbent mid-term swing"
+
+    # Capital & risk
+    budget_per_symbol_usd: 50000
+    drawdown_tolerance_pct: 20        # max acceptable per-symbol drawdown
+    max_concentration_pct: 60         # single-symbol cap as % of total deployed
+    cash_reserve_pct: 10              # always-uninvested buffer (informational, M-3)
+
+    # Entry & sizing (scaling-in policy)
+    initial_entry_pct: 40             # first buy = 40% of budget; rest reserved for adds
+    max_batches: 3                    # max accumulating buys (LLM BUY refused after)
+    add_on_dip_pct: 5                 # next add-on requires price ≥5% below avg cost
+    add_cooldown_days: 5              # min days between add-on buys
+    prefer_dip_buy: true              # bias LLM toward pullback entries
+    earnings_blackout_days: 3         # no new positions <N days BEFORE earnings (reserved)
+
+    # Exit
+    take_profit_pct: 30               # trim trigger when +N% unrealized
+    take_profit_trim_pct: 50          # sell N% of position when triggered
+    hard_stop_pct: 20                 # hard SELL when -N% (overrides LLM)
+    trailing_stop_pct: null           # null=disabled (reserved)
+    min_holding_days: 30              # block voluntary SELL within N days of buy
+
+    # LLM-prompt helpers
+    news_lookback_days: 7             # reserved (C2b)
+    rebalance_cadence_days: 30        # reserved (long-form review prompt cadence)
+    valuation_ceiling_pe: null        # null=disabled (reserved)

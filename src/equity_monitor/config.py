@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Literal
+from typing import Any, Literal
 
 import yaml
 from pydantic import BaseModel, Field, field_validator
@@ -213,6 +213,112 @@ class StrategyConfig(BaseModel):
     ensemble: StrategyEnsembleConfig = Field(default_factory=StrategyEnsembleConfig)
 
 
+class InvestmentProfileConfig(BaseModel):
+    """User's investment thesis — strategy-agnostic.
+
+    Fed verbatim into the LLM prompt for every decision, and used by
+    rule-based safety nets (min_holding_days, hard_stop_pct, etc.). Keeps
+    'who I am as an investor' decoupled from 'which strategy am I using
+    today'. Default values target a 3-6 month tech-growth playbook that
+    fits a $50k-per-symbol budget with 20% drawdown tolerance.
+
+    Set `enabled: false` to fall back to legacy short-term framing (pre
+    M-series). Pre-canned profiles live in `docs/mid-term-investing.md`.
+    """
+
+    enabled: bool = True
+
+    # ---- Horizon & style ------------------------------------------------
+    horizon_months_min: int = 3
+    horizon_months_max: int = 6
+    style: Literal["growth", "value", "blend", "income", "speculative"] = "growth"
+
+    theme: str = "AI-infrastructure & cloud-incumbent mid-term swing"
+    """Free-text thesis fed verbatim to the LLM. Keep <200 chars."""
+
+    # ---- Capital & risk -------------------------------------------------
+    budget_per_symbol_usd: float = 50_000.0
+    """Target dollar exposure per symbol when fully built up."""
+
+    drawdown_tolerance_pct: float = 20.0
+    """Max acceptable per-symbol drawdown from average cost."""
+
+    max_concentration_pct: float = 60.0
+    """Single-symbol cap as % of total deployed capital."""
+
+    cash_reserve_pct: float = 10.0
+    """Always-uninvested cash buffer. Informational today; honored by
+    the portfolio-aware sizer in M-3 (reserved)."""
+
+    # ---- Entry & sizing -------------------------------------------------
+    initial_entry_pct: float = 40.0
+    """First buy is N% of `budget_per_symbol_usd`. Rest reserved for
+    add-ons. Set to 100 for one-shot sizing."""
+
+    max_batches: int = 3
+    """Maximum number of accumulating buys. After this, BUY is declined
+    regardless of LLM signal."""
+
+    add_on_dip_pct: float = 5.0
+    """Add-on buy requires price to be at least N% below the most-recent
+    fill / avg-cost since the last buy."""
+
+    add_cooldown_days: int = 5
+    """Minimum days between add-on buys (avoid panic averaging-down)."""
+
+    prefer_dip_buy: bool = True
+    """Hint to LLM: bias entries toward technical pullbacks (RSI<40,
+    BB lower band, etc.)."""
+
+    earnings_blackout_days: int = 3
+    """Don't initiate new positions within N days BEFORE earnings.
+    Reserved — needs an earnings-calendar data source."""
+
+    # ---- Exit -----------------------------------------------------------
+    take_profit_pct: float = 30.0
+    """Trim trigger: when unrealized return exceeds N%, the LLM is
+    nudged toward partial profit. 0 disables."""
+
+    take_profit_trim_pct: float = 50.0
+    """Fraction of position to skim when `take_profit_pct` triggers
+    (default 50%, i.e. half-position). 100 = full exit."""
+
+    hard_stop_pct: float = 20.0
+    """Hard SELL when unrealized loss exceeds N% from avg cost. Enforced
+    regardless of LLM. Sane default = `drawdown_tolerance_pct`."""
+
+    trailing_stop_pct: float | None = None
+    """Sell when price drops N% from highest close since entry.
+    None = disabled. Reserved — needs running-high tracker."""
+
+    min_holding_days: int = 30
+    """Block voluntary SELL within N days of buy (hard_stop bypasses).
+    Prevents LLM-noise churning. Set to 0 for short-term setups."""
+
+    # ---- LLM-prompt helpers --------------------------------------------
+    news_lookback_days: int = 7
+    """How far back to summarise news / catalysts for the LLM. Reserved
+    until the news pipeline ships in C2b."""
+
+    rebalance_cadence_days: int = 30
+    """Re-evaluate the full thesis every N days (long-form review prompt
+    instead of the regular tick prompt). Reserved."""
+
+    valuation_ceiling_pe: float | None = None
+    """If set, LLM should decline BUY when forward P/E exceeds this.
+    None = disabled. Reserved — needs fundamentals source."""
+
+    @field_validator("horizon_months_max")
+    @classmethod
+    def _horizon_order(cls, v: int, info: Any) -> int:  # type: ignore[name-defined]
+        lo = info.data.get("horizon_months_min", 0)
+        if v < lo:
+            raise ValueError(
+                f"horizon_months_max ({v}) must be >= horizon_months_min ({lo})"
+            )
+        return v
+
+
 class TraderConfig(BaseModel):
     """Paper-trading auto-execution settings."""
 
@@ -236,6 +342,13 @@ class TraderConfig(BaseModel):
     Default `type=rule` preserves Phase 2 behaviour. Set `type=llm` once
     C2 ships LLMStrategy + you've exported the right API key.
     """
+
+    investment_profile: InvestmentProfileConfig = Field(
+        default_factory=InvestmentProfileConfig
+    )
+    """Cross-strategy investor profile (horizon, budget, drawdown, exits).
+    Fed into the LLM prompt; informs rule-side safety nets. See
+    `docs/mid-term-investing.md` for ready-made profiles."""
 
 
 class AppConfig(BaseModel):
