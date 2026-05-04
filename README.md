@@ -108,10 +108,61 @@ equity-monitor listen                    # 飞书消息听器
 
 数量、阈值都写在 `signals/strategy_lite.py` 顶部的常量里，要改去那里改。
 
-### HITL 策略（Human-in-the-Loop · 借用 Cursor / Claude 订阅当 LLM）
+### LLM 策略 · `provider: cursor-agent`（借用 Cursor 订阅自动决策）
 
-如果你**没有**独立 LLM API Key，但订阅了 Cursor / Claude.app / Codex 这类 IDE，
-HITL 策略让你免费接入 LLM 决策：
+如果你订阅了 Cursor Pro/Max 但没有独立 LLM API Key，这是**完全自动化**的最简路径：
+
+1. 装 CLI（一次性）：
+
+   ```bash
+   curl https://cursor.com/install | bash
+   cursor-agent login            # 浏览器走一遍 OAuth
+   cursor-agent status           # 应输出: ✓ Logged in as <你的账号>
+   ```
+
+2. `config/settings.yaml` 里：
+
+   ```yaml
+   trader:
+     strategy:
+       type: llm
+       llm:
+         provider: cursor-agent
+         model: ""               # 空 = 用账号默认；或 "sonnet-4" / "gpt-5"
+         timeout_s: 240          # CLI 一次约 30-60s，留余量
+         max_position_per_symbol: 200
+         min_trade_size: 10
+         min_confidence: 0.6     # 低于此值的建议自动降级为 HOLD
+         fallback_on_error: rule # CLI 故障时回退到 strategy_lite 规则
+   ```
+
+3. `nohup equity-monitor run > var/scheduler.log 2>&1 &` —— 之后每次定时任务
+   触发，scheduler 会 spawn `cursor-agent -p '<prompt>' --output-format json`，
+   消耗你的 IDE 订阅 quota，**无需任何 API Key**。
+
+每条决策都会落到 `data/llm_decisions.jsonl`（NDJSON，append-only）做审计。
+Hard-rule 二次校验同样会跑：max_position 越界 / qty 不足 / 置信度过低都会
+被 `enforce_constraints` 拦截。CLI 超时 / 报错 / JSON 解析失败等
+全部走 `fallback_on_error` 路径，不会让 cron 死掉。
+
+切换到独立 API Key 时只改一行：
+
+```yaml
+provider: anthropic            # 然后 export ANTHROPIC_API_KEY=...
+```
+
+或：
+
+```yaml
+provider: openai_compat        # DeepSeek / Doubao / OpenRouter / Ollama 任选
+base_url: https://api.deepseek.com
+api_key_env: DEEPSEEK_API_KEY
+```
+
+### HITL 策略（Human-in-the-Loop · 半自动备用通道）
+
+适用场景：你想**手动 review** 每一笔交易，把 Claude 当顾问而不是执行者；
+或者 cursor-agent CLI 还没装好、想先用 IDE 内对话验证 prompt：
 
 1. 设置 `config/settings.yaml` 里 `trader.strategy.type: hitl`
 2. 每次事件触发时，equity-monitor 把决策上下文渲染成一份 markdown

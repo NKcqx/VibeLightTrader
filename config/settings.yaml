@@ -54,7 +54,7 @@ trader:
   # Active strategy + per-strategy knobs. Only the sub-block matching
   # `type` is consumed; others are dormant and forward-compatible.
   strategy:
-    type: hitl          # rule | llm | hitl | ensemble    (ensemble lands in C3)
+    type: llm           # rule | llm | hitl | ensemble    (ensemble lands in C3)
 
     rule:
       max_position_per_symbol: 200
@@ -62,27 +62,41 @@ trader:
       warn_size: 50                   # tech combo BUY/SELL size
       rsi_extreme: 30.0
 
-    # LLM-driven strategy. To enable:
-    #   1. Flip `strategy.type` above to `llm`
-    #   2. Export the API key for your chosen provider:
-    #        - anthropic       → export ANTHROPIC_API_KEY=sk-ant-...
-    #        - openai/openai_compat:
-    #              OpenAI       → export OPENAI_API_KEY=sk-...
-    #              DeepSeek     → export DEEPSEEK_API_KEY=sk-...   + base_url=https://api.deepseek.com
-    #              Doubao(火山) → export ARK_API_KEY=...           + base_url=https://ark.cn-beijing.volces.com/api/v3
-    #              OpenRouter   → export OPENROUTER_API_KEY=sk-or- + base_url=https://openrouter.ai/api/v1
-    #              Ollama       → (no key needed)                  + base_url=http://localhost:11434/v1
+    # LLM-driven strategy. Three provider modes:
+    #
+    #   provider=cursor-agent  ← DEFAULT (no API key, uses Cursor IDE login)
+    #     1. Run `cursor-agent login` once
+    #     2. `cursor-agent status` should say "Logged in as ..."
+    #     3. Each cron tick spawns the CLI; takes 30-60s per symbol
+    #     4. Quota consumed against your Cursor Pro/Max subscription
+    #
+    #   provider=anthropic
+    #     1. export ANTHROPIC_API_KEY=sk-ant-...
+    #
+    #   provider=openai_compat (any OpenAI-compatible endpoint)
+    #     OpenAI       → export OPENAI_API_KEY=sk-...
+    #     DeepSeek     → export DEEPSEEK_API_KEY=sk-...   + base_url=https://api.deepseek.com
+    #     Doubao(火山) → export ARK_API_KEY=...           + base_url=https://ark.cn-beijing.volces.com/api/v3
+    #     OpenRouter   → export OPENROUTER_API_KEY=sk-or- + base_url=https://openrouter.ai/api/v1
+    #     Ollama       → (no key needed)                  + base_url=http://localhost:11434/v1
+    #
     # On any LLM error / parse failure / constraint violation we fall back
     # per `fallback_on_error` (default: rule). Every decision is logged
     # to `audit_log_path` (NDJSON, append-only).
     llm:
-      provider: anthropic             # anthropic | openai_compat
-      model: claude-3-5-sonnet-20241022
-      api_key_env: ANTHROPIC_API_KEY
-      base_url: null                  # required for openai_compat
-      max_tokens: 512
-      temperature: 0.0
-      timeout_s: 30
+      provider: cursor-agent          # cursor-agent | anthropic | openai_compat
+      model: ""                       # cursor-agent: ""=account default, or "sonnet-4" / "gpt-5" / "auto"
+      api_key_env: ""                 # not needed for cursor-agent
+      base_url: null                  # required for openai_compat only
+
+      # cursor-agent specific (ignored by other providers).
+      cursor_agent_binary: cursor-agent       # PATH name or absolute path
+      cursor_agent_workspace: null            # null → cwd at runtime
+      cursor_agent_extra_flags: []            # e.g. ['--mode', 'plan'] for safer read-only
+
+      max_tokens: 512                 # ignored by cursor-agent (CLI doesn't expose it)
+      temperature: 0.0                # ignored by cursor-agent
+      timeout_s: 240                  # cursor-agent typically 30-60s; bump to 240 for safety
       retries: 2                      # reserved (no retry today)
       max_position_per_symbol: 200
       min_trade_size: 10

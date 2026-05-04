@@ -404,11 +404,25 @@ def _build_llm_strategy(config: dict[str, Any]) -> Strategy:
     # hit on errors and uses the same SignalSuggest contract.
     fallback = RuleStrategy()
 
+    # cursor-agent specific knobs (ignored by other providers).
+    workspace = cfg.pop("cursor_agent_workspace", None)
+    cursor_bin = cfg.pop("cursor_agent_binary", "cursor-agent")
+    cursor_extra_flags = tuple(cfg.pop("cursor_agent_extra_flags", ()))
+    # If the user picked cursor-agent without specifying a workspace,
+    # default to the current working directory (which is the repo root
+    # when running `equity-monitor` from inside the project — the only
+    # supported invocation pattern, see README "How to run").
+    if provider == "cursor-agent" and not workspace:
+        workspace = str(Path.cwd().resolve())
+
     client = build_llm_client(
         provider=provider,
         model=model,
         api_key_env=api_key_env,
         base_url=base_url,
+        workspace=workspace,
+        cursor_agent_binary=cursor_bin,
+        cursor_agent_extra_flags=cursor_extra_flags,
     )
 
     audit_path = Path(cfg.pop("audit_log_path", "data/llm_decisions.jsonl"))

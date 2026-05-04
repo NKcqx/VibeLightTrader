@@ -370,3 +370,52 @@ def test_build_strategy_llm_returns_LLMStrategy(monkeypatch) -> None:
     assert isinstance(s, LLMStrategy)
     assert s.name == "llm"
     assert s.max_position == 200
+
+
+def test_build_strategy_llm_with_cursor_agent_provider(monkeypatch) -> None:
+    """`provider: cursor-agent` builds an LLMStrategy backed by CursorAgentClient.
+
+    No API key required. Workspace defaults to cwd. We assert plumbing
+    only — actual subprocess invocation is covered in test_llm_cursor_agent.py.
+    """
+    from equity_monitor.llm.cursor_agent import CursorAgentClient
+
+    s = build_strategy(
+        "llm",
+        {
+            "provider": "cursor-agent",
+            "model": "sonnet-4",
+            "api_key_env": "",
+            "cursor_agent_workspace": "/tmp/some_repo",
+            "cursor_agent_extra_flags": ["--mode", "plan"],
+            "max_position_per_symbol": 150,
+            "min_trade_size": 10,
+            "min_confidence": 0.7,
+            "timeout_s": 240,
+        },
+    )
+    assert isinstance(s, LLMStrategy)
+    assert isinstance(s.client, CursorAgentClient)
+    assert s.client.model == "sonnet-4"
+    assert s.client.workspace == "/tmp/some_repo"
+    assert s.client.extra_flags == ("--mode", "plan")
+    assert s.max_position == 150
+    assert s.min_confidence == 0.7
+    assert s.timeout_s == 240
+
+
+def test_build_strategy_llm_cursor_agent_workspace_defaults_to_cwd(tmp_path, monkeypatch) -> None:
+    """When workspace is not given, falls back to Path.cwd() at build time."""
+    from equity_monitor.llm.cursor_agent import CursorAgentClient
+
+    monkeypatch.chdir(tmp_path)
+    s = build_strategy(
+        "llm",
+        {
+            "provider": "cursor-agent",
+            "model": "",
+            "api_key_env": "",
+        },
+    )
+    assert isinstance(s.client, CursorAgentClient)
+    assert s.client.workspace == str(tmp_path.resolve())

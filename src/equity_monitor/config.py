@@ -87,26 +87,54 @@ class StrategyLLMConfig(BaseModel):
     """LLM-driven strategy. Implemented in `signals/strategy_llm.py:LLMStrategy`.
 
     Switch from rule → llm by setting `trader.strategy.type: llm` AND
-    exporting the API key the chosen provider needs:
+    pointing `provider` at the right backend:
 
-      - provider=anthropic       → ANTHROPIC_API_KEY
-      - provider=openai_compat   → whatever you set `api_key_env` to
+      - provider=anthropic       → needs ANTHROPIC_API_KEY env var
+      - provider=openai_compat   → needs whatever `api_key_env` names
                                    (OPENAI_API_KEY, DEEPSEEK_API_KEY,
                                     ARK_API_KEY, OPENROUTER_API_KEY, ...)
+      - provider=cursor-agent    → no API key. Spawns the locally-installed
+                                   `cursor-agent` CLI; consumes the user's
+                                   IDE Pro/Max subscription quota. Run
+                                   `cursor-agent login` once first.
 
     Local Ollama / vLLM servers don't need a key — leave `api_key_env`
     empty (the Authorization header is then omitted).
     """
 
-    provider: Literal["anthropic", "openai_compat"] = "anthropic"
+    provider: Literal["anthropic", "openai_compat", "cursor-agent"] = "anthropic"
     model: str = "claude-3-5-sonnet-20241022"
+    """For provider=cursor-agent, common values: 'sonnet-4',
+    'sonnet-4-thinking', 'gpt-5', 'auto'. Leave empty to inherit the
+    user's account default."""
+
     api_key_env: str = "ANTHROPIC_API_KEY"
+    """Ignored when provider=cursor-agent (auth is via IDE login)."""
+
     base_url: str | None = None
-    """Required for `openai_compat`; ignored by `anthropic`."""
+    """Required for `openai_compat`; ignored by other providers."""
+
+    cursor_agent_binary: str = "cursor-agent"
+    """Path or PATH-resolved name of the cursor-agent executable.
+    Only used when provider=cursor-agent."""
+
+    cursor_agent_workspace: str | None = None
+    """Working directory the cursor-agent treats as cwd for its file tools.
+    None → repo root (auto-detected at strategy build time). Only used
+    when provider=cursor-agent."""
+
+    cursor_agent_extra_flags: list[str] = Field(default_factory=list)
+    """Appended to every `cursor-agent` invocation. Use to pass e.g.
+    ['--mode', 'plan'] for read-only runs, or ['--force'] to allow
+    Shell/Edit tools (NOT recommended for the trading loop)."""
 
     max_tokens: int = 512
     temperature: float = 0.0
     timeout_s: int = 30
+    """For cursor-agent provider: bump this to 180+ — the CLI typically
+    takes 30-60s per call (it actually runs an agent loop, not a single
+    chat request)."""
+
     retries: int = 2
     """Reserved — current LLMStrategy does NOT retry. Add when we see
     real rate-limit pressure in production logs."""
