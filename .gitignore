@@ -1,5 +1,9 @@
+# --------------------------------------------------------------------------
+# Python build / cache
+# --------------------------------------------------------------------------
 __pycache__/
 *.pyc
+*.pyo
 .venv/
 .uv/
 *.egg-info/
@@ -7,25 +11,66 @@ build/
 dist/
 .pytest_cache/
 .ruff_cache/
+.mypy_cache/
 
-# secrets / personal config
-config/watchlist.yaml
+# --------------------------------------------------------------------------
+# Local config & secrets — NEVER commit anything in this block
+# --------------------------------------------------------------------------
+# Real settings (with personal Lark open_id, possibly API keys via
+# api_key_env). Public template lives in `config/settings.example.yaml`.
+config/settings.yaml
 config/settings.local.yaml
+# Personal watchlist (real symbols/thresholds). Template:
+# `config/watchlist.example.yaml`.
+config/watchlist.yaml
 
-# runtime data (root-level only; src/equity_monitor/data/ is source code)
+# Generic secret / credential patterns
+.env
+.env.*
+*.env
+*.key
+*.pem
+*.p12
+*.pfx
+secrets/
+.secrets/
+
+# Cursor agent / IDE auth state — should live in $HOME, not here, but
+# defend in depth in case it ever leaks into the workspace.
+.cursor-agent/
+.cursor/
+
+# --------------------------------------------------------------------------
+# Runtime data (root-level only; src/equity_monitor/data/ is source code)
+# --------------------------------------------------------------------------
 /data/
 *.db
 *.db-journal
 *.db-wal
 *.db-shm
 *.log
+log/
 
-# Phase 3 snapshot output
+# --------------------------------------------------------------------------
+# Internal docs / planning notes — kept locally for ongoing iteration,
+# not for public consumption (yet). README.md remains tracked.
+# --------------------------------------------------------------------------
+docs/
+
+# --------------------------------------------------------------------------
+# Per-symbol journals, snapshot PNGs, decision packets, scheduler stdout
+# --------------------------------------------------------------------------
 var/snapshots/*.png
 !var/snapshots/.gitkeep
-
-# HITL decision packets (runtime artifacts)
 var/decisions/
-
-# Scheduler stdout from `nohup equity-monitor run`
 var/scheduler.log
+var/listener.log
+
+# --------------------------------------------------------------------------
+# OS / editor noise
+# --------------------------------------------------------------------------
+.DS_Store
+.idea/
+.vscode/
+*.swp
+Thumbs.db

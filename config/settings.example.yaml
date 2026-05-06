@@ -1,3 +1,10 @@
+# --------------------------------------------------------------------------
+# settings.example.yaml — copy to `settings.yaml` (gitignored) and edit.
+# Anything here is safe to commit; secrets / personal IDs go in your local
+# settings.yaml only. See README "Quick start" for the minimum fields to
+# fill in.
+# --------------------------------------------------------------------------
+
 opend:
   host: 127.0.0.1
   port: 11111
@@ -23,7 +30,9 @@ lark:
   identity: bot              # "bot" needs no extra scope; "user" requires login --scope im:message.send_as_user
   receiver:
     type: user                # "user" → DM via --user-id ou_xxx; "chat" → group via --chat-id oc_xxx
-    open_id: "ou_2870dc0365b841b931f63f9fa769973f"
+    # Lark/Feishu open_id of the receiver (DM target if type=user, group if type=chat).
+    # Get yours via `lark-cli auth me --as user` (after `lark-cli auth login`).
+    open_id: "ou_REPLACE_ME_WITH_YOUR_OPEN_ID"
 
 signals:
   rsi_overbought: 70
