@@ -14,10 +14,10 @@ import pytest
 from sqlalchemy.engine import Engine
 from sqlalchemy.orm import Session, sessionmaker
 
-from equity_monitor.db import init_schema, make_engine, make_sessionmaker, session_scope
-from equity_monitor.models import Position, Signal as SignalRow, Symbol, Trade
-from equity_monitor.trader.execute import SignalExecutionError, execute_signal_trade
-from equity_monitor.trader.paper import PaperOrderResult
+from vibe_trader.db import init_schema, make_engine, make_sessionmaker, session_scope
+from vibe_trader.models import Position, Signal as SignalRow, Symbol, Trade
+from vibe_trader.trader.execute import SignalExecutionError, execute_signal_trade
+from vibe_trader.trader.paper import PaperOrderResult
 
 
 @pytest.fixture

@@ -7,13 +7,13 @@ from typing import Any
 import pytest
 from sqlalchemy.orm import sessionmaker
 
-from equity_monitor.db import init_schema, make_engine, make_sessionmaker, session_scope
-from equity_monitor.events.listener import (
+from vibe_trader.db import init_schema, make_engine, make_sessionmaker, session_scope
+from vibe_trader.events.listener import (
     _extract_text,
     _msg_to_event,
     dispatch_event,
 )
-from equity_monitor.models import Symbol
+from vibe_trader.models import Symbol
 
 
 @pytest.fixture
@@ -182,7 +182,7 @@ def test_msg_to_event_handles_missing_sender_id() -> None:
 
 def test_dispatch_with_card_reply_path(factory: sessionmaker) -> None:
     """Card reply path: dispatch_event delegates to reply_fn instead of send_text."""
-    from equity_monitor.events.listener import dispatch_event
+    from vibe_trader.events.listener import dispatch_event
 
     captured: list[tuple[str, str, str]] = []
 
@@ -202,7 +202,7 @@ def test_dispatch_with_card_reply_path(factory: sessionmaker) -> None:
 
 
 def test_dispatch_requires_either_text_or_reply_fn(factory: sessionmaker) -> None:
-    from equity_monitor.events.listener import dispatch_event
+    from vibe_trader.events.listener import dispatch_event
     import pytest as _pt
 
     with _pt.raises(ValueError):
@@ -211,7 +211,7 @@ def test_dispatch_requires_either_text_or_reply_fn(factory: sessionmaker) -> Non
 
 def test_run_listener_processes_injected_events(factory: sessionmaker) -> None:
     """End-to-end via injected event iterable (no subprocess)."""
-    from equity_monitor.config import (
+    from vibe_trader.config import (
         AppConfig,
         DatabaseConfig,
         LarkConfig,
@@ -221,7 +221,7 @@ def test_run_listener_processes_injected_events(factory: sessionmaker) -> None:
         SchedulerConfig,
         SignalsConfig,
     )
-    from equity_monitor.events.listener import run_listener
+    from vibe_trader.events.listener import run_listener
 
     cfg = AppConfig(
         opend=OpenDConfig(host="127.0.0.1", port=11111),
@@ -238,7 +238,7 @@ def test_run_listener_processes_injected_events(factory: sessionmaker) -> None:
 
     sent: list[tuple[str, str]] = []
     # Monkey-patch make_text_sender to bypass real lark-cli
-    import equity_monitor.events.listener as listener_mod
+    import vibe_trader.events.listener as listener_mod
 
     listener_mod.make_text_sender = lambda **kw: (
         lambda t, r: (sent.append((t, r)), "om_x")[1]

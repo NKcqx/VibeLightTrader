@@ -6,7 +6,7 @@ import pytest
 import yaml
 from click.testing import CliRunner
 
-from equity_monitor.cli.main import cli
+from vibe_trader.cli.main import cli
 
 
 @pytest.fixture
@@ -148,10 +148,10 @@ def test_once_news_skips_opend(cli_root: Path) -> None:
 
     with (
         patch(
-            "equity_monitor.cli.main.run_news_pulse",
+            "vibe_trader.cli.main.run_news_pulse",
             return_value={"news_inserted": 0, "pushed": 0},
         ) as mock_news,
-        patch("equity_monitor.cli.main.OpenDClient") as mock_opend,
+        patch("vibe_trader.cli.main.OpenDClient") as mock_opend,
     ):
         result = runner.invoke(
             cli, _base_args(cli_root) + ["once", "--job", "news"]

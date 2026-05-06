@@ -4,8 +4,8 @@ from datetime import datetime
 
 import structlog.testing
 
-from equity_monitor.data.kline import fetch_kline_df, fetch_klines_multi
-from equity_monitor.futu_client import Candle, FakeFutuClient, FREQ_TO_KTYPE
+from vibe_trader.data.kline import fetch_kline_df, fetch_klines_multi
+from vibe_trader.futu_client import Candle, FakeFutuClient, FREQ_TO_KTYPE
 
 
 def _candles(n: int = 6) -> list[Candle]:

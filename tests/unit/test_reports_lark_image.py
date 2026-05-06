@@ -7,7 +7,7 @@ from pathlib import Path
 import pytest
 from tenacity import wait_none
 
-from equity_monitor.reports.lark_image import LarkImageError, send_image
+from vibe_trader.reports.lark_image import LarkImageError, send_image
 
 
 @pytest.fixture(autouse=True)

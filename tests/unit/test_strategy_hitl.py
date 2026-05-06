@@ -9,10 +9,10 @@ from __future__ import annotations
 from datetime import datetime, timezone
 from pathlib import Path
 
-from equity_monitor.decisions.store import PacketState, PacketStore
-from equity_monitor.signals.base import Severity, Signal
-from equity_monitor.signals.strategy_base import StrategyContext
-from equity_monitor.signals.strategy_hitl import HITLStrategy
+from vibe_trader.decisions.store import PacketState, PacketStore
+from vibe_trader.signals.base import Severity, Signal
+from vibe_trader.signals.strategy_base import StrategyContext
+from vibe_trader.signals.strategy_hitl import HITLStrategy
 
 
 def _sig(stype: str = "rsi_oversold") -> Signal:
@@ -85,7 +85,7 @@ def test_lark_push_called_with_summary(tmp_path: Path) -> None:
     body = captured[0]
     assert "HITL 决策待办" in body
     assert "US.NVDA" in body
-    assert "equity-monitor decide submit" in body
+    assert "vibe-trader decide submit" in body
     pending = next(iter(store.list(state=PacketState.PENDING)))
     assert pending.packet.id in body
 

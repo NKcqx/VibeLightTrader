@@ -6,17 +6,17 @@ from pathlib import Path
 import pytest
 from sqlalchemy.orm import sessionmaker
 
-from equity_monitor.db import init_schema, make_engine, make_sessionmaker, session_scope
-from equity_monitor.events.apply import HELP_TEXT, _avg_cost_from_markers, apply
-from equity_monitor.events.grammar import (
+from vibe_trader.db import init_schema, make_engine, make_sessionmaker, session_scope
+from vibe_trader.events.apply import HELP_TEXT, _avg_cost_from_markers, apply
+from vibe_trader.events.grammar import (
     AddCommand,
     HelpCommand,
     ListCommand,
     RemoveCommand,
     ThresholdCommand,
 )
-from equity_monitor.models import Symbol
-from equity_monitor.reports.snapshot import TradeMarker
+from vibe_trader.models import Symbol
+from vibe_trader.reports.snapshot import TradeMarker
 
 
 def _mk(side: str, qty: int, price: float, day: int = 1) -> TradeMarker:

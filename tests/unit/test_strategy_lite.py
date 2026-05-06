@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from datetime import datetime
 
-from equity_monitor.signals.base import Severity, Signal
-from equity_monitor.signals.strategy_lite import (
+from vibe_trader.signals.base import Severity, Signal
+from vibe_trader.signals.strategy_lite import (
     decide_action,
     decide_actions_for_codes,
 )

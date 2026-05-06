@@ -9,7 +9,7 @@ import subprocess
 
 import pytest
 
-from equity_monitor.events.listener import stream_lark_events_ws
+from vibe_trader.events.listener import stream_lark_events_ws
 
 
 class _FakePopen:

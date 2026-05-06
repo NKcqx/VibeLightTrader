@@ -6,11 +6,11 @@ from typing import Any
 import pytest
 from sqlalchemy.orm import sessionmaker
 
-from equity_monitor.config import AppConfig, WatchlistConfig
-from equity_monitor.db import session_scope
-from equity_monitor.futu_client import FakeFutuClient, Snapshot
-from equity_monitor.models import Position, Symbol, Trade
-from equity_monitor.scheduler.jobs import run_closing_brief, run_morning_brief
+from vibe_trader.config import AppConfig, WatchlistConfig
+from vibe_trader.db import session_scope
+from vibe_trader.futu_client import FakeFutuClient, Snapshot
+from vibe_trader.models import Position, Symbol, Trade
+from vibe_trader.scheduler.jobs import run_closing_brief, run_morning_brief
 
 
 def _snap(code: str, *, last: float, open_: float) -> Snapshot:
@@ -119,7 +119,7 @@ def test_brief_summary_includes_top_gainers_losers(
     app_cfg: AppConfig,
 ) -> None:
     """With 3+ symbols, the summary must list top gainers and losers."""
-    from equity_monitor.config import SymbolConfig
+    from vibe_trader.config import SymbolConfig
 
     multi = WatchlistConfig(
         symbols=[

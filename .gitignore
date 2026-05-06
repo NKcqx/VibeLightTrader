@@ -41,7 +41,7 @@ secrets/
 .cursor/
 
 # --------------------------------------------------------------------------
-# Runtime data (root-level only; src/equity_monitor/data/ is source code)
+# Runtime data (root-level only; src/vibe_trader/data/ is source code)
 # --------------------------------------------------------------------------
 /data/
 *.db

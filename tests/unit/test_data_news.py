@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datetime import datetime
 
-from equity_monitor.data.news import _parse
+from vibe_trader.data.news import _parse
 
 
 def test_parse_news_by_code() -> None:

@@ -16,8 +16,8 @@ from datetime import datetime, timezone
 
 import pytest
 
-from equity_monitor.reports.render import explain_signal
-from equity_monitor.signals.base import Severity, Signal
+from vibe_trader.reports.render import explain_signal
+from vibe_trader.signals.base import Severity, Signal
 
 
 def _sig(signal_type: str, payload: dict | None = None) -> Signal:

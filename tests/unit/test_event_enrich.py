@@ -7,7 +7,7 @@ import pandas as pd
 import pytest
 from sqlalchemy.orm import sessionmaker
 
-from equity_monitor.config import (
+from vibe_trader.config import (
     AppConfig,
     DatabaseConfig,
     LarkConfig,
@@ -17,10 +17,10 @@ from equity_monitor.config import (
     SchedulerConfig,
     SignalsConfig,
 )
-from equity_monitor.db import init_schema, make_engine, make_sessionmaker, session_scope
-from equity_monitor.events.enrich import build_watchlist_rows
-from equity_monitor.futu_client import Candle, FakeFutuClient, Snapshot
-from equity_monitor.models import Symbol
+from vibe_trader.db import init_schema, make_engine, make_sessionmaker, session_scope
+from vibe_trader.events.enrich import build_watchlist_rows
+from vibe_trader.futu_client import Candle, FakeFutuClient, Snapshot
+from vibe_trader.models import Symbol
 
 
 @pytest.fixture

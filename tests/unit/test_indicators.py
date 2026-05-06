@@ -7,7 +7,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from equity_monitor.data.indicators import compute_indicators
+from vibe_trader.data.indicators import compute_indicators
 
 FIXTURE = Path(__file__).resolve().parents[1] / "fixtures" / "known_ohlc.csv"
 

@@ -14,13 +14,13 @@ from typing import Any
 
 import pytest
 
-from equity_monitor.llm.client import (
+from vibe_trader.llm.client import (
     LLMError,
     LLMHTTPError,
     LLMParseError,
     LLMTimeoutError,
 )
-from equity_monitor.llm.cursor_agent import CursorAgentClient
+from vibe_trader.llm.cursor_agent import CursorAgentClient
 
 
 # ---------------------------------------------------------------------------
@@ -56,7 +56,7 @@ def _patch_subprocess(
 
     monkeypatch.setattr(subprocess, "run", fake_run)
     monkeypatch.setattr(
-        "equity_monitor.llm.cursor_agent.shutil.which",
+        "vibe_trader.llm.cursor_agent.shutil.which",
         lambda _name: "/fake/path/cursor-agent",
     )
     return captured
@@ -289,7 +289,7 @@ def test_chat_strips_ansi_prefix_before_json(monkeypatch):
 
 def test_resolve_binary_missing_raises_llm_error(monkeypatch):
     monkeypatch.setattr(
-        "equity_monitor.llm.cursor_agent.shutil.which",
+        "vibe_trader.llm.cursor_agent.shutil.which",
         lambda _name: None,
     )
     client = CursorAgentClient()

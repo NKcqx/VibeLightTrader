@@ -9,7 +9,7 @@ import pytest
 import structlog
 from sqlalchemy.orm import sessionmaker
 
-from equity_monitor.config import (
+from vibe_trader.config import (
     AppConfig,
     DatabaseConfig,
     JobCron,
@@ -22,9 +22,9 @@ from equity_monitor.config import (
     SymbolConfig,
     WatchlistConfig,
 )
-from equity_monitor.futu_client import Candle, FakeFutuClient, Snapshot
-from equity_monitor.models import Symbol, Trade
-from equity_monitor.scheduler.jobs import run_intraday_check
+from vibe_trader.futu_client import Candle, FakeFutuClient, Snapshot
+from vibe_trader.models import Symbol, Trade
+from vibe_trader.scheduler.jobs import run_intraday_check
 
 
 def _make_cfg(tmp_path: Path) -> AppConfig:

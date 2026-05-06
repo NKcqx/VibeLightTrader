@@ -15,7 +15,7 @@ from unittest.mock import MagicMock
 import pandas as pd
 import pytest
 
-from equity_monitor.decisions.packet import (
+from vibe_trader.decisions.packet import (
     DecisionPacket,
     build_packet,
     default_memory_hints,
@@ -23,8 +23,8 @@ from equity_monitor.decisions.packet import (
     packet_to_json,
     render_packet_md,
 )
-from equity_monitor.signals.base import Severity, Signal
-from equity_monitor.signals.strategy_base import StrategyContext
+from vibe_trader.signals.base import Severity, Signal
+from vibe_trader.signals.strategy_base import StrategyContext
 
 
 # ---------------------------------------------------------------------------
@@ -232,7 +232,7 @@ def test_render_json_schema_uses_single_braces() -> None:
 def test_render_includes_submit_command_with_packet_id() -> None:
     p = build_packet(_ctx(), triggering_signal_ids=[], constraints=_constraints())
     md = render_packet_md(p)
-    assert "equity-monitor decide submit" in md
+    assert "vibe-trader decide submit" in md
     assert p.id in md
 
 

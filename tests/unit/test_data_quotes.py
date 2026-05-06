@@ -4,10 +4,10 @@ from datetime import datetime
 
 from sqlalchemy.orm import sessionmaker
 
-from equity_monitor.data.quotes import sync_snapshots
-from equity_monitor.db import session_scope
-from equity_monitor.futu_client import FakeFutuClient, Snapshot
-from equity_monitor.models import Quote, Symbol
+from vibe_trader.data.quotes import sync_snapshots
+from vibe_trader.db import session_scope
+from vibe_trader.futu_client import FakeFutuClient, Snapshot
+from vibe_trader.models import Quote, Symbol
 
 
 def _make_snap(code: str = "US.AAPL", ts: datetime | None = None) -> Snapshot:

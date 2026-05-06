@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 
-from equity_monitor.reports.render import (
+from vibe_trader.reports.render import (
     WatchlistCardRow,
     render_watchlist_card,
 )

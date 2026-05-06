@@ -8,15 +8,15 @@ from datetime import datetime, timedelta, timezone
 import pytest
 from sqlalchemy.orm import sessionmaker
 
-from equity_monitor.db import (
+from vibe_trader.db import (
     init_schema,
     make_engine,
     make_sessionmaker,
     session_scope,
 )
-from equity_monitor.models import Symbol, Trade
-from equity_monitor.trader.paper import OrderSide, OrderStatus, PaperOrder
-from equity_monitor.trader.reconcile import (
+from vibe_trader.models import Symbol, Trade
+from vibe_trader.trader.paper import OrderSide, OrderStatus, PaperOrder
+from vibe_trader.trader.reconcile import (
     ReconcileResult,
     reconcile_pending_fills,
 )

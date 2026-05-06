@@ -10,7 +10,7 @@ opend:
   port: 11111
 
 database:
-  path: data/equity_monitor.db
+  path: data/vibe_trader.db
   wal_mode: true
 
 scheduler:
@@ -48,13 +48,13 @@ signals:
 
 logging:
   level: INFO
-  file: data/equity_monitor.log
+  file: data/vibe_trader.log
 
 trader:
   # If true, run_intraday_check auto-executes BUY/SELL suggestions
   # through the paper broker and persists Trade/Position rows.
   # If false, suggestions are only shown in the alert card; you confirm
-  # them manually via `equity-monitor trade confirm <signal_id>`.
+  # them manually via `vibe-trader trade confirm <signal_id>`.
   auto_execute: true
   # Always true in Phase 2 — refuses non-SIMULATE accounts even if
   # OpenD's default account context says otherwise.
@@ -122,7 +122,7 @@ trader:
     # subscription. Each event triggers writing a decision packet (markdown)
     # to var_dir; you paste it into Cursor where Claude reads MEMORY +
     # decides; then submit back via:
-    #   equity-monitor decide submit <id> --json '<paste>'
+    #   vibe-trader decide submit <id> --json '<paste>'
     # Set strategy.type: hitl to enable.
     hitl:
       var_dir: var/decisions

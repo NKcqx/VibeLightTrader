@@ -3,8 +3,8 @@ from __future__ import annotations
 from datetime import datetime
 from typing import Any
 
-from equity_monitor.signals.base import Severity, Signal
-from equity_monitor.signals.compose import (
+from vibe_trader.signals.base import Severity, Signal
+from vibe_trader.signals.compose import (
     deduplicate,
     split_by_severity,
     upgrade_severity,
@@ -139,7 +139,7 @@ def test_upgrade_only_applies_to_futu_tech_anomaly() -> None:
 
 def test_upgrade_all_known_reversal_events() -> None:
     """Each pattern in REVERSAL_PATTERNS must trigger a CRITICAL bump."""
-    from equity_monitor.signals.compose import REVERSAL_PATTERNS
+    from vibe_trader.signals.compose import REVERSAL_PATTERNS
 
     for evt in REVERSAL_PATTERNS:
         s = _s(

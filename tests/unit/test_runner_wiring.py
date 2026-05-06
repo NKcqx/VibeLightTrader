@@ -4,9 +4,9 @@ from unittest.mock import patch
 
 import pytest
 
-from equity_monitor.config import AppConfig, WatchlistConfig
-from equity_monitor.futu_client import FakeFutuClient
-from equity_monitor.scheduler.runner import _wrap_trading_day, build_scheduler
+from vibe_trader.config import AppConfig, WatchlistConfig
+from vibe_trader.futu_client import FakeFutuClient
+from vibe_trader.scheduler.runner import _wrap_trading_day, build_scheduler
 
 
 def test_build_scheduler_registers_four_jobs(
@@ -35,7 +35,7 @@ def test_wrap_trading_day_skips_non_trading() -> None:
         return 42
 
     wrapped = _wrap_trading_day(job, tz_name="America/New_York")
-    with patch("equity_monitor.scheduler.runner.is_trading_day", return_value=False):
+    with patch("vibe_trader.scheduler.runner.is_trading_day", return_value=False):
         out = wrapped()
     assert out is None
     assert calls == []
@@ -50,7 +50,7 @@ def test_wrap_trading_day_runs_on_trading_day() -> None:
         return 42
 
     wrapped = _wrap_trading_day(job, tz_name="America/New_York")
-    with patch("equity_monitor.scheduler.runner.is_trading_day", return_value=True):
+    with patch("vibe_trader.scheduler.runner.is_trading_day", return_value=True):
         out = wrapped()
     assert out == 42
     assert calls == [1]
@@ -63,7 +63,7 @@ def test_wrap_trading_day_swallows_inner_exceptions() -> None:
         raise RuntimeError("boom")
 
     wrapped = _wrap_trading_day(bad, tz_name="America/New_York")
-    with patch("equity_monitor.scheduler.runner.is_trading_day", return_value=True):
+    with patch("vibe_trader.scheduler.runner.is_trading_day", return_value=True):
         wrapped()
 
 

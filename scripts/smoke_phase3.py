@@ -18,16 +18,16 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from equity_monitor.config import load_settings  # noqa: E402
-from equity_monitor.db import init_schema, make_engine, make_sessionmaker  # noqa: E402
-from equity_monitor.events.apply import apply_chart  # noqa: E402
-from equity_monitor.events.grammar import (  # noqa: E402
+from vibe_trader.config import load_settings  # noqa: E402
+from vibe_trader.db import init_schema, make_engine, make_sessionmaker  # noqa: E402
+from vibe_trader.events.apply import apply_chart  # noqa: E402
+from vibe_trader.events.grammar import (  # noqa: E402
     ALLOWED_CHART_FREQS,
     ChartCommand,
     _normalize_code,
 )
-from equity_monitor.futu_client import OpenDClient  # noqa: E402
-from equity_monitor.reports.lark_image import send_image  # noqa: E402
+from vibe_trader.futu_client import OpenDClient  # noqa: E402
+from vibe_trader.reports.lark_image import send_image  # noqa: E402
 
 
 def _parse_args(argv: list[str]) -> argparse.Namespace:

@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from datetime import datetime
 
-from equity_monitor.signals.base import Severity
-from equity_monitor.signals.threshold import detect_threshold_breach
+from vibe_trader.signals.base import Severity
+from vibe_trader.signals.threshold import detect_threshold_breach
 
 
 def test_upper_breach() -> None:

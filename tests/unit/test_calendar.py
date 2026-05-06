@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datetime import date, datetime, timezone
 
-from equity_monitor.scheduler.calendar import (
+from vibe_trader.scheduler.calendar import (
     early_close,
     is_market_open_at,
     is_trading_day,

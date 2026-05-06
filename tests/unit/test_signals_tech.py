@@ -4,8 +4,8 @@ from datetime import datetime
 
 import pandas as pd
 
-from equity_monitor.signals.base import Severity
-from equity_monitor.signals.tech import detect_tech_signals
+from vibe_trader.signals.base import Severity
+from vibe_trader.signals.tech import detect_tech_signals
 
 
 def _row(

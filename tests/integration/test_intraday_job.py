@@ -6,13 +6,13 @@ from typing import Any
 import pytest
 from sqlalchemy.orm import sessionmaker
 
-from equity_monitor.config import AppConfig, WatchlistConfig
-from equity_monitor.db import session_scope
-from equity_monitor.futu_client import Candle, FakeFutuClient, Snapshot
-from equity_monitor.models import Indicator
-from equity_monitor.models import Signal as SignalRow
-from equity_monitor.models import Symbol
-from equity_monitor.scheduler.jobs import run_intraday_check
+from vibe_trader.config import AppConfig, WatchlistConfig
+from vibe_trader.db import session_scope
+from vibe_trader.futu_client import Candle, FakeFutuClient, Snapshot
+from vibe_trader.models import Indicator
+from vibe_trader.models import Signal as SignalRow
+from vibe_trader.models import Symbol
+from vibe_trader.scheduler.jobs import run_intraday_check
 
 
 def _make_candles(start_ts: datetime, n: int) -> list[Candle]:

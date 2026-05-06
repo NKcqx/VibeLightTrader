@@ -8,8 +8,8 @@ from __future__ import annotations
 
 import pytest
 
-from equity_monitor.llm.client import LLMParseError
-from equity_monitor.llm.prompt import (
+from vibe_trader.llm.client import LLMParseError
+from vibe_trader.llm.prompt import (
     DEFAULT_USER_TEMPLATE,
     ParsedDecision,
     parse_decision,

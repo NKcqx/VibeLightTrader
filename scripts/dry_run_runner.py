@@ -23,7 +23,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from equity_monitor.config import (  # noqa: E402
+from vibe_trader.config import (  # noqa: E402
     AppConfig,
     DatabaseConfig,
     JobCron,
@@ -38,8 +38,8 @@ from equity_monitor.config import (  # noqa: E402
     load_settings,
     load_watchlist,
 )
-from equity_monitor.futu_client import FakeFutuClient  # noqa: E402
-from equity_monitor.scheduler.runner import build_scheduler  # noqa: E402
+from vibe_trader.futu_client import FakeFutuClient  # noqa: E402
+from vibe_trader.scheduler.runner import build_scheduler  # noqa: E402
 
 
 def _load_or_default() -> tuple[AppConfig, WatchlistConfig]:
@@ -97,7 +97,7 @@ def _ensure_all_crons(cfg: AppConfig) -> AppConfig:
 def main() -> int:
     cfg, wl = _load_or_default()
 
-    print("=== equity-monitor scheduler dry-run ===")
+    print("=== vibe-trader scheduler dry-run ===")
     print(f"now (UTC):     {datetime.now(tz=timezone.utc).isoformat(timespec='seconds')}")
     print(f"sched tz:      {cfg.scheduler.timezone}")
     print(f"db.path:       {cfg.database.path}")

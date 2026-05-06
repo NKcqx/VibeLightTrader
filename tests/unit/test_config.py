@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from equity_monitor.config import (
+from vibe_trader.config import (
     AppConfig,
     SymbolConfig,
     load_settings,

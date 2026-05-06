@@ -10,14 +10,14 @@ from __future__ import annotations
 import httpx
 import pytest
 
-from equity_monitor.llm.anthropic_client import AnthropicClient
-from equity_monitor.llm.client import (
+from vibe_trader.llm.anthropic_client import AnthropicClient
+from vibe_trader.llm.client import (
     LLMAuthError,
     LLMHTTPError,
     LLMRateLimitError,
     LLMTimeoutError,
 )
-from equity_monitor.llm.openai_compat import OpenAICompatClient
+from vibe_trader.llm.openai_compat import OpenAICompatClient
 
 
 # ---------------------------------------------------------------------------

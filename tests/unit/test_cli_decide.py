@@ -15,16 +15,16 @@ import pytest
 import yaml
 from click.testing import CliRunner
 
-from equity_monitor.cli.main import cli
-from equity_monitor.db import make_engine, make_sessionmaker, session_scope
-from equity_monitor.decisions.packet import build_packet
-from equity_monitor.decisions.store import PacketState, PacketStore
-from equity_monitor.models import Position, Symbol
-from equity_monitor.models import Signal as SignalRow
-from equity_monitor.models import Trade
-from equity_monitor.signals.base import Severity, Signal
-from equity_monitor.signals.strategy_base import StrategyContext
-from equity_monitor.trader.paper import FakePaperTrader
+from vibe_trader.cli.main import cli
+from vibe_trader.db import make_engine, make_sessionmaker, session_scope
+from vibe_trader.decisions.packet import build_packet
+from vibe_trader.decisions.store import PacketState, PacketStore
+from vibe_trader.models import Position, Symbol
+from vibe_trader.models import Signal as SignalRow
+from vibe_trader.models import Trade
+from vibe_trader.signals.base import Severity, Signal
+from vibe_trader.signals.strategy_base import StrategyContext
+from vibe_trader.trader.paper import FakePaperTrader
 
 
 # ---------------------------------------------------------------------------
@@ -214,7 +214,7 @@ def test_decide_submit_buy_places_paper_trade(
 
     fake = FakePaperTrader()
     fake.set_mark("US.NVDA", 850.0)
-    monkeypatch.setattr("equity_monitor.cli.main._make_trader", lambda cfg: fake)
+    monkeypatch.setattr("vibe_trader.cli.main._make_trader", lambda cfg: fake)
 
     decision = json.dumps(
         {
@@ -263,7 +263,7 @@ def test_decide_submit_hold_records_no_trade(
 
     fake = FakePaperTrader()
     fake.set_mark("US.NVDA", 850.0)
-    monkeypatch.setattr("equity_monitor.cli.main._make_trader", lambda cfg: fake)
+    monkeypatch.setattr("vibe_trader.cli.main._make_trader", lambda cfg: fake)
 
     decision = json.dumps(
         {
@@ -294,7 +294,7 @@ def test_decide_submit_no_execute_flag(cli_root: Path, monkeypatch) -> None:
     pid = _seed_packet(cli_root)
 
     monkeypatch.setattr(
-        "equity_monitor.cli.main._make_trader",
+        "vibe_trader.cli.main._make_trader",
         lambda cfg: pytest.fail("trader should NOT be built when --no-execute"),
     )
 
@@ -372,7 +372,7 @@ def test_decide_submit_low_confidence_demoted_to_hold(
 
     fake = FakePaperTrader()
     fake.set_mark("US.NVDA", 850.0)
-    monkeypatch.setattr("equity_monitor.cli.main._make_trader", lambda cfg: fake)
+    monkeypatch.setattr("vibe_trader.cli.main._make_trader", lambda cfg: fake)
 
     decision = json.dumps(
         {
@@ -407,7 +407,7 @@ def test_decide_submit_already_submitted_packet_rejected(
 
     fake = FakePaperTrader()
     fake.set_mark("US.NVDA", 850.0)
-    monkeypatch.setattr("equity_monitor.cli.main._make_trader", lambda cfg: fake)
+    monkeypatch.setattr("vibe_trader.cli.main._make_trader", lambda cfg: fake)
 
     decision = json.dumps(
         {"action": "BUY", "qty": 50, "confidence": 0.8, "reason": "x"}
@@ -444,7 +444,7 @@ def test_decide_submit_from_file(cli_root: Path, monkeypatch) -> None:
     )
 
     fake = FakePaperTrader()
-    monkeypatch.setattr("equity_monitor.cli.main._make_trader", lambda cfg: fake)
+    monkeypatch.setattr("vibe_trader.cli.main._make_trader", lambda cfg: fake)
 
     result = runner.invoke(
         cli,

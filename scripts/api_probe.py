@@ -1,4 +1,4 @@
-"""Full Futu OpenD capability probe for the equity-monitor account.
+"""Full Futu OpenD capability probe for the vibe-trader account.
 
 Verifies that every API surface used by Phase 1 + Phase 2 is reachable on
 the live OpenD instance and reports what the user's account can actually do.
@@ -184,7 +184,7 @@ def probe_trade() -> None:
 
 
 def main() -> int:
-    print("Futu OpenD probe — equity-monitor")
+    print("Futu OpenD probe — vibe-trader")
     print("OpenD: 127.0.0.1:11111")
     try:
         probe_quote()

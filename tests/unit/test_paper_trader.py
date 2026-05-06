@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pytest
 
-from equity_monitor.trader.paper import (
+from vibe_trader.trader.paper import (
     FakePaperTrader,
     PaperTradeError,
 )

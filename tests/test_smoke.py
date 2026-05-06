@@ -1,4 +1,4 @@
 def test_package_imports():
-    import equity_monitor
+    import vibe_trader
 
-    assert equity_monitor.__version__ == "0.1.0"
+    assert vibe_trader.__version__ == "0.1.0"

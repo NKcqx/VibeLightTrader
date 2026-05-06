@@ -6,12 +6,12 @@ from typing import Any
 import pytest
 from sqlalchemy.orm import sessionmaker
 
-from equity_monitor.config import AppConfig, WatchlistConfig
-from equity_monitor.data.news import NewsItem
-from equity_monitor.data.sentiment import SentimentSnapshot
-from equity_monitor.db import session_scope
-from equity_monitor.models import NewsDigest, SentimentSnapshotRow, Symbol
-from equity_monitor.scheduler.jobs import run_news_pulse
+from vibe_trader.config import AppConfig, WatchlistConfig
+from vibe_trader.data.news import NewsItem
+from vibe_trader.data.sentiment import SentimentSnapshot
+from vibe_trader.db import session_scope
+from vibe_trader.models import NewsDigest, SentimentSnapshotRow, Symbol
+from vibe_trader.scheduler.jobs import run_news_pulse
 
 
 def _news(code: str, url: str, title: str = "headline") -> NewsItem:

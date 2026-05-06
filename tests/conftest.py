@@ -4,7 +4,7 @@ import pytest
 from sqlalchemy.engine import Engine
 from sqlalchemy.orm import Session, sessionmaker
 
-from equity_monitor.config import (
+from vibe_trader.config import (
     AppConfig,
     DatabaseConfig,
     JobCron,
@@ -17,8 +17,8 @@ from equity_monitor.config import (
     SymbolConfig,
     WatchlistConfig,
 )
-from equity_monitor.db import init_schema, make_engine, make_sessionmaker
-from equity_monitor.futu_client import FakeFutuClient
+from vibe_trader.db import init_schema, make_engine, make_sessionmaker
+from vibe_trader.futu_client import FakeFutuClient
 
 
 @pytest.fixture

@@ -4,10 +4,10 @@ from datetime import datetime, timedelta
 
 from sqlalchemy.orm import sessionmaker
 
-from equity_monitor.data.backfill import backfill_all, backfill_symbol
-from equity_monitor.db import session_scope
-from equity_monitor.futu_client import Candle, FakeFutuClient
-from equity_monitor.models import Indicator, Quote, Symbol
+from vibe_trader.data.backfill import backfill_all, backfill_symbol
+from vibe_trader.db import session_scope
+from vibe_trader.futu_client import Candle, FakeFutuClient
+from vibe_trader.models import Indicator, Quote, Symbol
 
 
 def _candles(code: str, n: int) -> list[Candle]:

@@ -6,8 +6,8 @@ import pytest
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session, sessionmaker
 
-from equity_monitor.db import session_scope
-from equity_monitor.models import Quote, Symbol
+from vibe_trader.db import session_scope
+from vibe_trader.models import Quote, Symbol
 
 
 def test_can_insert_symbol_and_quote(factory: sessionmaker[Session]) -> None:

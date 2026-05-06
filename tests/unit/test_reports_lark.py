@@ -6,8 +6,8 @@ from unittest.mock import MagicMock, patch
 import pytest
 from tenacity import wait_none
 
-from equity_monitor.reports import lark as lark_mod
-from equity_monitor.reports.lark import LarkSendError, send_card
+from vibe_trader.reports import lark as lark_mod
+from vibe_trader.reports.lark import LarkSendError, send_card
 
 
 @pytest.fixture(autouse=True)

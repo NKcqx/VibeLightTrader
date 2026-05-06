@@ -2,12 +2,12 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 
-from equity_monitor.reports.render import (
+from vibe_trader.reports.render import (
     render_daily_brief,
     render_news_pulse,
     render_signal_alert,
 )
-from equity_monitor.signals.base import Severity, Signal
+from vibe_trader.signals.base import Severity, Signal
 
 
 def _texts(card: dict) -> str:

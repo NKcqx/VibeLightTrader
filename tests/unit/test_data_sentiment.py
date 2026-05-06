@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datetime import datetime
 
-from equity_monitor.data.sentiment import _parse
+from vibe_trader.data.sentiment import _parse
 
 
 def test_parse_sentiment() -> None:

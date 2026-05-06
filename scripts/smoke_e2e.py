@@ -4,7 +4,7 @@ Prerequisites:
   - OpenD running on 127.0.0.1:11111 (logged in)
   - lark-cli on PATH and authed
   - config/watchlist.yaml + config/settings.yaml populated
-  - Symbols are synced into DB (run `equity-monitor watchlist sync` first)
+  - Symbols are synced into DB (run `vibe-trader watchlist sync` first)
 
 Run:
     python scripts/smoke_e2e.py
@@ -32,10 +32,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from equity_monitor.config import load_settings, load_watchlist  # noqa: E402
-from equity_monitor.db import init_schema, make_engine, make_sessionmaker  # noqa: E402
-from equity_monitor.futu_client import OpenDClient  # noqa: E402
-from equity_monitor.scheduler.jobs import (  # noqa: E402
+from vibe_trader.config import load_settings, load_watchlist  # noqa: E402
+from vibe_trader.db import init_schema, make_engine, make_sessionmaker  # noqa: E402
+from vibe_trader.futu_client import OpenDClient  # noqa: E402
+from vibe_trader.scheduler.jobs import (  # noqa: E402
     run_closing_brief,
     run_intraday_check,
     run_morning_brief,

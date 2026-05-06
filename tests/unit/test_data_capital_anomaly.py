@@ -6,7 +6,7 @@ from unittest.mock import patch
 
 import pytest
 
-from equity_monitor.data.capital_anomaly import _parse, fetch_capital_anomalies
+from vibe_trader.data.capital_anomaly import _parse, fetch_capital_anomalies
 
 
 def test_parse_capital_anomaly() -> None:
@@ -44,7 +44,7 @@ def test_parse_amount_defaults_to_zero() -> None:
 
 
 def test_fetch_subprocess_failure_raises() -> None:
-    with patch("equity_monitor.data.capital_anomaly.subprocess.run") as run:
+    with patch("vibe_trader.data.capital_anomaly.subprocess.run") as run:
         run.return_value.returncode = 2
         run.return_value.stderr = "rate limited"
         with pytest.raises(RuntimeError, match="rate limited"):
@@ -65,7 +65,7 @@ def test_fetch_subprocess_success() -> None:
             ]
         }
     )
-    with patch("equity_monitor.data.capital_anomaly.subprocess.run") as run:
+    with patch("vibe_trader.data.capital_anomaly.subprocess.run") as run:
         run.return_value.returncode = 0
         run.return_value.stdout = fake_stdout
         out = fetch_capital_anomalies(["US.TSLA"], script_path="/fake/run.py")

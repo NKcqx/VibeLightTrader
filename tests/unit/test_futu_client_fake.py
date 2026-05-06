@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datetime import datetime
 
-from equity_monitor.futu_client import Candle, FakeFutuClient, Snapshot
+from vibe_trader.futu_client import Candle, FakeFutuClient, Snapshot
 
 
 def test_fake_snapshot_roundtrip(fake_futu: FakeFutuClient) -> None:

@@ -11,10 +11,10 @@ from pathlib import Path
 
 import pytest
 
-from equity_monitor.decisions.packet import DecisionPacket, build_packet
-from equity_monitor.decisions.store import PacketState, PacketStore
-from equity_monitor.signals.base import Severity, Signal
-from equity_monitor.signals.strategy_base import StrategyContext
+from vibe_trader.decisions.packet import DecisionPacket, build_packet
+from vibe_trader.decisions.store import PacketState, PacketStore
+from vibe_trader.signals.base import Severity, Signal
+from vibe_trader.signals.strategy_base import StrategyContext
 
 
 # ---------------------------------------------------------------------------
@@ -194,7 +194,7 @@ def test_list_returns_chronological_order(tmp_path: Path) -> None:
     )
     # p1 / p2 IDs will differ by uuid suffix; both same minute; stable ordering only matters
     # in the same logical second. Build explicit ids:
-    from equity_monitor.decisions.packet import make_packet_id
+    from vibe_trader.decisions.packet import make_packet_id
 
     earlier = make_packet_id(datetime(2026, 5, 4, 9, 0, tzinfo=timezone.utc))
     later = make_packet_id(datetime(2026, 5, 4, 10, 0, tzinfo=timezone.utc))

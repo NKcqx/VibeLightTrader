@@ -6,7 +6,7 @@ import json
 from datetime import datetime, timezone
 from pathlib import Path
 
-from equity_monitor.journal.errors import (
+from vibe_trader.journal.errors import (
     DevLogEntry,
     ProbeSummary,
     append_dev_log_entry,
@@ -139,7 +139,7 @@ def test_append_dev_log_creates_file_with_header(tmp_path):
     )
     append_dev_log_entry(dev_log_path=p, entry=entry)
     text = p.read_text(encoding="utf-8")
-    assert "# Equity Monitor — 开发者日志" in text
+    assert "# Vibe Trader — 开发者日志" in text
     assert "## 2026-05-04 14:30 UTC · ⏱️ timeout · US.NVDA" in text
     assert "`LLMTimeoutError`" in text
 
@@ -169,7 +169,7 @@ def test_append_dev_log_appends_subsequent_entries(tmp_path):
 
     text = p.read_text(encoding="utf-8")
     # Both entries present, header only once.
-    assert text.count("# Equity Monitor — 开发者日志") == 1
+    assert text.count("# Vibe Trader — 开发者日志") == 1
     assert "msg1" in text and "msg2" in text
     # Excerpt rendered as a fenced code block under details.
     assert "<details>" in text

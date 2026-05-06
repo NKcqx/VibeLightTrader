@@ -14,25 +14,25 @@ from pathlib import Path
 
 import pytest
 
-from equity_monitor.journal import (
+from vibe_trader.journal import (
     JournalEntry,
     OverviewSnapshot,
     append_event,
     refresh_overview_only,
 )
-from equity_monitor.journal.templates import (
+from vibe_trader.journal.templates import (
     EVENT_DELIMITER,
     OVERVIEW_BEGIN,
     OVERVIEW_END,
     render_event,
     render_overview,
 )
-from equity_monitor.journal.writer import (
+from vibe_trader.journal.writer import (
     compute_overview,
     scan_existing_events,
 )
-from equity_monitor.signals.base import Severity, Signal
-from equity_monitor.signals.strategy_lite import SignalSuggest
+from vibe_trader.signals.base import Severity, Signal
+from vibe_trader.signals.strategy_lite import SignalSuggest
 
 
 # ---------------------------------------------------------------------------
@@ -425,7 +425,7 @@ def test_scan_existing_events_handles_no_signal_entries(tmp_path):
 
 def test_path_resolution_rejects_path_traversal(tmp_path):
     """Hostile codes with `/` get sanitised, but a literal '..' path is rejected."""
-    from equity_monitor.journal.writer import _path_for
+    from vibe_trader.journal.writer import _path_for
 
     safe = _path_for(tmp_path, "US/NVDA")  # slash → underscore
     assert safe.name == "US_NVDA.md"

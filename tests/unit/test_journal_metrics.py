@@ -10,11 +10,11 @@ import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from equity_monitor.journal.metrics import (
+from vibe_trader.journal.metrics import (
     compute_hit_rates,
     render_hit_rate_lines,
 )
-from equity_monitor.models import Base, Quote, Symbol
+from vibe_trader.models import Base, Quote, Symbol
 
 
 @pytest.fixture()

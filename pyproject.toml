@@ -1,7 +1,7 @@
 [project]
-name = "equity-monitor"
+name = "vibe-trader"
 version = "0.1.0"
-description = "Hourly equity monitor with technical signals, news sentiment, Lark alerts and paper-trading hooks"
+description = "Vibe-coded mid-term equity trader: Futu OpenAPI quotes + cursor-agent (LLM) decisions + paper trading + Lark notifications"
 requires-python = ">=3.11"
 authors = [{ name = "you" }]
 dependencies = [
@@ -22,7 +22,7 @@ dependencies = [
 ]
 
 [project.scripts]
-equity-monitor = "equity_monitor.cli.main:cli"
+vibe-trader = "vibe_trader.cli.main:cli"
 
 [project.optional-dependencies]
 dev = [
@@ -40,7 +40,7 @@ build-backend = "setuptools.build_meta"
 where = ["src"]
 
 [tool.setuptools.package-data]
-"equity_monitor.reports" = ["templates/*.j2"]
+"vibe_trader.reports" = ["templates/*.j2"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

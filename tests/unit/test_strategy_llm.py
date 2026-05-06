@@ -14,22 +14,22 @@ from typing import Any
 
 import pytest
 
-from equity_monitor.llm.client import (
+from vibe_trader.llm.client import (
     LLMResponse,
     LLMTimeoutError,
 )
-from equity_monitor.signals.base import Severity, Signal
-from equity_monitor.signals.strategy_base import (
+from vibe_trader.signals.base import Severity, Signal
+from vibe_trader.signals.strategy_base import (
     StrategyContext,
     build_strategy,
     registered_strategies,
 )
-from equity_monitor.signals.strategy_llm import (
+from vibe_trader.signals.strategy_llm import (
     ConstraintViolation,
     LLMStrategy,
     enforce_constraints,
 )
-from equity_monitor.signals.strategy_rule import RuleStrategy
+from vibe_trader.signals.strategy_rule import RuleStrategy
 
 
 # ---------------------------------------------------------------------------
@@ -311,7 +311,7 @@ def test_cache_avoids_second_llm_call(tmp_path: Path) -> None:
 
 
 def _parsed(action: str, qty: int, conf: float = 0.8, reason: str = "ok"):
-    from equity_monitor.llm.prompt import ParsedDecision
+    from vibe_trader.llm.prompt import ParsedDecision
     return ParsedDecision(action=action, qty=qty, confidence=conf, reason=reason)  # type: ignore[arg-type]
 
 
@@ -391,7 +391,7 @@ def test_build_strategy_llm_with_cursor_agent_provider(monkeypatch) -> None:
     No API key required. Workspace defaults to cwd. We assert plumbing
     only — actual subprocess invocation is covered in test_llm_cursor_agent.py.
     """
-    from equity_monitor.llm.cursor_agent import CursorAgentClient
+    from vibe_trader.llm.cursor_agent import CursorAgentClient
 
     s = build_strategy(
         "llm",
@@ -419,7 +419,7 @@ def test_build_strategy_llm_with_cursor_agent_provider(monkeypatch) -> None:
 
 def test_build_strategy_llm_cursor_agent_workspace_defaults_to_cwd(tmp_path, monkeypatch) -> None:
     """When workspace is not given, falls back to Path.cwd() at build time."""
-    from equity_monitor.llm.cursor_agent import CursorAgentClient
+    from vibe_trader.llm.cursor_agent import CursorAgentClient
 
     monkeypatch.chdir(tmp_path)
     s = build_strategy(

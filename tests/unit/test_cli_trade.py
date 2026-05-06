@@ -7,11 +7,11 @@ import pytest
 import yaml
 from click.testing import CliRunner
 
-from equity_monitor.cli.main import cli
-from equity_monitor.db import make_engine, make_sessionmaker, session_scope
-from equity_monitor.models import Position, Symbol
-from equity_monitor.models import Signal as SignalRow
-from equity_monitor.trader.paper import FakePaperTrader
+from vibe_trader.cli.main import cli
+from vibe_trader.db import make_engine, make_sessionmaker, session_scope
+from vibe_trader.models import Position, Symbol
+from vibe_trader.models import Signal as SignalRow
+from vibe_trader.trader.paper import FakePaperTrader
 
 
 @pytest.fixture
@@ -129,7 +129,7 @@ def test_trade_confirm_places_order_and_persists(cli_root: Path, monkeypatch) ->
 
     fake = FakePaperTrader()
     fake.set_mark("US.AAPL", 178.5)
-    monkeypatch.setattr("equity_monitor.cli.main._make_trader", lambda cfg: fake)
+    monkeypatch.setattr("vibe_trader.cli.main._make_trader", lambda cfg: fake)
 
     result = runner.invoke(
         cli, _base_args(cli_root) + ["trade", "confirm", str(sig_id)]
@@ -161,7 +161,7 @@ def test_trade_confirm_idempotent_on_already_executed(cli_root: Path, monkeypatc
 
     fake = FakePaperTrader()
     fake.set_mark("US.AAPL", 180.0)
-    monkeypatch.setattr("equity_monitor.cli.main._make_trader", lambda cfg: fake)
+    monkeypatch.setattr("vibe_trader.cli.main._make_trader", lambda cfg: fake)
 
     runner.invoke(cli, _base_args(cli_root) + ["trade", "confirm", str(sig_id)])
     result = runner.invoke(
@@ -181,7 +181,7 @@ def test_trade_confirm_cancel_path_when_broker_rejects(
     sig_id = _seed_pending_signal(cli_root / "data" / "x.db", action="BUY", qty=10)
 
     fake = FakePaperTrader()  # no mark price → REJECTED
-    monkeypatch.setattr("equity_monitor.cli.main._make_trader", lambda cfg: fake)
+    monkeypatch.setattr("vibe_trader.cli.main._make_trader", lambda cfg: fake)
 
     result = runner.invoke(
         cli, _base_args(cli_root) + ["trade", "confirm", str(sig_id)]
@@ -197,7 +197,7 @@ def test_trade_confirm_qty_override(cli_root: Path, monkeypatch) -> None:
 
     fake = FakePaperTrader()
     fake.set_mark("US.AAPL", 180.0)
-    monkeypatch.setattr("equity_monitor.cli.main._make_trader", lambda cfg: fake)
+    monkeypatch.setattr("vibe_trader.cli.main._make_trader", lambda cfg: fake)
 
     result = runner.invoke(
         cli, _base_args(cli_root) + ["trade", "confirm", str(sig_id), "--qty", "25"]
@@ -235,7 +235,7 @@ def test_trade_positions_shows_open(cli_root: Path, monkeypatch) -> None:
     sig_id = _seed_pending_signal(cli_root / "data" / "x.db", action="BUY", qty=12)
     fake = FakePaperTrader()
     fake.set_mark("US.AAPL", 178.0)
-    monkeypatch.setattr("equity_monitor.cli.main._make_trader", lambda cfg: fake)
+    monkeypatch.setattr("vibe_trader.cli.main._make_trader", lambda cfg: fake)
     runner.invoke(cli, _base_args(cli_root) + ["trade", "confirm", str(sig_id)])
 
     result = runner.invoke(cli, _base_args(cli_root) + ["trade", "positions"])
@@ -251,7 +251,7 @@ def test_trade_pnl_realized_after_buy_then_sell(cli_root: Path, monkeypatch) -> 
     fake = FakePaperTrader()
     fake.close = lambda: None  # type: ignore[method-assign]
     fake.set_mark("US.AAPL", 100.0)
-    monkeypatch.setattr("equity_monitor.cli.main._make_trader", lambda cfg: fake)
+    monkeypatch.setattr("vibe_trader.cli.main._make_trader", lambda cfg: fake)
 
     buy_id = _seed_pending_signal(cli_root / "data" / "x.db", action="BUY", qty=10)
     r1 = runner.invoke(cli, _base_args(cli_root) + ["trade", "confirm", str(buy_id)])

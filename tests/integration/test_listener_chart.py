@@ -7,9 +7,9 @@ from pathlib import Path
 import pytest
 from sqlalchemy.orm import sessionmaker
 
-from equity_monitor.events.listener import dispatch_event
-from equity_monitor.futu_client import Candle, FakeFutuClient, Snapshot
-from equity_monitor.models import Symbol
+from vibe_trader.events.listener import dispatch_event
+from vibe_trader.futu_client import Candle, FakeFutuClient, Snapshot
+from vibe_trader.models import Symbol
 
 
 def _seed_kline(client: FakeFutuClient) -> None:

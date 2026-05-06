@@ -1,4 +1,4 @@
-from equity_monitor.events.grammar import ChartCommand, parse
+from vibe_trader.events.grammar import ChartCommand, parse
 
 
 def test_chart_default_freq() -> None:

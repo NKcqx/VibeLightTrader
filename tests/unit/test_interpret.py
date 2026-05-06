@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pytest
 
-from equity_monitor.reports.interpret import (
+from vibe_trader.reports.interpret import (
     IndicatorReading,
     PositionSummary,
     ReturnSummary,

@@ -27,7 +27,7 @@ cat <<'EOF'
     From within this project (with conda env `fin` activated):
 
         conda activate fin
-        cd equity-monitor
+        cd vibe-trader
         python scripts/check_opend.py
 
     Expected output: "OK: OpenD reachable" plus an AAPL snapshot row.

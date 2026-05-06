@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pytest
 
-from equity_monitor.events.grammar import (
+from vibe_trader.events.grammar import (
     AddCommand,
     HelpCommand,
     ListCommand,

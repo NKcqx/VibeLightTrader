@@ -2,7 +2,7 @@ from datetime import datetime, timezone
 
 import pandas as pd
 
-from equity_monitor.reports.snapshot import (
+from vibe_trader.reports.snapshot import (
     SnapshotRequest,
     TradeMarker,
     render_snapshot,

@@ -11,10 +11,10 @@ from datetime import datetime, timezone
 
 import pytest
 
-from equity_monitor.scheduler.jobs import _run_strategy_per_code
-from equity_monitor.signals.base import Severity, Signal
-from equity_monitor.signals.strategy_base import StrategyContext
-from equity_monitor.signals.strategy_lite import SignalSuggest
+from vibe_trader.scheduler.jobs import _run_strategy_per_code
+from vibe_trader.signals.base import Severity, Signal
+from vibe_trader.signals.strategy_base import StrategyContext
+from vibe_trader.signals.strategy_lite import SignalSuggest
 
 
 class _FlakyStrategy:
@@ -93,7 +93,7 @@ def test_run_strategy_per_code_propagates_full_ctx() -> None:
     """C2b: kline_dfs / position_details / return_summaries must reach ctx."""
     import pandas as pd
 
-    from equity_monitor.reports.interpret import ReturnSummary
+    from vibe_trader.reports.interpret import ReturnSummary
 
     df = pd.DataFrame({"close": [100.0, 101.0]})
     rec = _CtxRecorder()

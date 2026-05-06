@@ -6,7 +6,7 @@ from unittest.mock import patch
 
 import pytest
 
-from equity_monitor.data.tech_anomaly import _parse, fetch_tech_anomalies
+from vibe_trader.data.tech_anomaly import _parse, fetch_tech_anomalies
 
 
 def test_parse_extracts_anomalies() -> None:
@@ -46,7 +46,7 @@ def test_fetch_invokes_subprocess_and_parses() -> None:
             ]
         }
     )
-    with patch("equity_monitor.data.tech_anomaly.subprocess.run") as run:
+    with patch("vibe_trader.data.tech_anomaly.subprocess.run") as run:
         run.return_value.returncode = 0
         run.return_value.stdout = fake_stdout
         run.return_value.stderr = ""
@@ -56,7 +56,7 @@ def test_fetch_invokes_subprocess_and_parses() -> None:
 
 
 def test_fetch_raises_on_nonzero_exit() -> None:
-    with patch("equity_monitor.data.tech_anomaly.subprocess.run") as run:
+    with patch("vibe_trader.data.tech_anomaly.subprocess.run") as run:
         run.return_value.returncode = 1
         run.return_value.stdout = ""
         run.return_value.stderr = "OpenD not connected"

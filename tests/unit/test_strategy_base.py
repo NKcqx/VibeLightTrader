@@ -13,15 +13,15 @@ from datetime import datetime, timezone
 
 import pytest
 
-from equity_monitor.signals.base import Severity, Signal
-from equity_monitor.signals.strategy_base import (
+from vibe_trader.signals.base import Severity, Signal
+from vibe_trader.signals.strategy_base import (
     StrategyContext,
     build_strategy,
     register_strategy,
     registered_strategies,
 )
-from equity_monitor.signals.strategy_lite import SignalSuggest, decide_action
-from equity_monitor.signals.strategy_rule import RuleStrategy  # ensures registration
+from vibe_trader.signals.strategy_lite import SignalSuggest, decide_action
+from vibe_trader.signals.strategy_rule import RuleStrategy  # ensures registration
 
 
 def _sig(signal_type: str, severity: Severity = Severity.WARN, **payload) -> Signal:
