@@ -1,12 +1,13 @@
 from __future__ import annotations
 
+from datetime import datetime, timezone
 from pathlib import Path
 
 import pytest
 from sqlalchemy.orm import sessionmaker
 
 from equity_monitor.db import init_schema, make_engine, make_sessionmaker, session_scope
-from equity_monitor.events.apply import HELP_TEXT, apply
+from equity_monitor.events.apply import HELP_TEXT, _avg_cost_from_markers, apply
 from equity_monitor.events.grammar import (
     AddCommand,
     HelpCommand,
@@ -15,6 +16,80 @@ from equity_monitor.events.grammar import (
     ThresholdCommand,
 )
 from equity_monitor.models import Symbol
+from equity_monitor.reports.snapshot import TradeMarker
+
+
+def _mk(side: str, qty: int, price: float, day: int = 1) -> TradeMarker:
+    return TradeMarker(
+        ts=datetime(2026, 4, day, tzinfo=timezone.utc),
+        side=side,  # type: ignore[arg-type]
+        qty=qty,
+        price=price,
+    )
+
+
+def test_avg_cost_from_markers_empty_returns_none() -> None:
+    assert _avg_cost_from_markers([]) is None
+
+
+def test_avg_cost_from_markers_single_buy() -> None:
+    assert _avg_cost_from_markers([_mk("buy", 10, 100.0)]) == pytest.approx(100.0)
+
+
+def test_avg_cost_from_markers_two_buys_weighted() -> None:
+    # 10 @ 100  +  20 @ 130  →  (1000 + 2600) / 30 = 120
+    avg = _avg_cost_from_markers([_mk("buy", 10, 100.0, 1), _mk("buy", 20, 130.0, 2)])
+    assert avg == pytest.approx(120.0)
+
+
+def test_avg_cost_from_markers_partial_sell_keeps_basis() -> None:
+    # Buy 10 @ 100, sell 4 @ 150 → remaining 6 @ 100 (sells reduce qty
+    # at running avg, not at exit price)
+    avg = _avg_cost_from_markers(
+        [_mk("buy", 10, 100.0, 1), _mk("sell", 4, 150.0, 2)]
+    )
+    assert avg == pytest.approx(100.0)
+
+
+def test_avg_cost_from_markers_full_sell_returns_none() -> None:
+    avg = _avg_cost_from_markers(
+        [_mk("buy", 10, 100.0, 1), _mk("sell", 10, 150.0, 2)]
+    )
+    assert avg is None
+
+
+def test_avg_cost_from_markers_mixed_path() -> None:
+    # Buy 10 @ 100  → qty=10, basis=1000
+    # Buy 10 @ 200  → qty=20, basis=3000, avg=150
+    # Sell 5 @ 250  → qty=15, basis=2250 (5 * 150 removed), avg still 150
+    # Buy 5 @ 100   → qty=20, basis=2750, avg=137.5
+    avg = _avg_cost_from_markers(
+        [
+            _mk("buy", 10, 100.0, 1),
+            _mk("buy", 10, 200.0, 2),
+            _mk("sell", 5, 250.0, 3),
+            _mk("buy", 5, 100.0, 4),
+        ]
+    )
+    assert avg == pytest.approx(137.5)
+
+
+def test_avg_cost_from_markers_skips_zero_price_placeholders() -> None:
+    # MARKET orders land in DB as price=0 until reconcile pulls the
+    # actual fill back — they must not pollute the running avg.
+    avg = _avg_cost_from_markers(
+        [_mk("buy", 10, 0.0, 1), _mk("buy", 10, 200.0, 2)]
+    )
+    assert avg == pytest.approx(200.0)
+
+
+def test_avg_cost_from_markers_oversell_clamped() -> None:
+    # Stale data: a SELL with qty larger than running position. We
+    # clamp instead of going negative (we don't model shorts).
+    avg = _avg_cost_from_markers(
+        [_mk("buy", 5, 100.0, 1), _mk("sell", 10, 150.0, 2)]
+    )
+    assert avg is None
 
 
 @pytest.fixture

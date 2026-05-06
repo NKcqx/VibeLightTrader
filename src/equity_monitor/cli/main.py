@@ -160,8 +160,22 @@ def listen(
     show_default=True,
     help="Also push the PNG to Lark via lark-cli.",
 )
+@click.option(
+    "--no-reconcile",
+    is_flag=True,
+    default=False,
+    help="Skip the broker fill-price reconcile step (faster, but PENDING "
+         "MARKET orders won't show their actual fill price on the chart).",
+)
 @click.pass_context
-def chart(ctx: click.Context, code: str, freq: str, out_dir: str, push: bool) -> None:
+def chart(
+    ctx: click.Context,
+    code: str,
+    freq: str,
+    out_dir: str,
+    push: bool,
+    no_reconcile: bool,
+) -> None:
     """Render a K-line snapshot PNG. Optionally push it to Lark.
 
     \b
@@ -176,10 +190,32 @@ def chart(ctx: click.Context, code: str, freq: str, out_dir: str, push: bool) ->
     from equity_monitor.events.apply import apply_chart
     from equity_monitor.events.grammar import ChartCommand, _normalize_code
     from equity_monitor.reports.lark_image import send_image
+    from equity_monitor.trader.reconcile import reconcile_pending_fills
 
     cfg = _get_cfg(ctx)
     factory = _make_factory(cfg)
     out_path_dir = Path(out_dir).resolve()
+
+    if not no_reconcile:
+        # Heal MARKET orders whose fill price hasn't been written back yet.
+        # Cheap when there's nothing pending; quietly skipped if OpenD's
+        # trade ctx isn't reachable so the chart still renders.
+        try:
+            trader = _make_trader(cfg)
+            try:
+                r = reconcile_pending_fills(factory, trader)
+                if r.candidates:
+                    click.echo(
+                        f"reconcile: {r.updated}/{r.candidates} pending fills "
+                        f"backfilled (matched={r.matched}, errors={r.errors})"
+                    )
+            finally:
+                try:
+                    trader.close()
+                except Exception:
+                    pass
+        except Exception as e:
+            click.echo(f"reconcile skipped: {e}", err=True)
 
     client = OpenDClient(cfg.opend.host, cfg.opend.port)
     try:

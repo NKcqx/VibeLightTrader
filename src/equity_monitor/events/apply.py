@@ -68,6 +68,41 @@ class ChartReplyPayload:
     image_path: Path
 
 
+def _avg_cost_from_markers(markers: list[TradeMarker]) -> float | None:
+    """Replay BUY/SELL markers chronologically to derive current avg cost.
+
+    BUY adds at the trade price; SELL reduces qty at the *running* avg cost
+    (i.e. doesn't change the per-share basis). Returns None if there's no
+    open position after replay.
+
+    Markers are expected to already be in chronological order (apply_chart
+    queries `ORDER BY ts ASC`); we don't re-sort to keep this trivially
+    auditable.
+    """
+    qty = 0
+    cost_basis = 0.0
+    for m in markers:
+        if m.price <= 0:
+            # Skip placeholder rows (MARKET orders submitted but the
+            # broker hasn't reported the fill price back to our DB yet —
+            # `_reconcile_pending_fills` is responsible for healing these).
+            continue
+        if m.side == "buy":
+            qty += m.qty
+            cost_basis += m.qty * m.price
+        elif m.side == "sell":
+            if qty <= 0:
+                # Short or stale data — skip; we don't model shorts here.
+                continue
+            avg = cost_basis / qty
+            sell_qty = min(m.qty, qty)
+            cost_basis -= sell_qty * avg
+            qty -= sell_qty
+    if qty <= 0:
+        return None
+    return cost_basis / qty
+
+
 def apply_chart(
     cmd: ChartCommand,
     factory: sessionmaker,
@@ -115,6 +150,11 @@ def apply_chart(
                     side_lit = "sell"
                 else:
                     continue
+                if r.price <= 0:
+                    # Unfilled MARKET order placeholder — rendering would
+                    # plant a triangle at $0 on the chart. Drop until
+                    # reconcile fills the price in.
+                    continue
                 ts = r.ts if r.ts.tzinfo else r.ts.replace(tzinfo=timezone.utc)
                 markers.append(
                     TradeMarker(ts=ts, side=side_lit, qty=r.qty, price=r.price)
@@ -126,6 +166,15 @@ def apply_chart(
             )
             if position is not None:
                 avg_cost = position.avg_cost
+            else:
+                # Fallback: replay BUY/SELL trades to derive avg_cost.
+                # Why we need this: execute_signal_trade only writes the
+                # Position table when the broker returns status=FILLED. Our
+                # OpenD paper trades land as PENDING (broker async fill is
+                # not polled back yet), so positions stays empty even
+                # though there's an actual paper position upstream. Without
+                # this fallback the chart silently drops the avg-cost line.
+                avg_cost = _avg_cost_from_markers(markers)
 
     try:
         snap = next(iter(client.snapshot([cmd.code])), None)

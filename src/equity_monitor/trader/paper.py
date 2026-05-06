@@ -87,6 +87,10 @@ class PaperTrader(Protocol):
 
     def query_today_orders(self) -> list[PaperOrder]: ...
 
+    def query_history_orders(
+        self, *, start: datetime, end: datetime | None = None
+    ) -> list[PaperOrder]: ...
+
     def close(self) -> None: ...
 
 
@@ -304,6 +308,13 @@ class FakePaperTrader:
         with self._lock:
             return list(self._orders)
 
+    def query_history_orders(
+        self, *, start: datetime, end: datetime | None = None
+    ) -> list[PaperOrder]:
+        end = end or datetime.now(tz=timezone.utc)
+        with self._lock:
+            return [o for o in self._orders if start <= o.submitted_at <= end]
+
     def close(self) -> None:
         self.closed = True
 
@@ -457,27 +468,33 @@ class OpenDSecTrader:
         )
         if ret != 0:
             raise PaperTradeError(f"order_list_query failed: {data}")
-        out: list[PaperOrder] = []
-        for _, row in data.iterrows():
-            raw_status = str(row.get("order_status", ""))
-            status: OrderStatus = "FILLED" if raw_status == "FILLED_ALL" else (
-                "CANCELLED" if raw_status == "CANCELLED_ALL" else "PENDING"
-            )
-            side: OrderSide = "BUY" if str(row.get("trd_side", "")) == "BUY" else "SELL"
-            out.append(
-                PaperOrder(
-                    order_id=str(row["order_id"]),
-                    code=str(row["code"]),
-                    side=side,
-                    qty=int(row.get("qty", 0)),
-                    price=float(row["price"]) if row.get("price") else None,
-                    status=status,
-                    submitted_at=_parse_futu_ts(str(row.get("create_time", ""))),
-                    filled_qty=int(row.get("dealt_qty", 0)),
-                    avg_fill_price=float(row.get("dealt_avg_price", 0.0)),
-                )
-            )
-        return out
+        return _orders_from_futu_df(data)
+
+    def query_history_orders(
+        self, *, start: datetime, end: datetime | None = None
+    ) -> list[PaperOrder]:
+        """Query historical orders within [start, end].
+
+        Used by `reconcile_pending_fills` to recover the actual fill
+        price for MARKET orders we submitted earlier — `query_today_orders`
+        only covers the current trading day, so anything older gets
+        invisible to us without this.
+
+        Futu's `history_order_list_query` expects naive local-time
+        strings `YYYY-MM-DD HH:MM:SS`.
+        """
+        end = end or datetime.now(tz=timezone.utc)
+        s = start.astimezone().strftime("%Y-%m-%d %H:%M:%S")
+        e = end.astimezone().strftime("%Y-%m-%d %H:%M:%S")
+        ret, data = self._ctx.history_order_list_query(
+            start=s,
+            end=e,
+            trd_env=self._TrdEnv.SIMULATE,
+            acc_id=self._acc_id,
+        )
+        if ret != 0:
+            raise PaperTradeError(f"history_order_list_query failed: {data}")
+        return _orders_from_futu_df(data)
 
     def close(self) -> None:
         try:
@@ -493,6 +510,37 @@ class OpenDSecTrader:
 
 def _new_oid() -> str:
     return "po_" + uuid.uuid4().hex[:16]
+
+
+def _orders_from_futu_df(data) -> list[PaperOrder]:  # type: ignore[no-untyped-def]
+    """Adapt a futu order dataframe (`order_list_query` /
+    `history_order_list_query`) into our `PaperOrder` list.
+
+    Both endpoints return the same column set, so this is shared.
+    """
+    out: list[PaperOrder] = []
+    for _, row in data.iterrows():
+        raw_status = str(row.get("order_status", ""))
+        status: OrderStatus = (
+            "FILLED" if raw_status == "FILLED_ALL"
+            else "CANCELLED" if raw_status == "CANCELLED_ALL"
+            else "PENDING"
+        )
+        side: OrderSide = "BUY" if str(row.get("trd_side", "")) == "BUY" else "SELL"
+        out.append(
+            PaperOrder(
+                order_id=str(row["order_id"]),
+                code=str(row["code"]),
+                side=side,
+                qty=int(row.get("qty", 0)),
+                price=float(row["price"]) if row.get("price") else None,
+                status=status,
+                submitted_at=_parse_futu_ts(str(row.get("create_time", ""))),
+                filled_qty=int(row.get("dealt_qty", 0)),
+                avg_fill_price=float(row.get("dealt_avg_price", 0.0)),
+            )
+        )
+    return out
 
 
 def _parse_futu_ts(s: str) -> datetime:

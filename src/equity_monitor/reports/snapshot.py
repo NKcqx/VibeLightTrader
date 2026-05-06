@@ -51,13 +51,25 @@ class SnapshotRequest:
 def _markers_series(
     df: pd.DataFrame, markers: list[TradeMarker], side: str
 ) -> pd.Series:
-    """Build a DataFrame-aligned series with NaN where no marker, else price."""
+    """Build a DataFrame-aligned series with NaN where no marker, else price.
+
+    Normalises the marker timestamp into the same tz-awareness as the
+    OHLCV index so `get_indexer` doesn't crash. Real OpenD klines come
+    back tz-naive UTC; trade rows come back tz-aware UTC. Either side
+    being naive means we strip tz; either being aware means we localise.
+    """
     s = pd.Series(index=df.index, dtype=float)
+    index_is_naive = df.index.tz is None
     for m in markers:
         if m.side != side:
             continue
+        ts = pd.Timestamp(m.ts)
+        if index_is_naive and ts.tzinfo is not None:
+            ts = ts.tz_convert("UTC").tz_localize(None)
+        elif not index_is_naive and ts.tzinfo is None:
+            ts = ts.tz_localize("UTC")
         # Snap to the bar at-or-before m.ts (markers don't always land exactly).
-        idx = df.index.get_indexer([pd.Timestamp(m.ts)], method="ffill")
+        idx = df.index.get_indexer([ts], method="ffill")
         if idx[0] == -1:
             continue
         # TODO(p4): stack same-bar markers; currently last-wins.
@@ -115,6 +127,10 @@ def render_snapshot(req: SnapshotRequest) -> Path:
             mpf.make_addplot(
                 buy_s, type="scatter", marker="^",
                 markersize=140, color="#2ecc71", panel=0,
+                secondary_y=False,  # share the price axis; default 'auto' splits to
+                                     # secondary y because of high NaN ratio, which
+                                     # both adds a bogus -0.04~+0.04 left scale and
+                                     # offsets the marker from its true price.
             )
         )
     if sell_s.notna().any():
@@ -122,6 +138,7 @@ def render_snapshot(req: SnapshotRequest) -> Path:
             mpf.make_addplot(
                 sell_s, type="scatter", marker="v",
                 markersize=140, color="#e74c3c", panel=0,
+                secondary_y=False,
             )
         )
 

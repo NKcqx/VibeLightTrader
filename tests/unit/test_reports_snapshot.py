@@ -78,6 +78,43 @@ def test_render_snapshot_empty_df_returns_placeholder(tmp_path) -> None:
     assert out_path.read_bytes()[:8] == b"\x89PNG\r\n\x1a\n"  # PNG magic
 
 
+def test_render_snapshot_tz_naive_index_with_tz_aware_marker(tmp_path) -> None:
+    """Regression: real OpenD klines come back tz-naive UTC, while
+    TradeMarker timestamps are tz-aware UTC. pandas.get_indexer used to
+    raise `TypeError: Cannot compare dtypes datetime64[us] and
+    datetime64[us, UTC]` when the marker is mapped onto the index.
+    _markers_series must normalise tz-awareness before lookup.
+    """
+    naive_idx = pd.date_range("2026-04-01", periods=10, freq="D", tz=None)
+    df = pd.DataFrame(
+        {
+            "open":   [100, 101, 102, 99,  98,  100, 102, 104, 103, 105],
+            "high":   [102, 103, 103, 100, 99,  101, 105, 106, 105, 107],
+            "low":    [99,  100, 101, 97,  96,  99,  101, 103, 102, 104],
+            "close":  [101, 102, 99,  98,  100, 102, 104, 105, 104, 106],
+            "volume": [1_000] * 10,
+        },
+        index=naive_idx,
+    )
+    req = SnapshotRequest(
+        code="US.NVDA",
+        freq="D",
+        df=df,
+        markers=[
+            TradeMarker(
+                ts=datetime(2026, 4, 4, 8, 30, tzinfo=timezone.utc),
+                side="buy", qty=10, price=98.5,
+            ),
+        ],
+        avg_cost=98.5,
+        current_price=106.0,
+        out_dir=tmp_path,
+    )
+    out_path = render_snapshot(req)  # must not raise
+    assert out_path.exists()
+    assert out_path.stat().st_size > 1024
+
+
 def test_render_snapshot_with_malformed_df_falls_back(tmp_path) -> None:
     df = pd.DataFrame(
         {
