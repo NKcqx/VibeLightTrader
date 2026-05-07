@@ -74,6 +74,17 @@ class StrategyContext:
     Fed by `FundamentalsClient.fetch(code)` at scheduler tick time. Strategies
     that don't care (e.g. RuleStrategy) can ignore it."""
 
+    batch_index: int = 0
+    """How many BUY fills make up the *current* open position. 0 means no
+    position; 1 means initial entry filled; ≥2 means the strategy is in
+    add-on mode. Reset to 0 once a SELL takes the position back to zero
+    (a future cycle then starts fresh from 1)."""
+
+    days_since_last_buy: int | None = None
+    """Calendar days from the most-recent BUY fill in the current cycle to
+    `today` (snapshot date). None when there's no open position. Drives
+    `add_cooldown_days` enforcement."""
+
     config: dict[str, Any] = field(default_factory=dict)
     """Strategy-private knobs from settings.yaml `trader.strategy.<type>`."""
 

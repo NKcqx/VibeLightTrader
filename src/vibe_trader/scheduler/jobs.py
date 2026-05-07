@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import json
 from collections.abc import Callable
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Literal
 
@@ -197,6 +197,74 @@ def _load_open_positions(session) -> dict[str, int]:
         .all()
     )
     return {code: qty for code, qty in rows}
+
+
+def _load_batch_state(
+    session, *, today: date | None = None
+) -> dict[str, tuple[int, int | None]]:
+    """Per-symbol ``(batch_index, days_since_last_buy)`` for currently-open positions.
+
+    A "batch" is one BUY fill in the current open cycle. The cycle resets
+    when a SELL takes the running quantity back to zero — counting then
+    restarts from the next BUY. This matches the user-facing semantic of
+    ``investment_profile.max_batches`` ("max accumulating buys per
+    position cycle") and ``add_cooldown_days`` ("min days between
+    accumulating buys").
+
+    Implementation: scan FILLED trades chronologically, maintain a running
+    qty, remember the index of the BUY that opens the current cycle, then
+    count BUYs from there. PENDING / REJECTED / CANCELLED orders are
+    ignored.
+
+    Returns a dict keyed by trading code. Symbols with no open cycle are
+    omitted; callers should default missing entries to ``(0, None)``.
+    """
+    rows = (
+        session.query(
+            Symbol.code,
+            Trade.side,
+            Trade.qty,
+            Trade.ts,
+            Trade.status,
+        )
+        .join(Trade, Trade.symbol_id == Symbol.id)
+        .filter(Trade.status == "FILLED")
+        .order_by(Symbol.code.asc(), Trade.ts.asc())
+        .all()
+    )
+    out: dict[str, tuple[int, int | None]] = {}
+    by_code: dict[str, list[tuple[str, int, datetime]]] = {}
+    for code, side, qty, ts, _status in rows:
+        by_code.setdefault(code, []).append((side, qty, ts))
+
+    for code, trades in by_code.items():
+        running = 0
+        cycle_start_idx: int | None = None
+        for i, (side, qty, _ts) in enumerate(trades):
+            if running == 0 and side == "BUY":
+                cycle_start_idx = i
+            if side == "BUY":
+                running += qty
+            else:  # SELL
+                running -= qty
+                if running <= 0:
+                    running = 0
+                    cycle_start_idx = None
+        if running == 0 or cycle_start_idx is None:
+            continue
+        cycle = trades[cycle_start_idx:]
+        buys = [t for t in cycle if t[0] == "BUY"]
+        if not buys:
+            continue
+        last_buy_ts = buys[-1][2]
+        if today is None:
+            out[code] = (len(buys), None)
+        else:
+            out[code] = (
+                len(buys),
+                (today - last_buy_ts.date()).days,
+            )
+    return out
 
 
 def _load_open_positions_full(session) -> dict[str, tuple[int, float, float]]:
@@ -510,6 +578,7 @@ def _run_strategy_per_code(
     position_details: dict[str, tuple[int, float, float]] | None = None,
     return_summaries: dict[str, ReturnSummary] | None = None,
     fundamentals_client: Any | None = None,
+    batch_state: dict[str, tuple[int, int | None]] | None = None,
 ) -> dict[str, SignalSuggest]:
     """Build a `StrategyContext` per code and collect non-None decisions.
 
@@ -537,6 +606,7 @@ def _run_strategy_per_code(
     kline_dfs = kline_dfs or {}
     position_details = position_details or {}
     return_summaries = return_summaries or {}
+    batch_state = batch_state or {}
     out: dict[str, SignalSuggest] = {}
     for code, sigs in sigs_by_code.items():
         qty, avg_cost, realized_pnl = position_details.get(
@@ -555,6 +625,7 @@ def _run_strategy_per_code(
                     error=repr(e),
                 )
                 fund = None
+        b_idx, b_days = batch_state.get(code, (0, None))
         ctx = StrategyContext(
             code=code,
             signals=sigs,
@@ -566,6 +637,8 @@ def _run_strategy_per_code(
             intraday_return=ret.intraday if ret else None,
             last_30_bar_return=ret.last_30_bars if ret else None,
             fundamentals=fund,
+            batch_index=b_idx,
+            days_since_last_buy=b_days,
         )
         try:
             decision = strategy.decide(ctx)
@@ -868,6 +941,7 @@ def run_intraday_check(
     with session_scope(factory) as session:
         positions = _load_open_positions(session)
         position_details = _load_open_positions_full(session)
+        batch_state = _load_batch_state(session, today=now_utc.date())
         suggestions = _run_strategy_per_code(
             strategy,
             sigs_by_code,
@@ -877,6 +951,7 @@ def run_intraday_check(
             position_details=position_details,
             return_summaries=return_summaries,
             fundamentals_client=fund_client,
+            batch_state=batch_state,
         )
         ids = _persist_signal_rows(session, deduped, suggestions=suggestions)
         if paper_trader is not None and cfg.trader.auto_execute:

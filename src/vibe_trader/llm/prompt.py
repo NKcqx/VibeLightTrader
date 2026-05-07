@@ -68,6 +68,19 @@ present):
       from titles unless they describe a concrete catalyst (guidance
       change, M&A, regulatory action, executive change).
 
+Position-cycle discipline (the "Position cycle" block in the user message):
+  12. ``batch_index`` counts how many BUY fills make up the current open
+      position. NEVER recommend BUY when ``batch_index >= max_batches``;
+      the runtime will reject it as a constraint violation regardless.
+  13. NEVER recommend BUY when ``days_since_last_buy < add_cooldown_days``
+      — the policy requires a cooldown between accumulating buys. The
+      runtime enforces this hard, but the model should also self-rationalise.
+  14. ``batch_index == 0`` is an *initial* entry: size at most
+      ``initial_entry_pct`` of the per-symbol budget. ``batch_index >= 1``
+      is an *add-on*; only recommend it on a meaningful pullback (the
+      ``prefer_dip_buy`` profile flag means the model should bias toward
+      lower entries).
+
 You will be evaluated on (a) JSON validity, (b) constraint adherence, and
 (c) decision quality vs hand-coded rules over many trading days.
 """
@@ -104,6 +117,17 @@ Position:
   - qty: {{ position_qty }}
   - avg_cost: ${{ '%.2f' % avg_cost }}
   - realized_pnl: ${{ '%.2f' % realized_pnl }}
+{%- if batch_index is defined and batch_index is not none %}
+
+Position cycle:
+  - batch_index:           {{ batch_index }}{% if profile %}  (max_batches={{ profile.max_batches }})  {% endif %}
+  - days_since_last_buy:   {{ days_since_last_buy if days_since_last_buy is not none else 'n/a' }}{% if profile %}  (add_cooldown_days={{ profile.add_cooldown_days }})  {% endif %}
+{%- if profile and batch_index >= profile.max_batches %}
+  - **HARD STOP:** batch_index has reached max_batches; BUY is forbidden.
+{%- elif profile and days_since_last_buy is not none and days_since_last_buy < profile.add_cooldown_days %}
+  - **COOLDOWN:** still {{ profile.add_cooldown_days - days_since_last_buy }} day(s) before another BUY is permitted.
+{%- endif %}
+{%- endif %}
 
 {%- if indicators %}
 
@@ -153,6 +177,8 @@ def render_user_prompt(
     dedupe_window_minutes: int = 60,
     profile: Any | None = None,
     fundamentals_md: str | None = None,
+    batch_index: int | None = None,
+    days_since_last_buy: int | None = None,
     template: str = DEFAULT_USER_TEMPLATE,
 ) -> str:
     """Render the user message for one decision.
@@ -188,6 +214,8 @@ def render_user_prompt(
         dedupe_window_minutes=dedupe_window_minutes,
         profile=profile,
         fundamentals_md=fundamentals_md or "",
+        batch_index=batch_index,
+        days_since_last_buy=days_since_last_buy,
     )
 
 

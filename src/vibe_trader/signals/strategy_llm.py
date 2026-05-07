@@ -85,6 +85,10 @@ def enforce_constraints(
     max_position: int,
     min_trade_size: int,
     min_confidence: float,
+    batch_index: int = 0,
+    days_since_last_buy: int | None = None,
+    max_batches: int | None = None,
+    add_cooldown_days: int | None = None,
 ) -> SignalSuggest:
     """Validate `parsed` against runtime constraints and emit SignalSuggest.
 
@@ -94,9 +98,19 @@ def enforce_constraints(
       - BUY: position_qty + qty <= max_position
       - SELL: qty <= position_qty
 
-    Demotions (low confidence) are NOT failures; they return HOLD.
-    Real violations (qty out of bounds) raise ConstraintViolation, which
-    triggers the fallback path.
+    Position-cycle hard guards (only applied to BUY):
+      - When ``max_batches`` is provided and ``batch_index >= max_batches``,
+        the BUY is **demoted to HOLD** (not raised). This is a policy-level
+        cap, not a malformed LLM output, and a fallback BUY would defeat
+        the cap too.
+      - When ``add_cooldown_days`` is provided and
+        ``days_since_last_buy < add_cooldown_days``, BUY is similarly
+        demoted to HOLD with a clear cooldown explanation.
+
+    Demotions (low confidence, batch cap, cooldown) are NOT failures —
+    they return a HOLD SignalSuggest. Real shape violations (qty < min,
+    qty > position for SELL, qty pushes BUY past max_position) raise
+    ConstraintViolation, which triggers the fallback path.
     """
     if parsed.action == "HOLD":
         return SignalSuggest(
@@ -123,6 +137,31 @@ def enforce_constraints(
         )
 
     if parsed.action == "BUY":
+        if max_batches is not None and batch_index >= max_batches:
+            return SignalSuggest(
+                action="HOLD",
+                qty=0,
+                reason=(
+                    f"[llm] 已达最大批次 {batch_index}/{max_batches}，"
+                    f"暂停加仓；原建议: BUY {parsed.qty} ({parsed.reason})"
+                ),
+                triggering_signal_types=("llm_batch_capped",),
+            )
+        if (
+            add_cooldown_days is not None
+            and days_since_last_buy is not None
+            and days_since_last_buy < add_cooldown_days
+        ):
+            remain = add_cooldown_days - days_since_last_buy
+            return SignalSuggest(
+                action="HOLD",
+                qty=0,
+                reason=(
+                    f"[llm] 加仓冷却中（距上次买入 {days_since_last_buy}d，"
+                    f"还需 {remain}d）；原建议: BUY {parsed.qty} ({parsed.reason})"
+                ),
+                triggering_signal_types=("llm_cooldown",),
+            )
         if position_qty + parsed.qty > max_position:
             raise ConstraintViolation(
                 f"BUY {parsed.qty} would push position {position_qty}→"
@@ -323,12 +362,26 @@ class LLMStrategy:
                 "reason": parsed.reason,
             }
 
+            max_batches = (
+                int(getattr(self.investment_profile, "max_batches", 0))
+                if self.investment_profile is not None
+                else None
+            ) or None
+            cooldown = (
+                int(getattr(self.investment_profile, "add_cooldown_days", 0))
+                if self.investment_profile is not None
+                else None
+            ) or None
             decision = enforce_constraints(
                 parsed,
                 position_qty=ctx.position_qty,
                 max_position=self.max_position,
                 min_trade_size=self.min_trade_size,
                 min_confidence=self.min_confidence,
+                batch_index=ctx.batch_index,
+                days_since_last_buy=ctx.days_since_last_buy,
+                max_batches=max_batches,
+                add_cooldown_days=cooldown,
             )
             decision = _decorate(
                 decision,
@@ -449,6 +502,8 @@ class LLMStrategy:
             min_confidence=self.min_confidence,
             profile=self.investment_profile,
             fundamentals_md=fundamentals_md,
+            batch_index=ctx.batch_index,
+            days_since_last_buy=ctx.days_since_last_buy,
             template=self.user_template,
         )
         return [
