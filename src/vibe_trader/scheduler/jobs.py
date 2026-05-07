@@ -267,6 +267,77 @@ def _load_batch_state(
     return out
 
 
+def _compute_portfolio_state(
+    *,
+    paper_trader: Any | None,
+    position_details: dict[str, tuple[int, float, float]],
+    snapshots_by_code: dict[str, Any],
+) -> Any | None:
+    """Build a ``PortfolioSnapshot`` from the broker's account view + DB.
+
+    Strategy:
+      1. Ask ``paper_trader.query_account()`` for cash + total_assets.
+         When this fails (None broker, OpenD blip), return None — the LLM
+         will see "Portfolio: n/a" and degrade gracefully.
+      2. Derive each symbol's market value from the local positions table
+         × the live snapshot's ``last_price``. We don't trust the broker's
+         per-symbol market-value column because in our case (Futu) it
+         lags during fast moves and isn't always populated for paper.
+      3. Compute invested / cash percentages off the broker's
+         ``total_assets`` so the numbers reconcile with the user's Futu UI.
+
+    Always returns either a fully populated PortfolioSnapshot or None;
+    never raises out of this helper.
+    """
+    if paper_trader is None:
+        return None
+    try:
+        acct = paper_trader.query_account()
+    except Exception as e:  # noqa: BLE001
+        log.warning(
+            "portfolio.account_query_failed",
+            exc_type=type(e).__name__,
+            error=str(e),
+        )
+        return None
+
+    from vibe_trader.signals.strategy_base import PortfolioSnapshot
+
+    holdings: dict[str, float] = {}
+    for code, (qty, avg_cost, _real) in position_details.items():
+        if qty <= 0:
+            continue
+        snap = snapshots_by_code.get(code)
+        last_price = (
+            getattr(snap, "last_price", None) if snap is not None else None
+        )
+        px = last_price if last_price else avg_cost  # avg_cost as fallback
+        holdings[code] = float(qty) * float(px)
+    holdings_sorted = dict(
+        sorted(holdings.items(), key=lambda kv: kv[1], reverse=True)
+    )
+
+    total = acct.total_assets if acct.total_assets > 0 else (
+        acct.cash + acct.market_val
+    )
+    if total <= 0:
+        return None
+    holdings_pct = {c: (v / total) * 100 for c, v in holdings_sorted.items()}
+    invested_pct = (acct.market_val / total) * 100
+    cash_pct = (acct.cash / total) * 100
+    return PortfolioSnapshot(
+        cash=acct.cash,
+        market_val=acct.market_val,
+        total_assets=total,
+        invested_pct=invested_pct,
+        cash_pct=cash_pct,
+        holdings=holdings_sorted,
+        holdings_pct=holdings_pct,
+        buying_power=acct.buying_power,
+        currency=acct.currency,
+    )
+
+
 def _load_open_positions_full(session) -> dict[str, tuple[int, float, float]]:
     """Return {code: (qty, avg_cost, realized_pnl)} for ALL Position rows.
 
@@ -579,6 +650,7 @@ def _run_strategy_per_code(
     return_summaries: dict[str, ReturnSummary] | None = None,
     fundamentals_client: Any | None = None,
     batch_state: dict[str, tuple[int, int | None]] | None = None,
+    portfolio: Any | None = None,
 ) -> dict[str, SignalSuggest]:
     """Build a `StrategyContext` per code and collect non-None decisions.
 
@@ -639,6 +711,7 @@ def _run_strategy_per_code(
             fundamentals=fund,
             batch_index=b_idx,
             days_since_last_buy=b_days,
+            portfolio=portfolio,
         )
         try:
             decision = strategy.decide(ctx)
@@ -942,6 +1015,19 @@ def run_intraday_check(
         positions = _load_open_positions(session)
         position_details = _load_open_positions_full(session)
         batch_state = _load_batch_state(session, today=now_utc.date())
+        portfolio = _compute_portfolio_state(
+            paper_trader=paper_trader,
+            position_details=position_details,
+            snapshots_by_code=snapshots_by_code,
+        )
+        if portfolio is not None:
+            log.info(
+                "intraday_check.portfolio",
+                cash=round(portfolio.cash, 2),
+                market_val=round(portfolio.market_val, 2),
+                invested_pct=round(portfolio.invested_pct, 1),
+                holdings={k: round(v, 0) for k, v in portfolio.holdings.items()},
+            )
         suggestions = _run_strategy_per_code(
             strategy,
             sigs_by_code,
@@ -952,6 +1038,7 @@ def run_intraday_check(
             return_summaries=return_summaries,
             fundamentals_client=fund_client,
             batch_state=batch_state,
+            portfolio=portfolio,
         )
         ids = _persist_signal_rows(session, deduped, suggestions=suggestions)
         if paper_trader is not None and cfg.trader.auto_execute:

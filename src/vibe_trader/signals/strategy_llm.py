@@ -504,6 +504,7 @@ class LLMStrategy:
             fundamentals_md=fundamentals_md,
             batch_index=ctx.batch_index,
             days_since_last_buy=ctx.days_since_last_buy,
+            portfolio=ctx.portfolio,
             template=self.user_template,
         )
         return [

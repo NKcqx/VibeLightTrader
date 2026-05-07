@@ -29,6 +29,44 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any, Protocol, runtime_checkable
 
+
+@dataclass(frozen=True)
+class PortfolioSnapshot:
+    """Account-wide capital state — shared across *all* watchlist symbols.
+
+    Futu paper (and live) accounts have a single cash pool: a BUY on any
+    symbol draws from the same wallet. Without this snapshot, an LLM
+    decision per symbol is myopic — six 'STRONG BUY' calls in one tick
+    can collectively over-commit even when each looks fine on its own.
+
+    Fields:
+      cash            : available cash (USD for the US sub-account).
+      market_val      : aggregate market value of all current holdings.
+      total_assets    : cash + market_val (round trip back to a constant
+                        across BUY/SELL ticks, modulo P&L drift).
+      invested_pct    : market_val / total_assets, in [0, 100].
+      cash_pct        : 100 - invested_pct.
+      holdings        : per-symbol market value (USD). Includes only
+                        symbols with non-zero qty. Sorted by value desc.
+      holdings_pct    : per-symbol market value as % of total_assets.
+      buying_power    : margin-adjusted buying power if the broker
+                        reports it; None on cash-only accounts.
+
+    All fields are advisory in the current design — the LLM sees them
+    via the prompt and is asked (in system rule 15) to weigh them. There
+    are no hard constraints on portfolio shape today.
+    """
+
+    cash: float
+    market_val: float
+    total_assets: float
+    invested_pct: float
+    cash_pct: float
+    holdings: dict[str, float] = field(default_factory=dict)
+    holdings_pct: dict[str, float] = field(default_factory=dict)
+    buying_power: float | None = None
+    currency: str = "USD"
+
 import pandas as pd
 
 from vibe_trader.data.fundamentals import Fundamentals
@@ -84,6 +122,13 @@ class StrategyContext:
     """Calendar days from the most-recent BUY fill in the current cycle to
     `today` (snapshot date). None when there's no open position. Drives
     `add_cooldown_days` enforcement."""
+
+    portfolio: PortfolioSnapshot | None = None
+    """Account-wide cash + holdings snapshot. Shared across symbols within
+    a single tick so the LLM can reason about total exposure / cash
+    buffer / single-symbol concentration. None when the broker can't be
+    queried (auto_execute=False, OpenD timeout, etc.) — strategies should
+    treat this as 'unknown', not 'fully invested'."""
 
     config: dict[str, Any] = field(default_factory=dict)
     """Strategy-private knobs from settings.yaml `trader.strategy.<type>`."""

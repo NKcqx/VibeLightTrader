@@ -68,6 +68,24 @@ class PaperOrder:
     avg_fill_price: float = 0.0
 
 
+@dataclass(frozen=True)
+class PaperAccount:
+    """Account-wide cash / market-value snapshot.
+
+    All Futu paper accounts share *one* cash pool across symbols — the
+    LLM strategy needs to see this aggregate so it doesn't size each
+    symbol in isolation. Currency is always the market's native currency
+    (USD for US, HKD for HK, ...). Buying power may exceed cash on
+    margin-enabled accounts.
+    """
+
+    cash: float
+    market_val: float
+    total_assets: float
+    buying_power: float | None = None
+    currency: str = "USD"
+
+
 class PaperTrader(Protocol):
     """Minimal interface used by the rest of the system."""
 
@@ -84,6 +102,8 @@ class PaperTrader(Protocol):
     def cancel_order(self, order_id: str) -> None: ...
 
     def query_positions(self) -> list[PaperPosition]: ...
+
+    def query_account(self) -> PaperAccount: ...
 
     def query_today_orders(self) -> list[PaperOrder]: ...
 
@@ -112,6 +132,7 @@ class FakePaperTrader:
     """
 
     mark_price: dict[str, float] = field(default_factory=dict)
+    cash: float = 1_000_000.0
     _orders: list[PaperOrder] = field(default_factory=list)
     _positions: dict[str, PaperPosition] = field(default_factory=dict)
     _lock: threading.Lock = field(default_factory=threading.Lock, repr=False)
@@ -304,6 +325,27 @@ class FakePaperTrader:
                     out.append(pos)
             return out
 
+    def query_account(self) -> PaperAccount:
+        """Aggregate cash + market value for the test broker.
+
+        Cash is tracked via ``self.cash`` (set by tests; defaults to a
+        round 1M for deterministic assertions). Market value is summed
+        from current positions × ``mark_price`` for symbols that have a
+        mark, falling back to ``avg_cost`` when not.
+        """
+        with self._lock:
+            mv = 0.0
+            for code, pos in self._positions.items():
+                mark = self.mark_price.get(code, pos.avg_cost)
+                mv += pos.qty * mark
+            return PaperAccount(
+                cash=self.cash,
+                market_val=mv,
+                total_assets=self.cash + mv,
+                buying_power=None,
+                currency="USD",
+            )
+
     def query_today_orders(self) -> list[PaperOrder]:
         with self._lock:
             return list(self._orders)
@@ -461,6 +503,56 @@ class OpenDSecTrader:
                 )
             )
         return out
+
+    @retry(stop=stop_after_attempt(2), wait=wait_exponential(min=1, max=4), reraise=True)
+    def query_account(self) -> PaperAccount:
+        """Pull the SIMULATE account snapshot via ``accinfo_query``.
+
+        Picks the USD numeric column for US accounts; falls back to the
+        currency-agnostic ``cash`` / ``market_val`` / ``total_assets``
+        columns when the per-currency split isn't populated. Raises
+        ``PaperTradeError`` so callers can degrade gracefully (the
+        prompt block reports "n/a" rather than failing the tick).
+        """
+        from futu import Currency  # type: ignore[import-not-found]
+
+        ret, data = self._ctx.accinfo_query(
+            trd_env=self._TrdEnv.SIMULATE,
+            acc_id=self._acc_id,
+            currency=Currency.USD,
+        )
+        if ret != 0:
+            raise PaperTradeError(f"accinfo_query failed: {data}")
+        if data.empty:
+            raise PaperTradeError("accinfo_query returned no rows")
+        row = data.iloc[0]
+
+        def _flt(*keys: str) -> float | None:
+            for k in keys:
+                if k in row.index:
+                    v = row[k]
+                    if v is None:
+                        continue
+                    try:
+                        f = float(v)
+                    except (TypeError, ValueError):
+                        continue
+                    if f != f:  # NaN
+                        continue
+                    return f
+            return None
+
+        cash = _flt("us_cash", "cash") or 0.0
+        market_val = _flt("market_val") or 0.0
+        total = _flt("total_assets") or (cash + market_val)
+        bp = _flt("usd_net_cash_power", "power")
+        return PaperAccount(
+            cash=cash,
+            market_val=market_val,
+            total_assets=total,
+            buying_power=bp,
+            currency="USD",
+        )
 
     def query_today_orders(self) -> list[PaperOrder]:
         ret, data = self._ctx.order_list_query(

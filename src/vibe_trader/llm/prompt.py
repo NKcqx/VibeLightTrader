@@ -81,6 +81,22 @@ Position-cycle discipline (the "Position cycle" block in the user message):
       ``prefer_dip_buy`` profile flag means the model should bias toward
       lower entries).
 
+Portfolio discipline (the "Portfolio (account-wide..." block when present):
+  15. The cash pool is SHARED across every symbol. You're seeing this
+      symbol now, but the SAME cash will be drawn on by other symbols'
+      decisions in the same tick. Don't size as if cash were exclusive.
+  16. Respect the profile's ``max_concentration_pct`` — when ``this_symbol``
+      is already near or above that share of total_assets, prefer HOLD
+      / SELL over BUY. New BUY that would push it past the cap is a hard
+      no even if the technicals look good.
+  17. Respect ``cash_reserve_pct`` — when ``cash_pct`` is already at or
+      below ``cash_reserve_pct``, decline new BUY (the buffer exists to
+      survive drawdowns and to seize unexpected dips).
+  18. Heavy concentration in a single sector (look at the ``other holdings``
+      list) is a reason to be more cautious on additional same-theme BUYs
+      even when each symbol's individual technicals + fundamentals look
+      strong.
+
 You will be evaluated on (a) JSON validity, (b) constraint adherence, and
 (c) decision quality vs hand-coded rules over many trading days.
 """
@@ -126,6 +142,33 @@ Position cycle:
   - **HARD STOP:** batch_index has reached max_batches; BUY is forbidden.
 {%- elif profile and days_since_last_buy is not none and days_since_last_buy < profile.add_cooldown_days %}
   - **COOLDOWN:** still {{ profile.add_cooldown_days - days_since_last_buy }} day(s) before another BUY is permitted.
+{%- endif %}
+{%- endif %}
+{%- if portfolio %}
+
+Portfolio (account-wide — ALL symbols share this cash pool):
+  - cash:           ${{ '{:,.0f}'.format(portfolio.cash) }}  ({{ '%.1f' % portfolio.cash_pct }}%)
+  - invested:       ${{ '{:,.0f}'.format(portfolio.market_val) }}  ({{ '%.1f' % portfolio.invested_pct }}%)
+  - total_assets:   ${{ '{:,.0f}'.format(portfolio.total_assets) }} {{ portfolio.currency }}
+{%- if portfolio.buying_power is not none %}
+  - buying_power:   ${{ '{:,.0f}'.format(portfolio.buying_power) }}  (margin-adjusted)
+{%- endif %}
+  - this_symbol:    ${{ '{:,.0f}'.format(portfolio.holdings.get(code, 0)) }}  ({{ '%.1f' % portfolio.holdings_pct.get(code, 0) }}% of total)
+{%- set others = [] %}
+{%- for c, v in portfolio.holdings.items() %}{% if c != code %}{% set _ = others.append((c, v)) %}{% endif %}{% endfor %}
+{%- if others %}
+  - other holdings:
+{%- for c, v in others %}
+    - {{ c }}: ${{ '{:,.0f}'.format(v) }} ({{ '%.1f' % portfolio.holdings_pct.get(c, 0) }}%)
+{%- endfor %}
+{%- endif %}
+{%- if profile %}
+  - reminder: max_concentration_pct={{ profile.max_concentration_pct }}%, cash_reserve_pct={{ profile.cash_reserve_pct }}%, budget_per_symbol=${{ '{:,.0f}'.format(profile.budget_per_symbol_usd) }}
+{%- if portfolio.holdings_pct.get(code, 0) >= profile.max_concentration_pct %}
+  - **CONCENTRATION CAP:** this_symbol is already at/over max_concentration_pct; new BUY would breach the cap.
+{%- elif portfolio.cash_pct <= profile.cash_reserve_pct %}
+  - **LOW CASH:** cash_pct ({{ '%.1f' % portfolio.cash_pct }}%) is at/below cash_reserve_pct ({{ profile.cash_reserve_pct }}%); decline new BUY.
+{%- endif %}
 {%- endif %}
 {%- endif %}
 
@@ -179,6 +222,7 @@ def render_user_prompt(
     fundamentals_md: str | None = None,
     batch_index: int | None = None,
     days_since_last_buy: int | None = None,
+    portfolio: Any | None = None,
     template: str = DEFAULT_USER_TEMPLATE,
 ) -> str:
     """Render the user message for one decision.
@@ -216,6 +260,7 @@ def render_user_prompt(
         fundamentals_md=fundamentals_md or "",
         batch_index=batch_index,
         days_since_last_buy=days_since_last_buy,
+        portfolio=portfolio,
     )
 
 
