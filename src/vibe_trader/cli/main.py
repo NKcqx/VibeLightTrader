@@ -305,7 +305,7 @@ def fundamentals(
 @cli.command()
 @click.option(
     "--job",
-    type=click.Choice(["intraday", "morning", "closing"]),
+    type=click.Choice(["intraday", "morning", "closing", "refresh-fundamentals"]),
     required=True,
     help="Which single job to run.",
 )
@@ -323,6 +323,14 @@ def once(ctx: click.Context, job: str, auto_trade: bool | None) -> None:
     """Run a single job once and print the result dict."""
     cfg = _get_cfg(ctx)
     wl = _get_watchlist(ctx)
+
+    # refresh-fundamentals doesn't need OpenD or the DB.
+    if job == "refresh-fundamentals":
+        from vibe_trader.scheduler.jobs import run_refresh_fundamentals
+
+        click.echo(run_refresh_fundamentals(cfg=cfg, watchlist=wl))
+        return
+
     factory = _make_factory(cfg)
 
     if auto_trade is not None:

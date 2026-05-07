@@ -21,6 +21,7 @@ from vibe_trader.scheduler.jobs import (
     run_closing_brief,
     run_intraday_check,
     run_morning_brief,
+    run_refresh_fundamentals,
 )
 from vibe_trader.trader.paper import OpenDSecTrader
 
@@ -165,6 +166,31 @@ def build_scheduler(
         id="closing_brief",
         misfire_grace_time=600,
     )
+
+    # Optional: daily yfinance fundamentals refresh. Backwards-compatible —
+    # missing config entry simply means "not registered". Doesn't go through
+    # `with_client` (no Futu / paper-trader needed) and skips the
+    # trading-day wrapper (we want fundamentals fresh on weekends too).
+    refresh_cron = cfg.scheduler.jobs.get("refresh_fundamentals")
+    if refresh_cron is not None:
+        log_runner = structlog.get_logger("scheduler.runner")
+
+        def _refresh_runner() -> Any:
+            try:
+                return run_refresh_fundamentals(cfg=cfg, watchlist=watchlist)
+            except Exception as e:
+                log_runner.error(
+                    "job.failed", job="run_refresh_fundamentals", error=str(e)
+                )
+
+        _refresh_runner.__name__ = "run_refresh_fundamentals"
+        sched.add_job(
+            _refresh_runner,
+            CronTrigger.from_crontab(refresh_cron.cron, timezone=tz),
+            id="refresh_fundamentals",
+            misfire_grace_time=3600,  # 1h: not time-critical
+        )
+
     return sched
 
 

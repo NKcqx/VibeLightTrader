@@ -22,6 +22,11 @@ scheduler:
       cron: "30 10 * * mon-fri"
     closing_brief:
       cron: "30 16 * * mon-fri"
+    # Optional: refresh yfinance fundamentals fixtures (consensus, ratings,
+    # news, earnings calendar). Comment out the entry to disable. Runs on
+    # weekends too — fundamentals don't care about market hours.
+    refresh_fundamentals:
+      cron: "0 6 * * *"          # 06:00 ET daily, well before US open
 
 lark:
   cli_path: lark-cli

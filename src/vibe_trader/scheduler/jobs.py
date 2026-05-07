@@ -1316,3 +1316,41 @@ def run_closing_brief(**kw: Any) -> dict[str, int]:
     return run_brief(kind="收盘盘点", **kw)
 
 
+def run_refresh_fundamentals(
+    *,
+    cfg: AppConfig,
+    watchlist: WatchlistConfig,
+) -> dict[str, str]:
+    """Refresh the local yfinance fundamentals fixtures for the watchlist.
+
+    Best-effort: per-symbol failures are logged and reported in the
+    return summary but never abort the run. Designed to be wired up as a
+    daily cron via ``cfg.scheduler.jobs.refresh_fundamentals``.
+
+    Returns ``{code: status}`` where status is ``"ok"``, ``"skipped:..."``,
+    or ``"error:..."``.
+    """
+    if cfg.fundamentals.source != "fixture":
+        log.info(
+            "fundamentals.refresh_skipped",
+            reason=f"source={cfg.fundamentals.source!r} (not fixture)",
+        )
+        return {}
+    from vibe_trader.data.fundamentals import refresh_fixtures
+
+    codes = [s.code for s in watchlist.symbols]
+    log.info("fundamentals.refresh_start", codes=codes)
+    summary = refresh_fixtures(codes, fixture_dir=cfg.fundamentals.fixture_dir)
+    ok = sum(1 for v in summary.values() if v == "ok")
+    bad = sum(1 for v in summary.values() if v.startswith("error"))
+    skipped = sum(1 for v in summary.values() if v.startswith("skipped"))
+    log.info(
+        "fundamentals.refresh_done",
+        ok=ok,
+        skipped=skipped,
+        errors=bad,
+        summary=summary,
+    )
+    return summary
+
+

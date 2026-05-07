@@ -508,6 +508,79 @@ def render_for_prompt(
     return "\n".join(parts)
 
 
+# ---------------------------------------------------------------------------
+# Refresh: live yfinance → fixture JSON (atomic).
+# ---------------------------------------------------------------------------
+
+
+def refresh_fixtures(
+    codes: list[str],
+    *,
+    fixture_dir: str | Path | None = None,
+    fetcher: Any = None,
+) -> dict[str, str]:
+    """Refresh the local fundamentals fixture for ``codes`` from yfinance.
+
+    Each entry is written atomically (write to ``<name>.json.tmp`` then
+    rename) so a partial mid-flight crash never leaves the runtime with a
+    corrupted snapshot. Failures on one symbol don't abort the rest.
+
+    Parameters
+    ----------
+    codes:
+        Trading codes like ``["US.NVDA", "US.MSFT"]``. Non-US codes are
+        skipped (yfinance only knows about US tickers in our setup).
+    fixture_dir:
+        Override the destination directory. Defaults to the package-bundled
+        ``src/vibe_trader/data/fixtures/fundamentals/raw/``.
+    fetcher:
+        Callable ``(ticker_short: str) -> dict``. Defaults to
+        :func:`vibe_trader.data.fundamentals_yfinance.fetch_raw_fundamentals`.
+        Tests inject a stub to avoid touching the network.
+
+    Returns
+    -------
+    Mapping ``{code: "ok" | "skipped:<reason>" | "error:<msg>"}`` so the
+    cron caller can summarise the run.
+    """
+    if fetcher is None:
+        from vibe_trader.data.fundamentals_yfinance import fetch_raw_fundamentals
+
+        fetcher = fetch_raw_fundamentals
+
+    root = Path(fixture_dir) if fixture_dir else _DEFAULT_FIXTURE_DIR
+    root.mkdir(parents=True, exist_ok=True)
+
+    summary: dict[str, str] = {}
+    for code in codes:
+        if not code.startswith("US."):
+            summary[code] = "skipped:non-US"
+            continue
+        ticker_short = code.split(".", 1)[1]
+        try:
+            raw = fetcher(ticker_short)
+        except Exception as exc:  # noqa: BLE001
+            summary[code] = f"error:{type(exc).__name__}: {exc}"
+            logger.warning("fundamentals.refresh_failed code=%s err=%s", code, exc)
+            continue
+        out = root / f"{code}.json"
+        tmp = out.with_suffix(out.suffix + ".tmp")
+        try:
+            tmp.write_text(
+                json.dumps(raw, indent=2, ensure_ascii=False, default=str),
+                encoding="utf-8",
+            )
+            tmp.replace(out)
+            summary[code] = "ok"
+        except Exception as exc:  # noqa: BLE001
+            summary[code] = f"error:write:{type(exc).__name__}: {exc}"
+            try:
+                tmp.unlink(missing_ok=True)
+            except Exception:
+                pass
+    return summary
+
+
 __all__ = [
     "AnalystConsensus",
     "RatingChange",
@@ -519,5 +592,6 @@ __all__ = [
     "NullFundamentalsClient",
     "build_fundamentals_client",
     "parse_raw_fundamentals",
+    "refresh_fixtures",
     "render_for_prompt",
 ]
