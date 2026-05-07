@@ -1,0 +1,1995 @@
+{
+  "ticker": "TSM",
+  "code": "US.TSM",
+  "fetched_at": "2026-05-07T15:29:31.790824+00:00",
+  "info": {
+    "address1": "Hsinchu Science Park",
+    "address2": "No. 8, Li-Hsin Road 6",
+    "city": "Hsinchu City",
+    "zip": "300096",
+    "country": "Taiwan",
+    "phone": "886 3 563 6688",
+    "fax": "886 3 563 7000",
+    "website": "https://www.tsmc.com",
+    "industry": "Semiconductors",
+    "industryKey": "semiconductors",
+    "industryDisp": "Semiconductors",
+    "sector": "Technology",
+    "sectorKey": "technology",
+    "sectorDisp": "Technology",
+    "longBusinessSummary": "Taiwan Semiconductor Manufacturing Company Limited, together with its subsidiaries, manufactures, packages, tests, and sells integrated circuits and other semiconductor devices in Taiwan, China, Europe, the Middle East, Africa, Japan, the United States, and internationally. It provides various wafer fabrication processes, such as processes to manufacture complementary metal- oxide-semiconductor (CMOS) logic, mixed-signal, radio frequency, embedded memory, bipolar CMOS mixed-signal, and others. The company also involved in providing customer and engineering support services; manufacturing of masks; investment in technology start-up companies; research, designing, developing, manufacturing, packaging, testing, and sale of color filters; and investment activities. Its products are used in high performance computing, smartphones, Internet of things, automotive, and digital consumer electronics. Taiwan Semiconductor Manufacturing Company Limited was incorporated in 1987 and is headquartered in Hsinchu City, Taiwan.",
+    "fullTimeEmployees": 76907,
+    "companyOfficers": [
+      {
+        "maxAge": 1,
+        "name": "Dr. C. C.  Wei Ph.D.",
+        "title": "Chairman & CEO",
+        "fiscalYear": 2025,
+        "totalPay": 65100852,
+        "exercisedValue": 0,
+        "unexercisedValue": 0
+      },
+      {
+        "maxAge": 1,
+        "name": "Mr. Jen-Chau  Huang",
+        "title": "Senior VP & CFO",
+        "fiscalYear": 2025,
+        "totalPay": 9431326,
+        "exercisedValue": 0,
+        "unexercisedValue": 0
+      },
+      {
+        "maxAge": 1,
+        "name": "Mr. Y. P.  Chyn",
+        "title": "Executive VP of Operations & Co-COO",
+        "fiscalYear": 2025,
+        "exercisedValue": 0,
+        "unexercisedValue": 0
+      },
+      {
+        "maxAge": 1,
+        "name": "Dr. Y. J. Mii",
+        "title": "Executive VP & Co-COO",
+        "fiscalYear": 2025,
+        "exercisedValue": 0,
+        "unexercisedValue": 0
+      },
+      {
+        "maxAge": 1,
+        "name": "Dr. Min  Cao",
+        "title": "VP of Research, Development, Pathfinding & Corporate Research and CTO",
+        "fiscalYear": 2025,
+        "exercisedValue": 0,
+        "unexercisedValue": 0
+      },
+      {
+        "maxAge": 1,
+        "name": "Dr. Horng-Dar  Lin",
+        "title": "Vice President of Corporate Information Technology & Chief Information Officer",
+        "fiscalYear": 2025,
+        "exercisedValue": 0,
+        "unexercisedValue": 0
+      },
+      {
+        "maxAge": 1,
+        "name": "Mr. Jeff  Su",
+        "title": "Director of Investor Relations",
+        "fiscalYear": 2025,
+        "exercisedValue": 0,
+        "unexercisedValue": 0
+      },
+      {
+        "maxAge": 1,
+        "name": "Ms. Sylvia  Fang",
+        "title": "Senior VP, General Counsel & Corporate Governance Officer",
+        "fiscalYear": 2025,
+        "exercisedValue": 0,
+        "unexercisedValue": 0
+      },
+      {
+        "maxAge": 1,
+        "name": "Mr. Pei-Hong  Chen",
+        "title": "Vice President of the Human Resources",
+        "fiscalYear": 2025,
+        "exercisedValue": 0,
+        "unexercisedValue": 0
+      },
+      {
+        "maxAge": 1,
+        "name": "Dr. Wei-Jen  Lo",
+        "title": "Senior Vice President of Corporate Strategy Development",
+        "fiscalYear": 2025,
+        "exercisedValue": 0,
+        "unexercisedValue": 0
+      }
+    ],
+    "compensationAsOfEpochDate": 1767139200,
+    "irWebsite": "http://www.tsmc.com/english/investorRelations/index.htm",
+    "executiveTeam": [],
+    "maxAge": 86400,
+    "priceHint": 2,
+    "previousClose": 419.5,
+    "open": 418.09,
+    "dayLow": 414.0201,
+    "dayHigh": 420.0,
+    "regularMarketPreviousClose": 419.5,
+    "regularMarketOpen": 418.09,
+    "regularMarketDayLow": 414.0201,
+    "regularMarketDayHigh": 420.0,
+    "dividendRate": 3.51,
+    "dividendYield": 0.84,
+    "exDividendDate": 1781136000,
+    "payoutRatio": 0.2793,
+    "fiveYearAvgDividendYield": 1.59,
+    "beta": 1.264,
+    "trailingPE": 35.78045,
+    "forwardPE": 21.625343,
+    "volume": 5611145,
+    "regularMarketVolume": 5611145,
+    "averageVolume": 13464703,
+    "averageVolume10days": 14038380,
+    "averageDailyVolume10Day": 14038380,
+    "bid": 416.55,
+    "ask": 416.69,
+    "bidSize": 120,
+    "askSize": 80,
+    "marketCap": 2163766198272,
+    "nonDilutedMarketCap": 1847856724359,
+    "fiftyTwoWeekLow": 173.66,
+    "fiftyTwoWeekHigh": 420.0,
+    "allTimeHigh": 419.7,
+    "allTimeLow": 2.842947,
+    "priceToSalesTrailing12Months": 0.5272459,
+    "fiftyDayAverage": 362.0554,
+    "twoHundredDayAverage": 307.92935,
+    "trailingAnnualDividendRate": 17.0,
+    "trailingAnnualDividendYield": 0.040524434,
+    "currency": "USD",
+    "tradeable": false,
+    "enterpriseValue": 8552789835776,
+    "profitMargins": 0.46505,
+    "floatShares": 23639052052,
+    "sharesOutstanding": 5186400000,
+    "sharesShort": 25635323,
+    "sharesShortPriorMonth": 20816498,
+    "sharesShortPreviousMonthDate": 1773360000,
+    "dateShortInterest": 1776211200,
+    "sharesPercentSharesOut": 0.0049,
+    "heldPercentInsiders": 0.0005,
+    "heldPercentInstitutions": 0.15742,
+    "shortRatio": 2.0,
+    "shortPercentOfFloat": 0.0053,
+    "impliedSharesOutstanding": 5186400000,
+    "bookValue": 6.5373535,
+    "priceToBook": 63.817875,
+    "lastFiscalYearEnd": 1767139200,
+    "nextFiscalYearEnd": 1798675200,
+    "mostRecentQuarter": 1774915200,
+    "earningsQuarterlyGrowth": 0.583,
+    "netIncomeToCommon": 1908519993344,
+    "trailingEps": 11.66,
+    "forwardEps": 19.29218,
+    "pegRatio": 1.31,
+    "lastSplitFactor": "1005:1000",
+    "lastSplitDate": 1247616000,
+    "enterpriseToRevenue": 2.084,
+    "enterpriseToEbitda": 2.994,
+    "52WeekChange": 1.3941331,
+    "SandP52WeekChange": 0.3003528,
+    "lastDividendValue": 0.956,
+    "lastDividendDate": 1773705600,
+    "quoteType": "EQUITY",
+    "currentPrice": 417.2,
+    "targetHighPrice": 600.0,
+    "targetLowPrice": 351.0,
+    "targetMeanPrice": 463.4514,
+    "targetMedianPrice": 472.5,
+    "recommendationMean": 1.47368,
+    "recommendationKey": "strong_buy",
+    "numberOfAnalystOpinions": 18,
+    "totalCash": 3383600873472,
+    "totalCashPerShare": 130.477,
+    "ebitda": 2856460222464,
+    "totalDebt": 1016267997184,
+    "quickRatio": 2.186,
+    "currentRatio": 2.488,
+    "totalRevenue": 4103903379456,
+    "debtToEquity": 17.131,
+    "revenuePerShare": 98.91688,
+    "returnOnAssets": 0.17322001,
+    "returnOnEquity": 0.3621,
+    "grossProfits": 2539193892864,
+    "freeCashflow": 721560469504,
+    "operatingCashflow": 2348377702400,
+    "earningsGrowth": 0.584,
+    "revenueGrowth": 0.351,
+    "grossMargins": 0.61873,
+    "ebitdaMargins": 0.69602996,
+    "operatingMargins": 0.58105,
+    "financialCurrency": "TWD",
+    "symbol": "TSM",
+    "language": "en-US",
+    "region": "US",
+    "typeDisp": "Equity",
+    "quoteSourceName": "Nasdaq Real Time Price",
+    "triggerable": true,
+    "customPriceAlertConfidence": "HIGH",
+    "corporateActions": [],
+    "regularMarketTime": 1778167771,
+    "priceEpsCurrentYear": 27.002712,
+    "fiftyDayAverageChange": 55.144623,
+    "fiftyDayAverageChangePercent": 0.15230991,
+    "twoHundredDayAverageChange": 109.27066,
+    "twoHundredDayAverageChangePercent": 0.35485625,
+    "sourceInterval": 15,
+    "exchangeDataDelayedBy": 0,
+    "averageAnalystRating": "1.5 - Strong Buy",
+    "shortName": "Taiwan Semiconductor Manufactur",
+    "longName": "Taiwan Semiconductor Manufacturing Company Limited",
+    "marketState": "REGULAR",
+    "regularMarketChangePercent": -0.54826885,
+    "regularMarketPrice": 417.2,
+    "exchange": "NYQ",
+    "messageBoardId": "finmb_380075",
+    "exchangeTimezoneName": "America/New_York",
+    "exchangeTimezoneShortName": "EDT",
+    "gmtOffSetMilliseconds": -14400000,
+    "market": "us_market",
+    "esgPopulated": false,
+    "cryptoTradeable": false,
+    "hasPrePostMarketData": true,
+    "firstTradeDateMilliseconds": 876403800000,
+    "regularMarketChange": -2.2999878,
+    "regularMarketDayRange": "414.0201 - 420.0",
+    "fullExchangeName": "NYSE",
+    "averageDailyVolume3Month": 13464703,
+    "fiftyTwoWeekLowChange": 243.54001,
+    "fiftyTwoWeekLowChangePercent": 1.4023955,
+    "fiftyTwoWeekRange": "173.66 - 420.0",
+    "fiftyTwoWeekHighChange": -2.7999878,
+    "fiftyTwoWeekHighChangePercent": -0.0066666375,
+    "fiftyTwoWeekChangePercent": 139.41331,
+    "dividendDate": 1783555200,
+    "earningsTimestamp": 1776342600,
+    "earningsTimestampStart": 1784205000,
+    "earningsTimestampEnd": 1784205000,
+    "earningsCallTimestampStart": 1776319200,
+    "earningsCallTimestampEnd": 1776319200,
+    "isEarningsDateEstimate": true,
+    "epsTrailingTwelveMonths": 11.66,
+    "epsForward": 19.29218,
+    "epsCurrentYear": 15.4503,
+    "displayName": "Taiwan Semiconductor Manufacturing Company",
+    "trailingPegRatio": 1.3054
+  },
+  "recommendations": [
+    {
+      "index": 0,
+      "period": "0m",
+      "strongBuy": 5,
+      "buy": 12,
+      "hold": 2,
+      "sell": 0,
+      "strongSell": 0
+    },
+    {
+      "index": 1,
+      "period": "-1m",
+      "strongBuy": 6,
+      "buy": 12,
+      "hold": 1,
+      "sell": 0,
+      "strongSell": 0
+    },
+    {
+      "index": 2,
+      "period": "-2m",
+      "strongBuy": 6,
+      "buy": 12,
+      "hold": 1,
+      "sell": 0,
+      "strongSell": 0
+    }
+  ],
+  "recommendations_summary": [
+    {
+      "index": 0,
+      "period": "0m",
+      "strongBuy": 5,
+      "buy": 12,
+      "hold": 2,
+      "sell": 0,
+      "strongSell": 0
+    },
+    {
+      "index": 1,
+      "period": "-1m",
+      "strongBuy": 6,
+      "buy": 12,
+      "hold": 1,
+      "sell": 0,
+      "strongSell": 0
+    },
+    {
+      "index": 2,
+      "period": "-2m",
+      "strongBuy": 6,
+      "buy": 12,
+      "hold": 1,
+      "sell": 0,
+      "strongSell": 0
+    }
+  ],
+  "upgrades_downgrades": [
+    {
+      "GradeDate": "2026-04-22T13:31:03",
+      "Firm": "Barclays",
+      "ToGrade": "Overweight",
+      "FromGrade": "Overweight",
+      "Action": "main",
+      "priceTargetAction": "Raises",
+      "currentPriceTarget": 470.0,
+      "priorPriceTarget": 450.0
+    },
+    {
+      "GradeDate": "2026-04-17T19:01:33",
+      "Firm": "DA Davidson",
+      "ToGrade": "Buy",
+      "FromGrade": "Buy",
+      "Action": "main",
+      "priceTargetAction": "Maintains",
+      "currentPriceTarget": 450.0,
+      "priorPriceTarget": 450.0
+    },
+    {
+      "GradeDate": "2026-04-16T10:52:03",
+      "Firm": "Needham",
+      "ToGrade": "Buy",
+      "FromGrade": "Buy",
+      "Action": "main",
+      "priceTargetAction": "Raises",
+      "currentPriceTarget": 480.0,
+      "priorPriceTarget": 410.0
+    },
+    {
+      "GradeDate": "2026-04-07T05:23:12",
+      "Firm": "Freedom Broker",
+      "ToGrade": "Buy",
+      "FromGrade": "Buy",
+      "Action": "main",
+      "priceTargetAction": "Lowers",
+      "currentPriceTarget": 210.0,
+      "priorPriceTarget": 230.0
+    },
+    {
+      "GradeDate": "2026-02-13T14:10:22",
+      "Firm": "DA Davidson",
+      "ToGrade": "Buy",
+      "FromGrade": "",
+      "Action": "init",
+      "priceTargetAction": "Announces",
+      "currentPriceTarget": 450.0,
+      "priorPriceTarget": 0.0
+    },
+    {
+      "GradeDate": "2026-01-16T16:15:04",
+      "Firm": "Barclays",
+      "ToGrade": "Overweight",
+      "FromGrade": "Overweight",
+      "Action": "main",
+      "priceTargetAction": "Raises",
+      "currentPriceTarget": 450.0,
+      "priorPriceTarget": 380.0
+    },
+    {
+      "GradeDate": "2026-01-16T14:28:37",
+      "Firm": "TD Cowen",
+      "ToGrade": "Hold",
+      "FromGrade": "Hold",
+      "Action": "main",
+      "priceTargetAction": "Raises",
+      "currentPriceTarget": 370.0,
+      "priorPriceTarget": 325.0
+    },
+    {
+      "GradeDate": "2026-01-15T12:05:35",
+      "Firm": "Needham",
+      "ToGrade": "Buy",
+      "FromGrade": "Buy",
+      "Action": "main",
+      "priceTargetAction": "Raises",
+      "currentPriceTarget": 410.0,
+      "priorPriceTarget": 360.0
+    },
+    {
+      "GradeDate": "2025-12-08T13:25:28",
+      "Firm": "Bernstein",
+      "ToGrade": "Outperform",
+      "FromGrade": "Outperform",
+      "Action": "main",
+      "priceTargetAction": "Raises",
+      "currentPriceTarget": 330.0,
+      "priorPriceTarget": 290.0
+    },
+    {
+      "GradeDate": "2025-10-27T09:42:25",
+      "Firm": "Needham",
+      "ToGrade": "Buy",
+      "FromGrade": "Buy",
+      "Action": "reit",
+      "priceTargetAction": "Maintains",
+      "currentPriceTarget": 360.0,
+      "priorPriceTarget": 360.0
+    },
+    {
+      "GradeDate": "2025-10-17T13:25:33",
+      "Firm": "Barclays",
+      "ToGrade": "Overweight",
+      "FromGrade": "Overweight",
+      "Action": "main",
+      "priceTargetAction": "Raises",
+      "currentPriceTarget": 355.0,
+      "priorPriceTarget": 330.0
+    },
+    {
+      "GradeDate": "2025-10-16T10:12:46",
+      "Firm": "Needham",
+      "ToGrade": "Buy",
+      "FromGrade": "Buy",
+      "Action": "main",
+      "priceTargetAction": "Raises",
+      "currentPriceTarget": 360.0,
+      "priorPriceTarget": 270.0
+    },
+    {
+      "GradeDate": "2025-10-10T14:15:27",
+      "Firm": "Susquehanna",
+      "ToGrade": "Positive",
+      "FromGrade": "Positive",
+      "Action": "main",
+      "priceTargetAction": "Raises",
+      "currentPriceTarget": 400.0,
+      "priorPriceTarget": 300.0
+    },
+    {
+      "GradeDate": "2025-10-09T12:24:03",
+      "Firm": "Barclays",
+      "ToGrade": "Overweight",
+      "FromGrade": "Overweight",
+      "Action": "main",
+      "priceTargetAction": "Raises",
+      "currentPriceTarget": 330.0,
+      "priorPriceTarget": 325.0
+    },
+    {
+      "GradeDate": "2025-09-16T13:35:06",
+      "Firm": "Barclays",
+      "ToGrade": "Overweight",
+      "FromGrade": "Overweight",
+      "Action": "main",
+      "priceTargetAction": "Raises",
+      "currentPriceTarget": 325.0,
+      "priorPriceTarget": 275.0
+    },
+    {
+      "GradeDate": "2025-07-17T11:07:13",
+      "Firm": "Needham",
+      "ToGrade": "Buy",
+      "FromGrade": "Buy",
+      "Action": "reit",
+      "priceTargetAction": "Maintains",
+      "currentPriceTarget": 270.0,
+      "priorPriceTarget": 270.0
+    },
+    {
+      "GradeDate": "2025-07-14T13:02:58",
+      "Firm": "Susquehanna",
+      "ToGrade": "Positive",
+      "FromGrade": "Positive",
+      "Action": "main",
+      "priceTargetAction": "Raises",
+      "currentPriceTarget": 265.0,
+      "priorPriceTarget": 255.0
+    },
+    {
+      "GradeDate": "2025-07-01T11:37:52",
+      "Firm": "Needham",
+      "ToGrade": "Buy",
+      "FromGrade": "Buy",
+      "Action": "main",
+      "priceTargetAction": "Raises",
+      "currentPriceTarget": 270.0,
+      "priorPriceTarget": 225.0
+    },
+    {
+      "GradeDate": "2025-06-17T16:51:43",
+      "Firm": "Susquehanna",
+      "ToGrade": "Positive",
+      "FromGrade": "Positive",
+      "Action": "main",
+      "priceTargetAction": "Raises",
+      "currentPriceTarget": 255.0,
+      "priorPriceTarget": 250.0
+    },
+    {
+      "GradeDate": "2025-06-03T12:29:50",
+      "Firm": "Barclays",
+      "ToGrade": "Overweight",
+      "FromGrade": "Overweight",
+      "Action": "main",
+      "priceTargetAction": "Raises",
+      "currentPriceTarget": 240.0,
+      "priorPriceTarget": 215.0
+    },
+    {
+      "GradeDate": "2025-04-21T15:09:40",
+      "Firm": "Barclays",
+      "ToGrade": "Overweight",
+      "FromGrade": "Overweight",
+      "Action": "main",
+      "priceTargetAction": "Lowers",
+      "currentPriceTarget": 215.0,
+      "priorPriceTarget": 255.0
+    },
+    {
+      "GradeDate": "2025-04-17T14:48:13",
+      "Firm": "Susquehanna",
+      "ToGrade": "Positive",
+      "FromGrade": "Positive",
+      "Action": "main",
+      "priceTargetAction": "Lowers",
+      "currentPriceTarget": 250.0,
+      "priorPriceTarget": 265.0
+    },
+    {
+      "GradeDate": "2025-04-17T11:09:06",
+      "Firm": "Needham",
+      "ToGrade": "Buy",
+      "FromGrade": "Buy",
+      "Action": "reit",
+      "priceTargetAction": "Maintains",
+      "currentPriceTarget": 225.0,
+      "priorPriceTarget": 225.0
+    },
+    {
+      "GradeDate": "2025-02-18T11:52:36",
+      "Firm": "Needham",
+      "ToGrade": "Buy",
+      "FromGrade": "Buy",
+      "Action": "reit",
+      "priceTargetAction": "Maintains",
+      "currentPriceTarget": 225.0,
+      "priorPriceTarget": 225.0
+    },
+    {
+      "GradeDate": "2025-01-17T18:15:33",
+      "Firm": "Barclays",
+      "ToGrade": "Overweight",
+      "FromGrade": "Overweight",
+      "Action": "main",
+      "priceTargetAction": "Raises",
+      "currentPriceTarget": 255.0,
+      "priorPriceTarget": 240.0
+    },
+    {
+      "GradeDate": "2025-01-16T12:48:03",
+      "Firm": "Needham",
+      "ToGrade": "Buy",
+      "FromGrade": "Buy",
+      "Action": "reit",
+      "priceTargetAction": "Maintains",
+      "currentPriceTarget": 225.0,
+      "priorPriceTarget": 225.0
+    },
+    {
+      "GradeDate": "2024-11-18T16:21:44",
+      "Firm": "Barclays",
+      "ToGrade": "Overweight",
+      "FromGrade": "Overweight",
+      "Action": "main",
+      "priceTargetAction": "Raises",
+      "currentPriceTarget": 240.0,
+      "priorPriceTarget": 215.0
+    },
+    {
+      "GradeDate": "2024-10-23T13:11:29",
+      "Firm": "Barclays",
+      "ToGrade": "Overweight",
+      "FromGrade": "Overweight",
+      "Action": "main",
+      "priceTargetAction": "Raises",
+      "currentPriceTarget": 215.0,
+      "priorPriceTarget": 200.0
+    },
+    {
+      "GradeDate": "2024-10-18T10:43:47",
+      "Firm": "Needham",
+      "ToGrade": "Buy",
+      "FromGrade": "Buy",
+      "Action": "main",
+      "priceTargetAction": "Raises",
+      "currentPriceTarget": 225.0,
+      "priorPriceTarget": 210.0
+    },
+    {
+      "GradeDate": "2024-10-17T10:40:04",
+      "Firm": "Needham",
+      "ToGrade": "Buy",
+      "FromGrade": "Buy",
+      "Action": "reit",
+      "priceTargetAction": "Maintains",
+      "currentPriceTarget": 210.0,
+      "priorPriceTarget": 210.0
+    },
+    {
+      "GradeDate": "2024-08-14T13:51:30",
+      "Firm": "Susquehanna",
+      "ToGrade": "Positive",
+      "FromGrade": "Positive",
+      "Action": "main",
+      "priceTargetAction": "Maintains",
+      "currentPriceTarget": 250.0,
+      "priorPriceTarget": 250.0
+    },
+    {
+      "GradeDate": "2024-08-06T13:32:03",
+      "Firm": "Susquehanna",
+      "ToGrade": "Positive",
+      "FromGrade": "Positive",
+      "Action": "main",
+      "priceTargetAction": "Maintains",
+      "currentPriceTarget": 250.0,
+      "priorPriceTarget": 250.0
+    },
+    {
+      "GradeDate": "2024-07-18T10:26:58",
+      "Firm": "Needham",
+      "ToGrade": "Buy",
+      "FromGrade": "Buy",
+      "Action": "reit",
+      "priceTargetAction": "Maintains",
+      "currentPriceTarget": 210.0,
+      "priorPriceTarget": 210.0
+    },
+    {
+      "GradeDate": "2024-07-15T09:29:03",
+      "Firm": "Needham",
+      "ToGrade": "Buy",
+      "FromGrade": "Buy",
+      "Action": "main",
+      "priceTargetAction": "Raises",
+      "currentPriceTarget": 210.0,
+      "priorPriceTarget": 168.0
+    },
+    {
+      "GradeDate": "2024-07-11T12:41:29",
+      "Firm": "Susquehanna",
+      "ToGrade": "Positive",
+      "FromGrade": "Positive",
+      "Action": "main",
+      "priceTargetAction": "Raises",
+      "currentPriceTarget": 250.0,
+      "priorPriceTarget": 200.0
+    },
+    {
+      "GradeDate": "2024-06-20T11:26:56",
+      "Firm": "Bernstein",
+      "ToGrade": "Outperform",
+      "FromGrade": "Outperform",
+      "Action": "main",
+      "priceTargetAction": "Raises",
+      "currentPriceTarget": 200.0,
+      "priorPriceTarget": 150.0
+    },
+    {
+      "GradeDate": "2024-06-17T12:24:22",
+      "Firm": "Susquehanna",
+      "ToGrade": "Positive",
+      "FromGrade": "Positive",
+      "Action": "main",
+      "priceTargetAction": "Raises",
+      "currentPriceTarget": 200.0,
+      "priorPriceTarget": 180.0
+    },
+    {
+      "GradeDate": "2024-06-05T15:17:33",
+      "Firm": "Barclays",
+      "ToGrade": "Overweight",
+      "FromGrade": "Overweight",
+      "Action": "main",
+      "priceTargetAction": "Raises",
+      "currentPriceTarget": 170.0,
+      "priorPriceTarget": 150.0
+    },
+    {
+      "GradeDate": "2024-05-22T11:01:59",
+      "Firm": "Needham",
+      "ToGrade": "Buy",
+      "FromGrade": "Buy",
+      "Action": "reit",
+      "priceTargetAction": "Maintains",
+      "currentPriceTarget": 168.0,
+      "priorPriceTarget": 168.0
+    },
+    {
+      "GradeDate": "2024-04-19T13:13:53",
+      "Firm": "Barclays",
+      "ToGrade": "Overweight",
+      "FromGrade": "Overweight",
+      "Action": "main",
+      "priceTargetAction": "Raises",
+      "currentPriceTarget": 150.0,
+      "priorPriceTarget": 145.0
+    },
+    {
+      "GradeDate": "2024-04-18T10:44:51",
+      "Firm": "Needham",
+      "ToGrade": "Buy",
+      "FromGrade": "Buy",
+      "Action": "reit",
+      "priceTargetAction": "Maintains",
+      "currentPriceTarget": 168.0,
+      "priorPriceTarget": 168.0
+    },
+    {
+      "GradeDate": "2024-04-10T11:02:17",
+      "Firm": "Needham",
+      "ToGrade": "Buy",
+      "FromGrade": "Buy",
+      "Action": "main",
+      "priceTargetAction": "Raises",
+      "currentPriceTarget": 168.0,
+      "priorPriceTarget": 133.0
+    },
+    {
+      "GradeDate": "2024-04-02T18:53:07",
+      "Firm": "Barclays",
+      "ToGrade": "Overweight",
+      "FromGrade": "Overweight",
+      "Action": "main",
+      "priceTargetAction": "Raises",
+      "currentPriceTarget": 145.0,
+      "priorPriceTarget": 125.0
+    },
+    {
+      "GradeDate": "2024-04-02T12:16:55",
+      "Firm": "Susquehanna",
+      "ToGrade": "Positive",
+      "FromGrade": "Positive",
+      "Action": "main",
+      "priceTargetAction": "Raises",
+      "currentPriceTarget": 180.0,
+      "priorPriceTarget": 160.0
+    },
+    {
+      "GradeDate": "2024-03-11T11:25:33",
+      "Firm": "Bernstein",
+      "ToGrade": "Outperform",
+      "FromGrade": "Outperform",
+      "Action": "main",
+      "priceTargetAction": "Raises",
+      "currentPriceTarget": 150.0,
+      "priorPriceTarget": 125.0
+    },
+    {
+      "GradeDate": "2024-02-13T16:34:10",
+      "Firm": "Susquehanna",
+      "ToGrade": "Positive",
+      "FromGrade": "Positive",
+      "Action": "main",
+      "priceTargetAction": "Raises",
+      "currentPriceTarget": 160.0,
+      "priorPriceTarget": 130.0
+    },
+    {
+      "GradeDate": "2024-01-19T13:19:09",
+      "Firm": "Barclays",
+      "ToGrade": "Overweight",
+      "FromGrade": "Overweight",
+      "Action": "main",
+      "priceTargetAction": "Raises",
+      "currentPriceTarget": 125.0,
+      "priorPriceTarget": 110.0
+    },
+    {
+      "GradeDate": "2023-10-20T08:11:19",
+      "Firm": "Needham",
+      "ToGrade": "Buy",
+      "FromGrade": "Buy",
+      "Action": "reit",
+      "priceTargetAction": "Maintains",
+      "currentPriceTarget": 115.0,
+      "priorPriceTarget": 0.0
+    },
+    {
+      "GradeDate": "2023-07-21T08:19:07",
+      "Firm": "Needham",
+      "ToGrade": "Buy",
+      "FromGrade": "Buy",
+      "Action": "main",
+      "priceTargetAction": "Lowers",
+      "currentPriceTarget": 115.0,
+      "priorPriceTarget": 118.0
+    },
+    {
+      "GradeDate": "2023-07-20T09:28:50",
+      "Firm": "Needham",
+      "ToGrade": "Buy",
+      "FromGrade": "Buy",
+      "Action": "reit",
+      "priceTargetAction": "Maintains",
+      "currentPriceTarget": 118.0,
+      "priorPriceTarget": 118.0
+    },
+    {
+      "GradeDate": "2023-07-14T14:16:19",
+      "Firm": "Susquehanna",
+      "ToGrade": "Positive",
+      "FromGrade": "Positive",
+      "Action": "main",
+      "priceTargetAction": "Raises",
+      "currentPriceTarget": 135.0,
+      "priorPriceTarget": 128.0
+    },
+    {
+      "GradeDate": "2023-06-16T14:29:51",
+      "Firm": "Susquehanna",
+      "ToGrade": "Positive",
+      "FromGrade": "Positive",
+      "Action": "main",
+      "priceTargetAction": "Raises",
+      "currentPriceTarget": 128.0,
+      "priorPriceTarget": 126.0
+    },
+    {
+      "GradeDate": "2023-06-01T11:00:12",
+      "Firm": "Needham",
+      "ToGrade": "Buy",
+      "FromGrade": "",
+      "Action": "reit",
+      "priceTargetAction": "Raises",
+      "currentPriceTarget": 118.0,
+      "priorPriceTarget": 110.0
+    },
+    {
+      "GradeDate": "2023-04-24T10:37:49",
+      "Firm": "Needham",
+      "ToGrade": "Buy",
+      "FromGrade": "",
+      "Action": "reit",
+      "priceTargetAction": "Maintains",
+      "currentPriceTarget": 110.0,
+      "priorPriceTarget": 0.0
+    },
+    {
+      "GradeDate": "2023-04-20T12:04:13",
+      "Firm": "Needham",
+      "ToGrade": "Buy",
+      "FromGrade": "",
+      "Action": "reit",
+      "priceTargetAction": "Maintains",
+      "currentPriceTarget": 110.0,
+      "priorPriceTarget": 0.0
+    },
+    {
+      "GradeDate": "2023-04-17T13:33:19",
+      "Firm": "Susquehanna",
+      "ToGrade": "Positive",
+      "FromGrade": "Neutral",
+      "Action": "up",
+      "priceTargetAction": "Announces",
+      "currentPriceTarget": 126.0,
+      "priorPriceTarget": 0.0
+    },
+    {
+      "GradeDate": "2023-03-10T12:19:05",
+      "Firm": "Needham",
+      "ToGrade": "Buy",
+      "FromGrade": "",
+      "Action": "reit",
+      "priceTargetAction": "Maintains",
+      "currentPriceTarget": 110.0,
+      "priorPriceTarget": 0.0
+    },
+    {
+      "GradeDate": "2022-11-18T14:20:51",
+      "Firm": "Erste Group",
+      "ToGrade": "Buy",
+      "FromGrade": "Hold",
+      "Action": "up",
+      "priceTargetAction": "",
+      "currentPriceTarget": 0.0,
+      "priorPriceTarget": 0.0
+    },
+    {
+      "GradeDate": "2022-10-13T13:11:44",
+      "Firm": "Goldman Sachs",
+      "ToGrade": "Buy",
+      "FromGrade": "",
+      "Action": "main",
+      "priceTargetAction": "Lowers",
+      "currentPriceTarget": 89.0,
+      "priorPriceTarget": 126.0
+    },
+    {
+      "GradeDate": "2022-07-14T11:47:32",
+      "Firm": "Susquehanna",
+      "ToGrade": "Neutral",
+      "FromGrade": "",
+      "Action": "main",
+      "priceTargetAction": "Lowers",
+      "currentPriceTarget": 88.0,
+      "priorPriceTarget": 90.0
+    },
+    {
+      "GradeDate": "2022-01-13T15:02:58",
+      "Firm": "Atlantic Equities",
+      "ToGrade": "Overweight",
+      "FromGrade": "Neutral",
+      "Action": "up",
+      "priceTargetAction": "Raises",
+      "currentPriceTarget": 170.0,
+      "priorPriceTarget": 125.0
+    },
+    {
+      "GradeDate": "2021-10-11T15:40:24",
+      "Firm": "Cowen & Co.",
+      "ToGrade": "Market Perform",
+      "FromGrade": "",
+      "Action": "init",
+      "priceTargetAction": "Announces",
+      "currentPriceTarget": 120.0,
+      "priorPriceTarget": 0.0
+    },
+    {
+      "GradeDate": "2021-07-13T09:46:07",
+      "Firm": "Needham",
+      "ToGrade": "Buy",
+      "FromGrade": "",
+      "Action": "init",
+      "priceTargetAction": "",
+      "currentPriceTarget": 0.0,
+      "priorPriceTarget": 0.0
+    },
+    {
+      "GradeDate": "2021-06-30T12:55:55",
+      "Firm": "Susquehanna",
+      "ToGrade": "Neutral",
+      "FromGrade": "Negative",
+      "Action": "up",
+      "priceTargetAction": "Raises",
+      "currentPriceTarget": 105.0,
+      "priorPriceTarget": 85.0
+    },
+    {
+      "GradeDate": "2021-06-22T14:39:09",
+      "Firm": "Argus Research",
+      "ToGrade": "Buy",
+      "FromGrade": "",
+      "Action": "init",
+      "priceTargetAction": "Announces",
+      "currentPriceTarget": 150.0,
+      "priorPriceTarget": 0.0
+    },
+    {
+      "GradeDate": "2021-04-12T11:54:09",
+      "Firm": "Atlantic Equities",
+      "ToGrade": "Neutral",
+      "FromGrade": "",
+      "Action": "init",
+      "priceTargetAction": "",
+      "currentPriceTarget": 0.0,
+      "priorPriceTarget": 0.0
+    },
+    {
+      "GradeDate": "2021-01-12T17:23:34",
+      "Firm": "Bernstein",
+      "ToGrade": "Outperform",
+      "FromGrade": "Market Perform",
+      "Action": "up",
+      "priceTargetAction": "Maintains",
+      "currentPriceTarget": 149.0,
+      "priorPriceTarget": 0.0
+    },
+    {
+      "GradeDate": "2020-08-28T16:26:04",
+      "Firm": "New Street Research",
+      "ToGrade": "Buy",
+      "FromGrade": "",
+      "Action": "init",
+      "priceTargetAction": "",
+      "currentPriceTarget": 0.0,
+      "priorPriceTarget": 0.0
+    },
+    {
+      "GradeDate": "2020-07-24T15:40:57",
+      "Firm": "Macquarie",
+      "ToGrade": "Outperform",
+      "FromGrade": "Neutral",
+      "Action": "up",
+      "priceTargetAction": "",
+      "currentPriceTarget": 0.0,
+      "priorPriceTarget": 0.0
+    },
+    {
+      "GradeDate": "2019-12-17T11:35:07",
+      "Firm": "China Renaissance",
+      "ToGrade": "Buy",
+      "FromGrade": "Hold",
+      "Action": "up",
+      "priceTargetAction": "",
+      "currentPriceTarget": 0.0,
+      "priorPriceTarget": 0.0
+    },
+    {
+      "GradeDate": "2019-09-30T10:46:28",
+      "Firm": "Goldman Sachs",
+      "ToGrade": "Buy",
+      "FromGrade": "",
+      "Action": "reit",
+      "priceTargetAction": "Announces",
+      "currentPriceTarget": 55.0,
+      "priorPriceTarget": 0.0
+    },
+    {
+      "GradeDate": "2019-09-05T10:26:45",
+      "Firm": "Morgan Stanley",
+      "ToGrade": "Overweight",
+      "FromGrade": "Equal-Weight",
+      "Action": "up",
+      "priceTargetAction": "",
+      "currentPriceTarget": 0.0,
+      "priorPriceTarget": 0.0
+    },
+    {
+      "GradeDate": "2019-07-19T12:33:58",
+      "Firm": "CLSA",
+      "ToGrade": "Buy",
+      "FromGrade": "Underperform",
+      "Action": "up",
+      "priceTargetAction": "",
+      "currentPriceTarget": 0.0,
+      "priorPriceTarget": 0.0
+    },
+    {
+      "GradeDate": "2019-05-07T13:58:49",
+      "Firm": "Goldman Sachs",
+      "ToGrade": "Buy",
+      "FromGrade": "",
+      "Action": "init",
+      "priceTargetAction": "",
+      "currentPriceTarget": 0.0,
+      "priorPriceTarget": 0.0
+    },
+    {
+      "GradeDate": "2018-11-16T11:47:27",
+      "Firm": "Morgan Stanley",
+      "ToGrade": "Equal-Weight",
+      "FromGrade": "Underweight",
+      "Action": "up",
+      "priceTargetAction": "",
+      "currentPriceTarget": 0.0,
+      "priorPriceTarget": 0.0
+    },
+    {
+      "GradeDate": "2018-07-02T14:15:06",
+      "Firm": "Susquehanna",
+      "ToGrade": "Positive",
+      "FromGrade": "Neutral",
+      "Action": "up",
+      "priceTargetAction": "",
+      "currentPriceTarget": 0.0,
+      "priorPriceTarget": 0.0
+    },
+    {
+      "GradeDate": "2018-01-22T12:39:57",
+      "Firm": "Goldman Sachs",
+      "ToGrade": "Buy",
+      "FromGrade": "Neutral",
+      "Action": "up",
+      "priceTargetAction": "",
+      "currentPriceTarget": 0.0,
+      "priorPriceTarget": 0.0
+    },
+    {
+      "GradeDate": "2018-01-16T12:53:36",
+      "Firm": "HSBC",
+      "ToGrade": "Buy",
+      "FromGrade": "Buy",
+      "Action": "up",
+      "priceTargetAction": "",
+      "currentPriceTarget": 0.0,
+      "priorPriceTarget": 0.0
+    },
+    {
+      "GradeDate": "2017-11-27T14:00:15",
+      "Firm": "Morgan Stanley",
+      "ToGrade": "Equal-Weight",
+      "FromGrade": "Overweight",
+      "Action": "down",
+      "priceTargetAction": "",
+      "currentPriceTarget": 0.0,
+      "priorPriceTarget": 0.0
+    },
+    {
+      "GradeDate": "2016-10-14T04:00:00",
+      "Firm": "Pacific Crest",
+      "ToGrade": "Sector Weight",
+      "FromGrade": "Underweight",
+      "Action": "up",
+      "priceTargetAction": "",
+      "currentPriceTarget": 0.0,
+      "priorPriceTarget": 0.0
+    },
+    {
+      "GradeDate": "2016-10-04T10:49:37",
+      "Firm": "Susquehanna",
+      "ToGrade": "Neutral",
+      "FromGrade": "Negative",
+      "Action": "up",
+      "priceTargetAction": "",
+      "currentPriceTarget": 0.0,
+      "priorPriceTarget": 0.0
+    },
+    {
+      "GradeDate": "2016-07-12T13:25:41",
+      "Firm": "Nomura",
+      "ToGrade": "Neutral",
+      "FromGrade": "Buy",
+      "Action": "down",
+      "priceTargetAction": "",
+      "currentPriceTarget": 0.0,
+      "priorPriceTarget": 0.0
+    },
+    {
+      "GradeDate": "2016-07-12T10:44:29",
+      "Firm": "JP Morgan",
+      "ToGrade": "Neutral",
+      "FromGrade": "Overweight",
+      "Action": "down",
+      "priceTargetAction": "",
+      "currentPriceTarget": 0.0,
+      "priorPriceTarget": 0.0
+    },
+    {
+      "GradeDate": "2016-02-18T13:05:19",
+      "Firm": "Morgan Stanley",
+      "ToGrade": "Overweight",
+      "FromGrade": "Equal-Weight",
+      "Action": "up",
+      "priceTargetAction": "",
+      "currentPriceTarget": 0.0,
+      "priorPriceTarget": 0.0
+    },
+    {
+      "GradeDate": "2015-12-01T17:10:18",
+      "Firm": "HSBC",
+      "ToGrade": "Buy",
+      "FromGrade": "",
+      "Action": "up",
+      "priceTargetAction": "",
+      "currentPriceTarget": 0.0,
+      "priorPriceTarget": 0.0
+    },
+    {
+      "GradeDate": "2015-03-26T14:53:28",
+      "Firm": "Citigroup",
+      "ToGrade": "Neutral",
+      "FromGrade": "",
+      "Action": "down",
+      "priceTargetAction": "",
+      "currentPriceTarget": 0.0,
+      "priorPriceTarget": 0.0
+    },
+    {
+      "GradeDate": "2015-03-09T11:05:50",
+      "Firm": "Pacific Crest",
+      "ToGrade": "Underperform",
+      "FromGrade": "Sector Perform",
+      "Action": "down",
+      "priceTargetAction": "",
+      "currentPriceTarget": 0.0,
+      "priorPriceTarget": 0.0
+    },
+    {
+      "GradeDate": "2015-01-08T05:00:00",
+      "Firm": "Credit Suisse",
+      "ToGrade": "Neutral",
+      "FromGrade": "Buy",
+      "Action": "down",
+      "priceTargetAction": "",
+      "currentPriceTarget": 0.0,
+      "priorPriceTarget": 0.0
+    },
+    {
+      "GradeDate": "2014-12-08T13:39:06",
+      "Firm": "B of A Securities",
+      "ToGrade": "Buy",
+      "FromGrade": "Neutral",
+      "Action": "up",
+      "priceTargetAction": "Raises",
+      "currentPriceTarget": 27.62,
+      "priorPriceTarget": 22.0
+    },
+    {
+      "GradeDate": "2013-04-14T16:20:30",
+      "Firm": "Morgan Stanley",
+      "ToGrade": "Equal-Weight",
+      "FromGrade": "Overweight",
+      "Action": "down",
+      "priceTargetAction": "",
+      "currentPriceTarget": 0.0,
+      "priorPriceTarget": 0.0
+    },
+    {
+      "GradeDate": "2013-02-21T14:18:53",
+      "Firm": "B of A Securities",
+      "ToGrade": "Buy",
+      "FromGrade": "Underperform",
+      "Action": "up",
+      "priceTargetAction": "Raises",
+      "currentPriceTarget": 23.04,
+      "priorPriceTarget": 0.0
+    },
+    {
+      "GradeDate": "2012-12-06T21:12:12",
+      "Firm": "Credit Suisse",
+      "ToGrade": "Outperform",
+      "FromGrade": "Neutral",
+      "Action": "up",
+      "priceTargetAction": "",
+      "currentPriceTarget": 0.0,
+      "priorPriceTarget": 0.0
+    },
+    {
+      "GradeDate": "2012-10-08T11:28:00",
+      "Firm": "Credit Suisse",
+      "ToGrade": "Neutral",
+      "FromGrade": "Outperform",
+      "Action": "down",
+      "priceTargetAction": "",
+      "currentPriceTarget": 0.0,
+      "priorPriceTarget": 0.0
+    }
+  ],
+  "analyst_price_targets": {
+    "current": 417.34,
+    "high": 600.0,
+    "low": 351.0,
+    "mean": 463.4514,
+    "median": 472.5
+  },
+  "news": [
+    {
+      "id": "be2d2cfd-b21c-412d-99d8-e4584ac8d080",
+      "content": {
+        "id": "be2d2cfd-b21c-412d-99d8-e4584ac8d080",
+        "contentType": "VIDEO",
+        "title": "Elon Musk's SpaceX submits plans for $55B Terafab chip facility",
+        "description": "<p>Elon Musk's SpaceX (<a target=\"_blank\" rel=\"\" class=\"link\" href=\"https://finance.yahoo.com/quote/SPAX.PVT/\" data-i13n=\"cpos:1;pos:1\">SPAX.PVT</a>) has filed plans to invest $55 billion into building a Terafab facility in Texas, which will allow the company to produce in-house chips for its AI and robotics projects.</p>\n<p>Yahoo Finance Senior Autos Reporter Pras Subramanian dives into the details.</p>",
+        "summary": "Elon Musk's SpaceX (SPAX.PVT) has filed plans to invest $55 billion into building a Terafab facility in Texas, which will allow the company to produce in-house chips for its AI and robotics projects. Yahoo Finance Senior Autos Reporter Pras Subramanian dives into the details.",
+        "pubDate": "2026-05-06T20:41:47Z",
+        "displayTime": "",
+        "isHosted": true,
+        "bypassModal": false,
+        "previewUrl": null,
+        "thumbnail": {
+          "originalUrl": "https://s.yimg.com/uu/api/res/1.2/ng1lJuwEsdrbAHwMUM0x7Q--~B/aD0xMjQxO3c9MjIwNjthcHBpZD15dGFjaHlvbg--/https://d29szjachogqwa.cloudfront.net/images/user-uploaded/7260d2f0-7f3f-11ef-bb3e-9b3d023c94d9_0c0c923811c2bf82cf1bca274b62d515b7409befaa040dd7d8aedd750683dcd4.com/creatr-uploaded-images/2024-09/7260d2f0-7f3f-11ef-bb3e-9b3d023c94d9",
+          "originalWidth": 2206,
+          "originalHeight": 1241,
+          "caption": "",
+          "resolutions": [
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/ng1lJuwEsdrbAHwMUM0x7Q--~B/aD0xMjQxO3c9MjIwNjthcHBpZD15dGFjaHlvbg--/https://d29szjachogqwa.cloudfront.net/images/user-uploaded/7260d2f0-7f3f-11ef-bb3e-9b3d023c94d9_0c0c923811c2bf82cf1bca274b62d515b7409befaa040dd7d8aedd750683dcd4.com/creatr-uploaded-images/2024-09/7260d2f0-7f3f-11ef-bb3e-9b3d023c94d9",
+              "width": 2206,
+              "height": 1241,
+              "tag": "original"
+            },
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/OQBoggkp8PtOSYDJOFGdKA--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://d29szjachogqwa.cloudfront.net/images/user-uploaded/7260d2f0-7f3f-11ef-bb3e-9b3d023c94d9_0c0c923811c2bf82cf1bca274b62d515b7409befaa040dd7d8aedd750683dcd4.com/creatr-uploaded-images/2024-09/7260d2f0-7f3f-11ef-bb3e-9b3d023c94d9",
+              "width": 170,
+              "height": 128,
+              "tag": "170x128"
+            }
+          ]
+        },
+        "provider": {
+          "displayName": "Yahoo Finance Video",
+          "url": "https://finance.yahoo.com/",
+          "sourceId": "video.yahoofinance.com"
+        },
+        "canonicalUrl": {
+          "url": "https://finance.yahoo.com/video/elon-musks-spacex-submits-plans-for-55b-terafab-chip-facility-204147527.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "clickThroughUrl": {
+          "url": "https://finance.yahoo.com/video/elon-musks-spacex-submits-plans-for-55b-terafab-chip-facility-204147527.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "metadata": {
+          "editorsPick": true
+        },
+        "finance": {
+          "premiumFinance": {
+            "isPremiumNews": false,
+            "isPremiumFreeNews": false
+          }
+        },
+        "storyline": null
+      }
+    },
+    {
+      "id": "075fb943-8918-3237-a816-6e5b1efe45b5",
+      "content": {
+        "id": "075fb943-8918-3237-a816-6e5b1efe45b5",
+        "contentType": "STORY",
+        "title": "Apple Stock Notches Record High Ahead Of WWDC News",
+        "description": "",
+        "summary": "Apple stock on Thursday cleared a five-month consolidation pattern and hit a record high.  In morning trades on the stock market today, Apple hit an all-time high of 292.13.  In recent trades, Apple stock rose more than 1% to 290.91.",
+        "pubDate": "2026-05-07T14:32:41Z",
+        "displayTime": "2026-05-07T14:32:41Z",
+        "isHosted": false,
+        "bypassModal": false,
+        "previewUrl": "https://finance.yahoo.com/m/075fb943-8918-3237-a816-6e5b1efe45b5/apple-stock-notches-record.html",
+        "thumbnail": {
+          "originalUrl": "https://media.zenfs.com/en/ibd.com/ec536e5f5e284e091623a459aa169386",
+          "originalWidth": 1000,
+          "originalHeight": 511,
+          "caption": "",
+          "resolutions": [
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/e76E.d7_jEwUf1JJfqvp6g--~B/aD01MTE7dz0xMDAwO2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/ibd.com/ec536e5f5e284e091623a459aa169386",
+              "width": 1000,
+              "height": 511,
+              "tag": "original"
+            },
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/I14Pu8w0BAcL28VzwAVWAA--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/ibd.com/ec536e5f5e284e091623a459aa169386",
+              "width": 170,
+              "height": 128,
+              "tag": "170x128"
+            }
+          ]
+        },
+        "provider": {
+          "displayName": "Investor's Business Daily",
+          "url": "http://www.investors.com/",
+          "sourceId": "ibd.com"
+        },
+        "canonicalUrl": {
+          "url": "https://www.investors.com/news/technology/apple-stock-notches-record-high-ahead-of-wwdc-2026/?src=A00220&yptr=yahoo",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "clickThroughUrl": null,
+        "metadata": {
+          "editorsPick": false
+        },
+        "finance": {
+          "premiumFinance": {
+            "isPremiumNews": false,
+            "isPremiumFreeNews": false
+          }
+        },
+        "storyline": null
+      }
+    },
+    {
+      "id": "97756bd7-72fe-3280-b310-a4c4fadf2b65",
+      "content": {
+        "id": "97756bd7-72fe-3280-b310-a4c4fadf2b65",
+        "contentType": "STORY",
+        "title": "The Next Phase of the AI Boom Could Be Even Kinder to the Pick-and-Shovel Plays",
+        "description": "",
+        "summary": "The first wave of the AI boom rewarded the most obvious names. The next wave spreads wealth across the entire infrastructure stack: foundries, custom silicon, networking fabric, and enterprise deployment tools. Hyperscaler CapEx is climbing, agentic AI drives inference loads that dwarf training, and every gigawatt of new compute pulls dollars through a long supply ... The Next Phase of the AI Boom Could Be Even Kinder to the Pick-and-Shovel Plays",
+        "pubDate": "2026-05-07T11:30:59Z",
+        "displayTime": "2026-05-07T11:30:59Z",
+        "isHosted": true,
+        "bypassModal": false,
+        "previewUrl": null,
+        "thumbnail": {
+          "originalUrl": "https://media.zenfs.com/en/24_7_wall_st__718/eb55e61477c4bf32f41dccfaec8b9e16",
+          "originalWidth": 1920,
+          "originalHeight": 1080,
+          "caption": "",
+          "resolutions": [
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/wDWkHOkefClZUXpUmgZDmw--~B/aD0xMDgwO3c9MTkyMDthcHBpZD15dGFjaHlvbg--/https://media.zenfs.com/en/24_7_wall_st__718/eb55e61477c4bf32f41dccfaec8b9e16",
+              "width": 1920,
+              "height": 1080,
+              "tag": "original"
+            },
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/GxTajwO6F4nqq4u2G1LrJg--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/24_7_wall_st__718/eb55e61477c4bf32f41dccfaec8b9e16",
+              "width": 170,
+              "height": 128,
+              "tag": "170x128"
+            }
+          ]
+        },
+        "provider": {
+          "displayName": "24/7 Wall St.",
+          "url": "https://247wallst.com/",
+          "sourceId": "24_7_wall_st__718"
+        },
+        "canonicalUrl": {
+          "url": "https://247wallst.com/investing/2026/05/07/the-next-phase-of-the-ai-boom-could-be-even-kinder-to-the-pick-and-shovel-plays/",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "clickThroughUrl": {
+          "url": "https://finance.yahoo.com/sectors/technology/articles/next-phase-ai-boom-could-113059083.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "metadata": {
+          "editorsPick": false
+        },
+        "finance": {
+          "premiumFinance": {
+            "isPremiumNews": false,
+            "isPremiumFreeNews": false
+          }
+        },
+        "storyline": null
+      }
+    },
+    {
+      "id": "05ef26c1-c77f-3823-a8f8-9eff0e99e69c",
+      "content": {
+        "id": "05ef26c1-c77f-3823-a8f8-9eff0e99e69c",
+        "contentType": "STORY",
+        "title": "The 1 Thing Tech Investors Aren't Ready For -- but OpenAI Just Proved",
+        "description": "",
+        "summary": "OpenAI's IPO is still months away, but its influence over artificial intelligence (AI) stocks is already taking shape.",
+        "pubDate": "2026-05-07T08:20:00Z",
+        "displayTime": "2026-05-07T08:20:00Z",
+        "isHosted": true,
+        "bypassModal": false,
+        "previewUrl": null,
+        "thumbnail": {
+          "originalUrl": "https://media.zenfs.com/en/motleyfool.com/f671786d3b11139fb3b26bccbc3ee163",
+          "originalWidth": 1201,
+          "originalHeight": 686,
+          "caption": "A light bulb with AI on it on top of a semiconductor.",
+          "resolutions": [
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/e6XqdLLI47ANQQkpJ5tAhA--~B/aD02ODY7dz0xMjAxO2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/motleyfool.com/f671786d3b11139fb3b26bccbc3ee163",
+              "width": 1201,
+              "height": 686,
+              "tag": "original"
+            },
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/sbl9QdraAYiop4CIALPkfg--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/motleyfool.com/f671786d3b11139fb3b26bccbc3ee163",
+              "width": 170,
+              "height": 128,
+              "tag": "170x128"
+            }
+          ]
+        },
+        "provider": {
+          "displayName": "Motley Fool",
+          "url": "http://www.fool.com/",
+          "sourceId": "motleyfool.com"
+        },
+        "canonicalUrl": {
+          "url": "https://www.fool.com/investing/2026/05/07/the-1-thing-tech-investors-arent-ready-for-but-ope/",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "clickThroughUrl": {
+          "url": "https://finance.yahoo.com/markets/stocks/articles/1-thing-tech-investors-arent-082000104.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "metadata": {
+          "editorsPick": false
+        },
+        "finance": {
+          "premiumFinance": {
+            "isPremiumNews": false,
+            "isPremiumFreeNews": false
+          }
+        },
+        "storyline": null
+      }
+    },
+    {
+      "id": "98b3e29d-265e-32e2-8b8d-69845af538ce",
+      "content": {
+        "id": "98b3e29d-265e-32e2-8b8d-69845af538ce",
+        "contentType": "STORY",
+        "title": "More Record Highs — Heard on the Street Wednesday Recap",
+        "description": "",
+        "summary": "Oil prices fell and stocks rose on rising optimism about an end to Middle East hostilities.  Iran and the U.S. are working with mediators on a one-page framework to restart negotiations aimed at ending the conflict and opening the Strait of Hormuz, with talks potentially beginning next week in Islamabad.  Semiconductor stocks extended their rally.",
+        "pubDate": "2026-05-07T07:54:49Z",
+        "displayTime": "2026-05-07T07:54:49Z",
+        "isHosted": false,
+        "bypassModal": false,
+        "previewUrl": "https://finance.yahoo.com/m/98b3e29d-265e-32e2-8b8d-69845af538ce/more-record-highs-%E2%80%94-heard-on.html",
+        "thumbnail": {
+          "originalUrl": "https://media.zenfs.com/en/wsj.com/7b2c285183be07ca3c4e8242b25a59a8",
+          "originalWidth": 1200,
+          "originalHeight": 630,
+          "caption": "",
+          "resolutions": [
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/Fwf5HL4GsEGPbDfR3MJBPg--~B/aD02MzA7dz0xMjAwO2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/wsj.com/7b2c285183be07ca3c4e8242b25a59a8",
+              "width": 1200,
+              "height": 630,
+              "tag": "original"
+            },
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/c34MZxHLZOfDYN2BBjM9ww--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/wsj.com/7b2c285183be07ca3c4e8242b25a59a8",
+              "width": 170,
+              "height": 128,
+              "tag": "170x128"
+            }
+          ]
+        },
+        "provider": {
+          "displayName": "The Wall Street Journal",
+          "url": "http://www.wsj.com/",
+          "sourceId": "wsj.com"
+        },
+        "canonicalUrl": {
+          "url": "https://www.wsj.com/livecoverage/stock-market-today-dow-sp-500-nasdaq-05-07-2026/card/more-record-highs-heard-on-the-street-wednesday-recap-GrQIPw4fB4oJb2eiAh1E?siteid=yhoof2&yptr=yahoo",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "clickThroughUrl": null,
+        "metadata": {
+          "editorsPick": false
+        },
+        "finance": {
+          "premiumFinance": {
+            "isPremiumNews": false,
+            "isPremiumFreeNews": false
+          }
+        },
+        "storyline": null
+      }
+    },
+    {
+      "id": "71c9e255-d999-3611-bf66-7f7a65442b96",
+      "content": {
+        "id": "71c9e255-d999-3611-bf66-7f7a65442b96",
+        "contentType": "STORY",
+        "title": "Emerging Market Stocks Are Outperforming the S&P 500. How to Play the Rally.",
+        "description": "",
+        "summary": "Emerging market stocks are hitting new highs, driven by Asian AI firms and Latin American commodity exporters.",
+        "pubDate": "2026-05-07T06:00:00Z",
+        "displayTime": "2026-05-07T06:00:00Z",
+        "isHosted": false,
+        "bypassModal": false,
+        "previewUrl": "https://finance.yahoo.com/m/71c9e255-d999-3611-bf66-7f7a65442b96/emerging-market-stocks-are.html",
+        "thumbnail": {
+          "originalUrl": "https://media.zenfs.com/en/Barrons.com/c1fc6a013f4b77f7027732fe9a4466b9",
+          "originalWidth": 1280,
+          "originalHeight": 640,
+          "caption": "",
+          "resolutions": [
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/ztc5_5DZB2NHkS_.kq31tQ--~B/aD02NDA7dz0xMjgwO2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/Barrons.com/c1fc6a013f4b77f7027732fe9a4466b9",
+              "width": 1280,
+              "height": 640,
+              "tag": "original"
+            },
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/a5KP._J2GtcAo9nEcvO8Ug--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/Barrons.com/c1fc6a013f4b77f7027732fe9a4466b9",
+              "width": 170,
+              "height": 128,
+              "tag": "170x128"
+            }
+          ]
+        },
+        "provider": {
+          "displayName": "Barrons.com",
+          "url": "http://www.barrons.com/",
+          "sourceId": "Barrons.com"
+        },
+        "canonicalUrl": {
+          "url": "https://www.barrons.com/articles/emerging-market-stocks-how-to-play-the-rally-2d6c7e7f?siteid=yhoof2&yptr=yahoo",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "clickThroughUrl": null,
+        "metadata": {
+          "editorsPick": false
+        },
+        "finance": {
+          "premiumFinance": {
+            "isPremiumNews": false,
+            "isPremiumFreeNews": false
+          }
+        },
+        "storyline": null
+      }
+    },
+    {
+      "id": "450edb92-4f98-3186-816c-535a2b9cb292",
+      "content": {
+        "id": "450edb92-4f98-3186-816c-535a2b9cb292",
+        "contentType": "STORY",
+        "title": "What Apple (AAPL)'s Massive Buyback And Chip Shift Means For Shareholders",
+        "description": "",
+        "summary": "In late April 2026, Apple reported second‑quarter results showing revenue of US$111.18 billion and net income of US$29.58 billion, alongside a 4% dividend increase and board approval of a new US$100 billion share repurchase program. At the same time, Apple began early discussions with Intel and Samsung about diversifying chip production away from sole reliance on TSMC, while managing legal settlements and supply constraints tied to rising AI-related memory demand. We’ll now examine how...",
+        "pubDate": "2026-05-06T19:28:48Z",
+        "displayTime": "2026-05-06T19:28:48Z",
+        "isHosted": true,
+        "bypassModal": false,
+        "previewUrl": null,
+        "thumbnail": {
+          "originalUrl": "https://media.zenfs.com/en/simply_wall_st__316/69084628647944e382f8e555f97913e8",
+          "originalWidth": 1194,
+          "originalHeight": 432,
+          "caption": "",
+          "resolutions": [
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/fBnY8upz5XxbZDDWlufZ9w--~B/aD00MzI7dz0xMTk0O2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/simply_wall_st__316/69084628647944e382f8e555f97913e8",
+              "width": 1194,
+              "height": 432,
+              "tag": "original"
+            },
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/bU5AIomYRBg3WBNqAswADg--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/simply_wall_st__316/69084628647944e382f8e555f97913e8",
+              "width": 170,
+              "height": 128,
+              "tag": "170x128"
+            }
+          ]
+        },
+        "provider": {
+          "displayName": "Simply Wall St.",
+          "url": "https://simplywall.st/",
+          "sourceId": "simply_wall_st__316"
+        },
+        "canonicalUrl": {
+          "url": "https://finance.yahoo.com/markets/stocks/articles/apple-aapl-massive-buyback-chip-192848921.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "clickThroughUrl": {
+          "url": "https://finance.yahoo.com/markets/stocks/articles/apple-aapl-massive-buyback-chip-192848921.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "metadata": {
+          "editorsPick": false
+        },
+        "finance": {
+          "premiumFinance": {
+            "isPremiumNews": false,
+            "isPremiumFreeNews": false
+          }
+        },
+        "storyline": null
+      }
+    },
+    {
+      "id": "45770b4c-5828-326a-ab18-98475e73fb7b",
+      "content": {
+        "id": "45770b4c-5828-326a-ab18-98475e73fb7b",
+        "contentType": "STORY",
+        "title": "The Unintended Consequence the War in the Middle East Could Have on Taiwan Semiconductor Manufacturing Company's Business",
+        "description": "",
+        "summary": "Luckily, it shouldn't slow down the chipmaker's momentum.",
+        "pubDate": "2026-05-06T19:08:00Z",
+        "displayTime": "2026-05-06T19:08:00Z",
+        "isHosted": true,
+        "bypassModal": false,
+        "previewUrl": null,
+        "thumbnail": {
+          "originalUrl": "https://media.zenfs.com/en/motleyfool.com/9153c50f8e736ab6e6ef1af8e8c99da9",
+          "originalWidth": 1200,
+          "originalHeight": 800,
+          "caption": "TSMC logo overlaid on a red shadowy background.",
+          "resolutions": [
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/usIAUvsD7ep8tdqd5zFpPA--~B/aD04MDA7dz0xMjAwO2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/motleyfool.com/9153c50f8e736ab6e6ef1af8e8c99da9",
+              "width": 1200,
+              "height": 800,
+              "tag": "original"
+            },
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/_UtiVaeT4N6w_5jB5SwCwg--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/motleyfool.com/9153c50f8e736ab6e6ef1af8e8c99da9",
+              "width": 170,
+              "height": 128,
+              "tag": "170x128"
+            }
+          ]
+        },
+        "provider": {
+          "displayName": "Motley Fool",
+          "url": "http://www.fool.com/",
+          "sourceId": "motleyfool.com"
+        },
+        "canonicalUrl": {
+          "url": "https://www.fool.com/investing/2026/05/06/the-unintended-consequence-the-war-in-the-middle-e/",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "clickThroughUrl": {
+          "url": "https://finance.yahoo.com/sectors/technology/articles/unintended-consequence-war-middle-east-190800460.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "metadata": {
+          "editorsPick": false
+        },
+        "finance": {
+          "premiumFinance": {
+            "isPremiumNews": false,
+            "isPremiumFreeNews": false
+          }
+        },
+        "storyline": null
+      }
+    },
+    {
+      "id": "e5f0a0e1-9935-3b00-9105-599393f0af56",
+      "content": {
+        "id": "e5f0a0e1-9935-3b00-9105-599393f0af56",
+        "contentType": "STORY",
+        "title": "A Step Forward That TSMC (TSM) Stock Investors Shouldn’t Miss",
+        "description": "",
+        "summary": "Taiwan Semiconductor Manufacturing Company Limited (NYSE:TSM) is one of the best stocks to buy in 2026 according to billionaire George Soros. TSM stock has climbed around 30% over the past six months and soared more than 120% over the past 12 months. The Street believes the stock has more room to go up. On April […]",
+        "pubDate": "2026-05-06T19:02:10Z",
+        "displayTime": "2026-05-06T19:02:10Z",
+        "isHosted": true,
+        "bypassModal": false,
+        "previewUrl": null,
+        "thumbnail": {
+          "originalUrl": "https://media.zenfs.com/en/insidermonkey.com/dcf08a9dbb7c3de961dd78d32a01adf8",
+          "originalWidth": 640,
+          "originalHeight": 427,
+          "caption": "A Step Forward That TSMC (TSM) Stock Investors Shouldn’t Miss",
+          "resolutions": [
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/e7a64amZgU6zo5vKEMKUDA--~B/aD00Mjc7dz02NDA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/insidermonkey.com/dcf08a9dbb7c3de961dd78d32a01adf8",
+              "width": 640,
+              "height": 427,
+              "tag": "original"
+            },
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/QHTdCkG5iu.7ozintGjK4g--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/insidermonkey.com/dcf08a9dbb7c3de961dd78d32a01adf8",
+              "width": 170,
+              "height": 128,
+              "tag": "170x128"
+            }
+          ]
+        },
+        "provider": {
+          "displayName": "Insider Monkey",
+          "url": "http://www.insidermonkey.com",
+          "sourceId": "insidermonkey.com"
+        },
+        "canonicalUrl": {
+          "url": "https://finance.yahoo.com/markets/stocks/articles/step-forward-tsmc-tsm-stock-190210693.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "clickThroughUrl": {
+          "url": "https://finance.yahoo.com/markets/stocks/articles/step-forward-tsmc-tsm-stock-190210693.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "metadata": {
+          "editorsPick": false
+        },
+        "finance": {
+          "premiumFinance": {
+            "isPremiumNews": false,
+            "isPremiumFreeNews": false
+          }
+        },
+        "storyline": null
+      }
+    },
+    {
+      "id": "2c692fbd-58f5-340f-95e1-984dd19cb06b",
+      "content": {
+        "id": "2c692fbd-58f5-340f-95e1-984dd19cb06b",
+        "contentType": "STORY",
+        "title": "Semiconductor Leaders SOXX, SMH, and FTXL Are Crushing It on AI Infrastructure Demand",
+        "description": "",
+        "summary": "The semiconductor sector continues to absorb capital at a pace tied to the AI infrastructure buildout, and three exchange-traded funds offer distinct angles on it: iShares Semiconductor ETF (NASDAQ:SOXX), VanEck Semiconductor ETF (NASDAQ:SMH), and First Trust Nasdaq Semiconductor ETF (NASDAQ:FTXL). Each holds Advanced Micro Devices (NASDAQ:AMD), whose Q1 earnings report, released today, reinforces what the ... Semiconductor Leaders SOXX, SMH, and FTXL Are Crushing It on AI Infrastructure Demand",
+        "pubDate": "2026-05-06T18:54:40Z",
+        "displayTime": "2026-05-06T18:54:40Z",
+        "isHosted": true,
+        "bypassModal": false,
+        "previewUrl": null,
+        "thumbnail": {
+          "originalUrl": "https://media.zenfs.com/en/24_7_wall_st__718/115c82074b909c1335df4e84ce78a241",
+          "originalWidth": 1366,
+          "originalHeight": 767,
+          "caption": "",
+          "resolutions": [
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/kHL8tGoIOTOqK_3.GI.hpA--~B/aD03Njc7dz0xMzY2O2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/24_7_wall_st__718/115c82074b909c1335df4e84ce78a241",
+              "width": 1366,
+              "height": 767,
+              "tag": "original"
+            },
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/Rgb7M3vevc4acdrSX1AELg--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/24_7_wall_st__718/115c82074b909c1335df4e84ce78a241",
+              "width": 170,
+              "height": 128,
+              "tag": "170x128"
+            }
+          ]
+        },
+        "provider": {
+          "displayName": "24/7 Wall St.",
+          "url": "https://247wallst.com/",
+          "sourceId": "24_7_wall_st__718"
+        },
+        "canonicalUrl": {
+          "url": "https://247wallst.com/investing/2026/05/06/semiconductor-leaders-soxx-smh-and-ftxl-are-crushing-it-on-ai-infrastructure-demand/",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "clickThroughUrl": {
+          "url": "https://finance.yahoo.com/sectors/technology/articles/semiconductor-leaders-soxx-smh-ftxl-185440404.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "metadata": {
+          "editorsPick": false
+        },
+        "finance": {
+          "premiumFinance": {
+            "isPremiumNews": false,
+            "isPremiumFreeNews": false
+          }
+        },
+        "storyline": null
+      }
+    }
+  ],
+  "calendar": {
+    "Dividend Date": "2026-07-09",
+    "Ex-Dividend Date": "2026-06-11",
+    "Earnings Date": [
+      "2026-07-16"
+    ],
+    "Earnings High": 3.82,
+    "Earnings Low": 3.67,
+    "Earnings Average": 3.73677,
+    "Revenue High": 1283000000000,
+    "Revenue Low": 1225000000000,
+    "Revenue Average": 1261220195310
+  },
+  "earnings_dates": {
+    "__error__": "ImportError: `Import lxml` failed.  Use pip or conda to install the lxml package."
+  },
+  "institutional_holders": [
+    {
+      "index": 0,
+      "Date Reported": "2025-12-31T00:00:00",
+      "Holder": "FMR, LLC",
+      "pctHeld": 0.0117999995,
+      "Shares": 61131828,
+      "Value": 25509395070,
+      "pctChange": -0.16469999
+    },
+    {
+      "index": 1,
+      "Date Reported": "2025-12-31T00:00:00",
+      "Holder": "Sanders Capital, LLC",
+      "pctHeld": 0.0062,
+      "Shares": 31958360,
+      "Value": 13335744369,
+      "pctChange": -0.01
+    },
+    {
+      "index": 2,
+      "Date Reported": "2025-12-31T00:00:00",
+      "Holder": "Capital World Investors",
+      "pctHeld": 0.0053,
+      "Shares": 27404289,
+      "Value": 11435398835,
+      "pctChange": -0.0121
+    },
+    {
+      "index": 3,
+      "Date Reported": "2025-12-31T00:00:00",
+      "Holder": "Capital International Investors",
+      "pctHeld": 0.0049,
+      "Shares": 25658661,
+      "Value": 10706974449,
+      "pctChange": 0.00059999997
+    },
+    {
+      "index": 4,
+      "Date Reported": "2025-12-31T00:00:00",
+      "Holder": "JPMORGAN CHASE & CO",
+      "pctHeld": 0.0049,
+      "Shares": 25182540,
+      "Value": 10508296296,
+      "pctChange": -0.4859
+    },
+    {
+      "index": 5,
+      "Date Reported": "2026-03-31T00:00:00",
+      "Holder": "Fisher Asset Management, LLC",
+      "pctHeld": 0.0036000002,
+      "Shares": 18617691,
+      "Value": 7768883257,
+      "pctChange": 0.025899999
+    },
+    {
+      "index": 6,
+      "Date Reported": "2025-12-31T00:00:00",
+      "Holder": "Van Eck Associates Corporation",
+      "pctHeld": 0.0034,
+      "Shares": 17464962,
+      "Value": 7287866732,
+      "pctChange": 0.1114
+    },
+    {
+      "index": 7,
+      "Date Reported": "2025-12-31T00:00:00",
+      "Holder": "Blackrock Inc.",
+      "pctHeld": 0.0032,
+      "Shares": 16481878,
+      "Value": 6877640521,
+      "pctChange": -0.040700004
+    },
+    {
+      "index": 8,
+      "Date Reported": "2025-12-31T00:00:00",
+      "Holder": "Bank of America Corporation",
+      "pctHeld": 0.0031,
+      "Shares": 15902819,
+      "Value": 6636007884,
+      "pctChange": 0.0647
+    },
+    {
+      "index": 9,
+      "Date Reported": "2025-12-31T00:00:00",
+      "Holder": "Morgan Stanley",
+      "pctHeld": 0.0026,
+      "Shares": 13513371,
+      "Value": 5638927067,
+      "pctChange": -0.1046
+    }
+  ],
+  "major_holders": [
+    {
+      "index": "insidersPercentHeld",
+      "Value": 0.0005
+    },
+    {
+      "index": "institutionsPercentHeld",
+      "Value": 0.15742
+    },
+    {
+      "index": "institutionsFloatPercentHeld",
+      "Value": 0.1575
+    },
+    {
+      "index": "institutionsCount",
+      "Value": 4190.0
+    }
+  ]
+}
