@@ -424,6 +424,93 @@ def build_fundamentals_client(
 # ---------------------------------------------------------------------------
 
 
+def _summarise_recent_moves(
+    fund: Fundamentals,
+    *,
+    today: date | None,
+    window_days: int = 30,
+) -> dict[str, Any]:
+    """Distill recent rating-change activity into per-window aggregates.
+
+    Returns a dict with:
+      - upgrades / downgrades / reiterations: counts in the window
+      - pt_raised / pt_cut / pt_unchanged: count by price-target action
+      - pt_avg_change_pct: mean % change in current_price_target vs prior
+                           (None when no row had both targets)
+      - latest: most-recent row date (or None)
+
+    Counts are over ``recent_rating_changes`` (already capped). When
+    ``today`` is None we use ``fund.fetched_at`` as the reference date so
+    callers get a deterministic answer.
+    """
+    if not fund.recent_rating_changes:
+        return {
+            "upgrades": 0, "downgrades": 0, "reiterations": 0,
+            "pt_raised": 0, "pt_cut": 0, "pt_unchanged": 0,
+            "pt_avg_change_pct": None,
+            "latest": None,
+        }
+    ref = today or fund.fetched_at.date()
+    pt_changes: list[float] = []
+    out = {
+        "upgrades": 0, "downgrades": 0, "reiterations": 0,
+        "pt_raised": 0, "pt_cut": 0, "pt_unchanged": 0,
+        "latest": fund.recent_rating_changes[0].grade_date.date(),
+    }
+    for rc in fund.recent_rating_changes:
+        d = rc.grade_date.date()
+        if (ref - d).days > window_days or (ref - d).days < 0:
+            continue
+        a = (rc.action or "").lower()
+        if a in {"up", "upgrade"}:
+            out["upgrades"] += 1
+        elif a in {"down", "downgrade"}:
+            out["downgrades"] += 1
+        else:
+            out["reiterations"] += 1
+        # Price-target moves: prefer the explicit deltas where available.
+        cur, prior = rc.current_price_target, rc.prior_price_target
+        if cur is not None and prior is not None and prior > 0:
+            pct = (cur - prior) / prior * 100
+            if pct > 0.5:
+                out["pt_raised"] += 1
+            elif pct < -0.5:
+                out["pt_cut"] += 1
+            else:
+                out["pt_unchanged"] += 1
+            pt_changes.append(pct)
+    out["pt_avg_change_pct"] = (
+        sum(pt_changes) / len(pt_changes) if pt_changes else None
+    )
+    return out
+
+
+def _format_history_diff(history: list[dict[str, Any]]) -> str | None:
+    """Compare the latest period (0m) to the earliest available (-1m, -2m, -3m).
+
+    Returns a short Markdown line, or None when not enough data.
+    """
+    if len(history) < 2:
+        return None
+    latest = history[0]
+    # Find the oldest period available (largest negative offset).
+    oldest = history[-1]
+    if not isinstance(latest, dict) or not isinstance(oldest, dict):
+        return None
+    parts = []
+    for k in ("strongBuy", "buy", "hold", "sell", "strongSell"):
+        a, b = latest.get(k, 0), oldest.get(k, 0)
+        if a != b:
+            sign = "+" if a > b else ""
+            parts.append(f"{k} {b}→{a} ({sign}{a - b})")
+    if not parts:
+        return None
+    return (
+        f"**Rating distribution change (vs {oldest.get('period', '-3m')}):** "
+        + ", ".join(parts)
+    )
+
+
 def render_for_prompt(
     fund: Fundamentals | None,
     *,
@@ -431,40 +518,64 @@ def render_for_prompt(
     max_changes: int = 5,
     today: date | None = None,
     blackout_days: int = 3,
+    moves_window_days: int = 30,
 ) -> str:
     """Render Fundamentals as a compact Markdown block for LLM prompts.
+
+    Layout is **change-first**: the model sees recent movement (rating
+    upgrades, target revisions, history diff, earnings) before structural
+    context (consensus level, full distribution). This nudges decisions
+    toward *deltas* rather than re-acting to a stable ``strong_buy`` rating
+    every hour.
+
+    Sections (in order):
+      1. ``Fundamentals — recent moves (last 30d)``  — counts of
+         upgrades / downgrades / target raises / cuts / mean PT change.
+      2. ``Recent rating changes`` (most recent N rows, raw stream).
+      3. ``Rating distribution change`` (vs the earliest period, e.g. -3m).
+      4. ``Wall Street consensus (level)`` — the structural snapshot.
+      5. ``Recent news headlines``.
+      6. ``Next earnings`` + optional ``WARNING: blackout`` line.
 
     Returns an empty string when ``fund`` is None so callers can ``str.join``
     without conditionals.
 
-    ``today`` and ``blackout_days`` drive the earnings-blackout warning: when
-    ``today`` is provided and the next earnings date is within ``blackout_days``
-    (inclusive), an explicit ``WARNING`` line is emitted asking the LLM to
-    decline new BUY positions. ``today=None`` skips the warning.
+    ``today`` and ``blackout_days`` drive the earnings-blackout warning;
+    ``today=None`` skips the warning. ``moves_window_days`` widens or
+    narrows the recent-moves aggregation.
     """
     if fund is None:
         return ""
     parts: list[str] = []
-    cons = fund.consensus
-    upside = cons.upside_pct
-    upside_str = f" ({upside:+.1f}% vs current)" if upside is not None else ""
-    if cons.recommendation_key or cons.target_mean:
-        parts.append(
-            "**Wall Street consensus:** "
-            f"{cons.recommendation_key or '?'} "
-            f"(mean={cons.recommendation_mean or '?'}, "
-            f"n={cons.num_analysts or '?'} analysts); "
-            f"target ${cons.target_mean or '?':.2f}{upside_str} "
-            f"[low ${cons.target_low or 0:.0f} / high ${cons.target_high or 0:.0f}]"
+
+    # 1. Recent moves (CHANGE FIRST).
+    moves = _summarise_recent_moves(
+        fund, today=today, window_days=moves_window_days
+    )
+    if any(
+        moves[k] for k in (
+            "upgrades", "downgrades", "reiterations",
+            "pt_raised", "pt_cut", "pt_unchanged",
         )
-        if cons.rating_distribution:
-            d = cons.rating_distribution
-            parts.append(
-                f"**Rating distribution (latest):** "
-                f"strongBuy={d.get('strongBuy', 0)}, buy={d.get('buy', 0)}, "
-                f"hold={d.get('hold', 0)}, sell={d.get('sell', 0)}, "
-                f"strongSell={d.get('strongSell', 0)}"
-            )
+    ):
+        pt_avg = moves["pt_avg_change_pct"]
+        pt_avg_str = f", mean PT change {pt_avg:+.1f}%" if pt_avg is not None else ""
+        parts.append(
+            f"**Fundamentals — recent moves (last {moves_window_days}d):** "
+            f"{moves['upgrades']} upgrades / "
+            f"{moves['downgrades']} downgrades / "
+            f"{moves['reiterations']} reiterations; "
+            f"PT raised {moves['pt_raised']} / cut {moves['pt_cut']} / "
+            f"unchanged {moves['pt_unchanged']}{pt_avg_str}."
+        )
+    elif moves["latest"] is not None:
+        # No moves in window but we know there's history.
+        parts.append(
+            f"**Fundamentals — recent moves (last {moves_window_days}d):** none "
+            f"(latest move {moves['latest'].isoformat()})."
+        )
+
+    # 2. Raw rating-change stream (most recent N).
     if fund.recent_rating_changes:
         parts.append("**Recent rating changes:**")
         for rc in fund.recent_rating_changes[:max_changes]:
@@ -474,16 +585,54 @@ def render_for_prompt(
                 if rc.current_price_target is not None
                 else "PT n/a"
             )
+            # Surface BIG PT moves explicitly so the LLM doesn't have to do math.
+            big_move = ""
+            cur, prior = rc.current_price_target, rc.prior_price_target
+            if cur is not None and prior is not None and prior > 0:
+                pct = (cur - prior) / prior * 100
+                if abs(pct) >= 5:
+                    big_move = f" [PT {pct:+.0f}%]"
             line = (
                 f"- {d} {rc.firm}: {rc.from_grade or '?'} → {rc.to_grade} "
-                f"({rc.action or rc.price_target_action or 'n/a'}, {tgt})"
+                f"({rc.action or rc.price_target_action or 'n/a'}, {tgt}){big_move}"
             )
             parts.append(line)
+
+    # 3. Rating-distribution diff (latest vs oldest period in history).
+    diff_line = _format_history_diff(fund.rating_history)
+    if diff_line:
+        parts.append(diff_line)
+
+    # 4. Consensus level (structural).
+    cons = fund.consensus
+    upside = cons.upside_pct
+    upside_str = f" ({upside:+.1f}% vs current)" if upside is not None else ""
+    if cons.recommendation_key or cons.target_mean:
+        parts.append(
+            "**Wall Street consensus (level):** "
+            f"{cons.recommendation_key or '?'} "
+            f"(mean={cons.recommendation_mean or '?'}, "
+            f"n={cons.num_analysts or '?'} analysts); "
+            f"target ${cons.target_mean or '?':.2f}{upside_str} "
+            f"[low ${cons.target_low or 0:.0f} / high ${cons.target_high or 0:.0f}]"
+        )
+        if cons.rating_distribution:
+            d = cons.rating_distribution
+            parts.append(
+                "**Rating distribution (latest):** "
+                f"strongBuy={d.get('strongBuy', 0)}, buy={d.get('buy', 0)}, "
+                f"hold={d.get('hold', 0)}, sell={d.get('sell', 0)}, "
+                f"strongSell={d.get('strongSell', 0)}"
+            )
+
+    # 5. News headlines.
     if fund.news:
         parts.append("**Recent news headlines:**")
         for n in fund.news[:max_news]:
             d = n.pub_date.strftime("%Y-%m-%d") if n.pub_date else "?"
             parts.append(f"- [{d}] {n.title} ({n.publisher or '?'})")
+
+    # 6. Earnings + blackout.
     if fund.earnings.earnings_date:
         ed = fund.earnings.earnings_date
         days_str = ""

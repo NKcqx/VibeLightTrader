@@ -330,3 +330,112 @@ def test_render_for_prompt_no_today_skips_warning() -> None:
     out = render_for_prompt(fund, today=None)
     assert "WARNING" not in out
     assert "in " not in out.split("Next earnings:")[1].splitlines()[0]
+
+
+# ---------------------------------------------------------------------------
+# Change-first prompt layout (Step 2).
+# ---------------------------------------------------------------------------
+
+
+def test_render_for_prompt_recent_moves_section_first() -> None:
+    """The 'recent moves' summary must appear before the level block.
+
+    Prevents regression: hourly LLM ticks should see deltas first so a
+    stable strong_buy rating doesn't keep nudging BUY decisions.
+    """
+    fund = _fund_for_render()
+    out = render_for_prompt(fund, today=date(2026, 5, 7))
+    moves_idx = out.find("Fundamentals — recent moves")
+    level_idx = out.find("Wall Street consensus (level)")
+    assert moves_idx >= 0
+    assert level_idx >= 0
+    assert moves_idx < level_idx, "recent moves must precede level block"
+
+
+def test_render_for_prompt_recent_moves_aggregates_window() -> None:
+    """Upgrades / PT raises / cuts within the 30d window are counted."""
+    raw = _synthetic_raw()
+    raw["upgrades_downgrades"] = [
+        {"GradeDate": "2026-05-01T10:00:00", "Firm": "A", "ToGrade": "Buy",
+         "FromGrade": "Hold", "Action": "up",
+         "currentPriceTarget": 150.0, "priorPriceTarget": 130.0},
+        {"GradeDate": "2026-04-25T10:00:00", "Firm": "B", "ToGrade": "Hold",
+         "FromGrade": "Buy", "Action": "down",
+         "currentPriceTarget": 100.0, "priorPriceTarget": 120.0},
+        {"GradeDate": "2026-04-20T10:00:00", "Firm": "C", "ToGrade": "Buy",
+         "FromGrade": "Buy", "Action": "main",
+         "currentPriceTarget": 140.0, "priorPriceTarget": 140.0},
+        # Out of window:
+        {"GradeDate": "2026-01-01T10:00:00", "Firm": "OldBank",
+         "ToGrade": "Buy", "FromGrade": "Buy", "Action": "main",
+         "currentPriceTarget": 200.0, "priorPriceTarget": 100.0},
+    ]
+    fund = parse_raw_fundamentals(raw)
+    out = render_for_prompt(fund, today=date(2026, 5, 7), moves_window_days=30)
+    assert "1 upgrades" in out
+    assert "1 downgrades" in out
+    assert "1 reiterations" in out
+    assert "PT raised 1 / cut 1 / unchanged 1" in out
+    # Avg should reflect only the in-window rows: (+15.4 -16.7 +0)/3 ≈ -0.4%
+    assert "mean PT change" in out
+
+
+def test_render_for_prompt_recent_moves_none_in_window() -> None:
+    """When all rating changes are outside the window, emit a 'none' line."""
+    raw = _synthetic_raw()
+    raw["upgrades_downgrades"] = [
+        {"GradeDate": "2026-01-01T10:00:00", "Firm": "Old", "ToGrade": "Buy",
+         "FromGrade": "Hold", "Action": "up",
+         "currentPriceTarget": 150.0, "priorPriceTarget": 130.0},
+    ]
+    fund = parse_raw_fundamentals(raw)
+    out = render_for_prompt(fund, today=date(2026, 5, 7), moves_window_days=30)
+    assert "recent moves (last 30d):** none" in out
+    assert "latest move 2026-01-01" in out
+
+
+def test_render_for_prompt_inline_pt_marker_for_big_moves() -> None:
+    """Rows with ≥5% PT change get an inline ``[PT +N%]`` marker."""
+    raw = _synthetic_raw()
+    raw["upgrades_downgrades"] = [
+        {"GradeDate": "2026-04-25T10:00:00", "Firm": "BigMove",
+         "ToGrade": "Buy", "FromGrade": "Buy", "Action": "main",
+         "currentPriceTarget": 200.0, "priorPriceTarget": 150.0},  # +33%
+        {"GradeDate": "2026-04-20T10:00:00", "Firm": "TinyMove",
+         "ToGrade": "Buy", "FromGrade": "Buy", "Action": "main",
+         "currentPriceTarget": 152.0, "priorPriceTarget": 150.0},  # +1.3%
+    ]
+    fund = parse_raw_fundamentals(raw)
+    out = render_for_prompt(fund, today=date(2026, 5, 7))
+    assert "[PT +33%]" in out
+    assert "[PT +1%]" not in out  # below 5% threshold
+    assert "[PT +0%]" not in out
+
+
+def test_render_for_prompt_history_diff_when_distribution_changed() -> None:
+    raw = _synthetic_raw()
+    raw["recommendations"] = [
+        {"index": 0, "period": "0m", "strongBuy": 9, "buy": 48, "hold": 2,
+         "sell": 1, "strongSell": 0},
+        {"index": 1, "period": "-1m", "strongBuy": 9, "buy": 48, "hold": 2,
+         "sell": 1, "strongSell": 0},
+        {"index": 2, "period": "-3m", "strongBuy": 12, "buy": 48, "hold": 2,
+         "sell": 1, "strongSell": 0},
+    ]
+    fund = parse_raw_fundamentals(raw)
+    out = render_for_prompt(fund, today=date(2026, 5, 7))
+    assert "Rating distribution change" in out
+    assert "strongBuy 12→9" in out
+
+
+def test_render_for_prompt_history_diff_skipped_when_unchanged() -> None:
+    raw = _synthetic_raw()
+    raw["recommendations"] = [
+        {"index": 0, "period": "0m", "strongBuy": 9, "buy": 48, "hold": 2,
+         "sell": 1, "strongSell": 0},
+        {"index": 1, "period": "-3m", "strongBuy": 9, "buy": 48, "hold": 2,
+         "sell": 1, "strongSell": 0},
+    ]
+    fund = parse_raw_fundamentals(raw)
+    out = render_for_prompt(fund, today=date(2026, 5, 7))
+    assert "Rating distribution change" not in out

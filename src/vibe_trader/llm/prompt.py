@@ -49,6 +49,25 @@ Hard rules — violating any disqualifies your response:
      weight your decision toward that horizon and risk tolerance — do
      NOT short-term-scalp a multi-month thesis.
 
+Fundamentals discipline (when a "Fundamentals (snapshot..." block is
+present):
+  8. The consensus rating, target price, and rating distribution are
+     STRUCTURAL CONTEXT, not standalone triggers. A stable ``strong_buy``
+     rating with no recent moves does NOT justify a new BUY by itself —
+     the model is being asked the same question every hour and the
+     fundamentals barely change between calls.
+  9. BUY/SELL must be driven by AT LEAST ONE of:
+       (i)  the technical signals listed in "Triggered signals";
+       (ii) a *change* in fundamentals — see "Fundamentals — recent
+            moves": rating upgrade/downgrade in the last 30 days, price-
+            target raised/cut by >5%, an earnings event, or imminent
+            blackout. If neither (i) nor (ii) is present, prefer HOLD.
+  10. When a fundamentals "WARNING: Earnings blackout" line is present,
+      decline new BUY positions and prefer HOLD or partial SELL only.
+  11. Recent news headlines are advisory only — do not infer sentiment
+      from titles unless they describe a concrete catalyst (guidance
+      change, M&A, regulatory action, executive change).
+
 You will be evaluated on (a) JSON validity, (b) constraint adherence, and
 (c) decision quality vs hand-coded rules over many trading days.
 """
