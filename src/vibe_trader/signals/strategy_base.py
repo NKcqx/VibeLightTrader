@@ -31,6 +31,7 @@ from typing import Any, Protocol, runtime_checkable
 
 import pandas as pd
 
+from vibe_trader.data.fundamentals import Fundamentals
 from vibe_trader.futu_client import Snapshot
 from vibe_trader.signals.base import Signal
 from vibe_trader.signals.strategy_lite import SignalSuggest
@@ -67,6 +68,11 @@ class StrategyContext:
 
     last_30_bar_return: float | None = None
     """30-bar trailing return on the 60m series; None when not enough history."""
+
+    fundamentals: Fundamentals | None = None
+    """Wall-Street consensus + recent rating changes + news + earnings calendar.
+    Fed by `FundamentalsClient.fetch(code)` at scheduler tick time. Strategies
+    that don't care (e.g. RuleStrategy) can ignore it."""
 
     config: dict[str, Any] = field(default_factory=dict)
     """Strategy-private knobs from settings.yaml `trader.strategy.<type>`."""

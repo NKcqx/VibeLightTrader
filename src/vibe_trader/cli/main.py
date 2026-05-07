@@ -245,6 +245,64 @@ def chart(
 
 
 @cli.command()
+@click.argument("code", metavar="TICKER")
+@click.option(
+    "--max-news",
+    type=int,
+    default=5,
+    show_default=True,
+    help="How many news headlines to print.",
+)
+@click.option(
+    "--max-changes",
+    type=int,
+    default=10,
+    show_default=True,
+    help="How many recent rating changes to print.",
+)
+@click.pass_context
+def fundamentals(
+    ctx: click.Context, code: str, max_news: int, max_changes: int
+) -> None:
+    """Print Wall-Street consensus / rating moves / news / earnings for TICKER.
+
+    Reads from the local fixture snapshot (no network call). Refresh the
+    fixture with:
+
+        python scripts/refresh_fundamentals_fixtures.py NVDA MSFT
+
+    \b
+    Examples:
+      vibe-trader fundamentals US.NVDA
+      vibe-trader fundamentals US.MSFT --max-news 10 --max-changes 20
+    """
+    cfg = _get_cfg(ctx)
+    from vibe_trader.data.fundamentals import (
+        build_fundamentals_client,
+        render_for_prompt,
+    )
+
+    client = build_fundamentals_client(
+        cfg.fundamentals.source,
+        fixture_dir=cfg.fundamentals.fixture_dir,
+        max_rating_changes=max(max_changes, cfg.fundamentals.max_rating_changes),
+        max_news=max(max_news, cfg.fundamentals.max_news),
+    )
+    fund = client.fetch(code)
+    if fund is None:
+        raise click.ClickException(
+            f"No fundamentals fixture for {code!r}. Run "
+            f"`python scripts/refresh_fundamentals_fixtures.py "
+            f"{code.split('.', 1)[1] if '.' in code else code}` first, "
+            f"or check `fundamentals.fixture_dir` in settings.yaml."
+        )
+    click.echo(f"# Fundamentals — {fund.code}")
+    click.echo(f"_fetched_at: {fund.fetched_at.isoformat()}_")
+    click.echo()
+    click.echo(render_for_prompt(fund, max_news=max_news, max_changes=max_changes))
+
+
+@cli.command()
 @click.option(
     "--job",
     type=click.Choice(["intraday", "morning", "closing"]),

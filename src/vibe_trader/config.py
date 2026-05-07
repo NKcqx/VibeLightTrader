@@ -72,6 +72,35 @@ class LoggingConfig(BaseModel):
     file: str | None = None
 
 
+class FundamentalsConfig(BaseModel):
+    """Wall-Street consensus / news / earnings feed for LLM strategies.
+
+    Data is snapshotted from yfinance via
+    ``scripts/refresh_fundamentals_fixtures.py`` and read at runtime from a
+    local fixture directory. The runtime never touches yfinance directly —
+    keep ``source: fixture`` and refresh the fixture deliberately.
+    """
+
+    source: Literal["fixture", "none"] = "fixture"
+    """``"fixture"`` reads ``src/vibe_trader/data/fixtures/fundamentals/raw/``;
+    ``"none"`` disables fundamentals (LLM won't see consensus/news)."""
+
+    fixture_dir: str | None = None
+    """Override the default fixture directory. None = package default."""
+
+    max_rating_changes: int = 20
+    """Cap on how many recent rating changes are loaded per symbol."""
+
+    max_news: int = 10
+    """Cap on how many recent news headlines are loaded per symbol."""
+
+    prompt_max_changes: int = 5
+    """Cap on rating changes rendered into the LLM prompt (UI density)."""
+
+    prompt_max_news: int = 5
+    """Cap on news headlines rendered into the LLM prompt."""
+
+
 class StrategyRuleConfig(BaseModel):
     """Knobs for the hard-coded rule strategy (a.k.a. strategy_lite)."""
 
@@ -350,6 +379,7 @@ class AppConfig(BaseModel):
     signals: SignalsConfig
     logging: LoggingConfig
     trader: TraderConfig = Field(default_factory=TraderConfig)
+    fundamentals: FundamentalsConfig = Field(default_factory=FundamentalsConfig)
 
 
 def load_watchlist(path: str | Path) -> WatchlistConfig:

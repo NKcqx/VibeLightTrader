@@ -102,6 +102,11 @@ Triggered signals (last {{ dedupe_window_minutes }} min):
 {%- else %}
   (none)
 {%- endif %}
+{%- if fundamentals_md %}
+
+Fundamentals (snapshot — Wall Street consensus, recent rating moves, news, earnings):
+{{ fundamentals_md }}
+{%- endif %}
 
 Constraints:
   - max_position:   {{ max_position }}
@@ -128,6 +133,7 @@ def render_user_prompt(
     min_confidence: float,
     dedupe_window_minutes: int = 60,
     profile: Any | None = None,
+    fundamentals_md: str | None = None,
     template: str = DEFAULT_USER_TEMPLATE,
 ) -> str:
     """Render the user message for one decision.
@@ -140,6 +146,9 @@ def render_user_prompt(
     same field names). When non-None and `profile.enabled`, the LLM
     receives the medium-term thesis framing block. Pass None to keep the
     legacy short-term framing.
+    `fundamentals_md`: pre-rendered Markdown block from
+    `vibe_trader.data.fundamentals.render_for_prompt`. None / empty →
+    omitted entirely from the prompt.
     """
     if profile is not None and not getattr(profile, "enabled", True):
         profile = None
@@ -159,6 +168,7 @@ def render_user_prompt(
         min_confidence=min_confidence,
         dedupe_window_minutes=dedupe_window_minutes,
         profile=profile,
+        fundamentals_md=fundamentals_md or "",
     )
 
 

@@ -11,6 +11,10 @@ from sqlalchemy.dialects.sqlite import insert as sqlite_insert
 from sqlalchemy.orm import sessionmaker
 
 from vibe_trader.config import AppConfig, WatchlistConfig
+from vibe_trader.data.fundamentals import (
+    FundamentalsClient,
+    build_fundamentals_client,
+)
 from vibe_trader.data.indicators import compute_indicators
 from vibe_trader.data.kline import fetch_kline_df
 from vibe_trader.data.quotes import sync_snapshots
@@ -404,6 +408,34 @@ def _refresh_journal_overview_for_quiet_code(
     refresh_overview_only(journal_dir=journal_dir, overview=overview)
 
 
+def _build_fundamentals_client(cfg: AppConfig) -> FundamentalsClient | None:
+    """Construct the per-tick fundamentals reader from `cfg.fundamentals`.
+
+    Returns None when source='none' so callers can short-circuit without
+    consulting config flags. Errors during construction (missing fixture
+    dir, etc.) log a warning and degrade to None rather than crashing the
+    cron tick.
+    """
+    fc = cfg.fundamentals
+    if fc.source == "none":
+        return None
+    try:
+        return build_fundamentals_client(
+            fc.source,
+            fixture_dir=fc.fixture_dir,
+            max_rating_changes=fc.max_rating_changes,
+            max_news=fc.max_news,
+        )
+    except Exception as exc:  # noqa: BLE001
+        log.warning(
+            "fundamentals.build_failed",
+            source=fc.source,
+            exc_type=type(exc).__name__,
+            error=repr(exc),
+        )
+        return None
+
+
 def _build_strategy_from_cfg(
     cfg: AppConfig, *, send_card_fn: SendCardFn = _default_sender
 ) -> Strategy:
@@ -429,6 +461,8 @@ def _build_strategy_from_cfg(
     profile = cfg.trader.investment_profile
     if sc.type == "llm":
         sub_dict["investment_profile"] = profile
+        sub_dict["fundamentals_max_changes"] = cfg.fundamentals.prompt_max_changes
+        sub_dict["fundamentals_max_news"] = cfg.fundamentals.prompt_max_news
     strat = build_strategy(sc.type, sub_dict)
 
     if sc.type == "hitl":
@@ -475,6 +509,7 @@ def _run_strategy_per_code(
     kline_dfs: dict[str, Any] | None = None,
     position_details: dict[str, tuple[int, float, float]] | None = None,
     return_summaries: dict[str, ReturnSummary] | None = None,
+    fundamentals_client: Any | None = None,
 ) -> dict[str, SignalSuggest]:
     """Build a `StrategyContext` per code and collect non-None decisions.
 
@@ -493,6 +528,10 @@ def _run_strategy_per_code(
             avg_cost/realized_pnl default to 0.0 when absent.
         return_summaries: {code: ReturnSummary}. Optional — provides
             intraday and 30-bar return percentages.
+        fundamentals_client: Optional FundamentalsClient. When provided,
+            the per-code Fundamentals snapshot is loaded and attached to
+            the StrategyContext. Errors from the lookup are swallowed so
+            a missing fixture never aborts the tick.
     """
     snapshots_by_code = snapshots_by_code or {}
     kline_dfs = kline_dfs or {}
@@ -504,6 +543,18 @@ def _run_strategy_per_code(
             code, (positions.get(code, 0), 0.0, 0.0)
         )
         ret = return_summaries.get(code)
+        fund = None
+        if fundamentals_client is not None:
+            try:
+                fund = fundamentals_client.fetch(code)
+            except Exception as e:  # noqa: BLE001
+                log.warning(
+                    "fundamentals.lookup_failed",
+                    code=code,
+                    exc_type=type(e).__name__,
+                    error=repr(e),
+                )
+                fund = None
         ctx = StrategyContext(
             code=code,
             signals=sigs,
@@ -514,6 +565,7 @@ def _run_strategy_per_code(
             realized_pnl=realized_pnl,
             intraday_return=ret.intraday if ret else None,
             last_30_bar_return=ret.last_30_bars if ret else None,
+            fundamentals=fund,
         )
         try:
             decision = strategy.decide(ctx)
@@ -811,6 +863,7 @@ def run_intraday_check(
         sigs_by_code.setdefault(sig.code, []).append(sig)
 
     strategy = _build_strategy_from_cfg(cfg, send_card_fn=send_card_fn)
+    fund_client = _build_fundamentals_client(cfg)
     executed: dict[int, int] = {}
     with session_scope(factory) as session:
         positions = _load_open_positions(session)
@@ -823,6 +876,7 @@ def run_intraday_check(
             kline_dfs=kline_dfs,
             position_details=position_details,
             return_summaries=return_summaries,
+            fundamentals_client=fund_client,
         )
         ids = _persist_signal_rows(session, deduped, suggestions=suggestions)
         if paper_trader is not None and cfg.trader.auto_execute:

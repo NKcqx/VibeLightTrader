@@ -169,3 +169,17 @@ trader:
     # LLM-prompt helpers
     rebalance_cadence_days: 30        # reserved (long-form review prompt cadence)
     valuation_ceiling_pe: null        # null=disabled (reserved)
+
+# ---------------------------------------------------------------------------
+# Fundamentals — Wall-Street consensus / news / earnings calendar feed
+# ---------------------------------------------------------------------------
+# Snapshotted from yfinance via `python scripts/refresh_fundamentals_fixtures.py`
+# and read at runtime from the local fixture directory below. The runtime
+# never hits yfinance directly — refresh the fixture deliberately, e.g. weekly.
+fundamentals:
+  source: fixture                   # fixture | none
+  fixture_dir: null                 # null = src/vibe_trader/data/fixtures/fundamentals/raw
+  max_rating_changes: 20            # how many rating-change rows to load
+  max_news: 10                      # how many recent news headlines to load
+  prompt_max_changes: 5             # cap rendered into the LLM prompt
+  prompt_max_news: 5                # cap rendered into the LLM prompt

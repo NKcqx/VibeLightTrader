@@ -269,6 +269,13 @@ class LLMStrategy:
     medium-term thesis framing block. None = legacy short-term framing.
     """
 
+    fundamentals_max_changes: int = 5
+    """Cap on rating changes rendered into the LLM prompt. Higher values
+    give the model more recency context but inflate prompt tokens."""
+
+    fundamentals_max_news: int = 5
+    """Cap on news headlines rendered into the LLM prompt."""
+
     _cache: dict[str, SignalSuggest] = field(default_factory=dict, init=False, repr=False)
 
     def decide(self, ctx: StrategyContext) -> SignalSuggest | None:
@@ -402,6 +409,31 @@ class LLMStrategy:
             except Exception:  # pragma: no cover — be paranoid; tolerate odd df shapes
                 indicators = None
 
+        from datetime import datetime, timezone
+
+        from vibe_trader.data.fundamentals import render_for_prompt
+
+        # Use the snapshot timestamp when available so the blackout window
+        # is deterministic in unit tests / replay; otherwise fall back to
+        # wall-clock UTC.
+        if ctx.snapshot is not None and getattr(ctx.snapshot, "update_time", None):
+            today = ctx.snapshot.update_time.date()
+        else:
+            today = datetime.now(tz=timezone.utc).date()
+        blackout_days = 3
+        if self.investment_profile is not None:
+            blackout_days = int(
+                getattr(self.investment_profile, "earnings_blackout_days", 3)
+            )
+
+        fundamentals_md = render_for_prompt(
+            ctx.fundamentals,
+            max_news=self.fundamentals_max_news,
+            max_changes=self.fundamentals_max_changes,
+            today=today,
+            blackout_days=blackout_days,
+        )
+
         user = render_user_prompt(
             code=ctx.code,
             snapshot=ctx.snapshot,
@@ -416,6 +448,7 @@ class LLMStrategy:
             min_trade_size=self.min_trade_size,
             min_confidence=self.min_confidence,
             profile=self.investment_profile,
+            fundamentals_md=fundamentals_md,
             template=self.user_template,
         )
         return [
@@ -554,6 +587,8 @@ def _build_llm_strategy(config: dict[str, Any]) -> Strategy:
         dev_log_path=dev_log_path,
         fallback_on_error=fallback_on_error,
         investment_profile=profile,
+        fundamentals_max_changes=cfg.pop("fundamentals_max_changes", 5),
+        fundamentals_max_news=cfg.pop("fundamentals_max_news", 5),
         # Skeleton fields from StrategyLLMConfig that we don't use today
         # are silently ignored — keeps yaml forward-compat. (kline_window,
         # max_concurrent, retries)
