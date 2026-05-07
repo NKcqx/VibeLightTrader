@@ -129,28 +129,6 @@ def test_boll_lower_break_renders_levels() -> None:
 
 
 # ---------------------------------------------------------------------------
-# News & Futu anomalies — no numeric payload but still get a meaning.
-# ---------------------------------------------------------------------------
-
-
-@pytest.mark.parametrize(
-    "stype, name_substr, meaning_substr",
-    [
-        ("news_negative_burst", "负面舆情", "降温"),
-        ("news_positive_burst", "正面舆情", "升温"),
-        ("futu_tech_anomaly", "技术异动", "技术面"),
-        ("futu_capital_anomaly", "资金异动", "资金"),
-    ],
-)
-def test_misc_signal_types_have_meaning(
-    stype: str, name_substr: str, meaning_substr: str
-) -> None:
-    out = explain_signal(_sig(stype, {}))
-    assert name_substr in out
-    assert meaning_substr in out
-
-
-# ---------------------------------------------------------------------------
 # Robustness — payload missing fields / unknown signal_type.
 # ---------------------------------------------------------------------------
 

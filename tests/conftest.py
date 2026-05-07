@@ -50,7 +50,6 @@ def app_cfg(tmp_path) -> AppConfig:
                 "intraday_check": JobCron(cron="30 9-15 * * mon-fri"),
                 "morning_brief": JobCron(cron="30 10 * * mon-fri"),
                 "closing_brief": JobCron(cron="30 16 * * mon-fri"),
-                "news_pulse": JobCron(cron="*/30 9-15 * * mon-fri"),
             },
         ),
         lark=LarkConfig(receiver=LarkReceiver(type="chat", open_id="ou_test")),

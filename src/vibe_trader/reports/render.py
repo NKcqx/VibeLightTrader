@@ -44,10 +44,6 @@ _SIGNAL_NAME = {
     "boll_lower_break": "跌破布林下轨",
     "threshold_breach_upper": "穿越上限阈值",
     "threshold_breach_lower": "穿越下限阈值",
-    "futu_tech_anomaly": "技术异动",
-    "futu_capital_anomaly": "资金异动",
-    "news_negative_burst": "负面舆情突增",
-    "news_positive_burst": "正面舆情突增",
 }
 
 
@@ -87,22 +83,6 @@ _SIGNAL_EXPLAIN: dict[str, tuple[str, str]] = {
     "boll_lower_break": (
         "收盘 {close} 跌破布林带下轨 {boll_lower}",
         "价格偏离 20 周期均值约 -2σ，处于统计意义上的低位区间",
-    ),
-    "futu_tech_anomaly": (
-        "富途行情端检测到技术面异动",
-        "由富途侧推送的实时技术面信号，具体类型见 payload",
-    ),
-    "futu_capital_anomaly": (
-        "富途行情端检测到资金面异动",
-        "大单/北向资金等异常成交聚集，注意主力资金动向",
-    ),
-    "news_negative_burst": (
-        "短时间内出现多条负面新闻",
-        "舆情温度骤降，情绪降温；警惕避险盘流出",
-    ),
-    "news_positive_burst": (
-        "短时间内出现多条正面新闻",
-        "舆情温度骤升，情绪升温；注意短线追高风险",
     ),
 }
 
@@ -171,7 +151,6 @@ def render_signal_alert(
     close: float,
     change_pct: float,
     signals: Sequence[Signal],
-    news_titles: Sequence[str] = (),
     signal_ids: Sequence[int] = (),
     suggestion: dict[str, Any] | None = None,
     diagnostics_md: str = "",
@@ -189,7 +168,6 @@ def render_signal_alert(
     # Empty line between bullets — pairs of (feature line, meaning line)
     # become much easier to read with a paragraph break between signals.
     signals_md = "\n\n".join(f"• {explain_signal(s)}" for s in signals)
-    news_md = "\n".join(f"• {t}" for t in news_titles)
     change_str = f"{'▲' if change_pct >= 0 else '▼'} {change_pct:+.2%}"
 
     suggestion_md = ""
@@ -225,7 +203,6 @@ def render_signal_alert(
         close=close,
         change_str=change_str,
         signals_md=signals_md,
-        news_md=news_md,
         suggestion_md=suggestion_md,
         diagnostics_md=diagnostics_md,
         ts_str=_ts_str(ts),
@@ -299,7 +276,6 @@ def render_daily_brief(
     Each row dict supports the following optional fields beyond the basics:
         analysis (str): indicator interpretation line
         pnl_str  (str): per-symbol position + unrealized P&L summary
-        sentiment (str): one-line sentiment note (skipped if absent)
 
     `pnl_lines` (P2 aggregate): if non-empty, appended as a "纸面盘 P&L" section.
     """
@@ -315,8 +291,6 @@ def render_daily_brief(
             rows_md_lines.append(f"  📊 {r['analysis']}")
         if r.get("pnl_str"):
             rows_md_lines.append(f"  💰 {r['pnl_str']}")
-        if r.get("sentiment"):
-            rows_md_lines.append(f"  💬 {r['sentiment']}")
     rows_md = "\n".join(rows_md_lines)
     summary_md = "\n".join(f"• {line}" for line in summary_lines)
     pnl_md = ""
@@ -330,30 +304,6 @@ def render_daily_brief(
         rows_md=rows_md,
         summary_md=summary_md,
         pnl_md=pnl_md,
-    )
-    return json.loads(rendered)
-
-
-def render_news_pulse(
-    *,
-    code: str,
-    direction: str,
-    temp_now: float,
-    temp_prev: float,
-    news_titles: Sequence[str],
-) -> dict[str, Any]:
-    headline = "负面舆情突增" if direction == "negative" else "正面舆情突增"
-    color = "red" if direction == "negative" else "green"
-    news_md = "\n".join(f"• {t}" for t in news_titles)
-
-    tpl = _env().from_string(_load_template("news_pulse.json.j2"))
-    rendered = tpl.render(
-        code=code,
-        headline=headline,
-        color=color,
-        temp_now=f"{temp_now:.1f}",
-        temp_prev=f"{temp_prev:.1f}",
-        news_md=news_md,
     )
     return json.loads(rendered)
 

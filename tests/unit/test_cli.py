@@ -27,7 +27,6 @@ def cli_root(tmp_path: Path) -> Path:
                         "intraday_check": {"cron": "30 9-15 * * mon-fri"},
                         "morning_brief": {"cron": "30 10 * * mon-fri"},
                         "closing_brief": {"cron": "30 16 * * mon-fri"},
-                        "news_pulse": {"cron": "*/30 9-15 * * mon-fri"},
                     },
                 },
                 "lark": {
@@ -135,31 +134,7 @@ def test_db_status_prints_zero_counts(cli_root: Path) -> None:
     assert result.exit_code == 0, result.output
     assert "symbols:" in result.output
     assert "quotes:" in result.output
-    assert "sentiment_snapshots:" in result.output
-
-
-def test_once_news_skips_opend(cli_root: Path) -> None:
-    """`once --job news` MUST NOT instantiate OpenDClient (the news job has no
-    quote/kline dependency). We verify by patching `run_news_pulse` itself."""
-    runner = CliRunner()
-    runner.invoke(cli, _base_args(cli_root) + ["db", "init"])
-
-    from unittest.mock import patch
-
-    with (
-        patch(
-            "vibe_trader.cli.main.run_news_pulse",
-            return_value={"news_inserted": 0, "pushed": 0},
-        ) as mock_news,
-        patch("vibe_trader.cli.main.OpenDClient") as mock_opend,
-    ):
-        result = runner.invoke(
-            cli, _base_args(cli_root) + ["once", "--job", "news"]
-        )
-    assert result.exit_code == 0, result.output
-    assert "news_inserted" in result.output
-    mock_news.assert_called_once()
-    mock_opend.assert_not_called()
+    assert "indicators:" in result.output
 
 
 def test_once_unknown_job_rejected(cli_root: Path) -> None:

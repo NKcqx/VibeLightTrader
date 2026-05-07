@@ -62,7 +62,6 @@ def _load_or_default() -> tuple[AppConfig, WatchlistConfig]:
                     "intraday_check": JobCron(cron="30 9-15 * * mon-fri"),
                     "morning_brief": JobCron(cron="30 10 * * mon-fri"),
                     "closing_brief": JobCron(cron="30 16 * * mon-fri"),
-                    "news_pulse": JobCron(cron="*/30 9-15 * * mon-fri"),
                 },
             ),
             lark=LarkConfig(receiver=LarkReceiver(type="chat", open_id="ou_dryrun")),
@@ -86,7 +85,6 @@ def _ensure_all_crons(cfg: AppConfig) -> AppConfig:
         "intraday_check": "30 9-15 * * mon-fri",
         "morning_brief": "30 10 * * mon-fri",
         "closing_brief": "30 16 * * mon-fri",
-        "news_pulse": "*/30 9-15 * * mon-fri",
     }
     for name, cron in defaults.items():
         if name not in cfg.scheduler.jobs:

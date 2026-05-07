@@ -7,7 +7,6 @@ from vibe_trader.signals.base import Severity, Signal
 from vibe_trader.signals.compose import (
     deduplicate,
     split_by_severity,
-    upgrade_severity,
 )
 
 
@@ -93,60 +92,3 @@ def test_split_by_severity() -> None:
 def test_split_by_severity_empty() -> None:
     c, w, i = split_by_severity([])
     assert c == [] and w == [] and i == []
-
-
-# ─────────────────────────────────── upgrade_severity ─────────────────────────
-
-
-def test_upgrade_reversal_pattern_to_critical() -> None:
-    s = _s(
-        "US.NVDA",
-        datetime(2026, 5, 2, 14),
-        "futu_tech_anomaly",
-        sev=Severity.WARN,
-        payload={"event": "M_top", "indicator": "PATTERN"},
-    )
-    out = upgrade_severity(s)
-    assert out.severity is Severity.CRITICAL
-    assert out.code == s.code
-    assert out.payload == s.payload
-
-
-def test_upgrade_non_reversal_unchanged() -> None:
-    s = _s(
-        "US.NVDA",
-        datetime(2026, 5, 2, 14),
-        "futu_tech_anomaly",
-        sev=Severity.WARN,
-        payload={"event": "MA_cross", "indicator": "MA"},
-    )
-    out = upgrade_severity(s)
-    assert out.severity is Severity.WARN
-
-
-def test_upgrade_only_applies_to_futu_tech_anomaly() -> None:
-    """rsi_overbought stays WARN even with reversal-looking payload."""
-    s = _s(
-        "US.NVDA",
-        datetime(2026, 5, 2, 14),
-        "rsi_overbought",
-        sev=Severity.WARN,
-        payload={"event": "M_top"},
-    )
-    out = upgrade_severity(s)
-    assert out.severity is Severity.WARN
-
-
-def test_upgrade_all_known_reversal_events() -> None:
-    """Each pattern in REVERSAL_PATTERNS must trigger a CRITICAL bump."""
-    from vibe_trader.signals.compose import REVERSAL_PATTERNS
-
-    for evt in REVERSAL_PATTERNS:
-        s = _s(
-            "US.NVDA",
-            datetime(2026, 5, 2, 14),
-            "futu_tech_anomaly",
-            sev=Severity.WARN,
-            payload={"event": evt},
-        )
-        assert upgrade_severity(s).severity is Severity.CRITICAL, f"failed for {evt}"

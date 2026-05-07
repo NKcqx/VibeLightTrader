@@ -65,8 +65,6 @@ class SignalsConfig(BaseModel):
     macd_slow: int = 26
     macd_signal: int = 9
     dedupe_window_minutes: int = 60
-    news_burst_drop: float = 3.0
-    news_burst_rise: float = 3.0
 
 
 class LoggingConfig(BaseModel):
@@ -155,10 +153,7 @@ class StrategyLLMConfig(BaseModel):
     Inspect with `tail -f data/llm_decisions.jsonl`."""
 
     kline_window: int = 200
-    news_window_minutes: int = 30
-    news_top_k: int = 3
-    """Reserved for C2b — `_run_strategy_per_code` will fill the
-    StrategyContext with this many bars / minutes / news items."""
+    """How many K-line bars to feed the StrategyContext per tick."""
 
     cache_seconds: int = 300
     max_concurrent: int = 5
@@ -296,10 +291,6 @@ class InvestmentProfileConfig(BaseModel):
     Prevents LLM-noise churning. Set to 0 for short-term setups."""
 
     # ---- LLM-prompt helpers --------------------------------------------
-    news_lookback_days: int = 7
-    """How far back to summarise news / catalysts for the LLM. Reserved
-    until the news pipeline ships in C2b."""
-
     rebalance_cadence_days: int = 30
     """Re-evaluate the full thesis every N days (long-form review prompt
     instead of the regular tick prompt). Reserved."""

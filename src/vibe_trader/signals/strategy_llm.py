@@ -556,7 +556,7 @@ def _build_llm_strategy(config: dict[str, Any]) -> Strategy:
         investment_profile=profile,
         # Skeleton fields from StrategyLLMConfig that we don't use today
         # are silently ignored — keeps yaml forward-compat. (kline_window,
-        # news_window_minutes, news_top_k, max_concurrent, retries)
+        # max_concurrent, retries)
     )
 
 

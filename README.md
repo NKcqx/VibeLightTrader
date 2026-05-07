@@ -1,185 +1,148 @@
-# Vibe Trader — 用户手册
+# Vibe Trader
 
-一个驻留在本地的美股盯盘 + 模拟自动交易系统。每个 NYSE 交易小时自动取价 → 算指标 → 出信号 → 推飞书卡片 → 默认直接走 Futu SIMULATE 账户下单。同时支持 K 线快照、飞书双向命令、历史回看和 P&L。
+A locally-hosted US-equity monitor + simulated autotrader. Every NYSE trading hour: pull quotes → compute indicators → run an LLM strategy → push a Lark card → place a paper-trade order on Futu's SIMULATE account. K-line snapshots, two-way Lark commands, position tracking, and P&L are all built in.
 
-> **架构定位**：长跑后台（`vibe-trader run`）+ 飞书消息听器（`vibe-trader listen`）+ 一组手动 CLI。状态全部落 SQLite，跨重启幂等。
-
----
-
-## 目录
-
-1. [快速上手（5 步）](#快速上手5-步)
-2. [它能做什么](#它能做什么)
-3. [系统工作原理](#系统工作原理)
-4. [日常运行 & 操作](#日常运行--操作)
-5. [飞书命令参考](#飞书命令参考)
-6. [CLI 命令参考](#cli-命令参考)
-7. [配置文件](#配置文件)
-8. [数据模型](#数据模型)
-9. [故障排查](#故障排查)
-10. [测试 / 开发](#测试--开发)
-11. [已知限制 & Roadmap](#已知限制--roadmap)
+> **Architecture in one line**: a long-running `vibe-trader run` (scheduler) + an optional `vibe-trader listen` (Lark message listener) + a handful of one-shot CLI commands. State is persisted to SQLite, idempotent across restarts.
 
 ---
 
-## 快速上手（5 步）
+## Table of Contents
+
+1. [Quick Start (5 steps)](#quick-start-5-steps)
+2. [What It Does](#what-it-does)
+3. [How It Works](#how-it-works)
+4. [Daily Operation](#daily-operation)
+5. [Lark Command Reference](#lark-command-reference)
+6. [CLI Reference](#cli-reference)
+7. [Configuration](#configuration)
+8. [Data Model](#data-model)
+9. [Testing & Development](#testing--development)
+10. [Known Limitations & Roadmap](#known-limitations--roadmap)
+
+---
+
+## Quick Start (5 steps)
 
 ```bash
-# 1) OpenD（富途本地 API 服务，一次性装）
+# 1) OpenD (Futu's local API daemon, one-time)
 bash scripts/install_opend.sh
-python scripts/check_opend.py    # 验证 127.0.0.1:11111 可达
-# → 用富途账号登录 OpenD，并把账号设为「模拟账户」(SIMULATE)
+python scripts/check_opend.py    # verify 127.0.0.1:11111 is reachable
+# → Log into OpenD with your Futu account, switch the active account to SIMULATE.
 
-# 2) Python 环境
-conda create -n fin python=3.11 -y
-conda activate fin
+# 2) Python env
+conda create -n vibe-trader python=3.11 -y
+conda activate vibe-trader
 pip install -e ".[dev]"
 
-# 3) 配置
-cp config/watchlist.example.yaml config/watchlist.yaml   # 编辑你的标的 + 上下阈值
-# 编辑 config/settings.yaml → lark.receiver.open_id 改成你的飞书 open_id：
+# 3) Configuration
+cp config/settings.example.yaml config/settings.yaml
+cp config/watchlist.example.yaml config/watchlist.yaml
+# Edit config/settings.yaml → set lark.receiver.open_id to your Lark open_id:
 lark-cli contact +get-user | jq -r '.data.user.open_id'
+# Edit config/watchlist.yaml → add the symbols you want to monitor.
 
-# 4) 初始化 DB + 同步 watchlist
+# 4) Initialize DB + sync watchlist
 vibe-trader db init
 vibe-trader watchlist sync
-vibe-trader backfill --days 30        # 拉 30 天历史 K 线 + 指标（推荐）
+vibe-trader backfill --days 30        # backfill 30d of OHLC + indicators (recommended)
 
-# 5) 跑起来（tmux 双窗格）
-tmux new -s equity
-vibe-trader run                       # 窗格 1：调度器
-# Ctrl-B " 切窗格 2：
-vibe-trader listen                    # 飞书消息听器
-# Ctrl-B D 离开（继续后台跑）；tmux kill-session -t equity 完全关停
+# 5) Run it
+nohup vibe-trader run > var/scheduler.log 2>&1 &     # scheduler
+# Optional second process for two-way Lark commands:
+nohup vibe-trader listen > var/listener.log 2>&1 &   # message listener
 ```
 
-跑起来之后你会在飞书 DM 收到：
+Once it's running you'll get on Lark DM:
 
-- 美东每个整点 30 分的盯盘卡（含 K 线快照 PNG + 指标解读 + 自动成交回执）
-- 上午 10:30 早报 / 下午 16:30 收盘小结
-- 每 30 分钟一次的新闻情绪脉搏
+- An intraday card on every trading-hour `:30`, with K-line PNG + indicator readout + auto-fill receipt
+- A morning brief at 10:30 ET, a closing summary at 16:30 ET
 
 ---
 
-## 它能做什么
+## What It Does
 
+| Use case | How |
+|---|---|
+| **Monitor + auto-alert** | `vibe-trader run` runs in the background; price / RSI / MACD / Bollinger / threshold breaches all push Lark cards |
+| **Auto paper-trading** | On by default. Each cron tick that produces a BUY/SELL suggestion places an order on Futu SIMULATE and records a `Trade` row |
+| **K-line snapshot** | `/chart US.AAPL D` from Lark, or `vibe-trader chart US.NVDA --freq 60m --push` from the shell. Marks buy/sell points + cost-basis line |
+| **Edit watchlist** | DM the bot: `添加 US.AAPL 上限200 下限165`, `阈值 NVDA 上限150`, `删除 TSLA`, `列表` |
+| **Inspect history / positions / P&L** | `vibe-trader trade positions` / `pnl --days 7` / `list` |
+| **Manual confirm/cancel** | When `auto_execute=false`: `vibe-trader trade confirm <signal_id>` / `cancel <signal_id>` |
+| **Backfill / inspect** | `vibe-trader backfill --days N` / `vibe-trader db status` |
 
-| 场景                | 怎么用                                                                                                  |
-| ----------------- | ---------------------------------------------------------------------------------------------------- |
-| **盯盘 + 自动告警**     | `vibe-trader run` 后台跑；价格 / RSI / MACD / Bollinger / 阈值突破都会触发飞书卡片                                  |
-| **自动模拟交易**        | 默认开。每次盯盘 cron 命中 BUY/SELL 建议时，自动通过 Futu SIMULATE 账户下单并写入 `trades` 表                                  |
-| **K 线快照**         | 飞书 `/chart US.AAPL D` 或终端 `vibe-trader chart US.NVDA --freq 60m --push`；带买卖点和成本均价线                |
-| **改 watchlist**   | 在飞书直接 DM `添加 US.AAPL 上限200 下限165`、`阈值 NVDA 上限150`、`删除 TSLA`、`列表`                                     |
-| **看历史 / 持仓 / 盈亏** | `vibe-trader trade positions` / `vibe-trader trade pnl --days 7` / `vibe-trader trade list` |
-| **手动确认 / 取消建议**   | `auto_execute=false` 时使用 `vibe-trader trade confirm <signal_id>` / `cancel <signal_id>`           |
-| **回填 / 重置**       | `vibe-trader backfill --days N` / `vibe-trader db status` 看各表行数                                |
+### Signal types (rendered in alert cards)
 
+| Signal | Severity | Source |
+|---|---|---|
+| `threshold_breach_upper` / `_lower` | CRITICAL | User-defined upper/lower thresholds in watchlist |
+| `rsi_overbought` / `_oversold` | WARN | RSI(14) crossing 70 / 30 |
+| `macd_golden_cross` / `_death_cross` | INFO / WARN | MACD line crossing the signal line |
+| `boll_upper_break` / `_lower_break` | INFO | Close crossing Bollinger band |
 
-### 信号种类（出现在告警卡里）
+`signals.dedupe_window_minutes` (default 60) deduplicates same-type signals within the window.
 
+### Strategy layer
 
-| 信号                                  | 严重度           | 来源                      |
-| ----------------------------------- | ------------- | ----------------------- |
-| `threshold_breach_upper / lower`    | CRITICAL      | watchlist 里的上下阈值        |
-| `rsi_overbought / oversold`         | WARN          | RSI(14) 穿越 70 / 30      |
-| `macd_golden_cross` / `death_cross` | INFO / WARN   | MACD 线上穿 / 下穿信号线        |
-| `boll_upper_break / lower_break`    | INFO          | 收盘价穿越布林带                |
-| `futu_tech_anomaly`                 | INFO/CRITICAL | 富途技术异动；反转形态升级到 CRITICAL |
-| `futu_capital_anomaly`              | WARN          | 富途大单异动                  |
-| `news_pulse_pos / neg`              | WARN          | 评论情绪温度变化 ≥ 3.0          |
+Four strategies share one Protocol; pick one in `config/settings.yaml` → `trader.strategy.type`:
 
+| Strategy | When to use | Key trait |
+|---|---|---|
+| `llm` *(default)* | Production. Lets an LLM weigh signals + position + investor profile | `provider: cursor-agent` ⇒ uses your Cursor Pro/Max subscription, **no separate API key** |
+| `rule` | Explicit fallback / when you want fully deterministic behavior | 5 hard-coded rules in `signals/strategy_rule.py` |
+| `hitl` | Manual review of every trade | Writes a Markdown decision packet, you reply via `vibe-trader decide submit` |
+| `ensemble` | Multi-strategy voting | Skeleton in place, not yet wired |
 
-`signals.dedupe_window_minutes`（默认 60 分钟）窗内的同号信号会被去重。
+#### `provider: cursor-agent` — using your Cursor subscription as the LLM backend
 
-### 自动交易策略（hard-coded `strategy_lite`）
-
-由 `signals/strategy_lite.py` 5 条规则确定，**无 LLM、无 ML、纯规则**：
-
-
-| 优先级 | 触发信号                                    | 决策                     |
-| --- | --------------------------------------- | ---------------------- |
-| 1   | `threshold_breach_lower`                | BUY 100 股              |
-| 2   | `threshold_breach_upper`                | SELL 当前持仓全部（无仓位则 HOLD） |
-| 3   | `rsi_oversold` AND `macd_golden_cross`  | BUY 50 股               |
-| 4   | `rsi_overbought` AND `macd_death_cross` | SELL min(持仓, 50)       |
-| 5   | `boll_lower_break`                      | BUY 50 股               |
-| -   | 其他组合                                    | HOLD                   |
-
-
-数量、阈值都写在 `signals/strategy_lite.py` 顶部的常量里，要改去那里改。
-
-### LLM 策略 · `provider: cursor-agent`（借用 Cursor 订阅自动决策）
-
-如果你订阅了 Cursor Pro/Max 但没有独立 LLM API Key，这是**完全自动化**的最简路径：
-
-1. 装 CLI（一次性）：
-  ```bash
-   curl https://cursor.com/install | bash
-   cursor-agent login            # 浏览器走一遍 OAuth
-   cursor-agent status           # 应输出: ✓ Logged in as <你的账号>
-  ```
-2. `config/settings.yaml` 里：
-  ```yaml
-   trader:
-     strategy:
-       type: llm
-       llm:
-         provider: cursor-agent
-         model: ""               # 空 = 用账号默认；或 "sonnet-4" / "gpt-5"
-         timeout_s: 240          # CLI 一次约 30-60s，留余量
-         max_position_per_symbol: 200
-         min_trade_size: 10
-         min_confidence: 0.6     # 低于此值的建议自动降级为 HOLD
-         fallback_on_error: rule # CLI 故障时回退到 strategy_lite 规则
-  ```
-3. `nohup vibe-trader run > var/scheduler.log 2>&1 &` —— 之后每次定时任务
-  触发，scheduler 会 spawn `cursor-agent -p '<prompt>' --output-format json`，
-   消耗你的 IDE 订阅 quota，**无需任何 API Key**。
-
-每条决策都会落到 `data/llm_decisions.jsonl`（NDJSON，append-only）做审计。
-Hard-rule 二次校验同样会跑：max_position 越界 / qty 不足 / 置信度过低都会
-被 `enforce_constraints` 拦截。CLI 超时 / 报错 / JSON 解析失败等
-全部走 `fallback_on_error` 路径，不会让 cron 死掉。
-
-切换到独立 API Key 时只改一行：
-
-```yaml
-provider: anthropic            # 然后 export ANTHROPIC_API_KEY=...
+```bash
+# One-time setup
+curl https://cursor.com/install | bash
+cursor-agent login            # OAuth in browser
+cursor-agent status           # → ✓ Logged in as <your account>
 ```
 
-或：
+```yaml
+# config/settings.yaml
+trader:
+  strategy:
+    type: llm
+    llm:
+      provider: cursor-agent
+      model: ""               # "" = account default; or "sonnet-4" / "gpt-5"
+      timeout_s: 240          # CLI takes 30-60s; leave headroom
+      max_position_per_symbol: 200
+      min_trade_size: 10
+      min_confidence: 0.6     # below this, suggestion is auto-demoted to HOLD
+      fallback_on_error: rule # on CLI timeout / parse failure / constraint violation
+```
+
+Every cron tick spawns `cursor-agent -p '<prompt>' --output-format json`. Each decision is appended to `data/llm_decisions.jsonl` (NDJSON, append-only) for audit.
+
+`enforce_constraints` runs as a second-line guard: max-position, qty floor, low confidence — all are checked after the LLM returns. Anything that fails routes through `fallback_on_error`.
+
+To switch backends, change one line:
 
 ```yaml
-provider: openai_compat        # DeepSeek / Doubao / OpenRouter / Ollama 任选
+provider: anthropic            # then export ANTHROPIC_API_KEY=...
+```
+
+```yaml
+provider: openai_compat        # DeepSeek / Doubao / OpenRouter / Ollama
 base_url: https://api.deepseek.com
 api_key_env: DEEPSEEK_API_KEY
 ```
 
-### HITL 策略（Human-in-the-Loop · 半自动备用通道）
+#### `type: hitl` — human-in-the-loop review
 
-适用场景：你想**手动 review** 每一笔交易，把 Claude 当顾问而不是执行者；
-或者 cursor-agent CLI 还没装好、想先用 IDE 内对话验证 prompt：
+Useful when you want to review every trade, or want to validate a prompt before going fully automated:
 
-1. 设置 `config/settings.yaml` 里 `trader.strategy.type: hitl`
-2. 每次事件触发时，vibe-trader 把决策上下文渲染成一份 markdown
-  "decision packet"，写到 `var/decisions/pending/<id>.md`，**同时推一张
-   Lark 卡片**告诉你 packet ID
-3. 你打开 Cursor → 让 Claude 读这个文件 (`Read /path/to/<id>.md`)
-4. Packet 里写好了 self-instructions：让 Claude 先 grep transcript 召回
-  MEMORY，再读 README/audit log，最后输出固定 schema 的决策 JSON
-5. 你（或 Claude 直写）跑：
-  ```bash
-   vibe-trader decide submit <id> --json '<paste decision JSON here>'
-  ```
-   系统过同样的硬约束（`max_position` / `min_trade_size` /
-   `min_confidence`），通过则下单，拒绝则记录原因。
+1. Set `trader.strategy.type: hitl`
+2. On each event, vibe-trader writes a Markdown decision packet to `var/decisions/pending/<id>.md` and pushes a Lark card with the packet ID
+3. You open Cursor → ask Claude to read the packet → Claude returns a fixed-schema JSON
+4. Submit it back: `vibe-trader decide submit <id> --json '<paste>'`
 
-为什么这么设计：发送 packet 的我（在 cron 里）和接收 packet 的 Claude（在
-Cursor 里）是同款模型，所以 packet 的 prompt 可以"自己写给自己"——能精
-准引导接收方调用 Read/Grep 工具召回 conversation 上下文，这是任何外部 API 都
-做不到的。
-
-`vibe-trader decide` 子命令：
+`vibe-trader decide` subcommands:
 
 ```text
 decide list  [--state pending|submitted|executed|cancelled|all]
@@ -188,148 +151,159 @@ decide submit <packet_id> --json '...' | --file decision.json [--no-execute]
 decide cancel <packet_id> [--reason "..."]
 ```
 
-### 安全护栏
+### Investor profile (medium-term framing)
 
-- **SIMULATE-only**：`OpenDSecTrader` 启动时主动找 SIMULATE 账户；找不到直接 raise，绝不碰真实钱包
-- **错误隔离**：单标的下单拒绝不影响其他标的；OpenDSecTrader 初始化失败只关掉这一轮自动交易，盯盘告警继续推
-- **幂等**：同一 `(symbol, ts, signal_type)` 只下一次单；调度器重启 / cron 重跑都不会双开
-- **PENDING 单不污染持仓**：闭市后下的 SIMULATE 单状态是 PENDING，会写 `trades` 但**不**更新 `positions`（避免 qty=100 / avg_cost=0 这种脏数据）
+Independent of which strategy you pick, a single block in `settings.yaml` parameterizes the user's intent and is fed into every LLM prompt:
+
+```yaml
+trader:
+  investment_profile:
+    enabled: true
+    horizon_months_min: 3
+    horizon_months_max: 6
+    style: growth                    # growth | value | blend | income | speculative
+    budget_per_symbol_usd: 50000
+    drawdown_tolerance_pct: 20
+    initial_entry_pct: 40            # first buy = 40% of budget
+    max_batches: 3                   # max accumulating buys
+    add_on_dip_pct: 5                # next add-on requires ≥5% dip
+    take_profit_pct: 30              # +30% triggers trim
+    take_profit_trim_pct: 50
+    hard_stop_pct: 20                # hard SELL on -20%
+    min_holding_days: 30             # block voluntary SELL within N days of buy
+```
+
+### Safety guardrails
+
+- **SIMULATE-only**: `OpenDSecTrader` actively scans for a SIMULATE account at startup and refuses to operate without one. It will never touch a real-money account.
+- **Error isolation**: a single symbol's order rejection doesn't affect others; `OpenDSecTrader` init failure disables auto-trading for the round but quote alerts continue
+- **Idempotent**: same `(symbol, ts, signal_type)` is only ordered once; scheduler restarts and cron repeats won't double-fire
+- **PENDING orders don't pollute positions**: an after-hours SIMULATE order lands as PENDING — recorded in `trades` but **not** applied to `positions` until the broker confirms the fill (avoids the `qty=100 / avg_cost=0` pollution case)
 
 ---
 
-## 系统工作原理
+## How It Works
 
 ```
-                                              ┌────────────────────────┐
-       APScheduler                             │    Futu OpenD :11111   │
-       (NYSE calendar)                         │   行情 + SIMULATE 交易  │
-            │                                  └─────────┬──────────────┘
-            ▼                                            │
-  每整点 30 分           ┌──────────────────────────────┐ │
-  intraday_check  ────► │ run_intraday_check           │◄┘
-                        │  ① 取 snapshot + K 线         │
-                        │  ② 算 RSI/MACD/BOLL          │
-                        │  ③ 阈值 + 技术信号 → Signal   │
-                        │  ④ strategy_lite → Suggest   │
-                        │  ⑤ 落 SignalRow              │
-                        │  ⑥ 自动执行 BUY/SELL ────────┐│
-                        │  ⑦ 渲染卡片 + K 线快照 PNG    ││
-                        └─────┬────────────────────────┘│
-                              │  飞书卡片 + PNG          │
-                              ▼                          │
-                        ┌──────────┐                     │
-                        │ lark-cli │                     │
-                        └────┬─────┘                     │
-                             │                            ▼
-                             ▼                 ┌────────────────────┐
-                        飞书 DM / 群           │ trader/execute.py  │
-                                              │ Trade + Position   │
-                              ▲                │ → SQLite           │
-                              │                └────────────────────┘
+                                           ┌───────────────────────────┐
+       APScheduler                          │   Futu OpenD :11111       │
+       (NYSE calendar)                      │   quotes + SIMULATE trade │
+            │                               └─────────┬─────────────────┘
+            ▼                                         │
+  every :30 of trading hour    ┌────────────────────┐ │
+  intraday_check  ───────────► │ run_intraday_check │◄┘
+                               │  ① snapshot + K线   │
+                               │  ② RSI/MACD/BOLL   │
+                               │  ③ signals          │
+                               │  ④ Strategy.decide │ ← LLM / rule / hitl
+                               │  ⑤ persist Signal  │
+                               │  ⑥ auto-execute   ─┐│
+                               │  ⑦ render card+PNG ││
+                               └─────┬───────────────┘│
+                                     │  Lark card+PNG │
+                                     ▼                │
+                               ┌──────────┐           │
+                               │ lark-cli │           │
+                               └────┬─────┘           ▼
+                                    │       ┌────────────────────┐
+                                    ▼       │ trader/execute.py  │
+                              Lark DM /     │ Trade + Position   │
+                              group chat    │ → SQLite           │
+                                            └────────────────────┘
+                              ▲
+                              │
                         ┌──────────┐
-                        │ listener │ ◄── 飞书 WS 事件 (im.message.receive_v1)
-                        │  /add    │     /remove /list /threshold /chart …
+                        │ listener │ ◄─── Lark WS event
+                        │ /add     │      (im.message.receive_v1)
                         └──────────┘
 ```
 
-3 个长跑组件：
+Three long-running components:
 
-- `**vibe-trader run**` — APScheduler，按 cron 触发 4 个 job
-- `**vibe-trader listen**` — 飞书消息听器，处理双向命令
-- **OpenD**（富途）— 必须先开起来，提供行情 + SIMULATE 交易
+- **`vibe-trader run`** — APScheduler, fires 4 cron jobs
+- **`vibe-trader listen`** — optional Lark listener for two-way commands
+- **OpenD** (Futu) — must be running first; provides quotes + SIMULATE trading
 
-### 每天的 4 个定时任务
+### Cron schedule (NYSE timezone)
 
+| Job | Cron | Purpose |
+|---|---|---|
+| `intraday_check` | `30 9-15 * * mon-fri` | Every :30 of trading hour: snapshot + indicators + signals + **auto-trade** + card + K-line |
+| `morning_brief` | `30 10 * * mon-fri` | 1h after open: gainers/losers leaderboard |
+| `closing_brief` | `30 16 * * mon-fri` | After close: daily summary |
 
-| Job              | Cron (America/New_York) | 用途                                                  |
-| ---------------- | ----------------------- | --------------------------------------------------- |
-| `intraday_check` | `30 9-15 * * mon-fri`   | 每整点 30 分：snapshot + 指标 + 信号 + **自动交易** + 卡片 + K 线快照 |
-| `morning_brief`  | `30 10 * * mon-fri`     | 开盘 1 小时后：涨跌幅榜                                       |
-| `closing_brief`  | `30 16 * * mon-fri`     | 收盘后：当日总结                                            |
-| `news_pulse`     | `*/30 9-15 * * mon-fri` | 每 30 分钟：新闻 + 情绪温度突变检测                               |
-
-
-NYSE 节假日（含早闭）和 DST 由 `pandas-market-calendars` 自动处理，非交易日整体跳过。
+NYSE holidays (incl. early close) and DST are handled by `pandas-market-calendars` — non-trading days are skipped wholesale.
 
 ---
 
-## 日常运行 & 操作
+## Daily Operation
 
-### 启动 / 停止
+### Start / stop
 
 ```bash
-# 启动（推荐 tmux）
-tmux new -s equity
-conda activate fin
-vibe-trader run                # 窗格 1：调度器
-# Ctrl-B "
-vibe-trader listen             # 窗格 2：飞书听器
-# Ctrl-B D 离开
+# Recommended: nohup + scheduler.log
+nohup vibe-trader run > var/scheduler.log 2>&1 &
+nohup vibe-trader listen > var/listener.log 2>&1 &
 
-# 停止
-tmux kill-session -t equity       # 完全关停
-# 或者 SIGINT / SIGTERM 单个进程
+# Stop
+ps aux | grep vibe-trader     # find PIDs
+kill <pid>                    # SIGTERM is graceful
 ```
 
-### 临时手跑一轮（不影响调度器）
+Or use `tmux` for interactive sessions if you prefer.
+
+### Run a single tick (without affecting the scheduler)
 
 ```bash
-vibe-trader once --job intraday              # 用 cfg.trader.auto_execute 决定是否下单
-vibe-trader once --job intraday --no-auto-trade   # 强制不下单（debug / dry-run）
-vibe-trader once --job intraday --auto-trade      # 强制下单（即使 settings.yaml 是 false）
+vibe-trader once --job intraday              # honors cfg.trader.auto_execute
+vibe-trader once --job intraday --no-auto-trade   # force no orders (dry-run)
+vibe-trader once --job intraday --auto-trade      # force orders (override config)
 vibe-trader once --job morning
 vibe-trader once --job closing
-vibe-trader once --job news
 ```
 
-返回值是个 dict，例如：
+The return value is a dict, e.g.:
 
 ```
 {'quotes': 3, 'signals': 4, 'pushed': 3, 'suggestions': 1, 'executed': 1}
 ```
 
-字段含义：
+- `quotes` — newly inserted `quotes` rows
+- `signals` — deduped signals produced this round
+- `pushed` — Lark cards pushed
+- `suggestions` — non-HOLD strategy decisions
+- `executed` — orders that actually placed (0 when `auto_execute=false` or no paper trader)
 
-- `quotes` 新写入的 quotes 行数
-- `signals` 本轮产生的去重后信号数
-- `pushed` 推送到飞书的卡片数
-- `suggestions` 非 HOLD 的策略建议数
-- `executed` 真正下单成功的数（auto_execute=false 或 paper_trader=None 时为 0）
-
-### 看当前状态
+### Inspect state
 
 ```bash
-vibe-trader db status                  # 各表行数
-vibe-trader watchlist list             # DB 里激活的标的
-vibe-trader trade positions            # 当前持仓 + 未实现 P&L（DB 端）
-vibe-trader trade pnl --days 7         # 最近 7 天已实现 P&L
-vibe-trader trade list --status pending     # 待确认建议（auto_execute=false 时用）
-vibe-trader trade list --status executed    # 已成交
+vibe-trader db status                        # row counts per table
+vibe-trader watchlist list                   # active symbols in DB
+vibe-trader trade positions                  # current positions + unrealized P&L
+vibe-trader trade pnl --days 7               # realized P&L over the window
+vibe-trader trade list --status pending      # pending suggestions (when auto_execute=false)
+vibe-trader trade list --status executed     # filled trades
 ```
 
-### 手动场景：临时关掉自动交易
-
-两种姿势：
+### Disable auto-trading temporarily
 
 ```bash
-# 方式 A：永久关。改 settings.yaml → trader.auto_execute: false → 重启 run。
-#         之后所有信号只出建议，等你 trade confirm 才下单。
-
-# 方式 B：单次关。
+# Persistent: set trader.auto_execute: false in settings.yaml, restart `run`.
+# Per-tick:
 vibe-trader once --job intraday --no-auto-trade
 ```
 
-`auto_execute=false` 时的人工流程：
+When `auto_execute=false`, the manual confirm flow:
 
 ```bash
-vibe-trader trade list --status pending          # 看建议列表
-vibe-trader trade confirm 7                      # 确认下单（可加 --qty 50 覆盖建议数量）
-vibe-trader trade cancel 7                       # 直接取消
+vibe-trader trade list --status pending      # see suggestions
+vibe-trader trade confirm 7                  # confirm (add --qty 50 to override size)
+vibe-trader trade cancel 7                   # cancel a pending suggestion
 ```
 
-### 改 watchlist（不重启）
+### Edit watchlist (no restart needed)
 
-在飞书 DM 给 bot：
+DM the bot:
 
 ```
 添加 US.AAPL 上限200 下限165
@@ -338,98 +312,82 @@ vibe-trader trade cancel 7                       # 直接取消
 列表
 ```
 
-或者改 `config/watchlist.yaml` + `vibe-trader watchlist sync`。
+Or edit `config/watchlist.yaml` and run `vibe-trader watchlist sync`.
 
 ---
 
-## 飞书命令参考
+## Lark Command Reference
 
-`vibe-trader listen` 必须在跑。命令支持斜杠、中文、自然语言三种风格，**仅 `lark.receiver.open_id` 配置的本人**能改 watchlist（其他发件人会被忽略）。
+`vibe-trader listen` must be running. Commands accept slash, Chinese, and natural-language style. **Only the user behind `lark.receiver.open_id`** can edit the watchlist (other senders are ignored).
 
+| Operation | Examples |
+|---|---|
+| Add | `添加 US.AAPL 上限200 下限165` / `/add US.AAPL upper=200 lower=165` / `监控 TSLA` |
+| Remove | `删除 US.AAPL` / `取消 AAPL` / `/remove US.AAPL` |
+| Update threshold | `阈值 US.AAPL 上限205` / `/threshold US.AAPL upper=205 lower=170` |
+| List | `列表` / `/list` |
+| Chart | `/chart US.AAPL` / `/chart AAPL D` / `图 TSLA` / `chart NVDA 15m` |
+| Help | `帮助` / `/help` |
 
-| 操作    | 写法示例                                                                      |
-| ----- | ------------------------------------------------------------------------- |
-| 添加    | `添加 US.AAPL 上限200 下限165` ／ `/add US.AAPL upper=200 lower=165` ／ `监控 TSLA` |
-| 删除    | `删除 US.AAPL` ／ `取消 AAPL` ／ `/remove US.AAPL`                              |
-| 改阈值   | `阈值 US.AAPL 上限205` ／ `/threshold US.AAPL upper=205 lower=170`             |
-| 列表    | `列表` ／ `/list`                                                            |
-| K 线快照 | `/chart US.AAPL` ／ `/chart AAPL D` ／ `图 TSLA` ／ `chart NVDA 15m`          |
-| 帮助    | `帮助` ／ `/help`                                                            |
+`/chart` supports frequencies `5m`, `15m`, `30m`, `60m` (default), `D`, `W`. `1m` is intentionally not exposed (too noisy).
 
-
-`/chart` 支持频率：`5m`、`15m`、`30m`、`60m`（默认）、`D`、`W`。`1m` 噪声太大未开放。
-
-### 听器后端
+### Listener backend
 
 ```bash
-vibe-trader listen                                         # 默认 websocket（推荐）
-vibe-trader listen --backend polling --poll-interval 10   # 回退轮询
-vibe-trader listen --rich-cards                           # 默认开（含实时价格 + 指标解读卡片）
-vibe-trader listen --text-only                            # 关闭，回纯 markdown
+vibe-trader listen                                          # default: websocket
+vibe-trader listen --backend polling --poll-interval 10     # polling fallback
+vibe-trader listen --rich-cards                             # default ON: live price + indicators
+vibe-trader listen --text-only                              # plain markdown reply
 ```
 
-> WebSocket 后端要求飞书后台已注册 `im.message.receive_v1` 事件 + 当前 `lark-cli` 进程是该 bot 的唯一订阅者（多个会被服务端轮询切走）。
+The websocket backend requires the bot's app on Lark to have `im.message.receive_v1` registered as a long-poll subscription, and only one process can subscribe at a time.
 
 ---
 
-## CLI 命令参考
+## CLI Reference
 
 ```
 vibe-trader [--settings PATH] [--watchlist PATH]
-├── run                                启动长跑调度器（阻塞，SIGINT/TERM 停止）
-├── listen                             启动飞书消息听器（阻塞）
+├── run                                 start the long-running scheduler (blocking)
+├── listen                              start the Lark message listener (blocking)
 │     [--backend websocket|polling] [--poll-interval N] [--rich-cards/--text-only]
-├── once --job intraday|morning|closing|news
-│                                      手动跑一次某个 job 并打印结果 dict
-│     [--auto-trade|--no-auto-trade]   覆盖 cfg.trader.auto_execute（仅当本次 intraday）
-├── backfill [--days N]                回填 60-min OHLC + 指标（默认 30 天，幂等）
+├── once --job intraday|morning|closing
+│                                       run one job and print the result dict
+│     [--auto-trade|--no-auto-trade]    override cfg.trader.auto_execute (intraday only)
+├── analyze --code CODE [...]           run an on-demand LLM analysis (no signal trigger required)
+│     [--execute]                       auto-execute BUY/SELL decisions
+├── backfill [--days N]                 backfill 60-min OHLC + indicators (default 30d, idempotent)
 │
-├── chart TICKER                       渲染 K 线快照 PNG（可选推飞书）
-│     [--freq 60m|5m|15m|30m|D|W]      (default 60m)
-│     [--out-dir PATH]                 (default var/snapshots)
+├── chart TICKER                        render a K-line snapshot PNG (optionally push to Lark)
+│     [--freq 60m|5m|15m|30m|D|W]       (default 60m)
+│     [--out-dir PATH]                  (default var/snapshots)
 │     [--push|--no-push]                (default --no-push)
+│     [--no-reconcile]                  skip the broker fill-price backfill step
 │
 ├── watchlist
-│   ├── list                           列出 DB 中激活的标的
-│   └── sync                           把 config/watchlist.yaml upsert 到 symbols 表
+│   ├── list                            list active symbols in DB
+│   └── sync                            upsert config/watchlist.yaml into the symbols table
 │
 ├── trade
 │   ├── list [--status pending|confirmed|executed|cancelled|all]
-│   │                                  看交易建议（默认 pending）
-│   ├── confirm SIGNAL_ID [--qty N]    手动下单（auto_execute=false 时用）
-│   ├── cancel SIGNAL_ID               把 pending 建议标记为 cancelled
-│   ├── positions                      持仓 + 未实现 P&L（DB 端 mark-to-market）
-│   └── pnl [--days N]                 已实现 P&L 按标的聚合（默认 7 天）
+│   ├── confirm SIGNAL_ID [--qty N]
+│   ├── cancel SIGNAL_ID
+│   ├── positions
+│   └── pnl [--days N]
+│
+├── decide                              HITL strategy commands (see `## Strategy layer`)
+│   ├── list / show / submit / cancel
 │
 └── db
-    ├── init                           创建 SQLite schema
-    └── status                         打印各表行数
+    ├── init                            create the SQLite schema
+    └── status                          row counts per table
 ```
 
-### CLI 用法示例
-
-```bash
-# 1. 渲染 AAPL 60 分 K 线，保存本地 + 推飞书
-vibe-trader chart US.AAPL --freq 60m --push
-
-# 2. 看上周已实现盈亏
-vibe-trader trade pnl --days 7
-
-# 3. 手动确认 signal 12 的建议，按建议数量下单
-vibe-trader trade confirm 12
-
-# 4. 手动确认 signal 12 但只下 30 股
-vibe-trader trade confirm 12 --qty 30
-
-# 5. 临时强制干跑（不下单），用来 debug 当前指标 / 信号是否正常
-vibe-trader once --job intraday --no-auto-trade
-```
-
-`--settings` / `--watchlist` 默认是 `config/{settings,watchlist}.yaml`（相对当前工作目录）。配置是惰性加载的，所以 `--help` 在配置不存在时也能跑。**所有命令都默认从 repo 根目录跑**；要在别处跑就 `vibe-trader --settings /abs/path/to/settings.yaml ...`。
+`--settings` / `--watchlist` default to `config/{settings,watchlist}.yaml` relative to cwd. Most commands need to be run from the repo root (config files are resolved from cwd by default); use absolute paths if running elsewhere.
 
 ---
 
-## 配置文件
+## Configuration
 
 ### `config/settings.yaml`
 
@@ -440,7 +398,7 @@ opend:
 
 database:
   path: data/vibe_trader.db
-  wal_mode: true                    # SQLite WAL；多进程读写更友好
+  wal_mode: true                         # SQLite WAL; better concurrent reads
 
 scheduler:
   timezone: America/New_York
@@ -448,13 +406,12 @@ scheduler:
     intraday_check: { cron: "30 9-15 * * mon-fri" }
     morning_brief:  { cron: "30 10 * * mon-fri" }
     closing_brief:  { cron: "30 16 * * mon-fri" }
-    news_pulse:     { cron: "*/30 9-15 * * mon-fri" }
 
 lark:
   cli_path: lark-cli
-  identity: bot                     # bot 无需额外 scope；user 需 `lark-cli auth login --scope im:message.send_as_user`
+  identity: bot                          # bot | user (user requires extra scope)
   receiver:
-    type: user                      # user → DM 发给 open_id；chat → 群发
+    type: user                           # user → DM via open_id; chat → group via chat_id
     open_id: "ou_xxx..."
 
 signals:
@@ -465,223 +422,173 @@ signals:
   macd_fast: 12
   macd_slow: 26
   macd_signal: 9
-  dedupe_window_minutes: 60         # 同信号去重窗口
-  news_burst_drop: 3.0              # 情绪温度突变阈值
-  news_burst_rise: 3.0
+  dedupe_window_minutes: 60              # same-type signal dedupe window
 
 logging:
   level: INFO
   file: data/vibe_trader.log
 
 trader:
-  auto_execute: true                # ★ 是否自动下模拟单（默认 ON）
-  simulate_only: true               # 永远 true；防呆，禁止接真实账户
+  auto_execute: true                     # auto-place SIMULATE orders (default ON)
+  simulate_only: true                    # always true; refuses non-SIMULATE accounts
+  strategy:
+    type: llm                            # llm | rule | hitl | ensemble
+    # ... per-strategy blocks; see "Strategy layer"
+  investment_profile:
+    # ... see "Investor profile"
 ```
 
 ### `config/watchlist.yaml`
 
 ```yaml
 symbols:
-  - code: US.AAPL                   # 必须 US./HK./SH./SZ. 前缀
+  - code: US.AAPL                        # must be prefixed: US./HK./SH./SZ.
     name: Apple
-    upper_threshold: 200.0          # 收盘 > upper → CRITICAL → SELL all
-    lower_threshold: 165.0          # 收盘 < lower → CRITICAL → BUY 100
+    upper_threshold: 200.0               # close > upper → CRITICAL → SELL all
+    lower_threshold: 165.0               # close < lower → CRITICAL → BUY 100
     notes: "core position"
   - code: US.NVDA
     name: NVIDIA
-    upper_threshold: 150.0
-    lower_threshold: 110.0
-  - code: US.TSLA                   # 不写阈值就只监控 RSI/MACD/BOLL/异动信号
+    upper_threshold: 220.0
+    lower_threshold: 170.0
+  - code: US.TSLA                        # no thresholds → tech-only signals (RSI/MACD/BOLL)
     name: Tesla
 ```
 
-改完后跑 `vibe-trader watchlist sync`（或在飞书直接 `/add`）让它生效。
+Run `vibe-trader watchlist sync` (or DM `/add` from Lark) for changes to take effect.
 
 ---
 
-## 数据模型
+## Data Model
 
-SQLite，8 张表，全部由 `vibe-trader db init` 创建：
+SQLite, 8 tables, all created by `vibe-trader db init`:
 
+| Table | PK | Key columns | Purpose |
+|---|---|---|---|
+| `symbols` | id | code, name, upper_threshold, lower_threshold, is_active | Watchlist mirror |
+| `quotes` | id | symbol_id, ts, last_price, open/high/low, volume | Realtime snapshot history |
+| `indicators` | (symbol_id, ts) | rsi_14, macd, macd_signal, macd_hist, boll_* | Per-bar indicator values |
+| `signals` | id | symbol_id, ts, signal_type, severity, payload_json, suggested_action, suggested_qty, status, executed_trade_id | Each signal + its strategy decision + lifecycle state |
+| `trades` | id | symbol_id, ts, side, qty, price, futu_order_id, signal_id, status (FILLED/PENDING/REJECTED) | Paper-trade history |
+| `positions` | symbol_id (UQ) | qty, avg_cost, unrealized_pnl, realized_pnl | Current positions + P&L |
 
-| 表                     | 主键              | 关键字段                                                                                                           | 用途                  |
-| --------------------- | --------------- | -------------------------------------------------------------------------------------------------------------- | ------------------- |
-| `symbols`             | id              | code, name, upper_threshold, lower_threshold, is_active                                                        | watchlist DB 镜像     |
-| `quotes`              | id              | symbol_id, ts, last_price, open/high/low, volume, turnover                                                     | 实时 snapshot 历史      |
-| `indicators`          | (symbol_id, ts) | rsi_14, macd, macd_signal, macd_hist, boll_*                                                                   | 每根 K 线的指标值          |
-| `signals`             | id              | symbol_id, ts, signal_type, severity, payload_json, suggested_action, suggested_qty, status, executed_trade_id | 每个信号 + 关联的策略建议 + 状态 |
-| `trades`              | id              | symbol_id, ts, side, qty, price, futu_order_id, signal_id, status (FILLED/PENDING/REJECTED)                    | 模拟交易历史              |
-| `positions`           | symbol_id (UQ)  | qty, avg_cost, unrealized_pnl, realized_pnl                                                                    | 当前持仓 + 累计盈亏         |
-| `news_digest`         | id              | symbol_id, ts, source, title, url, summary, sentiment_score                                                    | 抓回的新闻 + AI 摘要       |
-| `sentiment_snapshots` | (symbol_id, ts) | temperature, bullish_pct, bearish_pct, sample_size                                                             | 情绪温度时序，跨重启基线        |
+`vibe-trader db status` prints row counts per table.
 
-
-`vibe-trader db status` 一键看各表行数。
-
-### `signals.status` 状态机
+### `signals.status` state machine
 
 ```
-pending  ──(execute_signal_trade)──►  executed   (executed_trade_id 关联到 trades.id)
-   │                                       
+pending  ──(execute_signal_trade)──►  executed   (executed_trade_id → trades.id)
+   │
    ├──(broker REJECTED)──►  cancelled
    └──(vibe-trader trade cancel)──►  cancelled
 ```
 
 ### `trades.status`
 
-- `FILLED` — broker 已成交，`positions` 已更新
-- `PENDING` — broker 接单但未成交（典型：闭市后下的 SIMULATE 单），写 trades 但**不**改 positions
-- `REJECTED` — broker 拒单（不会写入 trades，只把 signals.status 标 cancelled）
+- `FILLED` — broker confirmed; `positions` updated
+- `PENDING` — broker accepted but not yet filled (typical for after-hours SIMULATE orders); `trades` written but `positions` left untouched. The `chart` command opportunistically reconciles these on the next run via `reconcile_pending_fills`.
+- `CANCELLED` — order cancelled at broker side (post-fact reconcile)
+- `REJECTED` — broker rejected; **not** written to `trades`, only `signals.status` becomes `cancelled`
 
 ---
 
-## 故障排查
-
-### 1. `Settings file not found: 'config/settings.yaml'`
-
-不在 repo 根目录跑。`cd` 到 `vibe-trader/` 再跑，或加 `--settings /abs/path/to/settings.yaml`。
-
-### 2. `vibe-trader chart --push` 报 `--image: --file must be a relative path`
-
-`lark-cli ≥ 1.0.23` 要求图片是当前目录下的相对路径。代码已经处理（`cwd=path.parent` + 传 basename）。如果你看到这个错，多半是用了过老版本的 `vibe-trader` —— 拉最新代码。
-
-### 3. 飞书听器收不到消息
-
-WebSocket 后端要求：
-
-- 飞书开发者后台「事件订阅」里**显式注册** `im.message.receive_v1`（订阅类型：长连接）
-- 同一个 bot 全局只能有一个 WS 订阅者；重启前 `pkill -f 'lark-cli event'` 清掉孤儿进程
-- 看 `vibe-trader listen` 日志有没有 `🟢 listener online`；没有就退到 `--backend polling`
-
-### 4. `executed=0` 但 `suggestions=1`
-
-可能原因（按概率）：
-
-- **OpenDSecTrader 初始化失败**：找不到 SIMULATE 账户。在 OpenD 客户端登录时勾"模拟账户"
-- **broker 拒单**：日志会有 `intraday_check.auto_execute_failed`，看 reason
-- **重复信号**：之前已经执行过，信号 status≠pending（防止重复下单的内置守卫）
-- **信号类型与策略 trigger 不匹配**：例如 RSI 超卖但没 MACD 金叉同时出现，`strategy_lite` 不会单独 BUY
-
-`vibe-trader once --job intraday` 输出的 dict 配合 `data/vibe_trader.log` 看清楚。
-
-### 5. 闭市后 trade 显示 `qty=100 px=0 status=PENDING`
-
-正常。SIMULATE 在闭市后只接单不成交。开盘后会变 FILLED，`positions` 在那次成交回报后更新。
-
-> ⚠️ 当前没有"成交回补"轮询任务（roadmap 项目）；如果闭市挂的 PENDING 单第二天开盘成交了但你下次 `intraday_check` 没碰到这只票，positions 会延迟更新。临时解法：手动 `once --job intraday` 触发一次下单同流程会重新对账。
-
-### 6. 想推到群里而不是 DM
-
-`config/settings.yaml` →
-
-```yaml
-lark:
-  receiver:
-    type: chat                      # 改成 chat
-    open_id: "oc_xxxxxxxx"          # 群的 chat_id
-```
-
-获取群 chat_id：在该群里发条消息让 bot 接到，看日志里的 `chat_id` 字段；或 `lark-cli im +chats-list`。
-
-### 7. 想用「我自己」的身份发消息
+## Testing & Development
 
 ```bash
-lark-cli auth login --scope im:message.send_as_user
+pytest tests/unit -q                      # unit tests (~5s)
+pytest tests/integration -v               # integration tests (FakeFutuClient + in-memory DB)
+pytest -k auto_trade                      # filter by name
 ```
 
-然后 `settings.yaml` →
+Current count: **454 unit tests**, all passing.
 
-```yaml
-lark:
-  identity: user
-```
-
----
-
-## 测试 / 开发
-
-```bash
-pytest                              # 全套（约 3 秒）
-pytest -m "not integration"         # 仅单测
-pytest tests/integration/ -v        # 集成测试（FakeFutuClient + 内存 DB）
-pytest -k auto_trade                # 只跑某模块
-```
-
-当前测试数：313（5 集成 + 3 单元为 Phase B 自动交易新增）。
-
-### 项目结构
+### Project structure
 
 ```
 src/vibe_trader/
-├── config.py                  pydantic v2 配置 + yaml loader
-├── models.py                  SQLAlchemy 2.x ORM（8 张表）
+├── config.py                  Pydantic v2 config + yaml loader
+├── models.py                  SQLAlchemy 2.x ORM (6 tables)
 ├── db.py                      engine / sessionmaker / WAL pragma
 ├── futu_client.py             FutuClient Protocol + OpenDClient + FakeFutuClient
-├── data/                      数据获取
+├── analyze.py                 on-demand LLM analysis (vibe-trader analyze)
+├── data/
 │   ├── quotes.py              snapshot → quotes
-│   ├── kline.py               K 线 → DataFrame
-│   ├── indicators.py          RSI / MACD / Bollinger（纯 pandas/numpy，无 pandas-ta）
-│   ├── tech_anomaly.py        富途技术异动 skill
-│   ├── capital_anomaly.py     富途大单异动 skill
-│   ├── news.py                富途新闻 skill
-│   ├── sentiment.py           评论情绪 skill
-│   └── backfill.py            历史 OHLC + 指标批量回填
+│   ├── kline.py               K-line → DataFrame
+│   ├── indicators.py          RSI / MACD / Bollinger (pure pandas/numpy)
+│   └── backfill.py            historical OHLC + indicator batch backfill
 ├── signals/
 │   ├── base.py                Signal + Severity
-│   ├── threshold.py           价格阈值检测
-│   ├── tech.py                RSI/MACD/Bollinger 状态切换检测
-│   ├── compose.py             严重度提升 + 去重 + 拆分
-│   └── strategy_lite.py       ★ 5 条 hard-coded 决策规则
+│   ├── threshold.py           price threshold detector
+│   ├── tech.py                RSI/MACD/Bollinger state-transition detectors
+│   ├── compose.py             dedupe + severity escalation
+│   ├── strategy_base.py       Strategy Protocol + Registry
+│   ├── strategy_lite.py       SignalSuggest dataclass
+│   ├── strategy_rule.py       deterministic 5-rule strategy
+│   ├── strategy_llm.py        LLMStrategy with constraint guard + audit log + fallback
+│   └── strategy_hitl.py       human-in-the-loop strategy
+├── llm/
+│   ├── client.py              LLMClient Protocol + LLMResponse + error hierarchy
+│   ├── prompt.py              Jinja2 prompt templates + JSON-tolerant parse_decision
+│   ├── factory.py             build_llm_client(provider=...)
+│   ├── cursor_agent.py        cursor-agent CLI backend
+│   ├── anthropic_client.py    Anthropic API backend
+│   └── openai_compat.py       OpenAI / DeepSeek / Doubao / Ollama / OpenRouter
 ├── trader/
 │   ├── paper.py               PaperTrader Protocol + FakePaperTrader + OpenDSecTrader
-│   └── execute.py             ★ execute_signal_trade（CLI / scheduler 共用）
+│   ├── execute.py             execute_signal_trade (CLI / scheduler share)
+│   └── reconcile.py           reconcile_pending_fills (backfill MARKET-order fills)
+├── decisions/                 HITL packet write/read
+├── journal/                   per-symbol Markdown journal + hit-rate metrics + dev_log
 ├── scheduler/
-│   ├── calendar.py            NYSE 交易日 / 早闭判断
-│   ├── jobs.py                4 个 job + _execute_suggestions 自动下单
-│   └── runner.py              APScheduler BlockingScheduler + cron 注册
+│   ├── calendar.py            NYSE trading-day / early-close logic
+│   ├── jobs.py                3 cron jobs + auto-execution
+│   └── runner.py              APScheduler BlockingScheduler
 ├── reports/
-│   ├── card.py                severity → 颜色 / emoji
-│   ├── render.py              Jinja2 → 飞书卡片 JSON
-│   ├── templates/*.j2         卡片模板
-│   ├── lark.py                send_card via lark-cli + tenacity 重试
-│   ├── snapshot.py            mplfinance K 线 PNG
-│   └── lark_image.py          send_image via lark-cli + 重试
+│   ├── card.py                severity → color/emoji
+│   ├── render.py              Jinja2 → Lark card JSON
+│   ├── templates/*.j2         card templates
+│   ├── lark.py                send_card via lark-cli + tenacity retry
+│   ├── snapshot.py            mplfinance K-line PNG
+│   └── lark_image.py          send_image via lark-cli + retry
 ├── events/
-│   ├── grammar.py             命令解析（斜杠 / 中文 / 自然语言）
-│   ├── apply.py               命令执行（含 ChartCommand）
-│   └── listener.py            飞书 WS / polling 主循环
+│   ├── grammar.py             command parsing (slash / Chinese / natural-language)
+│   ├── apply.py               command execution (incl. ChartCommand)
+│   └── listener.py            Lark WS / polling main loop
 └── cli/
-    └── main.py                所有 click 子命令
+    └── main.py                all click subcommands
 ```
 
-### 加新策略 / 信号
+### Adding a new strategy / signal
 
-- 新信号：在 `signals/` 下加 detector，让 `run_intraday_check` 加一条 `all_sigs.extend(...)`，并在 `compose.py` 注册严重度
-- 新策略规则：在 `signals/strategy_lite.py` 里加规则；`triggering_signal_types` 决定它会绑定到哪个新插入的 `signals` 行去触发自动下单
-- 新 Lark 命令：`events/grammar.py` 加 dataclass + parser，`events/apply.py` 加 handler
-
----
-
-## 已知限制 & Roadmap
-
-### 已知限制
-
-- **没有 fill follow-up**：闭市后挂的 PENDING 单，开盘成交后 positions 不会被自动回补（要等下一次 `intraday_check` 触发同票流程，或手动 `once --job intraday`）
-- **strategy_lite 是写死的规则**，不是 ML / LLM；要做策略对比 / 多策略并存还得抽 strategy registry
-- **无 max-drawdown / equity curve 跟踪**：当前只有 `positions.realized_pnl` 这一个累积量
-- **WebSocket 听器排他**：同一 bot 同时只能有一个 `lark-cli event` 订阅者；多窗格跑会丢消息
-- **盘前 / 盘后行情不入库**：cron 只在 9:30–16:00 ET 工作日跑
-
-### Roadmap（还没做）
-
-1. **Fill confirmation pass** — 启动时 + 每个 cron tick 用 `position_list_query` 对账 PENDING 单的成交状态
-2. **策略抽象层** — `Strategy` Protocol + Registry，支持多策略并存 + per-strategy P&L / max-drawdown 维护
-3. `**/positions` `/pnl` `/history`** 飞书命令 + 专属卡片
-4. **QuantStats tearsheet** — HTML 收益分析报告
-5. **Web dashboard** — Streamlit / FastAPI + Plotly 网页可视化
+- **New signal**: add a detector under `signals/`, append it in `run_intraday_check`, register severity in `compose.py`
+- **New strategy**: implement the `Strategy` Protocol in a new module, register via `@register_strategy("your-name")`, add a sub-block under `trader.strategy` in YAML
+- **New Lark command**: add a dataclass + parser to `events/grammar.py`, add a handler to `events/apply.py`
 
 ---
 
-## 许可
+## Known Limitations & Roadmap
 
-Internal — not for distribution.
+### Known limitations
+
+- **PENDING-fill reconcile is opportunistic, not background**: `reconcile_pending_fills` runs at the start of every `chart` command. After-hours PENDING orders that fill overnight don't get back-filled into `positions` until you next render a chart or the next intraday tick produces a fresh decision on the same symbol.
+- **No backtest framework**: medium-term LLM strategies don't backtest cleanly anyway (LLM behavior drifts), but a minimal version would still help.
+- **No portfolio-level risk**: per-symbol stop-loss / take-profit exists; correlation across symbols, total exposure, and equity curve are not tracked.
+- **WebSocket listener is exclusive**: same Lark bot can only have one active `lark-cli event` subscriber. Running multiple listener processes will silently drop messages.
+- **Pre/post market quotes are not persisted**: cron runs only 9:30–16:00 ET on trading days.
+- **LLM decisions are non-deterministic**: same prompt may produce different outputs across runs. Use `data/llm_decisions.jsonl` for post-hoc auditing.
+
+### Roadmap
+
+1. **Background fill confirmation** — periodic `position_list_query` reconcile loop, not just on `chart`
+2. **Portfolio-level guards** — concentration limits, correlation caps, equity-curve drawdown stop
+3. **`/positions` `/pnl` `/history` Lark cards** — first-class commands instead of having to use the CLI
+4. **News & sentiment input** — currently only indicators + profile go to the LLM; pulling real news (Futu / yfinance / FMP) and comment sentiment back in would help. The earlier scaffolding around four `data/*` skills was removed — see git history if you want to retry with a real provider.
+5. **QuantStats tearsheet** — HTML P&L analysis report
+6. **Web dashboard** — Streamlit / FastAPI + Plotly
+7. **Real-money RFC** — what would need to change to flip `simulate_only: false`
+
+---
+
+## License
+
+MIT. See [LICENSE](./LICENSE) (TODO: add LICENSE file before public release).

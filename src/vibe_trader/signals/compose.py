@@ -6,32 +6,6 @@ from datetime import datetime
 from vibe_trader.signals.base import Severity, Signal
 
 
-REVERSAL_PATTERNS = {
-    "M_top",
-    "W_bottom",
-    "head_and_shoulders",
-    "inverse_head_and_shoulders",
-}
-
-
-def upgrade_severity(sig: Signal) -> Signal:
-    """Pattern-based severity bump: tech_anomaly + reversal pattern → CRITICAL.
-
-    Other tech_anomaly events (golden_cross, overbought, ...) keep their
-    upstream severity.
-    """
-    if sig.signal_type == "futu_tech_anomaly":
-        if sig.payload.get("event") in REVERSAL_PATTERNS:
-            return Signal(
-                code=sig.code,
-                ts=sig.ts,
-                signal_type=sig.signal_type,
-                severity=Severity.CRITICAL,
-                payload=sig.payload,
-            )
-    return sig
-
-
 def deduplicate(
     signals: Iterable[Signal],
     *,
@@ -78,8 +52,6 @@ def split_by_severity(
 
 
 __all__ = [
-    "REVERSAL_PATTERNS",
     "deduplicate",
     "split_by_severity",
-    "upgrade_severity",
 ]

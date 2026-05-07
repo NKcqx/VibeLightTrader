@@ -12,13 +12,12 @@ Run:
 What it does:
   1. Loads settings + watchlist
   2. Connects to OpenD
-  3. Runs all four jobs sequentially:
+  3. Runs all three jobs sequentially:
        - intraday_check
        - morning_brief
        - closing_brief
-       - news_pulse
   4. Prints the per-job result dict
-  5. You should see 4 Interactive Cards in your Lark IM (one per job)
+  5. You should see 3 Interactive Cards in your Lark IM (one per job)
 
 Exits non-zero on the first exception (so you see a clear failure mode).
 """
@@ -39,7 +38,6 @@ from vibe_trader.scheduler.jobs import (  # noqa: E402
     run_closing_brief,
     run_intraday_check,
     run_morning_brief,
-    run_news_pulse,
 )
 
 
@@ -77,7 +75,6 @@ def main() -> int:
             ("intraday", lambda: run_intraday_check(client=client, factory=factory, cfg=cfg, watchlist=wl)),
             ("morning", lambda: run_morning_brief(client=client, factory=factory, cfg=cfg, watchlist=wl)),
             ("closing", lambda: run_closing_brief(client=client, factory=factory, cfg=cfg, watchlist=wl)),
-            ("news", lambda: run_news_pulse(factory=factory, cfg=cfg, watchlist=wl)),
         ]:
             print(f"--- {label} ---")
             try:

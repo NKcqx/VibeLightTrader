@@ -22,7 +22,6 @@ def test_build_scheduler_registers_four_jobs(
         "intraday_check",
         "morning_brief",
         "closing_brief",
-        "news_pulse",
     }
 
 

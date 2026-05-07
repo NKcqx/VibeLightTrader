@@ -24,7 +24,7 @@ def test_no_signals_returns_none() -> None:
 
 
 def test_unrecognized_signal_returns_none() -> None:
-    assert decide_action([_sig("futu_capital_anomaly")]) is None
+    assert decide_action([_sig("unknown_signal_type")]) is None
 
 
 def test_threshold_breach_lower_buys_at_critical_size() -> None:
@@ -184,7 +184,7 @@ def test_decide_actions_for_codes_filters_no_decisions() -> None:
     out = decide_actions_for_codes(
         {
             "US.AAPL": [_sig("threshold_breach_lower", Severity.CRITICAL)],
-            "US.NVDA": [_sig("futu_capital_anomaly")],  # no rule fires
+            "US.NVDA": [_sig("unknown_signal_type")],  # no rule fires
         },
         positions={"US.AAPL": 50},
     )

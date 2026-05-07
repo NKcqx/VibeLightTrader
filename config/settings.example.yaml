@@ -22,8 +22,6 @@ scheduler:
       cron: "30 10 * * mon-fri"
     closing_brief:
       cron: "30 16 * * mon-fri"
-    news_pulse:
-      cron: "*/30 9-15 * * mon-fri"
 
 lark:
   cli_path: lark-cli
@@ -43,8 +41,6 @@ signals:
   macd_slow: 26
   macd_signal: 9
   dedupe_window_minutes: 60
-  news_burst_drop: 3.0
-  news_burst_rise: 3.0
 
 logging:
   level: INFO
@@ -112,9 +108,7 @@ trader:
       min_confidence: 0.6             # below this → demote to HOLD
       fallback_on_error: rule         # rule | hold
       audit_log_path: data/llm_decisions.jsonl
-      kline_window: 200               # reserved (C2b)
-      news_window_minutes: 30         # reserved (C2b)
-      news_top_k: 3                   # reserved (C2b)
+      kline_window: 200               # K-line bars to feed StrategyContext per tick
       cache_seconds: 300              # 0 disables in-memory cache
       max_concurrent: 5               # reserved (today: serial)
 
@@ -173,6 +167,5 @@ trader:
     min_holding_days: 30              # block voluntary SELL within N days of buy
 
     # LLM-prompt helpers
-    news_lookback_days: 7             # reserved (C2b)
     rebalance_cadence_days: 30        # reserved (long-form review prompt cadence)
     valuation_ceiling_pe: null        # null=disabled (reserved)

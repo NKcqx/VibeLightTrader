@@ -18,12 +18,7 @@
     {
       "tag": "div",
       "text": {"tag": "lark_md", "content": {{ ('**🚨 触发信号:**\n' ~ signals_md) | tojson }}}
-    }{% if news_md %},
-    {"tag": "hr"},
-    {
-      "tag": "div",
-      "text": {"tag": "lark_md", "content": {{ ('**关键新闻:**\n' ~ news_md) | tojson }}}
-    }{% endif %}{% if suggestion_md %},
+    }{% if suggestion_md %},
     {"tag": "hr"},
     {
       "tag": "div",

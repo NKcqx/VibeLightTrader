@@ -32,7 +32,6 @@ def cli_root(tmp_path: Path) -> Path:
                         "intraday_check": {"cron": "30 9-15 * * mon-fri"},
                         "morning_brief": {"cron": "30 10 * * mon-fri"},
                         "closing_brief": {"cron": "30 16 * * mon-fri"},
-                        "news_pulse": {"cron": "*/30 9-15 * * mon-fri"},
                     },
                 },
                 "lark": {

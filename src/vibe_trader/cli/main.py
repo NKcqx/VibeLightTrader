@@ -17,7 +17,6 @@ from vibe_trader.scheduler.jobs import (
     run_closing_brief,
     run_intraday_check,
     run_morning_brief,
-    run_news_pulse,
 )
 from vibe_trader.scheduler.runner import run_forever
 
@@ -248,7 +247,7 @@ def chart(
 @cli.command()
 @click.option(
     "--job",
-    type=click.Choice(["intraday", "morning", "closing", "news"]),
+    type=click.Choice(["intraday", "morning", "closing"]),
     required=True,
     help="Which single job to run.",
 )
@@ -271,49 +270,46 @@ def once(ctx: click.Context, job: str, auto_trade: bool | None) -> None:
     if auto_trade is not None:
         cfg.trader.auto_execute = auto_trade
 
-    if job == "news":
-        res = run_news_pulse(factory=factory, cfg=cfg, watchlist=wl)
-    else:
-        client = OpenDClient(cfg.opend.host, cfg.opend.port)
-        paper_trader: Any | None = None
-        try:
-            if job == "intraday":
-                if cfg.trader.auto_execute:
-                    from vibe_trader.trader.paper import OpenDSecTrader
+    client = OpenDClient(cfg.opend.host, cfg.opend.port)
+    paper_trader: Any | None = None
+    try:
+        if job == "intraday":
+            if cfg.trader.auto_execute:
+                from vibe_trader.trader.paper import OpenDSecTrader
 
-                    try:
-                        paper_trader = OpenDSecTrader(
-                            host=cfg.opend.host, port=cfg.opend.port
-                        )
-                    except Exception as e:
-                        click.echo(
-                            f"warning: paper trader init failed; "
-                            f"auto-trade skipped this run ({e})",
-                            err=True,
-                        )
-                        paper_trader = None
-                res = run_intraday_check(
-                    client=client,
-                    factory=factory,
-                    cfg=cfg,
-                    watchlist=wl,
-                    paper_trader=paper_trader,
-                )
-            elif job == "morning":
-                res = run_morning_brief(
-                    client=client, factory=factory, cfg=cfg, watchlist=wl
-                )
-            else:
-                res = run_closing_brief(
-                    client=client, factory=factory, cfg=cfg, watchlist=wl
-                )
-        finally:
-            client.close()
-            if paper_trader is not None:
                 try:
-                    paper_trader.close()
-                except Exception:
-                    pass
+                    paper_trader = OpenDSecTrader(
+                        host=cfg.opend.host, port=cfg.opend.port
+                    )
+                except Exception as e:
+                    click.echo(
+                        f"warning: paper trader init failed; "
+                        f"auto-trade skipped this run ({e})",
+                        err=True,
+                    )
+                    paper_trader = None
+            res = run_intraday_check(
+                client=client,
+                factory=factory,
+                cfg=cfg,
+                watchlist=wl,
+                paper_trader=paper_trader,
+            )
+        elif job == "morning":
+            res = run_morning_brief(
+                client=client, factory=factory, cfg=cfg, watchlist=wl
+            )
+        else:
+            res = run_closing_brief(
+                client=client, factory=factory, cfg=cfg, watchlist=wl
+            )
+    finally:
+        client.close()
+        if paper_trader is not None:
+            try:
+                paper_trader.close()
+            except Exception:
+                pass
     click.echo(res)
 
 
@@ -401,9 +397,7 @@ def db_status(ctx: click.Context) -> None:
     factory = _make_factory(cfg)
     from vibe_trader.models import (
         Indicator,
-        NewsDigest,
         Quote,
-        SentimentSnapshotRow,
     )
     from vibe_trader.models import Signal as SignalRow
 
@@ -414,8 +408,6 @@ def db_status(ctx: click.Context) -> None:
         click.echo(f"quotes:            {s.query(Quote).count()}")
         click.echo(f"indicators:        {s.query(Indicator).count()}")
         click.echo(f"signals:           {s.query(SignalRow).count()}")
-        click.echo(f"news_digest:       {s.query(NewsDigest).count()}")
-        click.echo(f"sentiment_snapshots: {s.query(SentimentSnapshotRow).count()}")
 
 
 # ---------------------------------------------------------------------------

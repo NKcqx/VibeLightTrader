@@ -21,7 +21,6 @@ from vibe_trader.scheduler.jobs import (
     run_closing_brief,
     run_intraday_check,
     run_morning_brief,
-    run_news_pulse,
 )
 from vibe_trader.trader.paper import OpenDSecTrader
 
@@ -141,17 +140,6 @@ def build_scheduler(
         runner.__name__ = job_fn.__name__
         return runner
 
-    def news_runner() -> Any:
-        # sentiment_history=None → use DB-backed sentiment_snapshots table.
-        return run_news_pulse(
-            factory=factory,
-            cfg=cfg,
-            watchlist=watchlist,
-            send_card_fn=sender,
-        )
-
-    news_runner.__name__ = "run_news_pulse"
-
     tz = cfg.scheduler.timezone
     sched.add_job(
         _wrap_trading_day(with_client(run_intraday_check), tz_name=tz),
@@ -176,14 +164,6 @@ def build_scheduler(
         ),
         id="closing_brief",
         misfire_grace_time=600,
-    )
-    sched.add_job(
-        _wrap_trading_day(news_runner, tz_name=tz),
-        CronTrigger.from_crontab(
-            cfg.scheduler.jobs["news_pulse"].cron, timezone=tz
-        ),
-        id="news_pulse",
-        misfire_grace_time=300,
     )
     return sched
 
