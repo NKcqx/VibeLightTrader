@@ -1,7 +1,7 @@
 {
   "ticker": "AVGO",
   "code": "US.AVGO",
-  "fetched_at": "2026-05-07T15:29:26.348149+00:00",
+  "fetched_at": "2026-05-14T10:48:29.563251+00:00",
   "info": {
     "address1": "3421 Hillview Ave",
     "city": "Palo Alto",
@@ -122,78 +122,78 @@
     "executiveTeam": [],
     "maxAge": 86400,
     "priceHint": 2,
-    "previousClose": 425.44,
-    "open": 421.88,
-    "dayLow": 414.69,
-    "dayHigh": 426.49,
-    "regularMarketPreviousClose": 425.44,
-    "regularMarketOpen": 421.88,
-    "regularMarketDayLow": 414.69,
-    "regularMarketDayHigh": 426.49,
+    "previousClose": 419.3,
+    "open": 415.605,
+    "dayLow": 404.8,
+    "dayHigh": 418.63,
+    "regularMarketPreviousClose": 419.3,
+    "regularMarketOpen": 415.605,
+    "regularMarketDayLow": 404.8,
+    "regularMarketDayHigh": 418.63,
     "dividendRate": 2.6,
-    "dividendYield": 0.61,
+    "dividendYield": 0.62,
     "exDividendDate": 1774224000,
     "payoutRatio": 0.47169998,
     "fiveYearAvgDividendYield": 1.91,
     "beta": 1.44,
-    "trailingPE": 81.770294,
-    "forwardPE": 23.243082,
-    "volume": 6392546,
-    "regularMarketVolume": 6392546,
-    "averageVolume": 24171709,
-    "averageVolume10days": 19162690,
-    "averageDailyVolume10Day": 19162690,
-    "bid": 416.0,
-    "ask": 421.18,
-    "bidSize": 1,
-    "askSize": 1,
-    "marketCap": 1993849307136,
-    "nonDilutedMarketCap": 2023407795114,
-    "fiftyTwoWeekLow": 203.69,
+    "trailingPE": 81.24561,
+    "forwardPE": 23.004257,
+    "volume": 15956301,
+    "regularMarketVolume": 15956301,
+    "averageVolume": 24026054,
+    "averageVolume10days": 18885880,
+    "averageDailyVolume10Day": 18885880,
+    "bid": 415.81,
+    "ask": 416.85,
+    "bidSize": 2,
+    "askSize": 2,
+    "marketCap": 1973362491392,
+    "nonDilutedMarketCap": 2035907319120,
+    "fiftyTwoWeekLow": 221.6,
     "fiftyTwoWeekHigh": 437.68,
     "allTimeHigh": 437.68,
     "allTimeLow": 1.433,
-    "priceToSalesTrailing12Months": 29.200218,
-    "fiftyDayAverage": 355.092,
-    "twoHundredDayAverage": 342.14426,
+    "priceToSalesTrailing12Months": 28.900187,
+    "fiftyDayAverage": 365.1092,
+    "twoHundredDayAverage": 345.5023,
     "trailingAnnualDividendRate": 2.48,
-    "trailingAnnualDividendYield": 0.0058292593,
+    "trailingAnnualDividendYield": 0.0059146197,
     "currency": "USD",
     "tradeable": false,
-    "enterpriseValue": 2066200264704,
+    "enterpriseValue": 2025245376512,
     "profitMargins": 0.36571997,
     "floatShares": 4675721565,
     "sharesOutstanding": 4734668184,
-    "sharesShort": 54628705,
-    "sharesShortPriorMonth": 52541817,
-    "sharesShortPreviousMonthDate": 1773360000,
-    "dateShortInterest": 1776211200,
-    "sharesPercentSharesOut": 0.0115,
-    "heldPercentInsiders": 0.01967,
-    "heldPercentInstitutions": 0.79867,
-    "shortRatio": 2.11,
-    "shortPercentOfFloat": 0.0117999995,
+    "sharesShort": 51011972,
+    "sharesShortPriorMonth": 53367717,
+    "sharesShortPreviousMonthDate": 1774915200,
+    "dateShortInterest": 1777507200,
+    "sharesPercentSharesOut": 0.0108,
+    "heldPercentInsiders": 0.01949,
+    "heldPercentInstitutions": 0.79516,
+    "shortRatio": 2.28,
+    "shortPercentOfFloat": 0.011,
     "impliedSharesOutstanding": 4734668184,
     "bookValue": 16.865,
-    "priceToBook": 24.96988,
+    "priceToBook": 24.713312,
     "lastFiscalYearEnd": 1762041600,
     "nextFiscalYearEnd": 1793577600,
     "mostRecentQuarter": 1769904000,
     "earningsQuarterlyGrowth": 0.335,
     "netIncomeToCommon": 24971999232,
-    "trailingEps": 5.15,
+    "trailingEps": 5.13,
     "forwardEps": 18.11795,
-    "pegRatio": 0.93,
+    "pegRatio": 0.91,
     "lastSplitFactor": "10:1",
     "lastSplitDate": 1721001600,
-    "enterpriseToRevenue": 30.26,
-    "enterpriseToEbitda": 55.516,
-    "52WeekChange": 1.0476489,
-    "SandP52WeekChange": 0.3003528,
+    "enterpriseToRevenue": 29.66,
+    "enterpriseToEbitda": 54.416,
+    "52WeekChange": 0.7915664,
+    "SandP52WeekChange": 0.2581271,
     "lastDividendValue": 0.65,
     "lastDividendDate": 1774224000,
     "quoteType": "EQUITY",
-    "currentPrice": 421.117,
+    "currentPrice": 416.79,
     "targetHighPrice": 630.0,
     "targetLowPrice": 360.0,
     "targetMeanPrice": 475.49295,
@@ -228,53 +228,57 @@
     "quoteSourceName": "Nasdaq Real Time Price",
     "triggerable": true,
     "customPriceAlertConfidence": "HIGH",
-    "corporateActions": [],
-    "regularMarketTime": 1778167766,
-    "exchange": "NMS",
-    "messageBoardId": "finmb_25016048",
-    "exchangeTimezoneName": "America/New_York",
-    "exchangeTimezoneShortName": "EDT",
-    "gmtOffSetMilliseconds": -14400000,
-    "market": "us_market",
-    "esgPopulated": false,
-    "marketState": "REGULAR",
-    "cryptoTradeable": false,
     "hasPrePostMarketData": true,
     "firstTradeDateMilliseconds": 1249565400000,
-    "regularMarketChange": -4.322998,
-    "regularMarketDayRange": "414.69 - 426.49",
+    "preMarketChange": -1.1900024,
+    "preMarketChangePercent": -0.28551605,
+    "preMarketPrice": 415.6,
+    "regularMarketChange": -2.50998,
+    "regularMarketDayRange": "404.8 - 418.63",
     "fullExchangeName": "NasdaqGS",
-    "averageDailyVolume3Month": 24171709,
-    "fiftyTwoWeekLowChange": 217.427,
-    "fiftyTwoWeekLowChangePercent": 1.0674407,
-    "fiftyTwoWeekRange": "203.69 - 437.68",
-    "fiftyTwoWeekHighChange": -16.562988,
-    "fiftyTwoWeekHighChangePercent": -0.03784269,
-    "fiftyTwoWeekChangePercent": 104.76489,
+    "averageDailyVolume3Month": 24026054,
+    "fiftyTwoWeekLowChange": 195.19,
+    "fiftyTwoWeekLowChangePercent": 0.8808213,
+    "fiftyTwoWeekRange": "221.6 - 437.68",
+    "fiftyTwoWeekHighChange": -20.889984,
+    "fiftyTwoWeekHighChangePercent": -0.0477289,
+    "fiftyTwoWeekChangePercent": 79.15664,
     "dividendDate": 1774915200,
+    "cryptoTradeable": false,
+    "market": "us_market",
+    "esgPopulated": false,
+    "regularMarketChangePercent": -0.598612,
+    "regularMarketPrice": 416.79,
+    "shortName": "Broadcom Inc.",
+    "longName": "Broadcom Inc.",
     "earningsTimestamp": 1780516800,
     "earningsTimestampStart": 1780516800,
     "earningsTimestampEnd": 1780516800,
     "earningsCallTimestampStart": 1780520400,
     "earningsCallTimestampEnd": 1780520400,
     "isEarningsDateEstimate": false,
-    "epsTrailingTwelveMonths": 5.15,
+    "epsTrailingTwelveMonths": 5.13,
     "epsForward": 18.11795,
     "epsCurrentYear": 11.42564,
-    "priceEpsCurrentYear": 36.857193,
-    "fiftyDayAverageChange": 66.024994,
-    "fiftyDayAverageChangePercent": 0.1859377,
-    "twoHundredDayAverageChange": 78.97275,
-    "twoHundredDayAverageChangePercent": 0.23081711,
+    "priceEpsCurrentYear": 36.47848,
+    "fiftyDayAverageChange": 51.680817,
+    "fiftyDayAverageChangePercent": 0.14154893,
+    "twoHundredDayAverageChange": 71.28772,
+    "twoHundredDayAverageChangePercent": 0.20633067,
     "sourceInterval": 15,
     "exchangeDataDelayedBy": 0,
     "averageAnalystRating": "1.3 - Strong Buy",
-    "shortName": "Broadcom Inc.",
-    "longName": "Broadcom Inc.",
-    "regularMarketChangePercent": -1.016124,
-    "regularMarketPrice": 421.117,
+    "corporateActions": [],
+    "preMarketTime": 1778755651,
+    "regularMarketTime": 1778702401,
+    "exchange": "NMS",
+    "messageBoardId": "finmb_25016048",
+    "exchangeTimezoneName": "America/New_York",
+    "exchangeTimezoneShortName": "EDT",
+    "gmtOffSetMilliseconds": -14400000,
+    "marketState": "PRE",
     "displayName": "Broadcom",
-    "trailingPegRatio": 0.9297
+    "trailingPegRatio": 0.9355
   },
   "recommendations": [
     {
@@ -335,6 +339,16 @@
     }
   ],
   "upgrades_downgrades": [
+    {
+      "GradeDate": "2026-05-12T18:14:43",
+      "Firm": "Citigroup",
+      "ToGrade": "Buy",
+      "FromGrade": "Buy",
+      "Action": "main",
+      "priceTargetAction": "Raises",
+      "currentPriceTarget": 500.0,
+      "priorPriceTarget": 475.0
+    },
     {
       "GradeDate": "2026-04-16T09:40:43",
       "Firm": "Mizuho",
@@ -6247,7 +6261,7 @@
     }
   ],
   "analyst_price_targets": {
-    "current": 421.117,
+    "current": 416.79,
     "high": 630.0,
     "low": 360.0,
     "mean": 475.49295,
@@ -6255,32 +6269,32 @@
   },
   "news": [
     {
-      "id": "f70b7925-cc03-4edf-abcb-fe082de6d288",
+      "id": "dd6531fb-ab4a-369c-84cd-0a6cd94285f8",
       "content": {
-        "id": "f70b7925-cc03-4edf-abcb-fe082de6d288",
+        "id": "dd6531fb-ab4a-369c-84cd-0a6cd94285f8",
         "contentType": "STORY",
-        "title": "The stock market's semi-charmed life: Morning Brief",
+        "title": "The Profit Margins for These 3 AI Infrastructure Stocks Are Off the Charts",
         "description": "",
-        "summary": "The stock market has soared to record highs in recent weeks, and one sector has been doing a lot of the work.",
-        "pubDate": "2026-05-07T10:00:00Z",
-        "displayTime": "2026-05-07T10:00:00Z",
+        "summary": "Highly profitable AI stocks with surging demand are within reach.",
+        "pubDate": "2026-05-14T09:00:00Z",
+        "displayTime": "2026-05-14T09:00:00Z",
         "isHosted": true,
         "bypassModal": false,
         "previewUrl": null,
         "thumbnail": {
-          "originalUrl": "https://s.yimg.com/uu/api/res/1.2/d35FXVDYRR0HDbw8yPTfOg--~B/aD00NjU2O3c9Njk4NDthcHBpZD15dGFjaHlvbg--/https://d29szjachogqwa.cloudfront.net/images/2026-04/cea9c5c3-9735-4b5b-8b4f-6ea5312a4f36",
-          "originalWidth": 6984,
-          "originalHeight": 4656,
-          "caption": "",
+          "originalUrl": "https://media.zenfs.com/en/motleyfool.com/e1fd65106905666ec213cf98d5642d35",
+          "originalWidth": 1200,
+          "originalHeight": 801,
+          "caption": "A person sitting at a desk, looking at a tablet.",
           "resolutions": [
             {
-              "url": "https://s.yimg.com/uu/api/res/1.2/d35FXVDYRR0HDbw8yPTfOg--~B/aD00NjU2O3c9Njk4NDthcHBpZD15dGFjaHlvbg--/https://d29szjachogqwa.cloudfront.net/images/2026-04/cea9c5c3-9735-4b5b-8b4f-6ea5312a4f36",
-              "width": 6984,
-              "height": 4656,
+              "url": "https://s.yimg.com/uu/api/res/1.2/xpI2.nlrNjvQ4E48UNeFqg--~B/aD04MDE7dz0xMjAwO2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/motleyfool.com/e1fd65106905666ec213cf98d5642d35",
+              "width": 1200,
+              "height": 801,
               "tag": "original"
             },
             {
-              "url": "https://s.yimg.com/uu/api/res/1.2/Cq17DYMDVph2Mubg9Mwz6g--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://d29szjachogqwa.cloudfront.net/images/2026-04/cea9c5c3-9735-4b5b-8b4f-6ea5312a4f36",
+              "url": "https://s.yimg.com/uu/api/res/1.2/piVuIz7yzNGJO_X9tXpHgA--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/motleyfool.com/e1fd65106905666ec213cf98d5642d35",
               "width": 170,
               "height": 128,
               "tag": "170x128"
@@ -6288,80 +6302,18 @@
           ]
         },
         "provider": {
-          "displayName": "Yahoo Finance",
-          "url": "http://finance.yahoo.com/",
-          "sourceId": "yahoofinance.com"
+          "displayName": "Motley Fool",
+          "url": "http://www.fool.com/",
+          "sourceId": "motleyfool.com"
         },
         "canonicalUrl": {
-          "url": "https://finance.yahoo.com/markets/article/the-stock-markets-semi-charmed-life-morning-brief-100000617.html",
+          "url": "https://www.fool.com/investing/2026/05/14/the-profit-margins-for-these-3-ai-infrastructure-s/",
           "site": "finance",
           "region": "US",
           "lang": "en-US"
         },
         "clickThroughUrl": {
-          "url": "https://finance.yahoo.com/markets/article/the-stock-markets-semi-charmed-life-morning-brief-100000617.html",
-          "site": "finance",
-          "region": "US",
-          "lang": "en-US"
-        },
-        "metadata": {
-          "editorsPick": true
-        },
-        "finance": {
-          "premiumFinance": {
-            "isPremiumNews": false,
-            "isPremiumFreeNews": false
-          }
-        },
-        "storyline": null
-      }
-    },
-    {
-      "id": "1084de48-cf18-3b3e-acdd-4cd8a3253304",
-      "content": {
-        "id": "1084de48-cf18-3b3e-acdd-4cd8a3253304",
-        "contentType": "STORY",
-        "title": "Nvidia CEO Jensen Huang Warns of ‘Horrible Outcome’ if China’s Huawei Gains AI Advantage",
-        "description": "",
-        "summary": "On a recent Prof G Markets segment titled How China Wins The AI War, NVIDIA (NASDAQ: NVDA) CEO Jensen Huang delivered a blunt assessment of the competitive threat from China’s Huawei. “The day that Deepseek comes out on Huawei first, that is a horrible outcome for our nation,” he said, adding that, “AI models around ... Nvidia CEO Jensen Huang Warns of ‘Horrible Outcome’ if China’s Huawei Gains AI Advantage",
-        "pubDate": "2026-05-07T14:51:52Z",
-        "displayTime": "2026-05-07T14:51:52Z",
-        "isHosted": true,
-        "bypassModal": false,
-        "previewUrl": null,
-        "thumbnail": {
-          "originalUrl": "https://media.zenfs.com/en/24_7_wall_st__718/593998830b10c848d7750a8f1f0a18f6",
-          "originalWidth": 1366,
-          "originalHeight": 767,
-          "caption": "",
-          "resolutions": [
-            {
-              "url": "https://s.yimg.com/uu/api/res/1.2/lGUeAgYpRHrHuA2BlqRn_Q--~B/aD03Njc7dz0xMzY2O2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/24_7_wall_st__718/593998830b10c848d7750a8f1f0a18f6",
-              "width": 1366,
-              "height": 767,
-              "tag": "original"
-            },
-            {
-              "url": "https://s.yimg.com/uu/api/res/1.2/S8JX8Bz8RjrbGhcmtEv7Pg--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/24_7_wall_st__718/593998830b10c848d7750a8f1f0a18f6",
-              "width": 170,
-              "height": 128,
-              "tag": "170x128"
-            }
-          ]
-        },
-        "provider": {
-          "displayName": "24/7 Wall St.",
-          "url": "https://247wallst.com/",
-          "sourceId": "24_7_wall_st__718"
-        },
-        "canonicalUrl": {
-          "url": "https://247wallst.com/personal-finance/2026/05/07/nvidia-ceo-jensen-huang-warns-of-horrible-outcome-if-chinas-huawei-gains-ai-advantage/",
-          "site": "finance",
-          "region": "US",
-          "lang": "en-US"
-        },
-        "clickThroughUrl": {
-          "url": "https://finance.yahoo.com/markets/stocks/articles/nvidia-ceo-jensen-huang-warns-145152084.html",
+          "url": "https://finance.yahoo.com/markets/stocks/articles/profit-margins-3-ai-infrastructure-090000514.html",
           "site": "finance",
           "region": "US",
           "lang": "en-US"
@@ -6379,32 +6331,32 @@
       }
     },
     {
-      "id": "5f695c14-bc91-363c-995e-e994c1f0807e",
+      "id": "db2c22e3-bf1f-3a68-989e-e8f92a798300",
       "content": {
-        "id": "5f695c14-bc91-363c-995e-e994c1f0807e",
+        "id": "db2c22e3-bf1f-3a68-989e-e8f92a798300",
         "contentType": "STORY",
-        "title": "These Are The 5 Best Stocks To Buy Or Watch Now",
+        "title": "Cisco Soars on Sales Forecast, AI-Focused Restructuring Plan",
         "description": "",
-        "summary": "Buying a stock is easy, but buying the right stock without a good strategy is incredibly hard. Here are five top-performing stocks to buy now or put on a watchlist.",
-        "pubDate": "2026-05-07T13:44:14Z",
-        "displayTime": "2026-05-07T13:44:14Z",
-        "isHosted": false,
+        "summary": "(Bloomberg) -- Cisco Systems Inc. gained as much as 19% in late trading after the company delivered a better-than-anticipated sales forecast and announced plans to cut thousands of jobs, an attempt to focus on the fast-growing AI market.Most Read from BloombergIran’s Kharg Island Oil Jetties Empty Again Yesterday, Satellite ShowsAmbani’s Cola War With Coke, Pepsi Spurs Fridge Bonanza in IndiaNvidia’s CEO Joins Trump in China With AI in the SpotlightTrump Lands in China for Xi Trade Summit With I",
+        "pubDate": "2026-05-13T22:43:34Z",
+        "displayTime": "2026-05-13T22:43:34Z",
+        "isHosted": true,
         "bypassModal": false,
-        "previewUrl": "https://finance.yahoo.com/m/5f695c14-bc91-363c-995e-e994c1f0807e/these-are-the-5-best-stocks.html",
+        "previewUrl": null,
         "thumbnail": {
-          "originalUrl": "https://media.zenfs.com/en/ibd.com/d286311e6de86e24602ae294b1416a97",
-          "originalWidth": 1000,
-          "originalHeight": 565,
+          "originalUrl": "https://media.zenfs.com/en/bloomberg_holding_pen_162/b13300642a4393b92a163a7412d4be51",
+          "originalWidth": 2000,
+          "originalHeight": 1334,
           "caption": "",
           "resolutions": [
             {
-              "url": "https://s.yimg.com/uu/api/res/1.2/CnP2jdOEWBJtUq5bgefK.A--~B/aD01NjU7dz0xMDAwO2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/ibd.com/d286311e6de86e24602ae294b1416a97",
-              "width": 1000,
-              "height": 565,
+              "url": "https://s.yimg.com/uu/api/res/1.2/I246FPcHhvQ0mvPKkdP8xA--~B/aD0xMzM0O3c9MjAwMDthcHBpZD15dGFjaHlvbg--/https://media.zenfs.com/en/bloomberg_holding_pen_162/b13300642a4393b92a163a7412d4be51",
+              "width": 2000,
+              "height": 1334,
               "tag": "original"
             },
             {
-              "url": "https://s.yimg.com/uu/api/res/1.2/r4hto1YddsTx6maqnzG_kQ--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/ibd.com/d286311e6de86e24602ae294b1416a97",
+              "url": "https://s.yimg.com/uu/api/res/1.2/7M09LjPpja7IHqMkCO88zQ--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/bloomberg_holding_pen_162/b13300642a4393b92a163a7412d4be51",
               "width": 170,
               "height": 128,
               "tag": "170x128"
@@ -6412,12 +6364,136 @@
           ]
         },
         "provider": {
-          "displayName": "Investor's Business Daily",
-          "url": "http://www.investors.com/",
-          "sourceId": "ibd.com"
+          "displayName": "Bloomberg",
+          "url": "https://www.bloomberg.com/company",
+          "sourceId": "bloomberg_holding_pen_162"
         },
         "canonicalUrl": {
-          "url": "https://www.investors.com/research/best-stocks-to-buy-now/?src=A00220&yptr=yahoo",
+          "url": "https://finance.yahoo.com/markets/stocks/articles/cisco-soars-sales-forecast-ai-224334168.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "clickThroughUrl": {
+          "url": "https://finance.yahoo.com/markets/stocks/articles/cisco-soars-sales-forecast-ai-224334168.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "metadata": {
+          "editorsPick": false
+        },
+        "finance": {
+          "premiumFinance": {
+            "isPremiumNews": false,
+            "isPremiumFreeNews": false
+          }
+        },
+        "storyline": null
+      }
+    },
+    {
+      "id": "320a75fc-34ce-3e92-88db-90c84331a7c3",
+      "content": {
+        "id": "320a75fc-34ce-3e92-88db-90c84331a7c3",
+        "contentType": "STORY",
+        "title": "Should You Buy the Cerebras IPO? Here's How the AI Chip Stock Stacks Up.",
+        "description": "",
+        "summary": "The hot new chip company has major deals with OpenAI and Amazon.",
+        "pubDate": "2026-05-13T21:50:00Z",
+        "displayTime": "2026-05-13T21:50:00Z",
+        "isHosted": true,
+        "bypassModal": false,
+        "previewUrl": null,
+        "thumbnail": {
+          "originalUrl": "https://media.zenfs.com/en/motleyfool.com/38433d1657a617e13f38f2e723d1cf66",
+          "originalWidth": 1400,
+          "originalHeight": 933,
+          "caption": "Two silicon wafers etched with circuits.",
+          "resolutions": [
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/iJd1O90uacXQonhL2B6iuw--~B/aD05MzM7dz0xNDAwO2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/motleyfool.com/38433d1657a617e13f38f2e723d1cf66",
+              "width": 1400,
+              "height": 933,
+              "tag": "original"
+            },
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/ui5XlwuMYmoNtzLGCNkdyw--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/motleyfool.com/38433d1657a617e13f38f2e723d1cf66",
+              "width": 170,
+              "height": 128,
+              "tag": "170x128"
+            }
+          ]
+        },
+        "provider": {
+          "displayName": "Motley Fool",
+          "url": "http://www.fool.com/",
+          "sourceId": "motleyfool.com"
+        },
+        "canonicalUrl": {
+          "url": "https://www.fool.com/investing/2026/05/13/should-you-buy-the-cerebras-ipo-heres-how-the-ai-c/",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "clickThroughUrl": {
+          "url": "https://finance.yahoo.com/markets/stocks/articles/buy-cerebras-ipo-heres-ai-215000362.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "metadata": {
+          "editorsPick": false
+        },
+        "finance": {
+          "premiumFinance": {
+            "isPremiumNews": false,
+            "isPremiumFreeNews": false
+          }
+        },
+        "storyline": null
+      }
+    },
+    {
+      "id": "2129388d-de35-330c-8e3d-8652ba487258",
+      "content": {
+        "id": "2129388d-de35-330c-8e3d-8652ba487258",
+        "contentType": "STORY",
+        "title": "Micron Tops $900 Billion Market Cap. How the Samsung Strike Could Help the Chip Maker.",
+        "description": "",
+        "summary": "A walkout at rival Samsung could hit about 3% of global memory-chip production, according to estimates.",
+        "pubDate": "2026-05-13T21:36:00Z",
+        "displayTime": "2026-05-13T21:36:00Z",
+        "isHosted": false,
+        "bypassModal": false,
+        "previewUrl": "https://finance.yahoo.com/m/2129388d-de35-330c-8e3d-8652ba487258/micron-tops-900-billion.html",
+        "thumbnail": {
+          "originalUrl": "https://media.zenfs.com/en/Barrons.com/9d0e818f4d88ebb5d2ea6d5e5b58e660",
+          "originalWidth": 1280,
+          "originalHeight": 640,
+          "caption": "",
+          "resolutions": [
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/83Q3U3h7a8GTWf7QdHXfMQ--~B/aD02NDA7dz0xMjgwO2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/Barrons.com/9d0e818f4d88ebb5d2ea6d5e5b58e660",
+              "width": 1280,
+              "height": 640,
+              "tag": "original"
+            },
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/nji2f3RiOgsXf7u1XF4KHw--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/Barrons.com/9d0e818f4d88ebb5d2ea6d5e5b58e660",
+              "width": 170,
+              "height": 128,
+              "tag": "170x128"
+            }
+          ]
+        },
+        "provider": {
+          "displayName": "Barrons.com",
+          "url": "http://www.barrons.com/",
+          "sourceId": "Barrons.com"
+        },
+        "canonicalUrl": {
+          "url": "https://www.barrons.com/articles/micron-stock-price-samsung-strike-sandisk-2bd26f87?siteid=yhoof2&yptr=yahoo",
           "site": "finance",
           "region": "US",
           "lang": "en-US"
@@ -6436,32 +6512,32 @@
       }
     },
     {
-      "id": "da5786e9-1aa5-386d-92dc-1572c8dfcca7",
+      "id": "9ab1e0a2-4347-31cc-a200-62d542fb0b39",
       "content": {
-        "id": "da5786e9-1aa5-386d-92dc-1572c8dfcca7",
+        "id": "9ab1e0a2-4347-31cc-a200-62d542fb0b39",
         "contentType": "STORY",
-        "title": "NVIDIA Shares Rally Toward 52-Week High: Buy More or Lock in Gains?",
+        "title": "Broadcom (AVGO) Valuation Check After Recent Momentum In AI Infrastructure Story",
         "description": "",
-        "summary": "NVDA rises near its 52-week high as booming AI demand, strong Data Center growth and a lower P/E multiple fuel investor optimism.",
-        "pubDate": "2026-05-07T12:23:00Z",
-        "displayTime": "2026-05-07T12:23:00Z",
+        "summary": "Broadcom stock snapshot and recent performance Broadcom (AVGO) has been drawing fresh attention after recent trading left the stock at a last close of US$419.30. Its move over the past month and past 3 months has differed from its 1-day and 7-day declines. See our latest analysis for Broadcom. While the share price has eased over the past week and day, Broadcom’s 30-day and 90-day share price returns of 12.85% and 22.33% sit alongside a 1-year total shareholder return of 81.87%, with very...",
+        "pubDate": "2026-05-13T20:24:58Z",
+        "displayTime": "2026-05-13T20:24:58Z",
         "isHosted": true,
         "bypassModal": false,
         "previewUrl": null,
         "thumbnail": {
-          "originalUrl": "https://media.zenfs.com/en/zacks.com/cbfcc2d36e5d5391b79e00de30b0354f",
-          "originalWidth": 635,
-          "originalHeight": 400,
+          "originalUrl": "https://media.zenfs.com/en/simply_wall_st__316/dfc5c49a1ab838a9c236bef742ffecf1",
+          "originalWidth": 1194,
+          "originalHeight": 432,
           "caption": "",
           "resolutions": [
             {
-              "url": "https://s.yimg.com/uu/api/res/1.2/pXM1demKWkcUam5GodRDIw--~B/aD00MDA7dz02MzU7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/zacks.com/cbfcc2d36e5d5391b79e00de30b0354f",
-              "width": 635,
-              "height": 400,
+              "url": "https://s.yimg.com/uu/api/res/1.2/q7CEgJDIR38z7SHlrATgRA--~B/aD00MzI7dz0xMTk0O2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/simply_wall_st__316/dfc5c49a1ab838a9c236bef742ffecf1",
+              "width": 1194,
+              "height": 432,
               "tag": "original"
             },
             {
-              "url": "https://s.yimg.com/uu/api/res/1.2/NBMmAly1SUchVK.1rjKLpA--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/zacks.com/cbfcc2d36e5d5391b79e00de30b0354f",
+              "url": "https://s.yimg.com/uu/api/res/1.2/fAtX1UcMD13NawIOD5fjUA--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/simply_wall_st__316/dfc5c49a1ab838a9c236bef742ffecf1",
               "width": 170,
               "height": 128,
               "tag": "170x128"
@@ -6469,18 +6545,18 @@
           ]
         },
         "provider": {
-          "displayName": "Zacks",
-          "url": "http://www.zacks.com/",
-          "sourceId": "zacks.com"
+          "displayName": "Simply Wall St.",
+          "url": "https://simplywall.st/",
+          "sourceId": "simply_wall_st__316"
         },
         "canonicalUrl": {
-          "url": "https://finance.yahoo.com/markets/stocks/articles/nvidia-shares-rally-toward-52-122300584.html",
+          "url": "https://finance.yahoo.com/news/broadcom-avgo-valuation-check-recent-202458400.html",
           "site": "finance",
           "region": "US",
           "lang": "en-US"
         },
         "clickThroughUrl": {
-          "url": "https://finance.yahoo.com/markets/stocks/articles/nvidia-shares-rally-toward-52-122300584.html",
+          "url": "https://finance.yahoo.com/news/broadcom-avgo-valuation-check-recent-202458400.html",
           "site": "finance",
           "region": "US",
           "lang": "en-US"
@@ -6498,342 +6574,32 @@
       }
     },
     {
-      "id": "97756bd7-72fe-3280-b310-a4c4fadf2b65",
+      "id": "329a020b-ff46-3af4-bcea-ac6fd087e599",
       "content": {
-        "id": "97756bd7-72fe-3280-b310-a4c4fadf2b65",
+        "id": "329a020b-ff46-3af4-bcea-ac6fd087e599",
         "contentType": "STORY",
-        "title": "The Next Phase of the AI Boom Could Be Even Kinder to the Pick-and-Shovel Plays",
+        "title": "Broadcom Inc. (AVGO): Chris Rokos Is Buying This Chip Stock",
         "description": "",
-        "summary": "The first wave of the AI boom rewarded the most obvious names. The next wave spreads wealth across the entire infrastructure stack: foundries, custom silicon, networking fabric, and enterprise deployment tools. Hyperscaler CapEx is climbing, agentic AI drives inference loads that dwarf training, and every gigawatt of new compute pulls dollars through a long supply ... The Next Phase of the AI Boom Could Be Even Kinder to the Pick-and-Shovel Plays",
-        "pubDate": "2026-05-07T11:30:59Z",
-        "displayTime": "2026-05-07T11:30:59Z",
+        "summary": "We just covered the Chris Rokos Stock Portfolio: Top 10 Stock Picks and Broadcom Inc. (NASDAQ:AVGO) ranks 2nd on this list. Broadcom Inc. (NASDAQ:AVGO) has consistently featured in the 13F portfolio of Rokos Capital Management since the second quarter of 2024. Back then, this position comprised 1.4 million shares. By late 2024, the fund had […]",
+        "pubDate": "2026-05-13T19:50:34Z",
+        "displayTime": "2026-05-13T19:50:34Z",
         "isHosted": true,
         "bypassModal": false,
         "previewUrl": null,
         "thumbnail": {
-          "originalUrl": "https://media.zenfs.com/en/24_7_wall_st__718/eb55e61477c4bf32f41dccfaec8b9e16",
-          "originalWidth": 1920,
-          "originalHeight": 1080,
-          "caption": "",
+          "originalUrl": "https://media.zenfs.com/en/insidermonkey.com/cece14d8df3ff9750f89999715c2f4bb",
+          "originalWidth": 1456,
+          "originalHeight": 816,
+          "caption": "TD Cowen Sees Durability Driving Next Phase for Micron Technology (MU)",
           "resolutions": [
             {
-              "url": "https://s.yimg.com/uu/api/res/1.2/wDWkHOkefClZUXpUmgZDmw--~B/aD0xMDgwO3c9MTkyMDthcHBpZD15dGFjaHlvbg--/https://media.zenfs.com/en/24_7_wall_st__718/eb55e61477c4bf32f41dccfaec8b9e16",
-              "width": 1920,
-              "height": 1080,
+              "url": "https://s.yimg.com/uu/api/res/1.2/WV1rZpZVZ5.vOErnVRlVLA--~B/aD04MTY7dz0xNDU2O2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/insidermonkey.com/cece14d8df3ff9750f89999715c2f4bb",
+              "width": 1456,
+              "height": 816,
               "tag": "original"
             },
             {
-              "url": "https://s.yimg.com/uu/api/res/1.2/GxTajwO6F4nqq4u2G1LrJg--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/24_7_wall_st__718/eb55e61477c4bf32f41dccfaec8b9e16",
-              "width": 170,
-              "height": 128,
-              "tag": "170x128"
-            }
-          ]
-        },
-        "provider": {
-          "displayName": "24/7 Wall St.",
-          "url": "https://247wallst.com/",
-          "sourceId": "24_7_wall_st__718"
-        },
-        "canonicalUrl": {
-          "url": "https://247wallst.com/investing/2026/05/07/the-next-phase-of-the-ai-boom-could-be-even-kinder-to-the-pick-and-shovel-plays/",
-          "site": "finance",
-          "region": "US",
-          "lang": "en-US"
-        },
-        "clickThroughUrl": {
-          "url": "https://finance.yahoo.com/sectors/technology/articles/next-phase-ai-boom-could-113059083.html",
-          "site": "finance",
-          "region": "US",
-          "lang": "en-US"
-        },
-        "metadata": {
-          "editorsPick": false
-        },
-        "finance": {
-          "premiumFinance": {
-            "isPremiumNews": false,
-            "isPremiumFreeNews": false
-          }
-        },
-        "storyline": null
-      }
-    },
-    {
-      "id": "0c15a4fb-a4ae-3a0f-a5b6-eae9dbca4155",
-      "content": {
-        "id": "0c15a4fb-a4ae-3a0f-a5b6-eae9dbca4155",
-        "contentType": "STORY",
-        "title": "Qualcomm Is One of the Cheapest AI Stocks in the Trump Bull Market. Here’s Why That Gap May Close",
-        "description": "",
-        "summary": "Qualcomm trades like a legacy modem company while quietly building the cheapest exposure to AI silicon in the entire Trump bull market, and that mispricing is the core investment thesis. Qualcomm (NASDAQ:QCOM) just delivered its fourth consecutive earnings beat, confirmed a hyperscaler custom silicon program, and authorized a fresh $20 billion buyback. The market is ... Qualcomm Is One of the Cheapest AI Stocks in the Trump Bull Market. Here’s Why That Gap May Close",
-        "pubDate": "2026-05-07T11:30:01Z",
-        "displayTime": "2026-05-07T11:30:01Z",
-        "isHosted": true,
-        "bypassModal": false,
-        "previewUrl": null,
-        "thumbnail": {
-          "originalUrl": "https://media.zenfs.com/en/24_7_wall_st__718/82b97906c198aba8ecf69c54eb07f25d",
-          "originalWidth": 785,
-          "originalHeight": 500,
-          "caption": "",
-          "resolutions": [
-            {
-              "url": "https://s.yimg.com/uu/api/res/1.2/5rSxdcBR88gz9BW2KUIfAg--~B/aD01MDA7dz03ODU7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/24_7_wall_st__718/82b97906c198aba8ecf69c54eb07f25d",
-              "width": 785,
-              "height": 500,
-              "tag": "original"
-            },
-            {
-              "url": "https://s.yimg.com/uu/api/res/1.2/Y5acpdgFL2H8Y6Y9eglFNA--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/24_7_wall_st__718/82b97906c198aba8ecf69c54eb07f25d",
-              "width": 170,
-              "height": 128,
-              "tag": "170x128"
-            }
-          ]
-        },
-        "provider": {
-          "displayName": "24/7 Wall St.",
-          "url": "https://247wallst.com/",
-          "sourceId": "24_7_wall_st__718"
-        },
-        "canonicalUrl": {
-          "url": "https://247wallst.com/investing/2026/05/07/qualcomm-is-one-of-the-cheapest-ai-stocks-in-the-trump-bull-market-heres-why-that-gap-may-close/",
-          "site": "finance",
-          "region": "US",
-          "lang": "en-US"
-        },
-        "clickThroughUrl": {
-          "url": "https://finance.yahoo.com/markets/stocks/articles/qualcomm-one-cheapest-ai-stocks-113001539.html",
-          "site": "finance",
-          "region": "US",
-          "lang": "en-US"
-        },
-        "metadata": {
-          "editorsPick": false
-        },
-        "finance": {
-          "premiumFinance": {
-            "isPremiumNews": false,
-            "isPremiumFreeNews": false
-          }
-        },
-        "storyline": null
-      }
-    },
-    {
-      "id": "2e4c8a6e-81c4-33e7-8768-4d362602c107",
-      "content": {
-        "id": "2e4c8a6e-81c4-33e7-8768-4d362602c107",
-        "contentType": "STORY",
-        "title": "Zacks Investment Ideas feature highlights: AMD, Nvidia and Broadcom",
-        "description": "",
-        "summary": "AMD surged to a record high after Q1 revenue jumped 38%, free cash flow hit a quarterly record, and Q2 guidance topped estimates.",
-        "pubDate": "2026-05-07T08:32:00Z",
-        "displayTime": "2026-05-07T08:32:00Z",
-        "isHosted": true,
-        "bypassModal": false,
-        "previewUrl": null,
-        "thumbnail": {
-          "originalUrl": "https://media.zenfs.com/en/zacks.com/d87cc8e5693753ce8e232e0a527e4885",
-          "originalWidth": 635,
-          "originalHeight": 400,
-          "caption": "",
-          "resolutions": [
-            {
-              "url": "https://s.yimg.com/uu/api/res/1.2/mYQcKrBErD723LN8P5V9xQ--~B/aD00MDA7dz02MzU7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/zacks.com/d87cc8e5693753ce8e232e0a527e4885",
-              "width": 635,
-              "height": 400,
-              "tag": "original"
-            },
-            {
-              "url": "https://s.yimg.com/uu/api/res/1.2/tzvsO_ypF28r9r7fHDBqQg--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/zacks.com/d87cc8e5693753ce8e232e0a527e4885",
-              "width": 170,
-              "height": 128,
-              "tag": "170x128"
-            }
-          ]
-        },
-        "provider": {
-          "displayName": "Zacks",
-          "url": "http://www.zacks.com/",
-          "sourceId": "zacks.com"
-        },
-        "canonicalUrl": {
-          "url": "https://finance.yahoo.com/markets/stocks/articles/zacks-investment-ideas-feature-highlights-083200893.html",
-          "site": "finance",
-          "region": "US",
-          "lang": "en-US"
-        },
-        "clickThroughUrl": {
-          "url": "https://finance.yahoo.com/markets/stocks/articles/zacks-investment-ideas-feature-highlights-083200893.html",
-          "site": "finance",
-          "region": "US",
-          "lang": "en-US"
-        },
-        "metadata": {
-          "editorsPick": false
-        },
-        "finance": {
-          "premiumFinance": {
-            "isPremiumNews": false,
-            "isPremiumFreeNews": false
-          }
-        },
-        "storyline": null
-      }
-    },
-    {
-      "id": "05ef26c1-c77f-3823-a8f8-9eff0e99e69c",
-      "content": {
-        "id": "05ef26c1-c77f-3823-a8f8-9eff0e99e69c",
-        "contentType": "STORY",
-        "title": "The 1 Thing Tech Investors Aren't Ready For -- but OpenAI Just Proved",
-        "description": "",
-        "summary": "OpenAI's IPO is still months away, but its influence over artificial intelligence (AI) stocks is already taking shape.",
-        "pubDate": "2026-05-07T08:20:00Z",
-        "displayTime": "2026-05-07T08:20:00Z",
-        "isHosted": true,
-        "bypassModal": false,
-        "previewUrl": null,
-        "thumbnail": {
-          "originalUrl": "https://media.zenfs.com/en/motleyfool.com/f671786d3b11139fb3b26bccbc3ee163",
-          "originalWidth": 1201,
-          "originalHeight": 686,
-          "caption": "A light bulb with AI on it on top of a semiconductor.",
-          "resolutions": [
-            {
-              "url": "https://s.yimg.com/uu/api/res/1.2/e6XqdLLI47ANQQkpJ5tAhA--~B/aD02ODY7dz0xMjAxO2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/motleyfool.com/f671786d3b11139fb3b26bccbc3ee163",
-              "width": 1201,
-              "height": 686,
-              "tag": "original"
-            },
-            {
-              "url": "https://s.yimg.com/uu/api/res/1.2/sbl9QdraAYiop4CIALPkfg--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/motleyfool.com/f671786d3b11139fb3b26bccbc3ee163",
-              "width": 170,
-              "height": 128,
-              "tag": "170x128"
-            }
-          ]
-        },
-        "provider": {
-          "displayName": "Motley Fool",
-          "url": "http://www.fool.com/",
-          "sourceId": "motleyfool.com"
-        },
-        "canonicalUrl": {
-          "url": "https://www.fool.com/investing/2026/05/07/the-1-thing-tech-investors-arent-ready-for-but-ope/",
-          "site": "finance",
-          "region": "US",
-          "lang": "en-US"
-        },
-        "clickThroughUrl": {
-          "url": "https://finance.yahoo.com/markets/stocks/articles/1-thing-tech-investors-arent-082000104.html",
-          "site": "finance",
-          "region": "US",
-          "lang": "en-US"
-        },
-        "metadata": {
-          "editorsPick": false
-        },
-        "finance": {
-          "premiumFinance": {
-            "isPremiumNews": false,
-            "isPremiumFreeNews": false
-          }
-        },
-        "storyline": null
-      }
-    },
-    {
-      "id": "cd1f4afb-8f5b-33ab-936d-c3c16b6b786b",
-      "content": {
-        "id": "cd1f4afb-8f5b-33ab-936d-c3c16b6b786b",
-        "contentType": "STORY",
-        "title": "Not Nvidia. Not Broadcom. Intel Is Going to Be the Biggest Winner of the Artificial Intelligence (AI) Inference Era.",
-        "description": "",
-        "summary": "Sales of Intel's central processing units and custom AI processors are gaining traction as AI inference workloads grow.",
-        "pubDate": "2026-05-07T07:58:00Z",
-        "displayTime": "2026-05-07T07:58:00Z",
-        "isHosted": true,
-        "bypassModal": false,
-        "previewUrl": null,
-        "thumbnail": {
-          "originalUrl": "https://media.zenfs.com/en/motleyfool.com/2a02a1f71a2143cab44159cd703bc8c7",
-          "originalWidth": 1400,
-          "originalHeight": 840,
-          "caption": "Intel logo inside a building.",
-          "resolutions": [
-            {
-              "url": "https://s.yimg.com/uu/api/res/1.2/MsZVL_pRk2VzKgGLnQHoRQ--~B/aD04NDA7dz0xNDAwO2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/motleyfool.com/2a02a1f71a2143cab44159cd703bc8c7",
-              "width": 1400,
-              "height": 840,
-              "tag": "original"
-            },
-            {
-              "url": "https://s.yimg.com/uu/api/res/1.2/COHiopkN3OVimSo1HZjL7w--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/motleyfool.com/2a02a1f71a2143cab44159cd703bc8c7",
-              "width": 170,
-              "height": 128,
-              "tag": "170x128"
-            }
-          ]
-        },
-        "provider": {
-          "displayName": "Motley Fool",
-          "url": "http://www.fool.com/",
-          "sourceId": "motleyfool.com"
-        },
-        "canonicalUrl": {
-          "url": "https://www.fool.com/investing/2026/05/07/not-nvidia-not-broadcom-intel-is-going-to-be-the-b/",
-          "site": "finance",
-          "region": "US",
-          "lang": "en-US"
-        },
-        "clickThroughUrl": {
-          "url": "https://finance.yahoo.com/sectors/technology/articles/not-nvidia-not-broadcom-intel-075800341.html",
-          "site": "finance",
-          "region": "US",
-          "lang": "en-US"
-        },
-        "metadata": {
-          "editorsPick": false
-        },
-        "finance": {
-          "premiumFinance": {
-            "isPremiumNews": false,
-            "isPremiumFreeNews": false
-          }
-        },
-        "storyline": null
-      }
-    },
-    {
-      "id": "c15d9c76-24bf-3d6b-8fc6-0e182585e973",
-      "content": {
-        "id": "c15d9c76-24bf-3d6b-8fc6-0e182585e973",
-        "contentType": "STORY",
-        "title": "Celestica (CLS) Announces Availability of 1.6TbE Switches for GenAI, ML Infrastructure",
-        "description": "",
-        "summary": "Celestica Inc. (NYSE:CLS) is one of the best growth stocks to invest in for the next 2 years. On April 29, Celestica announced that its DS6000-series 1.6TbE switches are now available for order, marking a transition from development to market-ready status. These switches are designed to serve as the high-speed backbone for GenAI and ML […]",
-        "pubDate": "2026-05-07T04:56:03Z",
-        "displayTime": "2026-05-07T04:56:03Z",
-        "isHosted": true,
-        "bypassModal": false,
-        "previewUrl": null,
-        "thumbnail": {
-          "originalUrl": "https://media.zenfs.com/en/insidermonkey.com/c474ce6849973d472e01df44b4c5dcf3",
-          "originalWidth": 768,
-          "originalHeight": 419,
-          "caption": "Celestica (CLS) Announces Availability of 1.6TbE Switches for GenAI, ML Infrastructure",
-          "resolutions": [
-            {
-              "url": "https://s.yimg.com/uu/api/res/1.2/Dvohr_vhlrMYH8AMWUh0eg--~B/aD00MTk7dz03Njg7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/insidermonkey.com/c474ce6849973d472e01df44b4c5dcf3",
-              "width": 768,
-              "height": 419,
-              "tag": "original"
-            },
-            {
-              "url": "https://s.yimg.com/uu/api/res/1.2/c3oWI0dY3qr6rh_hjvixUA--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/insidermonkey.com/c474ce6849973d472e01df44b4c5dcf3",
+              "url": "https://s.yimg.com/uu/api/res/1.2/bv9CtYA1cFCLXDNUGvFctw--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/insidermonkey.com/cece14d8df3ff9750f89999715c2f4bb",
               "width": 170,
               "height": 128,
               "tag": "170x128"
@@ -6846,13 +6612,13 @@
           "sourceId": "insidermonkey.com"
         },
         "canonicalUrl": {
-          "url": "https://finance.yahoo.com/sectors/technology/articles/celestica-cls-announces-availability-1-045603505.html",
+          "url": "https://finance.yahoo.com/news/broadcom-inc-avgo-chris-rokos-195034919.html",
           "site": "finance",
           "region": "US",
           "lang": "en-US"
         },
         "clickThroughUrl": {
-          "url": "https://finance.yahoo.com/sectors/technology/articles/celestica-cls-announces-availability-1-045603505.html",
+          "url": "https://finance.yahoo.com/news/broadcom-inc-avgo-chris-rokos-195034919.html",
           "site": "finance",
           "region": "US",
           "lang": "en-US"
@@ -6863,6 +6629,235 @@
         "finance": {
           "premiumFinance": {
             "isPremiumNews": false,
+            "isPremiumFreeNews": false
+          }
+        },
+        "storyline": null
+      }
+    },
+    {
+      "id": "1cc5f2a3-d850-340c-a551-2ef87335c8a9",
+      "content": {
+        "id": "1cc5f2a3-d850-340c-a551-2ef87335c8a9",
+        "contentType": "STORY",
+        "title": "3 High-Flying Stocks on Our Buy List",
+        "description": "",
+        "summary": "Expensive stocks typically earn their valuations through superior growth rates that other companies simply can’t match. The flip side though is that these lofty expectations make them particularly susceptible to drawdowns when market sentiment shifts.",
+        "pubDate": "2026-05-13T19:40:55Z",
+        "displayTime": "2026-05-13T19:40:55Z",
+        "isHosted": true,
+        "bypassModal": false,
+        "previewUrl": null,
+        "thumbnail": {
+          "originalUrl": "https://media.zenfs.com/en/stockstory_922/c33d5012ea1701a7be34c00d3064b11a",
+          "originalWidth": 1400,
+          "originalHeight": 700,
+          "caption": "AVGO Cover Image",
+          "resolutions": [
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/YWFEnJcNYYaz8RzMffYDxw--~B/aD03MDA7dz0xNDAwO2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/stockstory_922/c33d5012ea1701a7be34c00d3064b11a",
+              "width": 1400,
+              "height": 700,
+              "tag": "original"
+            },
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/knNQTq4WmzZH.pRHKJF73g--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/stockstory_922/c33d5012ea1701a7be34c00d3064b11a",
+              "width": 170,
+              "height": 128,
+              "tag": "170x128"
+            }
+          ]
+        },
+        "provider": {
+          "displayName": "StockStory",
+          "url": "https://stockstory.org/",
+          "sourceId": "stockstory_922"
+        },
+        "canonicalUrl": {
+          "url": "https://finance.yahoo.com/news/3-high-flying-stocks-buy-194055007.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "clickThroughUrl": {
+          "url": "https://finance.yahoo.com/news/3-high-flying-stocks-buy-194055007.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "metadata": {
+          "editorsPick": false
+        },
+        "finance": {
+          "premiumFinance": {
+            "isPremiumNews": false,
+            "isPremiumFreeNews": false
+          }
+        },
+        "storyline": null
+      }
+    },
+    {
+      "id": "b267be52-aed5-394d-9748-ee14119448de",
+      "content": {
+        "id": "b267be52-aed5-394d-9748-ee14119448de",
+        "contentType": "STORY",
+        "title": "Broadcom Enters Earnings As Citi's Top Semiconductor Pick",
+        "description": "",
+        "summary": "The question surrounding Broadcom (NASDAQ:AVGO) heading into its next earnings report is not whether the company belongs among the AI trade’s biggest winners. That debate ended a long time ago. The more pressing question is whether a business already generating tens of billions in AI-related revenue can keep growing fast enough to justify a valuation that has briefly crossed $2 trillion. Citi’s answer, for now, is yes. Analyst Atif Malik raised his price target on the stock from $475 to $500 on",
+        "pubDate": "2026-05-13T19:31:27Z",
+        "displayTime": "2026-05-13T19:31:27Z",
+        "isHosted": true,
+        "bypassModal": false,
+        "previewUrl": null,
+        "thumbnail": {
+          "originalUrl": "https://media.zenfs.com/en/Benzinga/cae68a06228e62c801869e73ad9f0776",
+          "originalWidth": 1024,
+          "originalHeight": 683,
+          "caption": "",
+          "resolutions": [
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/UR1xgeZXE0cfd6uEEhtLxw--~B/aD02ODM7dz0xMDI0O2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/Benzinga/cae68a06228e62c801869e73ad9f0776",
+              "width": 1024,
+              "height": 683,
+              "tag": "original"
+            },
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/Avr8_oN7cgMT1EffMhG.2w--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/Benzinga/cae68a06228e62c801869e73ad9f0776",
+              "width": 170,
+              "height": 128,
+              "tag": "170x128"
+            }
+          ]
+        },
+        "provider": {
+          "displayName": "Benzinga",
+          "url": "http://www.benzinga.com/",
+          "sourceId": "Benzinga"
+        },
+        "canonicalUrl": {
+          "url": "https://finance.yahoo.com/news/broadcom-enters-earnings-citis-top-193127425.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "clickThroughUrl": {
+          "url": "https://finance.yahoo.com/news/broadcom-enters-earnings-citis-top-193127425.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "metadata": {
+          "editorsPick": false
+        },
+        "finance": {
+          "premiumFinance": {
+            "isPremiumNews": false,
+            "isPremiumFreeNews": false
+          }
+        },
+        "storyline": null
+      }
+    },
+    {
+      "id": "cc354424-b810-3895-911c-99e5aa0bf790",
+      "content": {
+        "id": "cc354424-b810-3895-911c-99e5aa0bf790",
+        "contentType": "STORY",
+        "title": "AMD Jumps 76% in a Month: Is There More Room for the Stock to Rise?",
+        "description": "",
+        "summary": "AMD is up 75.8% YTD as EPYC and Instinct drive data-center growth, but stiff competition and a pricey P/E leave the stock a hold.",
+        "pubDate": "2026-05-13T16:50:00Z",
+        "displayTime": "2026-05-13T16:50:00Z",
+        "isHosted": true,
+        "bypassModal": false,
+        "previewUrl": null,
+        "thumbnail": {
+          "originalUrl": "https://media.zenfs.com/en/zacks.com/c0a0d5596f2ebb626a8c1aabf1b4fb40",
+          "originalWidth": 635,
+          "originalHeight": 400,
+          "caption": "",
+          "resolutions": [
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/501H47h5ygSgSbhanVrDkw--~B/aD00MDA7dz02MzU7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/zacks.com/c0a0d5596f2ebb626a8c1aabf1b4fb40",
+              "width": 635,
+              "height": 400,
+              "tag": "original"
+            },
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/Z.IKVaBvghAal0Ud2gEmlA--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/zacks.com/c0a0d5596f2ebb626a8c1aabf1b4fb40",
+              "width": 170,
+              "height": 128,
+              "tag": "170x128"
+            }
+          ]
+        },
+        "provider": {
+          "displayName": "Zacks",
+          "url": "http://www.zacks.com/",
+          "sourceId": "zacks.com"
+        },
+        "canonicalUrl": {
+          "url": "https://finance.yahoo.com/news/amd-jumps-76-month-more-165000335.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "clickThroughUrl": {
+          "url": "https://finance.yahoo.com/news/amd-jumps-76-month-more-165000335.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "metadata": {
+          "editorsPick": false
+        },
+        "finance": {
+          "premiumFinance": {
+            "isPremiumNews": false,
+            "isPremiumFreeNews": false
+          }
+        },
+        "storyline": null
+      }
+    },
+    {
+      "id": "67dd6c65-ab34-3431-87da-7881a639d6b2",
+      "content": {
+        "id": "67dd6c65-ab34-3431-87da-7881a639d6b2",
+        "contentType": "STORY",
+        "title": "US Semiconductor Sector Set for AI-Driven Acceleration, BofA Says",
+        "description": "",
+        "summary": "US semiconductor companies are on track for faster AI-driven sales growth and stronger returns this",
+        "pubDate": "2026-05-13T16:06:55Z",
+        "displayTime": "2026-05-13T16:06:55Z",
+        "isHosted": true,
+        "bypassModal": false,
+        "previewUrl": null,
+        "thumbnail": null,
+        "provider": {
+          "displayName": "MT Newswires",
+          "url": "https://www.mtnewswires.com/",
+          "sourceId": "mt_newswires_premium_news_706"
+        },
+        "canonicalUrl": {
+          "url": "https://finance.yahoo.com/news/us-semiconductor-sector-set-ai-160655159.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "clickThroughUrl": {
+          "url": "https://finance.yahoo.com/news/us-semiconductor-sector-set-ai-160655159.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "metadata": {
+          "editorsPick": false
+        },
+        "finance": {
+          "premiumFinance": {
+            "isPremiumNews": true,
             "isPremiumFreeNews": false
           }
         },
@@ -6890,20 +6885,20 @@
     {
       "index": 0,
       "Date Reported": "2025-12-31T00:00:00",
-      "Holder": "Vanguard Group Inc",
-      "pctHeld": 0.102,
-      "Shares": 482707302,
-      "Value": 203330802124,
-      "pctChange": 0.0082
-    },
-    {
-      "index": 1,
-      "Date Reported": "2025-12-31T00:00:00",
       "Holder": "Blackrock Inc.",
       "pctHeld": 0.0802,
       "Shares": 379894948,
-      "Value": 160023153119,
+      "Value": 158336418623,
       "pctChange": 0.0052
+    },
+    {
+      "index": 1,
+      "Date Reported": "2026-03-31T00:00:00",
+      "Holder": "Vanguard Capital Management LLC",
+      "pctHeld": 0.0651,
+      "Shares": 308015865,
+      "Value": 128377935005,
+      "pctChange": 1.0
     },
     {
       "index": 2,
@@ -6911,7 +6906,7 @@
       "Holder": "State Street Corporation",
       "pctHeld": 0.0401,
       "Shares": 190084351,
-      "Value": 80069233260,
+      "Value": 79225258277,
       "pctChange": 0.0272
     },
     {
@@ -6920,80 +6915,80 @@
       "Holder": "Capital International Investors",
       "pctHeld": 0.03,
       "Shares": 141864077,
-      "Value": 59757406713,
+      "Value": 59127529865,
       "pctChange": -0.0315
     },
     {
       "index": 4,
-      "Date Reported": "2025-12-31T00:00:00",
-      "Holder": "Capital World Investors",
-      "pctHeld": 0.025999999,
-      "Shares": 123257172,
-      "Value": 51919619915,
-      "pctChange": -0.090900004
+      "Date Reported": "2026-03-31T00:00:00",
+      "Holder": "Vanguard Portfolio Management LLC",
+      "pctHeld": 0.0271,
+      "Shares": 128422947,
+      "Value": 53525401177,
+      "pctChange": 1.0
     },
     {
       "index": 5,
       "Date Reported": "2025-12-31T00:00:00",
-      "Holder": "FMR, LLC",
+      "Holder": "Capital World Investors",
       "pctHeld": 0.025999999,
-      "Shares": 123186236,
-      "Value": 51889739543,
-      "pctChange": 0.0196
+      "Shares": 123257172,
+      "Value": 51372357771,
+      "pctChange": -0.090900004
     },
     {
       "index": 6,
       "Date Reported": "2025-12-31T00:00:00",
-      "Holder": "Geode Capital Management, LLC",
-      "pctHeld": 0.0235,
-      "Shares": 111277280,
-      "Value": 46873329876,
-      "pctChange": 0.014099999
+      "Holder": "FMR, LLC",
+      "pctHeld": 0.025999999,
+      "Shares": 123186236,
+      "Value": 51342792355,
+      "pctChange": 0.0196
     },
     {
       "index": 7,
       "Date Reported": "2025-12-31T00:00:00",
-      "Holder": "JPMORGAN CHASE & CO",
-      "pctHeld": 0.0198,
-      "Shares": 93758850,
-      "Value": 39494041415,
-      "pctChange": -0.501
+      "Holder": "Geode Capital Management, LLC",
+      "pctHeld": 0.0235,
+      "Shares": 111277280,
+      "Value": 46379258482,
+      "pctChange": 0.014099999
     },
     {
       "index": 8,
       "Date Reported": "2025-12-31T00:00:00",
-      "Holder": "Capital Research Global Investors",
-      "pctHeld": 0.0182,
-      "Shares": 86361719,
-      "Value": 36378147843,
-      "pctChange": -0.0154
+      "Holder": "JPMORGAN CHASE & CO",
+      "pctHeld": 0.0198,
+      "Shares": 93758850,
+      "Value": 39077751892,
+      "pctChange": -0.501
     },
     {
       "index": 9,
       "Date Reported": "2025-12-31T00:00:00",
-      "Holder": "Price (T.Rowe) Associates Inc",
-      "pctHeld": 0.018099999,
-      "Shares": 85546083,
-      "Value": 36034577481,
-      "pctChange": 0.03
+      "Holder": "Capital Research Global Investors",
+      "pctHeld": 0.0182,
+      "Shares": 86361719,
+      "Value": 35994701599,
+      "pctChange": -0.0154
     }
   ],
   "major_holders": [
     {
       "index": "insidersPercentHeld",
-      "Value": 0.01967
+      "Value": 0.01949
     },
     {
       "index": "institutionsPercentHeld",
-      "Value": 0.79867
+      "Value": 0.79516
     },
     {
       "index": "institutionsFloatPercentHeld",
-      "Value": 0.81469
+      "Value": 0.81097
     },
     {
       "index": "institutionsCount",
-      "Value": 6018.0
+      "Value": 6048.0
     }
   ]
 }

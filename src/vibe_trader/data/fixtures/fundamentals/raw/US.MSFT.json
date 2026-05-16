@@ -1,7 +1,7 @@
 {
   "ticker": "MSFT",
   "code": "US.MSFT",
-  "fetched_at": "2026-05-07T14:11:52.854853+00:00",
+  "fetched_at": "2026-05-14T10:48:25.579443+00:00",
   "info": {
     "address1": "One Microsoft Way",
     "city": "Redmond",
@@ -130,81 +130,81 @@
     "executiveTeam": [],
     "maxAge": 86400,
     "priceHint": 2,
-    "previousClose": 413.866,
-    "open": 420.11,
-    "dayLow": 418.76,
-    "dayHigh": 427.98,
-    "regularMarketPreviousClose": 413.866,
-    "regularMarketOpen": 420.11,
-    "regularMarketDayLow": 418.76,
-    "regularMarketDayHigh": 427.98,
+    "previousClose": 407.77,
+    "open": 402.97,
+    "dayLow": 401.03,
+    "dayHigh": 406.31,
+    "regularMarketPreviousClose": 407.77,
+    "regularMarketOpen": 402.97,
+    "regularMarketDayLow": 401.03,
+    "regularMarketDayHigh": 406.31,
     "dividendRate": 3.64,
-    "dividendYield": 0.88,
+    "dividendYield": 0.9,
     "exDividendDate": 1779321600,
     "payoutRatio": 0.20729999,
     "fiveYearAvgDividendYield": 0.79,
     "beta": 1.093,
-    "trailingPE": 25.218325,
-    "forwardPE": 21.902872,
-    "volume": 7373464,
-    "regularMarketVolume": 7373464,
-    "averageVolume": 34573362,
-    "averageVolume10days": 35163970,
-    "averageDailyVolume10Day": 35163970,
-    "bid": 421.02,
-    "ask": 424.37,
-    "bidSize": 2,
-    "askSize": 2,
-    "marketCap": 3149062209536,
-    "nonDilutedMarketCap": 3075074830067,
+    "trailingPE": 24.14839,
+    "forwardPE": 20.936172,
+    "volume": 27753784,
+    "regularMarketVolume": 27753784,
+    "averageVolume": 33991393,
+    "averageVolume10days": 35850390,
+    "averageDailyVolume10Day": 35850390,
+    "bid": 404.03,
+    "ask": 406.97,
+    "bidSize": 3,
+    "askSize": 4,
+    "marketCap": 3010076082176,
+    "nonDilutedMarketCap": 3083691814324,
     "fiftyTwoWeekLow": 356.28,
     "fiftyTwoWeekHigh": 555.45,
     "allTimeHigh": 555.45,
     "allTimeLow": 0.088542,
-    "priceToSalesTrailing12Months": 9.8942175,
-    "fiftyDayAverage": 397.4756,
-    "twoHundredDayAverage": 466.53836,
+    "priceToSalesTrailing12Months": 9.457529,
+    "fiftyDayAverage": 398.7554,
+    "twoHundredDayAverage": 464.10486,
     "trailingAnnualDividendRate": 3.56,
-    "trailingAnnualDividendYield": 0.008601818,
+    "trailingAnnualDividendYield": 0.0087304115,
     "currency": "USD",
     "tradeable": false,
-    "enterpriseValue": 3122278957056,
+    "enterpriseValue": 3057280090112,
     "profitMargins": 0.39341998,
     "floatShares": 7417589189,
     "sharesOutstanding": 7428434704,
-    "sharesShort": 83407242,
-    "sharesShortPriorMonth": 79835909,
-    "sharesShortPreviousMonthDate": 1773360000,
-    "dateShortInterest": 1776211200,
-    "sharesPercentSharesOut": 0.0112,
-    "heldPercentInsiders": 0.00079,
-    "heldPercentInstitutions": 0.76063,
-    "shortRatio": 2.53,
-    "shortPercentOfFloat": 0.0112,
+    "sharesShort": 79107882,
+    "sharesShortPriorMonth": 80991357,
+    "sharesShortPreviousMonthDate": 1774915200,
+    "dateShortInterest": 1777507200,
+    "sharesPercentSharesOut": 0.0106,
+    "heldPercentInsiders": 0.0008,
+    "heldPercentInstitutions": 0.7579,
+    "shortRatio": 2.26,
+    "shortPercentOfFloat": 0.0107,
     "impliedSharesOutstanding": 7428434704,
-    "bookValue": 52.615,
-    "priceToBook": 8.057018,
+    "bookValue": 55.777,
+    "priceToBook": 7.264822,
     "lastFiscalYearEnd": 1751241600,
     "nextFiscalYearEnd": 1782777600,
     "mostRecentQuarter": 1774915200,
     "earningsQuarterlyGrowth": 0.231,
     "netIncomeToCommon": 125215997952,
-    "trailingEps": 16.81,
+    "trailingEps": 16.78,
     "forwardEps": 19.35454,
-    "pegRatio": 1.28,
+    "pegRatio": 1.26,
     "lastSplitFactor": "2:1",
     "lastSplitDate": 1045526400,
-    "enterpriseToRevenue": 9.81,
-    "enterpriseToEbitda": 16.927,
-    "52WeekChange": -0.055252552,
-    "SandP52WeekChange": 0.3003528,
+    "enterpriseToRevenue": 9.606,
+    "enterpriseToEbitda": 16.574,
+    "52WeekChange": -0.1057533,
+    "SandP52WeekChange": 0.2581271,
     "lastDividendValue": 0.91,
     "lastDividendDate": 1771459200,
     "quoteType": "EQUITY",
-    "currentPrice": 423.92,
+    "currentPrice": 405.21,
     "targetHighPrice": 870.0,
     "targetLowPrice": 400.0,
-    "targetMeanPrice": 562.07465,
+    "targetMeanPrice": 561.5561,
     "targetMedianPrice": 562.5,
     "recommendationMean": 1.30909,
     "recommendationKey": "strong_buy",
@@ -236,18 +236,16 @@
     "quoteSourceName": "Nasdaq Real Time Price",
     "triggerable": true,
     "customPriceAlertConfidence": "HIGH",
-    "hasPrePostMarketData": true,
-    "firstTradeDateMilliseconds": 511108200000,
-    "regularMarketChange": 10.054016,
-    "regularMarketDayRange": "418.76 - 427.98",
+    "regularMarketChange": -2.56,
+    "regularMarketDayRange": "401.03 - 406.31",
     "fullExchangeName": "NasdaqGS",
-    "averageDailyVolume3Month": 34573362,
-    "fiftyTwoWeekLowChange": 67.640015,
-    "fiftyTwoWeekLowChangePercent": 0.18985072,
+    "averageDailyVolume3Month": 33991393,
+    "fiftyTwoWeekLowChange": 48.929993,
+    "fiftyTwoWeekLowChangePercent": 0.13733578,
     "fiftyTwoWeekRange": "356.28 - 555.45",
-    "fiftyTwoWeekHighChange": -131.53,
-    "fiftyTwoWeekHighChangePercent": -0.23679899,
-    "fiftyTwoWeekChangePercent": -5.525255,
+    "fiftyTwoWeekHighChange": -150.24002,
+    "fiftyTwoWeekHighChangePercent": -0.27048343,
+    "fiftyTwoWeekChangePercent": -10.575331,
     "dividendDate": 1781136000,
     "earningsTimestamp": 1777492800,
     "earningsTimestampStart": 1785355200,
@@ -255,34 +253,40 @@
     "earningsCallTimestampStart": 1777498200,
     "earningsCallTimestampEnd": 1777498200,
     "isEarningsDateEstimate": true,
-    "epsTrailingTwelveMonths": 16.81,
+    "epsTrailingTwelveMonths": 16.78,
     "epsForward": 19.35454,
     "epsCurrentYear": 16.85079,
-    "priceEpsCurrentYear": 25.157278,
+    "priceEpsCurrentYear": 24.046944,
+    "hasPrePostMarketData": true,
+    "firstTradeDateMilliseconds": 511108200000,
+    "preMarketChange": 1.4840088,
+    "preMarketChangePercent": 0.36623204,
+    "preMarketPrice": 406.694,
+    "regularMarketChangePercent": -0.627804,
+    "regularMarketPrice": 405.21,
     "corporateActions": [],
-    "regularMarketTime": 1778163113,
+    "preMarketTime": 1778755674,
+    "regularMarketTime": 1778702401,
     "exchange": "NMS",
     "messageBoardId": "finmb_21835",
+    "market": "us_market",
     "exchangeTimezoneName": "America/New_York",
     "exchangeTimezoneShortName": "EDT",
     "gmtOffSetMilliseconds": -14400000,
-    "market": "us_market",
     "esgPopulated": false,
-    "marketState": "REGULAR",
-    "fiftyDayAverageChange": 26.444427,
-    "fiftyDayAverageChangePercent": 0.06653095,
-    "twoHundredDayAverageChange": -42.618347,
-    "twoHundredDayAverageChangePercent": -0.091350146,
+    "shortName": "Microsoft Corporation",
+    "longName": "Microsoft Corporation",
+    "marketState": "PRE",
+    "fiftyDayAverageChange": 6.45459,
+    "fiftyDayAverageChangePercent": 0.016186839,
+    "twoHundredDayAverageChange": -58.894867,
+    "twoHundredDayAverageChangePercent": -0.12689991,
     "sourceInterval": 15,
     "exchangeDataDelayedBy": 0,
     "averageAnalystRating": "1.3 - Strong Buy",
     "cryptoTradeable": false,
-    "regularMarketChangePercent": 2.4292927,
-    "regularMarketPrice": 423.92,
-    "shortName": "Microsoft Corporation",
-    "longName": "Microsoft Corporation",
     "displayName": "Microsoft",
-    "trailingPegRatio": 1.2831
+    "trailingPegRatio": 1.2863
   },
   "recommendations": [
     {
@@ -361,6 +365,16 @@
     }
   ],
   "upgrades_downgrades": [
+    {
+      "GradeDate": "2026-05-13T14:42:16",
+      "Firm": "Wedbush",
+      "ToGrade": "Outperform",
+      "FromGrade": "Outperform",
+      "Action": "reit",
+      "priceTargetAction": "Maintains",
+      "currentPriceTarget": 575.0,
+      "priorPriceTarget": 575.0
+    },
     {
       "GradeDate": "2026-05-06T22:53:27",
       "Firm": "Tigress Financial",
@@ -9293,102 +9307,40 @@
     }
   ],
   "analyst_price_targets": {
-    "current": 423.93,
+    "current": 405.21,
     "high": 870.0,
     "low": 400.0,
-    "mean": 562.07465,
+    "mean": 561.5561,
     "median": 562.5
   },
   "news": [
     {
-      "id": "efc8d8b7-dda9-40bd-a7bd-84a481168b21",
+      "id": "46ec1b84-e3a3-4b8d-a8ed-18bea82c093e",
       "content": {
-        "id": "efc8d8b7-dda9-40bd-a7bd-84a481168b21",
-        "contentType": "VIDEO",
-        "title": "Anthropic CEO warns software companies can 'go bust' without AI",
-        "description": "<p>Anthropic (<a target=\"_blank\" rel=\"\" class=\"link\" href=\"https://finance.yahoo.com/quote/ANTH.PVT/\" data-i13n=\"slk:ANTH.PVT;cpos:1;pos:1\">ANTH.PVT</a>) co-founder and CEO Dario Amodei warned that some software companies could <a target=\"_blank\" rel=\"\" class=\"link\" href=\"https://finance.yahoo.com/news/anthropic-ceo-dario-amodei-warns-some-software-companies-will-completely-go-bust-191014499.html\" data-i13n=\"slk:\"completely go bust\";cpos:2;pos:1\">\"completely go bust\"</a> without AI integration while speaking at his company's <a target=\"_blank\" rel=\"\" class=\"link yahoo-link\" href=\"https://finance.yahoo.com/sectors/technology/article/anthropic-continues-enterprise-push-with-new-financial-services-software-150000330.html\" data-i13n=\"slk:The Briefing;cpos:3;pos:1\">The Briefing: Financial Services event</a>.</p>\n<p>Yahoo Finance Tech Editor Dan Howley breaks down Amodei's comments and what it could be signaling for software developers.</p>",
-        "summary": "Anthropic (ANTH.PVT) co-founder and CEO Dario Amodei warned that some software companies could \"completely go bust\" without AI integration while speaking at his company's The Briefing: Financial Services event. Yahoo Finance Tech Editor Dan Howley breaks down Amodei's comments and what it could be signaling for software developers.",
-        "pubDate": "2026-05-06T15:30:00Z",
-        "displayTime": "",
-        "isHosted": true,
-        "bypassModal": false,
-        "previewUrl": null,
-        "thumbnail": {
-          "originalUrl": "https://s.yimg.com/uu/api/res/1.2/EnV6zwaWlciZJFclcVxtcQ--~B/aD0yODUwO3c9NTA2NzthcHBpZD15dGFjaHlvbg--/https://d29szjachogqwa.cloudfront.net/images/user-uploaded/8d8736d0-d75b-11f0-b277-c2557773ba89_357a070b5c946f4c58080b09b0ad297ee014b9ec2958b7d5747bf485fd700b7b.com/creatr-uploaded-images/2025-12/8d8736d0-d75b-11f0-b277-c2557773ba89",
-          "originalWidth": 5067,
-          "originalHeight": 2850,
-          "caption": "",
-          "resolutions": [
-            {
-              "url": "https://s.yimg.com/uu/api/res/1.2/EnV6zwaWlciZJFclcVxtcQ--~B/aD0yODUwO3c9NTA2NzthcHBpZD15dGFjaHlvbg--/https://d29szjachogqwa.cloudfront.net/images/user-uploaded/8d8736d0-d75b-11f0-b277-c2557773ba89_357a070b5c946f4c58080b09b0ad297ee014b9ec2958b7d5747bf485fd700b7b.com/creatr-uploaded-images/2025-12/8d8736d0-d75b-11f0-b277-c2557773ba89",
-              "width": 5067,
-              "height": 2850,
-              "tag": "original"
-            },
-            {
-              "url": "https://s.yimg.com/uu/api/res/1.2/TDHD.l6eJsG_wmjigQFVoQ--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://d29szjachogqwa.cloudfront.net/images/user-uploaded/8d8736d0-d75b-11f0-b277-c2557773ba89_357a070b5c946f4c58080b09b0ad297ee014b9ec2958b7d5747bf485fd700b7b.com/creatr-uploaded-images/2025-12/8d8736d0-d75b-11f0-b277-c2557773ba89",
-              "width": 170,
-              "height": 128,
-              "tag": "170x128"
-            }
-          ]
-        },
-        "provider": {
-          "displayName": "Yahoo Finance Video",
-          "url": "https://finance.yahoo.com/",
-          "sourceId": "video.yahoofinance.com"
-        },
-        "canonicalUrl": {
-          "url": "https://finance.yahoo.com/video/anthropic-ceo-warns-software-companies-can-go-bust-without-ai-153000062.html",
-          "site": "finance",
-          "region": "US",
-          "lang": "en-US"
-        },
-        "clickThroughUrl": {
-          "url": "https://finance.yahoo.com/video/anthropic-ceo-warns-software-companies-can-go-bust-without-ai-153000062.html",
-          "site": "finance",
-          "region": "US",
-          "lang": "en-US"
-        },
-        "metadata": {
-          "editorsPick": true
-        },
-        "finance": {
-          "premiumFinance": {
-            "isPremiumNews": false,
-            "isPremiumFreeNews": false
-          }
-        },
-        "storyline": null
-      }
-    },
-    {
-      "id": "0ec8c400-e6a7-493f-894c-e2d0c1f0014f",
-      "content": {
-        "id": "0ec8c400-e6a7-493f-894c-e2d0c1f0014f",
+        "id": "46ec1b84-e3a3-4b8d-a8ed-18bea82c093e",
         "contentType": "STORY",
-        "title": "Anthropic to rent all AI capacity at SpaceX's Colossus data center",
+        "title": "Nebius stock soars as revenue jumps 684% on booming data center demand",
         "description": "",
-        "summary": "Anthropic says it will rent all of the compute capacity from SpaceX's massive Colossus 1 data center.",
-        "pubDate": "2026-05-06T18:03:27Z",
-        "displayTime": "2026-05-06T18:03:27Z",
+        "summary": "Nebius stock soars after quarterly results.",
+        "pubDate": "2026-05-13T15:23:16Z",
+        "displayTime": "2026-05-13T20:11:17Z",
         "isHosted": true,
         "bypassModal": false,
         "previewUrl": null,
         "thumbnail": {
-          "originalUrl": "https://s.yimg.com/uu/api/res/1.2/khh8b1rmeDrKrQ.eg86RRg--~B/aD01MjI5O3c9Nzg0MzthcHBpZD15dGFjaHlvbg--/https://d29szjachogqwa.cloudfront.net/images/2026-05/35abe817-e7b4-407e-9360-d8ffcef85703",
-          "originalWidth": 7843,
-          "originalHeight": 5229,
+          "originalUrl": "https://s.yimg.com/uu/api/res/1.2/4H9bDDrNYYz6I5duHNw_hg--~B/aD0zMzkwO3c9NTAwMDthcHBpZD15dGFjaHlvbg--/https://d29szjachogqwa.cloudfront.net/images/2026-05/a30d206c-9724-4480-b6d1-901694b2dbf3",
+          "originalWidth": 5000,
+          "originalHeight": 3390,
           "caption": "",
           "resolutions": [
             {
-              "url": "https://s.yimg.com/uu/api/res/1.2/khh8b1rmeDrKrQ.eg86RRg--~B/aD01MjI5O3c9Nzg0MzthcHBpZD15dGFjaHlvbg--/https://d29szjachogqwa.cloudfront.net/images/2026-05/35abe817-e7b4-407e-9360-d8ffcef85703",
-              "width": 7843,
-              "height": 5229,
+              "url": "https://s.yimg.com/uu/api/res/1.2/4H9bDDrNYYz6I5duHNw_hg--~B/aD0zMzkwO3c9NTAwMDthcHBpZD15dGFjaHlvbg--/https://d29szjachogqwa.cloudfront.net/images/2026-05/a30d206c-9724-4480-b6d1-901694b2dbf3",
+              "width": 5000,
+              "height": 3390,
               "tag": "original"
             },
             {
-              "url": "https://s.yimg.com/uu/api/res/1.2/_ezWHKJHGurrkWsd5s8fFQ--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://d29szjachogqwa.cloudfront.net/images/2026-05/35abe817-e7b4-407e-9360-d8ffcef85703",
+              "url": "https://s.yimg.com/uu/api/res/1.2/.YR7RwGwhAXN9TTINt.aWw--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://d29szjachogqwa.cloudfront.net/images/2026-05/a30d206c-9724-4480-b6d1-901694b2dbf3",
               "width": 170,
               "height": 128,
               "tag": "170x128"
@@ -9401,13 +9353,13 @@
           "sourceId": "yahoofinance.com"
         },
         "canonicalUrl": {
-          "url": "https://finance.yahoo.com/news/anthropic-to-rent-all-ai-capacity-at-spacexs-colossus-data-center-180327774.html",
+          "url": "https://finance.yahoo.com/markets/article/nebius-stock-soars-as-revenue-jumps-684-on-booming-data-center-demand-152316937.html",
           "site": "finance",
           "region": "US",
           "lang": "en-US"
         },
         "clickThroughUrl": {
-          "url": "https://finance.yahoo.com/news/anthropic-to-rent-all-ai-capacity-at-spacexs-colossus-data-center-180327774.html",
+          "url": "https://finance.yahoo.com/markets/article/nebius-stock-soars-as-revenue-jumps-684-on-booming-data-center-demand-152316937.html",
           "site": "finance",
           "region": "US",
           "lang": "en-US"
@@ -9425,32 +9377,32 @@
       }
     },
     {
-      "id": "efa5b3dc-1651-3642-a4d3-ba3c9100db6b",
+      "id": "c8c0ea27-5a42-4cba-9183-6bb662826c8b",
       "content": {
-        "id": "efa5b3dc-1651-3642-a4d3-ba3c9100db6b",
+        "id": "c8c0ea27-5a42-4cba-9183-6bb662826c8b",
         "contentType": "STORY",
-        "title": "Did Google Just Turn Chrome Users Into Its AI Data Center?",
+        "title": "Anthropic debuts Claude for Small Business as it continues its enterprise software push",
         "description": "",
-        "summary": "The AI arms race is getting expensive fast. Alphabet (NASDAQ:GOOG)(NASDAQ:GOOGL), Microsoft (NASDAQ:MSFT), Amazon (NASDAQ:AMZN), and Meta Platforms (NASDAQ:META) are now on track to collectively spend roughly $710 billion to $725 billion this year building data centers, networking systems, and AI chips. That raises an uncomfortable question for investors: How long can hyperscalers keep pouring hundreds ... Did Google Just Turn Chrome Users Into Its AI Data Center?",
-        "pubDate": "2026-05-07T13:27:44Z",
-        "displayTime": "2026-05-07T13:27:44Z",
+        "summary": "Anthropic is entering the small business market.",
+        "pubDate": "2026-05-13T16:05:00Z",
+        "displayTime": "2026-05-13T16:05:00Z",
         "isHosted": true,
         "bypassModal": false,
         "previewUrl": null,
         "thumbnail": {
-          "originalUrl": "https://media.zenfs.com/en/24_7_wall_st__718/50e335a0628018fdd89839150f660ccd",
-          "originalWidth": 1366,
-          "originalHeight": 768,
+          "originalUrl": "https://s.yimg.com/uu/api/res/1.2/svuXJP7YgTSD9gXVVV5RSQ--~B/aD0zMzM2O3c9NTAwMDthcHBpZD15dGFjaHlvbg--/https://d29szjachogqwa.cloudfront.net/images/2026-05/836c3654-d573-4758-8156-4e061678fe5e",
+          "originalWidth": 5000,
+          "originalHeight": 3336,
           "caption": "",
           "resolutions": [
             {
-              "url": "https://s.yimg.com/uu/api/res/1.2/EXRx27DEk7RjNnXjOrdGzQ--~B/aD03Njg7dz0xMzY2O2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/24_7_wall_st__718/50e335a0628018fdd89839150f660ccd",
-              "width": 1366,
-              "height": 768,
+              "url": "https://s.yimg.com/uu/api/res/1.2/svuXJP7YgTSD9gXVVV5RSQ--~B/aD0zMzM2O3c9NTAwMDthcHBpZD15dGFjaHlvbg--/https://d29szjachogqwa.cloudfront.net/images/2026-05/836c3654-d573-4758-8156-4e061678fe5e",
+              "width": 5000,
+              "height": 3336,
               "tag": "original"
             },
             {
-              "url": "https://s.yimg.com/uu/api/res/1.2/4bDmJAbi98ykx.OMPFp6kQ--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/24_7_wall_st__718/50e335a0628018fdd89839150f660ccd",
+              "url": "https://s.yimg.com/uu/api/res/1.2/NwMXC4NETWUn5xBQAx88GQ--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://d29szjachogqwa.cloudfront.net/images/2026-05/836c3654-d573-4758-8156-4e061678fe5e",
               "width": 170,
               "height": 128,
               "tag": "170x128"
@@ -9458,18 +9410,80 @@
           ]
         },
         "provider": {
-          "displayName": "24/7 Wall St.",
-          "url": "https://247wallst.com/",
-          "sourceId": "24_7_wall_st__718"
+          "displayName": "Yahoo Finance",
+          "url": "http://finance.yahoo.com/",
+          "sourceId": "yahoofinance.com"
         },
         "canonicalUrl": {
-          "url": "https://247wallst.com/investing/2026/05/07/did-google-just-turn-chrome-users-into-its-ai-data-center/",
+          "url": "https://finance.yahoo.com/news/anthropic-debuts-claude-for-small-business-as-it-continues-its-enterprise-software-push-160500355.html",
           "site": "finance",
           "region": "US",
           "lang": "en-US"
         },
         "clickThroughUrl": {
-          "url": "https://finance.yahoo.com/sectors/technology/articles/did-google-just-turn-chrome-132744660.html",
+          "url": "https://finance.yahoo.com/news/anthropic-debuts-claude-for-small-business-as-it-continues-its-enterprise-software-push-160500355.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "metadata": {
+          "editorsPick": true
+        },
+        "finance": {
+          "premiumFinance": {
+            "isPremiumNews": false,
+            "isPremiumFreeNews": false
+          }
+        },
+        "storyline": null
+      }
+    },
+    {
+      "id": "dd6531fb-ab4a-369c-84cd-0a6cd94285f8",
+      "content": {
+        "id": "dd6531fb-ab4a-369c-84cd-0a6cd94285f8",
+        "contentType": "STORY",
+        "title": "The Profit Margins for These 3 AI Infrastructure Stocks Are Off the Charts",
+        "description": "",
+        "summary": "Highly profitable AI stocks with surging demand are within reach.",
+        "pubDate": "2026-05-14T09:00:00Z",
+        "displayTime": "2026-05-14T09:00:00Z",
+        "isHosted": true,
+        "bypassModal": false,
+        "previewUrl": null,
+        "thumbnail": {
+          "originalUrl": "https://media.zenfs.com/en/motleyfool.com/e1fd65106905666ec213cf98d5642d35",
+          "originalWidth": 1200,
+          "originalHeight": 801,
+          "caption": "A person sitting at a desk, looking at a tablet.",
+          "resolutions": [
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/xpI2.nlrNjvQ4E48UNeFqg--~B/aD04MDE7dz0xMjAwO2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/motleyfool.com/e1fd65106905666ec213cf98d5642d35",
+              "width": 1200,
+              "height": 801,
+              "tag": "original"
+            },
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/piVuIz7yzNGJO_X9tXpHgA--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/motleyfool.com/e1fd65106905666ec213cf98d5642d35",
+              "width": 170,
+              "height": 128,
+              "tag": "170x128"
+            }
+          ]
+        },
+        "provider": {
+          "displayName": "Motley Fool",
+          "url": "http://www.fool.com/",
+          "sourceId": "motleyfool.com"
+        },
+        "canonicalUrl": {
+          "url": "https://www.fool.com/investing/2026/05/14/the-profit-margins-for-these-3-ai-infrastructure-s/",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "clickThroughUrl": {
+          "url": "https://finance.yahoo.com/markets/stocks/articles/profit-margins-3-ai-infrastructure-090000514.html",
           "site": "finance",
           "region": "US",
           "lang": "en-US"
@@ -9487,32 +9501,32 @@
       }
     },
     {
-      "id": "6f7944de-64cd-36cb-bd00-78adf515829d",
+      "id": "ced3f9ef-45ae-33aa-8e57-fa60cfa7792c",
       "content": {
-        "id": "6f7944de-64cd-36cb-bd00-78adf515829d",
+        "id": "ced3f9ef-45ae-33aa-8e57-fa60cfa7792c",
         "contentType": "STORY",
-        "title": "Apple’s AI Restraint Looks Smart as Microsoft Spends $190B on AI Despite User Pushback",
+        "title": "Marvell Stock Pops. Why Wall Street Sees Upside.",
         "description": "",
-        "summary": "The narrative around Apple and AI has flipped. A year ago, Apple’s restrained posture toward generative AI looked like a weakness. On the latest This Week in Tech podcast, host Leo Laporte and panelists Devendra Hardawar, Micah Sargent, and Nicholas DeLeon argued the patient approach now looks like discipline, especially set against Microsoft’s accelerating capital ... Apple’s AI Restraint Looks Smart as Microsoft Spends $190B on AI Despite User Pushback",
-        "pubDate": "2026-05-07T12:41:46Z",
-        "displayTime": "2026-05-07T12:41:46Z",
-        "isHosted": true,
+        "summary": "While chip makers Intel and Micron have been getting all the love in recent days,  Marvell  got a nice bounce after analysts at BofA and Goldman Sachs raised their price targets for it.  Marvell shares closed up 8.2% to $177.95 on Wednesday, for a new record high.  The stock was up a further 4.2% to $185.40 in premarket trading Thursday.",
+        "pubDate": "2026-05-14T08:03:00Z",
+        "displayTime": "2026-05-14T08:03:00Z",
+        "isHosted": false,
         "bypassModal": false,
-        "previewUrl": null,
+        "previewUrl": "https://finance.yahoo.com/m/ced3f9ef-45ae-33aa-8e57-fa60cfa7792c/marvell-stock-pops-why-wall.html",
         "thumbnail": {
-          "originalUrl": "https://media.zenfs.com/en/24_7_wall_st__718/40ec1c804bd0da9c1ed65622e6ef7b5a",
-          "originalWidth": 1500,
-          "originalHeight": 1071,
+          "originalUrl": "https://media.zenfs.com/en/Barrons.com/a6c7e3e3dfe4bc65bf3e0d6a17a6a40c",
+          "originalWidth": 1280,
+          "originalHeight": 640,
           "caption": "",
           "resolutions": [
             {
-              "url": "https://s.yimg.com/uu/api/res/1.2/HfuaEC.yYra3EPsAI3YqIw--~B/aD0xMDcxO3c9MTUwMDthcHBpZD15dGFjaHlvbg--/https://media.zenfs.com/en/24_7_wall_st__718/40ec1c804bd0da9c1ed65622e6ef7b5a",
-              "width": 1500,
-              "height": 1071,
+              "url": "https://s.yimg.com/uu/api/res/1.2/2os8kdxg0JSaXkWQlaBEiw--~B/aD02NDA7dz0xMjgwO2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/Barrons.com/a6c7e3e3dfe4bc65bf3e0d6a17a6a40c",
+              "width": 1280,
+              "height": 640,
               "tag": "original"
             },
             {
-              "url": "https://s.yimg.com/uu/api/res/1.2/hzo5_oAYnI3TCUqKFoMkaQ--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/24_7_wall_st__718/40ec1c804bd0da9c1ed65622e6ef7b5a",
+              "url": "https://s.yimg.com/uu/api/res/1.2/xlUMd_HpH0fUVWRLjkKnqA--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/Barrons.com/a6c7e3e3dfe4bc65bf3e0d6a17a6a40c",
               "width": 170,
               "height": 128,
               "tag": "170x128"
@@ -9520,18 +9534,75 @@
           ]
         },
         "provider": {
-          "displayName": "24/7 Wall St.",
-          "url": "https://247wallst.com/",
-          "sourceId": "24_7_wall_st__718"
+          "displayName": "Barrons.com",
+          "url": "http://www.barrons.com/",
+          "sourceId": "Barrons.com"
         },
         "canonicalUrl": {
-          "url": "https://247wallst.com/investing/2026/05/07/apples-ai-restraint-looks-smart-as-microsoft-spends-190b-on-ai-despite-user-pushback/",
+          "url": "https://www.barrons.com/articles/marvell-stock-ai-price-target-28bb9de9?siteid=yhoof2&yptr=yahoo",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "clickThroughUrl": null,
+        "metadata": {
+          "editorsPick": false
+        },
+        "finance": {
+          "premiumFinance": {
+            "isPremiumNews": false,
+            "isPremiumFreeNews": false
+          }
+        },
+        "storyline": null
+      }
+    },
+    {
+      "id": "b9f32e04-ca88-3df2-907e-d09978704436",
+      "content": {
+        "id": "b9f32e04-ca88-3df2-907e-d09978704436",
+        "contentType": "STORY",
+        "title": "Anthony Scaramucci Says Bitcoin Poised To Follow The S-Curve Of Adoption Like Amazon, Microsoft: 'Cannot Be Devalued'",
+        "description": "",
+        "summary": "SkyBridge Capital founder Anthony Scaramucci suggested on Wednesday that Bitcoin (CRYPTO: BTC) is tracing an adoption path akin to that of Amazon.com Inc. (NASDAQ:AMZN) and Microsoft Corp. (NASDAQ:MSFT). Scaramucci Says Bitcoin Can’t Be ‘Devalued’ During an interview with RiskReversal Media, Scaramucci said that traditional fiat money is essentially “worthless,” but it gains value because people trust it. Bitcoin, he added, is an improved version, which happens to be “an open, transparent, fully",
+        "pubDate": "2026-05-14T06:46:45Z",
+        "displayTime": "2026-05-14T06:46:45Z",
+        "isHosted": true,
+        "bypassModal": false,
+        "previewUrl": null,
+        "thumbnail": {
+          "originalUrl": "https://media.zenfs.com/en/Benzinga/7a2da99657aeb75e1851e32542813576",
+          "originalWidth": 1000,
+          "originalHeight": 719,
+          "caption": "",
+          "resolutions": [
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/elyLCMVGX6chkihbI_Q0hw--~B/aD03MTk7dz0xMDAwO2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/Benzinga/7a2da99657aeb75e1851e32542813576",
+              "width": 1000,
+              "height": 719,
+              "tag": "original"
+            },
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/XLTqJHIIwd5i8Je0xlIR4A--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/Benzinga/7a2da99657aeb75e1851e32542813576",
+              "width": 170,
+              "height": 128,
+              "tag": "170x128"
+            }
+          ]
+        },
+        "provider": {
+          "displayName": "Benzinga",
+          "url": "http://www.benzinga.com/",
+          "sourceId": "Benzinga"
+        },
+        "canonicalUrl": {
+          "url": "https://finance.yahoo.com/markets/crypto/articles/anthony-scaramucci-says-bitcoin-poised-064645573.html",
           "site": "finance",
           "region": "US",
           "lang": "en-US"
         },
         "clickThroughUrl": {
-          "url": "https://finance.yahoo.com/sectors/technology/articles/apple-ai-restraint-looks-smart-124146238.html",
+          "url": "https://finance.yahoo.com/markets/crypto/articles/anthony-scaramucci-says-bitcoin-poised-064645573.html",
           "site": "finance",
           "region": "US",
           "lang": "en-US"
@@ -9549,15 +9620,139 @@
       }
     },
     {
-      "id": "ae11090f-5693-3d40-8db9-e2a29b8a6227",
+      "id": "5575b30b-5093-3025-aed8-8ffd1011a02b",
       "content": {
-        "id": "ae11090f-5693-3d40-8db9-e2a29b8a6227",
+        "id": "5575b30b-5093-3025-aed8-8ffd1011a02b",
         "contentType": "STORY",
-        "title": "Microsoft Drops Copilot for Xbox",
+        "title": "Microsoft Reshapes LinkedIn And AI Strategy While Shares Screen As Undervalued",
         "description": "",
-        "summary": "Xbox leadership shifts strategy as Microsoft scales back AI assistant plans for gaming platforms",
-        "pubDate": "2026-05-07T12:13:55Z",
-        "displayTime": "2026-05-07T12:13:55Z",
+        "summary": "Microsoft (NasdaqGS:MSFT) is planning layoffs at LinkedIn of about 5% of staff as part of a global restructuring aimed at higher growth business areas. The company is also adjusting its AI approach by pursuing acquisitions of AI startups and revising its OpenAI partnership to capped revenue and non-exclusive terms. Both moves highlight changes in Microsoft's workforce strategy and its approach to AI investment and partnerships. For investors watching Microsoft (NasdaqGS:MSFT), these updates...",
+        "pubDate": "2026-05-14T05:17:23Z",
+        "displayTime": "2026-05-14T05:17:23Z",
+        "isHosted": true,
+        "bypassModal": false,
+        "previewUrl": null,
+        "thumbnail": {
+          "originalUrl": "https://media.zenfs.com/en/simply_wall_st__316/df4b73b911e0bdb53cb26c5cad04a925",
+          "originalWidth": 1194,
+          "originalHeight": 432,
+          "caption": "",
+          "resolutions": [
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/vI2scrIoG3Y.UMQ70PAfYg--~B/aD00MzI7dz0xMTk0O2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/simply_wall_st__316/df4b73b911e0bdb53cb26c5cad04a925",
+              "width": 1194,
+              "height": 432,
+              "tag": "original"
+            },
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/AyiBLWl3XhKcC4uQ8kwsOA--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/simply_wall_st__316/df4b73b911e0bdb53cb26c5cad04a925",
+              "width": 170,
+              "height": 128,
+              "tag": "170x128"
+            }
+          ]
+        },
+        "provider": {
+          "displayName": "Simply Wall St.",
+          "url": "https://simplywall.st/",
+          "sourceId": "simply_wall_st__316"
+        },
+        "canonicalUrl": {
+          "url": "https://finance.yahoo.com/markets/stocks/articles/microsoft-reshapes-linkedin-ai-strategy-051723952.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "clickThroughUrl": {
+          "url": "https://finance.yahoo.com/markets/stocks/articles/microsoft-reshapes-linkedin-ai-strategy-051723952.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "metadata": {
+          "editorsPick": false
+        },
+        "finance": {
+          "premiumFinance": {
+            "isPremiumNews": false,
+            "isPremiumFreeNews": false
+          }
+        },
+        "storyline": null
+      }
+    },
+    {
+      "id": "0cf021f3-cf29-3049-805d-e590f534e749",
+      "content": {
+        "id": "0cf021f3-cf29-3049-805d-e590f534e749",
+        "contentType": "STORY",
+        "title": "The Real Reason Microsoft Just Went All-In on AI Infrastructure. It's Not What You Might Think.",
+        "description": "",
+        "summary": "Microsoft is transforming from a software giant into an AI infrastructure powerhouse.",
+        "pubDate": "2026-05-14T04:20:00Z",
+        "displayTime": "2026-05-14T04:20:00Z",
+        "isHosted": true,
+        "bypassModal": false,
+        "previewUrl": null,
+        "thumbnail": {
+          "originalUrl": "https://media.zenfs.com/en/motleyfool.com/6f6596c313962578ac933ded4492e403",
+          "originalWidth": 1400,
+          "originalHeight": 812,
+          "caption": "A massive AI data center sits expands across the horizon. ",
+          "resolutions": [
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/BcxnV6ybn0A9q3GO9nLRUQ--~B/aD04MTI7dz0xNDAwO2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/motleyfool.com/6f6596c313962578ac933ded4492e403",
+              "width": 1400,
+              "height": 812,
+              "tag": "original"
+            },
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/k_Jpt0aKD5hzQdOmw80Vkw--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/motleyfool.com/6f6596c313962578ac933ded4492e403",
+              "width": 170,
+              "height": 128,
+              "tag": "170x128"
+            }
+          ]
+        },
+        "provider": {
+          "displayName": "Motley Fool",
+          "url": "http://www.fool.com/",
+          "sourceId": "motleyfool.com"
+        },
+        "canonicalUrl": {
+          "url": "https://www.fool.com/investing/2026/05/14/the-real-reason-microsoft-just-went-all-in-on-ai-i/",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "clickThroughUrl": {
+          "url": "https://finance.yahoo.com/sectors/technology/articles/real-reason-microsoft-just-went-042000660.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "metadata": {
+          "editorsPick": false
+        },
+        "finance": {
+          "premiumFinance": {
+            "isPremiumNews": false,
+            "isPremiumFreeNews": false
+          }
+        },
+        "storyline": null
+      }
+    },
+    {
+      "id": "efda6736-d504-396a-b75f-b683ed05cfb2",
+      "content": {
+        "id": "efda6736-d504-396a-b75f-b683ed05cfb2",
+        "contentType": "STORY",
+        "title": "Microsoft's LinkedIn Cuts Jobs As AI Infrastructure Spending Climbs",
+        "description": "",
+        "summary": "LinkedIn reduced roles across engineering, product and marketing as Microsoft continues funding AI data center expansion.",
+        "pubDate": "2026-05-14T03:48:26Z",
+        "displayTime": "2026-05-14T03:48:26Z",
         "isHosted": true,
         "bypassModal": false,
         "previewUrl": null,
@@ -9568,13 +9763,13 @@
           "sourceId": "us.finance.gurufocus"
         },
         "canonicalUrl": {
-          "url": "https://finance.yahoo.com/sectors/technology/articles/microsoft-drops-copilot-xbox-121355719.html",
+          "url": "https://finance.yahoo.com/sectors/technology/articles/microsofts-linkedin-cuts-jobs-ai-034826565.html",
           "site": "finance",
           "region": "US",
           "lang": "en-US"
         },
         "clickThroughUrl": {
-          "url": "https://finance.yahoo.com/sectors/technology/articles/microsoft-drops-copilot-xbox-121355719.html",
+          "url": "https://finance.yahoo.com/sectors/technology/articles/microsofts-linkedin-cuts-jobs-ai-034826565.html",
           "site": "finance",
           "region": "US",
           "lang": "en-US"
@@ -9592,51 +9787,32 @@
       }
     },
     {
-      "id": "1758552f-2e12-3a74-ab4a-20abbcc8a031",
+      "id": "6010c98b-e758-34c5-9385-263bcff25a0e",
       "content": {
-        "id": "1758552f-2e12-3a74-ab4a-20abbcc8a031",
+        "id": "6010c98b-e758-34c5-9385-263bcff25a0e",
         "contentType": "STORY",
-        "title": "Microsoft’s (MSFT) Margins Face Temporary Headwind",
+        "title": "Nebius Posts 684% Revenue Surge as AI Data Center Demand Accelerates",
         "description": "",
-        "summary": "Microsoft Corporation (NASDAQ:MSFT) is one of the 8 Best Cloud Computing Stocks To Buy In 2026. Microsoft Corporation (NASDAQ:MSFT) reported its third-quarter fiscal 2026 earnings on April 29. Earnings per share came in at $4.27, marking a 21% increase. Revenue from Azure and other Cloud Services grew 40%. The company reported a gross margin of […]",
-        "pubDate": "2026-05-07T12:11:44Z",
-        "displayTime": "2026-05-07T12:11:44Z",
+        "summary": "Nebius reported $399 million in quarterly revenue and outlined up to $20 billion in planned spending this year.",
+        "pubDate": "2026-05-14T03:47:46Z",
+        "displayTime": "2026-05-14T03:47:46Z",
         "isHosted": true,
         "bypassModal": false,
         "previewUrl": null,
-        "thumbnail": {
-          "originalUrl": "https://media.zenfs.com/en/insidermonkey.com/ae3cb2a93ad8e5ddf6f94148e71f74b9",
-          "originalWidth": 1456,
-          "originalHeight": 816,
-          "caption": "Microsoft Corporation (NASDAQ:MSFT) is one of the 8 Best Cloud Computing Stocks To Buy In 2026.",
-          "resolutions": [
-            {
-              "url": "https://s.yimg.com/uu/api/res/1.2/FPV7LMJx9t7xViBmxMrZWw--~B/aD04MTY7dz0xNDU2O2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/insidermonkey.com/ae3cb2a93ad8e5ddf6f94148e71f74b9",
-              "width": 1456,
-              "height": 816,
-              "tag": "original"
-            },
-            {
-              "url": "https://s.yimg.com/uu/api/res/1.2/7FVXaC.qNKFr6Wz4v4sdRQ--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/insidermonkey.com/ae3cb2a93ad8e5ddf6f94148e71f74b9",
-              "width": 170,
-              "height": 128,
-              "tag": "170x128"
-            }
-          ]
-        },
+        "thumbnail": null,
         "provider": {
-          "displayName": "Insider Monkey",
-          "url": "http://www.insidermonkey.com",
-          "sourceId": "insidermonkey.com"
+          "displayName": "GuruFocus.com",
+          "url": "http://www.gurufocus.com/",
+          "sourceId": "us.finance.gurufocus"
         },
         "canonicalUrl": {
-          "url": "https://finance.yahoo.com/markets/stocks/articles/microsoft-msft-margins-face-temporary-121144188.html",
+          "url": "https://finance.yahoo.com/sectors/technology/articles/nebius-posts-684-revenue-surge-034746804.html",
           "site": "finance",
           "region": "US",
           "lang": "en-US"
         },
         "clickThroughUrl": {
-          "url": "https://finance.yahoo.com/markets/stocks/articles/microsoft-msft-margins-face-temporary-121144188.html",
+          "url": "https://finance.yahoo.com/sectors/technology/articles/nebius-posts-684-revenue-surge-034746804.html",
           "site": "finance",
           "region": "US",
           "lang": "en-US"
@@ -9654,237 +9830,32 @@
       }
     },
     {
-      "id": "2da3b0c0-3eba-32b3-a063-3625b2c120f3",
+      "id": "24c01f14-decf-36b2-b089-5a33a7aac03c",
       "content": {
-        "id": "2da3b0c0-3eba-32b3-a063-3625b2c120f3",
+        "id": "24c01f14-decf-36b2-b089-5a33a7aac03c",
         "contentType": "STORY",
-        "title": "State Street Calls It “The first $1 trillion ETF will land this year”",
+        "title": "Microsoft's OpenAI Deal Pulls Cash Forward",
         "description": "",
-        "summary": "State Street’s 2026 Global ETF Outlook puts a stake in the ground on page 20: the first $1 trillion ETF will land this year. The frontrunner is the Vanguard 500 Index Fund ETF (NYSEARCA:VOO), which closed Monday at $660 with $839 billion in net assets as of early May. VOO sits roughly $160 billion shy ... State Street Calls It “The first $1 trillion ETF will land this year”",
-        "pubDate": "2026-05-07T11:30:10Z",
-        "displayTime": "2026-05-07T11:30:10Z",
+        "summary": "OpenAI's revenue-sharing payments to Microsoft are reportedly capped at $38 billion through 2030.",
+        "pubDate": "2026-05-14T03:40:43Z",
+        "displayTime": "2026-05-14T03:40:43Z",
         "isHosted": true,
         "bypassModal": false,
         "previewUrl": null,
-        "thumbnail": {
-          "originalUrl": "https://media.zenfs.com/en/24_7_wall_st__718/5a1b6bae7dc145154f082d6cb513ed4f",
-          "originalWidth": 2560,
-          "originalHeight": 1707,
-          "caption": "",
-          "resolutions": [
-            {
-              "url": "https://s.yimg.com/uu/api/res/1.2/QnmQqDmk4m0iGI3RyIjadg--~B/aD0xNzA3O3c9MjU2MDthcHBpZD15dGFjaHlvbg--/https://media.zenfs.com/en/24_7_wall_st__718/5a1b6bae7dc145154f082d6cb513ed4f",
-              "width": 2560,
-              "height": 1707,
-              "tag": "original"
-            },
-            {
-              "url": "https://s.yimg.com/uu/api/res/1.2/sJPsxqHjTGsahNAQnzSNzg--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/24_7_wall_st__718/5a1b6bae7dc145154f082d6cb513ed4f",
-              "width": 170,
-              "height": 128,
-              "tag": "170x128"
-            }
-          ]
-        },
+        "thumbnail": null,
         "provider": {
-          "displayName": "24/7 Wall St.",
-          "url": "https://247wallst.com/",
-          "sourceId": "24_7_wall_st__718"
+          "displayName": "GuruFocus.com",
+          "url": "http://www.gurufocus.com/",
+          "sourceId": "us.finance.gurufocus"
         },
         "canonicalUrl": {
-          "url": "https://247wallst.com/investing/2026/05/07/if-the-sp-500-hits-7500-heres-when-voo-reaches-1-trillion/",
+          "url": "https://finance.yahoo.com/markets/stocks/articles/microsofts-openai-deal-pulls-cash-034043808.html",
           "site": "finance",
           "region": "US",
           "lang": "en-US"
         },
         "clickThroughUrl": {
-          "url": "https://finance.yahoo.com/markets/stocks/articles/state-street-calls-first-1-113010332.html",
-          "site": "finance",
-          "region": "US",
-          "lang": "en-US"
-        },
-        "metadata": {
-          "editorsPick": false
-        },
-        "finance": {
-          "premiumFinance": {
-            "isPremiumNews": false,
-            "isPremiumFreeNews": false
-          }
-        },
-        "storyline": null
-      }
-    },
-    {
-      "id": "86f81d15-e146-3bd9-89e5-ea8f91310862",
-      "content": {
-        "id": "86f81d15-e146-3bd9-89e5-ea8f91310862",
-        "contentType": "STORY",
-        "title": "CGI Inc. (GIB) Sets Sights on Cloud Computing Opportunities in the Nordics",
-        "description": "",
-        "summary": "CGI Inc. (NYSE:GIB) is one of the most oversold Canadian stocks to invest in. On April 30, CGI Inc. (NYSE:GIB) inked a strategic partnership with Cleura to expand its sovereign cloud offering in the Nordics. The partnership comes as the company looks to capitalize on growing cloud demand from Nordic organizations. As part of the […]",
-        "pubDate": "2026-05-07T09:59:23Z",
-        "displayTime": "2026-05-07T09:59:23Z",
-        "isHosted": true,
-        "bypassModal": false,
-        "previewUrl": null,
-        "thumbnail": {
-          "originalUrl": "https://media.zenfs.com/en/insidermonkey.com/bcfd08ceaf78019bf49b4ecc55f49fd2",
-          "originalWidth": 1000,
-          "originalHeight": 667,
-          "caption": "CGI Inc. (GIB) Sets Sights on Cloud Computing Opportunities in the Nordics",
-          "resolutions": [
-            {
-              "url": "https://s.yimg.com/uu/api/res/1.2/vp5F0k40ym4GNRh2bmOXLw--~B/aD02Njc7dz0xMDAwO2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/insidermonkey.com/bcfd08ceaf78019bf49b4ecc55f49fd2",
-              "width": 1000,
-              "height": 667,
-              "tag": "original"
-            },
-            {
-              "url": "https://s.yimg.com/uu/api/res/1.2/rkZXD3bej5ZRUJkYGPWyOQ--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/insidermonkey.com/bcfd08ceaf78019bf49b4ecc55f49fd2",
-              "width": 170,
-              "height": 128,
-              "tag": "170x128"
-            }
-          ]
-        },
-        "provider": {
-          "displayName": "Insider Monkey",
-          "url": "http://www.insidermonkey.com",
-          "sourceId": "insidermonkey.com"
-        },
-        "canonicalUrl": {
-          "url": "https://finance.yahoo.com/sectors/technology/articles/cgi-inc-gib-sets-sights-095923881.html",
-          "site": "finance",
-          "region": "US",
-          "lang": "en-US"
-        },
-        "clickThroughUrl": {
-          "url": "https://finance.yahoo.com/sectors/technology/articles/cgi-inc-gib-sets-sights-095923881.html",
-          "site": "finance",
-          "region": "US",
-          "lang": "en-US"
-        },
-        "metadata": {
-          "editorsPick": false
-        },
-        "finance": {
-          "premiumFinance": {
-            "isPremiumNews": false,
-            "isPremiumFreeNews": false
-          }
-        },
-        "storyline": null
-      }
-    },
-    {
-      "id": "02834bce-b8a7-3468-82df-62c6d84fda57",
-      "content": {
-        "id": "02834bce-b8a7-3468-82df-62c6d84fda57",
-        "contentType": "STORY",
-        "title": "2 Outstanding AI Stocks to Buy and Hold for the Next Decade",
-        "description": "",
-        "summary": "They have historically beaten the market, and they aren't done.",
-        "pubDate": "2026-05-07T09:50:00Z",
-        "displayTime": "2026-05-07T09:50:00Z",
-        "isHosted": true,
-        "bypassModal": false,
-        "previewUrl": null,
-        "thumbnail": {
-          "originalUrl": "https://media.zenfs.com/en/motleyfool.com/1b75cea4cfc6a983bf95670d35945c9e",
-          "originalWidth": 1200,
-          "originalHeight": 800,
-          "caption": "Meta Platforms and Microsoft logos.",
-          "resolutions": [
-            {
-              "url": "https://s.yimg.com/uu/api/res/1.2/rBr50ZDEjP6bEwNvR6Rt3g--~B/aD04MDA7dz0xMjAwO2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/motleyfool.com/1b75cea4cfc6a983bf95670d35945c9e",
-              "width": 1200,
-              "height": 800,
-              "tag": "original"
-            },
-            {
-              "url": "https://s.yimg.com/uu/api/res/1.2/nBZZIo8_6cqfk8bGCMbvbw--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/motleyfool.com/1b75cea4cfc6a983bf95670d35945c9e",
-              "width": 170,
-              "height": 128,
-              "tag": "170x128"
-            }
-          ]
-        },
-        "provider": {
-          "displayName": "Motley Fool",
-          "url": "http://www.fool.com/",
-          "sourceId": "motleyfool.com"
-        },
-        "canonicalUrl": {
-          "url": "https://www.fool.com/investing/2026/05/07/2-outstanding-ai-stocks-to-buy-and-hold-for-the-ne/",
-          "site": "finance",
-          "region": "US",
-          "lang": "en-US"
-        },
-        "clickThroughUrl": {
-          "url": "https://finance.yahoo.com/markets/stocks/articles/2-outstanding-ai-stocks-buy-095000450.html",
-          "site": "finance",
-          "region": "US",
-          "lang": "en-US"
-        },
-        "metadata": {
-          "editorsPick": false
-        },
-        "finance": {
-          "premiumFinance": {
-            "isPremiumNews": false,
-            "isPremiumFreeNews": false
-          }
-        },
-        "storyline": null
-      }
-    },
-    {
-      "id": "49c4d33b-c259-3811-a609-10681a91adfe",
-      "content": {
-        "id": "49c4d33b-c259-3811-a609-10681a91adfe",
-        "contentType": "STORY",
-        "title": "What Happens to Nvidia Stock If the AI Build-Out Slows Down? Here's My Answer.",
-        "description": "",
-        "summary": "Nvidia may surprise investors in such a scenario.",
-        "pubDate": "2026-05-07T08:54:00Z",
-        "displayTime": "2026-05-07T08:54:00Z",
-        "isHosted": true,
-        "bypassModal": false,
-        "previewUrl": null,
-        "thumbnail": {
-          "originalUrl": "https://media.zenfs.com/en/motleyfool.com/c883a089f7858c165e9b62e7545d24d7",
-          "originalWidth": 1400,
-          "originalHeight": 840,
-          "caption": "Nvidia corporate office.",
-          "resolutions": [
-            {
-              "url": "https://s.yimg.com/uu/api/res/1.2/zyWIwdJEXcM4GeunUhqQRg--~B/aD04NDA7dz0xNDAwO2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/motleyfool.com/c883a089f7858c165e9b62e7545d24d7",
-              "width": 1400,
-              "height": 840,
-              "tag": "original"
-            },
-            {
-              "url": "https://s.yimg.com/uu/api/res/1.2/R_6HA7Yr9Bu6vAAOqfxhew--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/motleyfool.com/c883a089f7858c165e9b62e7545d24d7",
-              "width": 170,
-              "height": 128,
-              "tag": "170x128"
-            }
-          ]
-        },
-        "provider": {
-          "displayName": "Motley Fool",
-          "url": "http://www.fool.com/",
-          "sourceId": "motleyfool.com"
-        },
-        "canonicalUrl": {
-          "url": "https://www.fool.com/investing/2026/05/07/what-happens-to-nvidia-stock-if-the-ai-buildout-sl/",
-          "site": "finance",
-          "region": "US",
-          "lang": "en-US"
-        },
-        "clickThroughUrl": {
-          "url": "https://finance.yahoo.com/markets/stocks/articles/happens-nvidia-stock-ai-build-085400112.html",
+          "url": "https://finance.yahoo.com/markets/stocks/articles/microsofts-openai-deal-pulls-cash-034043808.html",
           "site": "finance",
           "region": "US",
           "lang": "en-US"
@@ -9913,7 +9884,7 @@
     "Earnings Average": 4.24777,
     "Revenue High": 91239000000,
     "Revenue Low": 86900000000,
-    "Revenue Average": 87613396420
+    "Revenue Average": 87610832320
   },
   "earnings_dates": {
     "__error__": "ImportError: `Import lxml` failed.  Use pip or conda to install the lxml package."
@@ -9922,20 +9893,20 @@
     {
       "index": 0,
       "Date Reported": "2025-12-31T00:00:00",
-      "Holder": "Vanguard Group Inc",
-      "pctHeld": 0.096599996,
-      "Shares": 717942580,
-      "Value": 304314317879,
-      "pctChange": 0.0227
-    },
-    {
-      "index": 1,
-      "Date Reported": "2025-12-31T00:00:00",
       "Holder": "Blackrock Inc.",
       "pctHeld": 0.081,
       "Shares": 601897495,
-      "Value": 255126288266,
+      "Value": 243894878805,
       "pctChange": 0.017
+    },
+    {
+      "index": 1,
+      "Date Reported": "2026-03-31T00:00:00",
+      "Holder": "Vanguard Capital Management LLC",
+      "pctHeld": 0.065,
+      "Shares": 482558086,
+      "Value": 195537357904,
+      "pctChange": 1.0
     },
     {
       "index": 2,
@@ -9943,7 +9914,7 @@
       "Holder": "State Street Corporation",
       "pctHeld": 0.041199997,
       "Shares": 306150608,
-      "Value": 129768056718,
+      "Value": 124055285251,
       "pctChange": 0.021300001
     },
     {
@@ -9952,7 +9923,7 @@
       "Holder": "FMR, LLC",
       "pctHeld": 0.0271,
       "Shares": 200948745,
-      "Value": 85176143561,
+      "Value": 81426439244,
       "pctChange": -0.045300003
     },
     {
@@ -9961,44 +9932,44 @@
       "Holder": "Geode Capital Management, LLC",
       "pctHeld": 0.024600001,
       "Shares": 182618400,
-      "Value": 77406460316,
+      "Value": 73998800303,
       "pctChange": 0.0106
     },
     {
       "index": 5,
-      "Date Reported": "2025-12-31T00:00:00",
-      "Holder": "JPMORGAN CHASE & CO",
-      "pctHeld": 0.0199,
-      "Shares": 147759850,
-      "Value": 62630966898,
-      "pctChange": -0.5348
+      "Date Reported": "2026-03-31T00:00:00",
+      "Holder": "Vanguard Portfolio Management LLC",
+      "pctHeld": 0.0225,
+      "Shares": 167490848,
+      "Value": 67868965086,
+      "pctChange": 1.0
     },
     {
       "index": 6,
       "Date Reported": "2025-12-31T00:00:00",
-      "Holder": "Price (T.Rowe) Associates Inc",
-      "pctHeld": 0.016900001,
-      "Shares": 125709121,
-      "Value": 53284324504,
-      "pctChange": -0.048899997
+      "Holder": "JPMORGAN CHASE & CO",
+      "pctHeld": 0.0199,
+      "Shares": 147759850,
+      "Value": 59873767555,
+      "pctChange": -0.5348
     },
     {
       "index": 7,
       "Date Reported": "2025-12-31T00:00:00",
-      "Holder": "Morgan Stanley",
-      "pctHeld": 0.0163,
-      "Shares": 121220561,
-      "Value": 51381758599,
-      "pctChange": 0.0082
+      "Holder": "Price (T.Rowe) Associates Inc",
+      "pctHeld": 0.016900001,
+      "Shares": 125709121,
+      "Value": 50938591846,
+      "pctChange": -0.048899997
     },
     {
       "index": 8,
       "Date Reported": "2025-12-31T00:00:00",
-      "Holder": "NORGES BANK",
-      "pctHeld": 0.014099999,
-      "Shares": 104761241,
-      "Value": 44405146711,
-      "pctChange": 0.032
+      "Holder": "Morgan Stanley",
+      "pctHeld": 0.0163,
+      "Shares": 121220561,
+      "Value": 49119782486,
+      "pctChange": 0.0082
     },
     {
       "index": 9,
@@ -10006,26 +9977,26 @@
       "Holder": "Capital International Investors",
       "pctHeld": 0.011,
       "Shares": 81585381,
-      "Value": 34581595046,
+      "Value": 33059211537,
       "pctChange": 0.0276
     }
   ],
   "major_holders": [
     {
       "index": "insidersPercentHeld",
-      "Value": 0.00079
+      "Value": 0.0008
     },
     {
       "index": "institutionsPercentHeld",
-      "Value": 0.76063
+      "Value": 0.7579
     },
     {
       "index": "institutionsFloatPercentHeld",
-      "Value": 0.76124
+      "Value": 0.7585
     },
     {
       "index": "institutionsCount",
-      "Value": 8024.0
+      "Value": 8057.0
     }
   ]
 }

@@ -1,7 +1,7 @@
 {
   "ticker": "TSLA",
   "code": "US.TSLA",
-  "fetched_at": "2026-05-07T15:29:36.257928+00:00",
+  "fetched_at": "2026-05-14T10:48:38.185061+00:00",
   "info": {
     "address1": "1 Tesla Road",
     "city": "Austin",
@@ -27,7 +27,7 @@
         "yearBorn": 1971,
         "fiscalYear": 2024,
         "exercisedValue": 0,
-        "unexercisedValue": 0
+        "unexercisedValue": 129602732032
       },
       {
         "maxAge": 1,
@@ -36,9 +36,9 @@
         "title": "Chief Financial Officer",
         "yearBorn": 1978,
         "fiscalYear": 2024,
-        "totalPay": 306846,
-        "exercisedValue": 9653338,
-        "unexercisedValue": 347210016
+        "totalPay": 403000,
+        "exercisedValue": 15033838,
+        "unexercisedValue": 417696224
       },
       {
         "maxAge": 1,
@@ -47,9 +47,9 @@
         "title": "Senior Vice President of APAC & Global Vehicle Manufacturing",
         "yearBorn": 1980,
         "fiscalYear": 2024,
-        "totalPay": 518250,
-        "exercisedValue": 0,
-        "unexercisedValue": 697024064
+        "totalPay": 376322,
+        "exercisedValue": 4548562,
+        "unexercisedValue": 808327104
       },
       {
         "maxAge": 1,
@@ -74,6 +74,41 @@
         "fiscalYear": 2024,
         "exercisedValue": 0,
         "unexercisedValue": 0
+      },
+      {
+        "maxAge": 1,
+        "name": "Ms. Roxanne  Inskip-Kaye",
+        "title": "Head of Operations - Electric Vehicle Business",
+        "fiscalYear": 2024,
+        "exercisedValue": 0,
+        "unexercisedValue": 0
+      },
+      {
+        "maxAge": 1,
+        "name": "Mr. John  Walker",
+        "age": 62,
+        "title": "Vice President of Sales - North America",
+        "yearBorn": 1963,
+        "fiscalYear": 2024,
+        "totalPay": 121550,
+        "exercisedValue": 0,
+        "unexercisedValue": 0
+      },
+      {
+        "maxAge": 1,
+        "name": "Mr. Rodney D. Westmoreland Jr.",
+        "title": "Director of Construction Management",
+        "fiscalYear": 2024,
+        "exercisedValue": 0,
+        "unexercisedValue": 0
+      },
+      {
+        "maxAge": 1,
+        "name": "Mr. Lars  Moravy",
+        "title": "Vice President of Vehicle Engineering",
+        "fiscalYear": 2024,
+        "exercisedValue": 0,
+        "unexercisedValue": 0
       }
     ],
     "auditRisk": 4,
@@ -86,72 +121,72 @@
     "executiveTeam": [],
     "maxAge": 86400,
     "priceHint": 2,
-    "previousClose": 398.534,
-    "open": 407.52,
-    "dayLow": 406.91,
-    "dayHigh": 415.83,
-    "regularMarketPreviousClose": 398.534,
-    "regularMarketOpen": 407.52,
-    "regularMarketDayLow": 406.91,
-    "regularMarketDayHigh": 415.83,
+    "previousClose": 433.45,
+    "open": 436.68,
+    "dayLow": 430.21,
+    "dayHigh": 453.4,
+    "regularMarketPreviousClose": 433.45,
+    "regularMarketOpen": 436.68,
+    "regularMarketDayLow": 430.21,
+    "regularMarketDayHigh": 453.4,
     "payoutRatio": 0.0,
     "beta": 1.793,
-    "trailingPE": 378.46295,
-    "forwardPE": 161.21576,
-    "volume": 29912304,
-    "regularMarketVolume": 29912304,
-    "averageVolume": 62161770,
-    "averageVolume10days": 58611180,
-    "averageDailyVolume10Day": 58611180,
-    "bid": 408.92,
-    "ask": 416.77,
-    "bidSize": 2,
-    "askSize": 2,
-    "marketCap": 1535114477568,
-    "nonDilutedMarketCap": 1474159176606,
+    "trailingPE": 416.14017,
+    "forwardPE": 177.11475,
+    "volume": 64708180,
+    "regularMarketVolume": 64708180,
+    "averageVolume": 62928765,
+    "averageVolume10days": 60271470,
+    "averageDailyVolume10Day": 60271470,
+    "bid": 442.75,
+    "ask": 445.08,
+    "bidSize": 1,
+    "askSize": 1,
+    "marketCap": 1672311078912,
+    "nonDilutedMarketCap": 1608764320142,
     "fiftyTwoWeekLow": 273.21,
     "fiftyTwoWeekHigh": 498.83,
     "allTimeHigh": 498.83,
     "allTimeLow": 0.998667,
-    "priceToSalesTrailing12Months": 15.683798,
-    "fiftyDayAverage": 382.9062,
-    "twoHundredDayAverage": 403.50784,
+    "priceToSalesTrailing12Months": 17.085495,
+    "fiftyDayAverage": 385.6986,
+    "twoHundredDayAverage": 406.26904,
     "trailingAnnualDividendRate": 0.0,
     "trailingAnnualDividendYield": 0.0,
     "currency": "USD",
     "tradeable": false,
-    "enterpriseValue": 1469352771584,
+    "enterpriseValue": 1644144230400,
     "profitMargins": 0.03946,
     "floatShares": 2815929087,
     "sharesOutstanding": 3755723871,
-    "sharesShort": 71106902,
-    "sharesShortPriorMonth": 60860404,
-    "sharesShortPreviousMonthDate": 1773360000,
-    "dateShortInterest": 1776211200,
-    "sharesPercentSharesOut": 0.0189,
-    "heldPercentInsiders": 0.11121,
-    "heldPercentInstitutions": 0.44737,
-    "shortRatio": 1.07,
-    "shortPercentOfFloat": 0.021300001,
+    "sharesShort": 76673071,
+    "sharesShortPriorMonth": 65598603,
+    "sharesShortPreviousMonthDate": 1774915200,
+    "dateShortInterest": 1777507200,
+    "sharesPercentSharesOut": 0.020399999,
+    "heldPercentInsiders": 0.111099996,
+    "heldPercentInstitutions": 0.44684,
+    "shortRatio": 1.13,
+    "shortPercentOfFloat": 0.023,
     "impliedSharesOutstanding": 3755723871,
     "bookValue": 21.897,
-    "priceToBook": 18.666485,
+    "priceToBook": 20.33475,
     "lastFiscalYearEnd": 1767139200,
     "nextFiscalYearEnd": 1798675200,
     "mostRecentQuarter": 1774915200,
     "earningsQuarterlyGrowth": 0.166,
     "netIncomeToCommon": 3862000128,
-    "trailingEps": 1.08,
-    "forwardEps": 2.53536,
-    "pegRatio": 5.49,
+    "trailingEps": 1.07,
+    "forwardEps": 2.51402,
+    "pegRatio": 5.97,
     "lastSplitFactor": "3:1",
     "lastSplitDate": 1661385600,
-    "enterpriseToRevenue": 15.012,
-    "enterpriseToEbitda": 132.446,
-    "52WeekChange": 0.3999368,
-    "SandP52WeekChange": 0.3003528,
+    "enterpriseToRevenue": 16.798,
+    "enterpriseToEbitda": 148.201,
+    "52WeekChange": 0.29884493,
+    "SandP52WeekChange": 0.2581271,
     "quoteType": "EQUITY",
-    "currentPrice": 408.74,
+    "currentPrice": 445.27,
     "targetHighPrice": 600.0,
     "targetLowPrice": 123.0,
     "targetMeanPrice": 412.25366,
@@ -186,9 +221,9 @@
     "quoteSourceName": "Nasdaq Real Time Price",
     "triggerable": true,
     "customPriceAlertConfidence": "HIGH",
-    "longName": "Tesla, Inc.",
     "corporateActions": [],
-    "regularMarketTime": 1778167776,
+    "preMarketTime": 1778755709,
+    "regularMarketTime": 1778702400,
     "exchange": "NMS",
     "messageBoardId": "finmb_27444752",
     "exchangeTimezoneName": "America/New_York",
@@ -196,42 +231,46 @@
     "gmtOffSetMilliseconds": -14400000,
     "market": "us_market",
     "esgPopulated": false,
-    "marketState": "REGULAR",
-    "regularMarketChangePercent": 2.560884,
-    "regularMarketPrice": 408.74,
+    "regularMarketChangePercent": 2.72695,
+    "regularMarketPrice": 445.27,
     "shortName": "Tesla, Inc.",
-    "epsTrailingTwelveMonths": 1.08,
-    "epsForward": 2.53536,
-    "epsCurrentYear": 2.05482,
-    "priceEpsCurrentYear": 198.91766,
-    "fiftyDayAverageChange": 25.833801,
-    "fiftyDayAverageChangePercent": 0.067467704,
-    "twoHundredDayAverageChange": 5.232147,
-    "twoHundredDayAverageChangePercent": 0.012966655,
-    "sourceInterval": 15,
-    "exchangeDataDelayedBy": 0,
-    "averageAnalystRating": "2.4 - Buy",
-    "cryptoTradeable": false,
-    "hasPrePostMarketData": true,
-    "firstTradeDateMilliseconds": 1277818200000,
-    "regularMarketChange": 10.205994,
-    "regularMarketDayRange": "406.91 - 415.83",
+    "longName": "Tesla, Inc.",
+    "marketState": "PRE",
+    "preMarketChange": 2.6800232,
+    "preMarketChangePercent": 0.6018872,
+    "preMarketPrice": 447.95,
+    "regularMarketChange": 11.82,
+    "regularMarketDayRange": "430.21 - 453.4",
     "fullExchangeName": "NasdaqGS",
-    "averageDailyVolume3Month": 62161770,
-    "fiftyTwoWeekLowChange": 135.53,
-    "fiftyTwoWeekLowChangePercent": 0.49606532,
+    "averageDailyVolume3Month": 62928765,
+    "fiftyTwoWeekLowChange": 172.06,
+    "fiftyTwoWeekLowChangePercent": 0.629772,
     "fiftyTwoWeekRange": "273.21 - 498.83",
-    "fiftyTwoWeekHighChange": -90.09,
-    "fiftyTwoWeekHighChangePercent": -0.18060261,
-    "fiftyTwoWeekChangePercent": 39.99368,
+    "fiftyTwoWeekHighChange": -53.559998,
+    "fiftyTwoWeekHighChangePercent": -0.10737125,
+    "fiftyTwoWeekChangePercent": 29.884493,
     "earningsTimestamp": 1776888000,
     "earningsTimestampStart": 1784750400,
     "earningsTimestampEnd": 1784750400,
     "earningsCallTimestampStart": 1776893400,
     "earningsCallTimestampEnd": 1776893400,
     "isEarningsDateEstimate": true,
+    "epsTrailingTwelveMonths": 1.07,
+    "epsForward": 2.51402,
+    "epsCurrentYear": 2.04894,
+    "priceEpsCurrentYear": 217.31725,
+    "fiftyDayAverageChange": 59.57138,
+    "fiftyDayAverageChangePercent": 0.1544506,
+    "twoHundredDayAverageChange": 39.000946,
+    "twoHundredDayAverageChangePercent": 0.095997825,
+    "sourceInterval": 15,
+    "exchangeDataDelayedBy": 0,
+    "averageAnalystRating": "2.4 - Buy",
+    "hasPrePostMarketData": true,
+    "firstTradeDateMilliseconds": 1277818200000,
+    "cryptoTradeable": false,
     "displayName": "Tesla",
-    "trailingPegRatio": 5.4046
+    "trailingPegRatio": 5.8981
   },
   "recommendations": [
     {
@@ -10142,7 +10181,7 @@
     }
   ],
   "analyst_price_targets": {
-    "current": 408.6201,
+    "current": 445.27,
     "high": 600.0,
     "low": 123.0,
     "mean": 412.25366,
@@ -10150,32 +10189,32 @@
   },
   "news": [
     {
-      "id": "6e06c3b4-e3b9-463f-be60-afc3e01a9aa8",
+      "id": "56d7f360-7285-4a96-97f9-c3ae9cc2c2c0",
       "content": {
-        "id": "6e06c3b4-e3b9-463f-be60-afc3e01a9aa8",
+        "id": "56d7f360-7285-4a96-97f9-c3ae9cc2c2c0",
         "contentType": "VIDEO",
-        "title": "'Uber won': Why Instacart might not stand a chance",
-        "description": "<p>Uber (<a target=\"_blank\" rel=\"\" class=\"link\" href=\"https://finance.yahoo.com/quote/UBER/\" data-i13n=\"cpos:1;pos:1\">UBER</a>) and Maplebear (<a target=\"_blank\" rel=\"\" class=\"link\" href=\"https://finance.yahoo.com/quote/CART/\" data-i13n=\"cpos:2;pos:1\">CART</a>) (Instacart's parent company) both reported quarterly earnings on Wednesday.</p>\n<p>BNP Paribas US large-cap internet equity analyst Nick Jones joins Yahoo Finance's Josh Lipton to discuss the key differences between the two companies and why he thinks Uber has much more room to run.</p>",
-        "summary": "Uber (UBER) and Maplebear (CART) (Instacart's parent company) both reported quarterly earnings on Wednesday. BNP Paribas US large-cap internet equity analyst Nick Jones joins Yahoo Finance's Josh Lipton to discuss the key differences between the two companies and why he thinks Uber has much more room to run.",
-        "pubDate": "2026-05-06T20:41:39Z",
+        "title": "Trump–Xi meeting, rarnings and Retail Sales in focus Thursday",
+        "description": "<p>Market Domination Overtime host Josh Lipton takes a look at the top stories for investors to watch on Thursday, May 15, including updates from President Trump’s meeting with Chinese President Xi Jinping, earnings reports from Viking Holdings (<a target=\"_blank\" rel=\"\" class=\"link\" href=\"https://finance.yahoo.com/quote/VIK/\" data-i13n=\"slk:VIK;cpos:1;pos:1\">VIK</a>), Klarna (<a target=\"_blank\" rel=\"\" class=\"link\" href=\"https://finance.yahoo.com/quote/KLAR/\" data-i13n=\"slk:KLAR;cpos:2;pos:1\">KLAR</a>), Applied Materials (<a target=\"_blank\" rel=\"\" class=\"link\" href=\"https://finance.yahoo.com/quote/AMAT/\" data-i13n=\"slk:AMAT;cpos:3;pos:1\">AMAT</a>), and Figma (<a target=\"_blank\" rel=\"\" class=\"link\" href=\"https://finance.yahoo.com/quote/FIG/\" data-i13n=\"slk:FIG;cpos:4;pos:1\">FIG</a>), and a check-in on the consumer as new U.S. retail sales data is released.</p>",
+        "summary": "Market Domination Overtime host Josh Lipton takes a look at the top stories for investors to watch on Thursday, May 15, including updates from President Trump’s meeting with Chinese President Xi Jinping, earnings reports from Viking Holdings (VIK), Klarna (KLAR), Applied Materials (AMAT), and Figma (FIG), and a check-in on the consumer as new U.S. retail sales data is released.",
+        "pubDate": "2026-05-13T23:00:00Z",
         "displayTime": "",
         "isHosted": true,
         "bypassModal": false,
         "previewUrl": null,
         "thumbnail": {
-          "originalUrl": "https://s.yimg.com/uu/api/res/1.2/.GEZmLC_ryieCZ6qViWFzg--~B/aD0yMjQ5O3c9NDAwMDthcHBpZD15dGFjaHlvbg--/https://d29szjachogqwa.cloudfront.net/images/user-uploaded/b577de1f-7775-428a-b566-0b96889ecea6_7180ed71df07b0167cc17ce01e49da7c957bdadc0a184a1c2c8b264503fa4696.net/images/2026-05/b577de1f-7775-428a-b566-0b96889ecea6",
-          "originalWidth": 4000,
-          "originalHeight": 2249,
+          "originalUrl": "https://s.yimg.com/uu/api/res/1.2/OAB3L5w0xyAdcAkUdENQ1A--~B/aD0xMDgwO3c9MTkyMDthcHBpZD15dGFjaHlvbg--/https://d29szjachogqwa.cloudfront.net/images/user-uploaded/wtw-whattowatchthumb-5-13-2026_0267.png",
+          "originalWidth": 1920,
+          "originalHeight": 1080,
           "caption": "",
           "resolutions": [
             {
-              "url": "https://s.yimg.com/uu/api/res/1.2/.GEZmLC_ryieCZ6qViWFzg--~B/aD0yMjQ5O3c9NDAwMDthcHBpZD15dGFjaHlvbg--/https://d29szjachogqwa.cloudfront.net/images/user-uploaded/b577de1f-7775-428a-b566-0b96889ecea6_7180ed71df07b0167cc17ce01e49da7c957bdadc0a184a1c2c8b264503fa4696.net/images/2026-05/b577de1f-7775-428a-b566-0b96889ecea6",
-              "width": 4000,
-              "height": 2249,
+              "url": "https://s.yimg.com/uu/api/res/1.2/OAB3L5w0xyAdcAkUdENQ1A--~B/aD0xMDgwO3c9MTkyMDthcHBpZD15dGFjaHlvbg--/https://d29szjachogqwa.cloudfront.net/images/user-uploaded/wtw-whattowatchthumb-5-13-2026_0267.png",
+              "width": 1920,
+              "height": 1080,
               "tag": "original"
             },
             {
-              "url": "https://s.yimg.com/uu/api/res/1.2/6SZ5gSWGS.BDjdIWi_UFqA--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://d29szjachogqwa.cloudfront.net/images/user-uploaded/b577de1f-7775-428a-b566-0b96889ecea6_7180ed71df07b0167cc17ce01e49da7c957bdadc0a184a1c2c8b264503fa4696.net/images/2026-05/b577de1f-7775-428a-b566-0b96889ecea6",
+              "url": "https://s.yimg.com/uu/api/res/1.2/5ykiSyV0BBOU0EsUBgtHIw--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://d29szjachogqwa.cloudfront.net/images/user-uploaded/wtw-whattowatchthumb-5-13-2026_0267.png",
               "width": 170,
               "height": 128,
               "tag": "170x128"
@@ -10188,13 +10227,132 @@
           "sourceId": "video.yahoofinance.com"
         },
         "canonicalUrl": {
-          "url": "https://finance.yahoo.com/video/uber-won-why-instacart-might-not-stand-a-chance-204139211.html",
+          "url": "https://finance.yahoo.com/video/trump-xi-meeting-rarnings-retail-230000345.html",
           "site": "finance",
           "region": "US",
           "lang": "en-US"
         },
         "clickThroughUrl": {
-          "url": "https://finance.yahoo.com/video/uber-won-why-instacart-might-not-stand-a-chance-204139211.html",
+          "url": "https://finance.yahoo.com/video/trump-xi-meeting-rarnings-retail-230000345.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "metadata": {
+          "editorsPick": true
+        },
+        "finance": {
+          "premiumFinance": {
+            "isPremiumNews": false,
+            "isPremiumFreeNews": false
+          }
+        },
+        "storyline": {
+          "storylineItems": [
+            {
+              "content": {
+                "id": "d692d73b-124b-4d18-9198-596144d3dba0",
+                "contentType": "STORY",
+                "isHosted": true,
+                "title": "Tech stocks today: Cerebras to stage blockbuster IPO, tech stocks climb as Cook, Musk, and Huang join Trump for China trip",
+                "thumbnail": {
+                  "originalUrl": "https://s.yimg.com/uu/api/res/1.2/7.DYK5M10Ip559Sr3JJoKQ--~B/aD0xNTY2O3c9MzAwMDthcHBpZD15dGFjaHlvbg--/https://d29szjachogqwa.cloudfront.net/images/2026-05/fd27c14a-3dcf-4203-b525-d1c9dfaabf85",
+                  "originalWidth": 3000,
+                  "originalHeight": 1566,
+                  "caption": "",
+                  "resolutions": null
+                },
+                "provider": {
+                  "displayName": "Yahoo Finance",
+                  "sourceId": "yahoofinance.com"
+                },
+                "previewUrl": null,
+                "providerContentUrl": "",
+                "canonicalUrl": {
+                  "url": "https://finance.yahoo.com/sectors/technology/live/tech-stocks-today-cerebras-to-stage-blockbuster-ipo-tech-stocks-climb-as-cook-musk-and-huang-join-trump-for-china-trip-100000399.html"
+                },
+                "clickThroughUrl": {
+                  "url": "https://finance.yahoo.com/sectors/technology/live/tech-stocks-today-cerebras-to-stage-blockbuster-ipo-tech-stocks-climb-as-cook-musk-and-huang-join-trump-for-china-trip-100000399.html"
+                }
+              }
+            },
+            {
+              "content": {
+                "id": "798b5891-2efc-47be-8d76-8a38e63fe2d5",
+                "contentType": "VIDEO",
+                "isHosted": true,
+                "title": "What Elon Musk hopes to gain from joining Trump's China visit",
+                "thumbnail": {
+                  "originalUrl": "https://s.yimg.com/uu/api/res/1.2/axo2DVR0AunuV3bGQFKWpA--~B/aD0xNTE1O3c9MjY5NTthcHBpZD15dGFjaHlvbg--/https://d29szjachogqwa.cloudfront.net/images/user-uploaded/b4c46001-d7ce-4772-b8bb-76f237b8ab9f_03381245a9f402f8f840dad666e16fce14104b35e2659db1359b4e0fc12c507b.jpg",
+                  "originalWidth": 2695,
+                  "originalHeight": 1515,
+                  "caption": "",
+                  "resolutions": null
+                },
+                "provider": {
+                  "displayName": "Yahoo Finance Video",
+                  "sourceId": "video.yahoofinance.com"
+                },
+                "previewUrl": null,
+                "providerContentUrl": "",
+                "canonicalUrl": {
+                  "url": "https://finance.yahoo.com/video/what-elon-musk-hopes-to-gain-from-joining-trumps-china-visit-203340603.html"
+                },
+                "clickThroughUrl": {
+                  "url": "https://finance.yahoo.com/video/what-elon-musk-hopes-to-gain-from-joining-trumps-china-visit-203340603.html"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "1d153070-2fac-4750-a47a-89168ed504ed",
+      "content": {
+        "id": "1d153070-2fac-4750-a47a-89168ed504ed",
+        "contentType": "VIDEO",
+        "title": "Why criticism of ARKK's Cathie Wood might be a bit 'harsh'",
+        "description": "<p>Cathie Wood, CEO of Ark Investment Management, is facing criticism online over Ark Innovation ETF's (<a target=\"_blank\" rel=\"\" class=\"link\" href=\"https://finance.yahoo.com/quote/ARKK/\" data-i13n=\"cpos:1;pos:1\">ARKK</a>) recent losses.</p>\n<p>Bullseye American Ingenuity Fund portfolio manager Adam Johnson shares his thoughts with Yahoo Finance's Josh Lipton.</p>",
+        "summary": "Cathie Wood, CEO of Ark Investment Management, is facing criticism online over Ark Innovation ETF's (ARKK) recent losses. Bullseye American Ingenuity Fund portfolio manager Adam Johnson shares his thoughts with Yahoo Finance's Josh Lipton.",
+        "pubDate": "2026-05-13T20:06:03Z",
+        "displayTime": "",
+        "isHosted": true,
+        "bypassModal": false,
+        "previewUrl": null,
+        "thumbnail": {
+          "originalUrl": "https://s.yimg.com/uu/api/res/1.2/exKGRf.w9V6MDSQoMxq7dw--~B/aD0zMzc1O3c9NjAwMDthcHBpZD15dGFjaHlvbg--/https://d29szjachogqwa.cloudfront.net/images/user-uploaded/9d408ec0-f613-11ef-9fed-dff65c605a70_fdae045b7ca85390a17bfad386cec0e4f735e15e8fd3d3c113a28cfa2c8e55a8.jpg",
+          "originalWidth": 6000,
+          "originalHeight": 3375,
+          "caption": "",
+          "resolutions": [
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/exKGRf.w9V6MDSQoMxq7dw--~B/aD0zMzc1O3c9NjAwMDthcHBpZD15dGFjaHlvbg--/https://d29szjachogqwa.cloudfront.net/images/user-uploaded/9d408ec0-f613-11ef-9fed-dff65c605a70_fdae045b7ca85390a17bfad386cec0e4f735e15e8fd3d3c113a28cfa2c8e55a8.jpg",
+              "width": 6000,
+              "height": 3375,
+              "tag": "original"
+            },
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/FHGDJsC2A7JpoUVK53AZ4Q--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://d29szjachogqwa.cloudfront.net/images/user-uploaded/9d408ec0-f613-11ef-9fed-dff65c605a70_fdae045b7ca85390a17bfad386cec0e4f735e15e8fd3d3c113a28cfa2c8e55a8.jpg",
+              "width": 170,
+              "height": 128,
+              "tag": "170x128"
+            }
+          ]
+        },
+        "provider": {
+          "displayName": "Yahoo Finance Video",
+          "url": "https://finance.yahoo.com/",
+          "sourceId": "video.yahoofinance.com"
+        },
+        "canonicalUrl": {
+          "url": "https://finance.yahoo.com/video/why-criticism-of-arkks-cathie-wood-might-be-a-bit-harsh-200603491.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "clickThroughUrl": {
+          "url": "https://finance.yahoo.com/video/why-criticism-of-arkks-cathie-wood-might-be-a-bit-harsh-200603491.html",
           "site": "finance",
           "region": "US",
           "lang": "en-US"
@@ -10212,75 +10370,32 @@
       }
     },
     {
-      "id": "60a8a4a7-98de-3a5e-9a80-9e5539569a5a",
+      "id": "421bac1e-301a-4bbf-972a-c9652a799ae1",
       "content": {
-        "id": "60a8a4a7-98de-3a5e-9a80-9e5539569a5a",
+        "id": "421bac1e-301a-4bbf-972a-c9652a799ae1",
         "contentType": "STORY",
-        "title": "Tesla Stock Rises After Massive 36% China Sales Spike Signals Export Strength",
+        "title": "Nvidia's Jensen Huang is a late addition to Trump's China trip, joining Elon Musk, Tim Cook, and others",
         "description": "",
-        "summary": "Tesla Gains Momentum on Export Surge as Europe Demand Lifts China Output",
-        "pubDate": "2026-05-07T14:42:13Z",
-        "displayTime": "2026-05-07T14:42:13Z",
-        "isHosted": true,
-        "bypassModal": false,
-        "previewUrl": null,
-        "thumbnail": null,
-        "provider": {
-          "displayName": "GuruFocus.com",
-          "url": "http://www.gurufocus.com/",
-          "sourceId": "us.finance.gurufocus"
-        },
-        "canonicalUrl": {
-          "url": "https://finance.yahoo.com/markets/stocks/articles/tesla-stock-rises-massive-36-144213111.html",
-          "site": "finance",
-          "region": "US",
-          "lang": "en-US"
-        },
-        "clickThroughUrl": {
-          "url": "https://finance.yahoo.com/markets/stocks/articles/tesla-stock-rises-massive-36-144213111.html",
-          "site": "finance",
-          "region": "US",
-          "lang": "en-US"
-        },
-        "metadata": {
-          "editorsPick": false
-        },
-        "finance": {
-          "premiumFinance": {
-            "isPremiumNews": false,
-            "isPremiumFreeNews": false
-          }
-        },
-        "storyline": null
-      }
-    },
-    {
-      "id": "166fa93f-4a13-3d02-8adc-daabbb39869b",
-      "content": {
-        "id": "166fa93f-4a13-3d02-8adc-daabbb39869b",
-        "contentType": "STORY",
-        "title": "What's the Better Artificial Intelligence (AI) Stock: Palantir Technologies or Tesla?",
-        "description": "",
-        "summary": "These stocks both have some tremendous growth opportunities due to artificial intelligence (AI), but they also trade at excessively high premiums.",
-        "pubDate": "2026-05-07T14:20:00Z",
-        "displayTime": "2026-05-07T14:20:00Z",
+        "summary": "Nvidia's Jensen Huang joined sixteen other top business executives and President Trump on his trip this week to meet with Chinese leader Xi Jinping.",
+        "pubDate": "2026-05-11T20:11:20Z",
+        "displayTime": "2026-05-13T11:06:19Z",
         "isHosted": true,
         "bypassModal": false,
         "previewUrl": null,
         "thumbnail": {
-          "originalUrl": "https://media.zenfs.com/en/motleyfool.com/8e27f2dc0b675f1748217e1ee376b0b9",
-          "originalWidth": 1400,
-          "originalHeight": 787,
-          "caption": "A robotic arm with the word AI hovering above.",
+          "originalUrl": "https://s.yimg.com/os/creatr-uploaded-images/2026-05/9d3115e0-4e86-11f1-97f7-8ffbad7cb620",
+          "originalWidth": 3313,
+          "originalHeight": 2262,
+          "caption": "",
           "resolutions": [
             {
-              "url": "https://s.yimg.com/uu/api/res/1.2/Khrmk6BiEGp0rYsTPVKlPg--~B/aD03ODc7dz0xNDAwO2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/motleyfool.com/8e27f2dc0b675f1748217e1ee376b0b9",
-              "width": 1400,
-              "height": 787,
+              "url": "https://s.yimg.com/uu/api/res/1.2/N8l5UoBMo7pCF7sqrrdy9Q--~B/aD0yMjYyO3c9MzMxMzthcHBpZD15dGFjaHlvbg--/https://media-mbst-pub-ue1.s3.amazonaws.com/creatr-uploaded-images/2026-05/9d3115e0-4e86-11f1-97f7-8ffbad7cb620",
+              "width": 3313,
+              "height": 2262,
               "tag": "original"
             },
             {
-              "url": "https://s.yimg.com/uu/api/res/1.2/qDM6AdCZbPCIEmvwgj6a7w--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/motleyfool.com/8e27f2dc0b675f1748217e1ee376b0b9",
+              "url": "https://s.yimg.com/uu/api/res/1.2/bPOttF6vylQnAtIsnqx6RQ--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media-mbst-pub-ue1.s3.amazonaws.com/creatr-uploaded-images/2026-05/9d3115e0-4e86-11f1-97f7-8ffbad7cb620",
               "width": 170,
               "height": 128,
               "tag": "170x128"
@@ -10288,24 +10403,24 @@
           ]
         },
         "provider": {
-          "displayName": "Motley Fool",
-          "url": "http://www.fool.com/",
-          "sourceId": "motleyfool.com"
+          "displayName": "Yahoo Finance",
+          "url": "http://finance.yahoo.com/",
+          "sourceId": "yahoofinance.com"
         },
         "canonicalUrl": {
-          "url": "https://www.fool.com/investing/2026/05/07/whats-the-better-artificial-intelligence-ai-stock/",
+          "url": "https://finance.yahoo.com/economy/policy/article/nvidias-jensen-huang-is-a-late-addition-to-trumps-china-trip-joining-elon-musk-tim-cook-and-others-201120985.html",
           "site": "finance",
           "region": "US",
           "lang": "en-US"
         },
         "clickThroughUrl": {
-          "url": "https://finance.yahoo.com/markets/stocks/articles/whats-better-artificial-intelligence-ai-142000639.html",
+          "url": "https://finance.yahoo.com/economy/policy/article/nvidias-jensen-huang-is-a-late-addition-to-trumps-china-trip-joining-elon-musk-tim-cook-and-others-201120985.html",
           "site": "finance",
           "region": "US",
           "lang": "en-US"
         },
         "metadata": {
-          "editorsPick": false
+          "editorsPick": true
         },
         "finance": {
           "premiumFinance": {
@@ -10317,32 +10432,32 @@
       }
     },
     {
-      "id": "00222f47-5934-3dbd-9218-ee86eccd0afa",
+      "id": "867c971f-758d-3391-a626-c9b7c2db0d27",
       "content": {
-        "id": "00222f47-5934-3dbd-9218-ee86eccd0afa",
+        "id": "867c971f-758d-3391-a626-c9b7c2db0d27",
         "contentType": "STORY",
-        "title": "Tesla China Sales Spike 36%. The Stock Passes An Aggressive Buy Point.",
+        "title": "Elon Musk’s $119 Billion Gambit: The Real Reason He’s Building the World’s Largest Chip Plant.",
         "description": "",
-        "summary": "Tesla China sales including exports jumped in April vs. a year earlier. Tesla stock passed the 200-day line on Thursday morning. An aggressive buy point is in play.",
-        "pubDate": "2026-05-07T13:43:21Z",
-        "displayTime": "2026-05-07T13:43:21Z",
-        "isHosted": false,
+        "summary": "On March 21, 2026, at the Seaholm Power Plant in Austin, Elon Musk unveiled “the most epic chip-building exercise in history”: Terafab, a joint venture between Tesla (NASDAQ:TSLA), SpaceX, and xAI, with Intel (NASDAQ:INTC) as foundational manufacturing partner. The stated goal: one terawatt of AI compute capacity per year, an order-of-magnitude expansion of global semiconductor ... Elon Musk’s $119 Billion Gambit: The Real Reason He’s Building the World’s Largest Chip Plant.",
+        "pubDate": "2026-05-14T10:28:20Z",
+        "displayTime": "2026-05-14T10:28:20Z",
+        "isHosted": true,
         "bypassModal": false,
-        "previewUrl": "https://finance.yahoo.com/m/00222f47-5934-3dbd-9218-ee86eccd0afa/tesla-china-sales-spike-36-.html",
+        "previewUrl": null,
         "thumbnail": {
-          "originalUrl": "https://media.zenfs.com/en/ibd.com/4cba9b427ad943db2ec3bd1d4ca41ef8",
-          "originalWidth": 1000,
-          "originalHeight": 563,
+          "originalUrl": "https://media.zenfs.com/en/24_7_wall_st__718/e564b19390ea5f879b3441cf0f6ebed7",
+          "originalWidth": 1366,
+          "originalHeight": 768,
           "caption": "",
           "resolutions": [
             {
-              "url": "https://s.yimg.com/uu/api/res/1.2/9svKl_6y8nNOz6tN3.y1tg--~B/aD01NjM7dz0xMDAwO2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/ibd.com/4cba9b427ad943db2ec3bd1d4ca41ef8",
-              "width": 1000,
-              "height": 563,
+              "url": "https://s.yimg.com/uu/api/res/1.2/HY39bY6F_0sMphB.ogoAug--~B/aD03Njg7dz0xMzY2O2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/24_7_wall_st__718/e564b19390ea5f879b3441cf0f6ebed7",
+              "width": 1366,
+              "height": 768,
               "tag": "original"
             },
             {
-              "url": "https://s.yimg.com/uu/api/res/1.2/qCbSct.U4TzCBSA3F_oTMw--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/ibd.com/4cba9b427ad943db2ec3bd1d4ca41ef8",
+              "url": "https://s.yimg.com/uu/api/res/1.2/Deh5sHNE.8SeCXzGy_VnOA--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/24_7_wall_st__718/e564b19390ea5f879b3441cf0f6ebed7",
               "width": 170,
               "height": 128,
               "tag": "170x128"
@@ -10350,56 +10465,18 @@
           ]
         },
         "provider": {
-          "displayName": "Investor's Business Daily",
-          "url": "http://www.investors.com/",
-          "sourceId": "ibd.com"
+          "displayName": "24/7 Wall St.",
+          "url": "https://247wallst.com/",
+          "sourceId": "24_7_wall_st__718"
         },
         "canonicalUrl": {
-          "url": "https://www.investors.com/news/tesla-stock-buy-point-tesla-china-sales/?src=A00220&yptr=yahoo",
-          "site": "finance",
-          "region": "US",
-          "lang": "en-US"
-        },
-        "clickThroughUrl": null,
-        "metadata": {
-          "editorsPick": false
-        },
-        "finance": {
-          "premiumFinance": {
-            "isPremiumNews": false,
-            "isPremiumFreeNews": false
-          }
-        },
-        "storyline": null
-      }
-    },
-    {
-      "id": "05ecd42c-3fef-31de-a674-7500012466d3",
-      "content": {
-        "id": "05ecd42c-3fef-31de-a674-7500012466d3",
-        "contentType": "STORY",
-        "title": "Tesla Extends China Sales Rebound",
-        "description": "",
-        "summary": "China-made EV sales rose 36% in April, marking a sixth straight monthly gain.",
-        "pubDate": "2026-05-07T13:00:26Z",
-        "displayTime": "2026-05-07T13:00:26Z",
-        "isHosted": true,
-        "bypassModal": false,
-        "previewUrl": null,
-        "thumbnail": null,
-        "provider": {
-          "displayName": "GuruFocus.com",
-          "url": "http://www.gurufocus.com/",
-          "sourceId": "us.finance.gurufocus"
-        },
-        "canonicalUrl": {
-          "url": "https://finance.yahoo.com/markets/stocks/articles/tesla-extends-china-sales-rebound-130026627.html",
+          "url": "https://247wallst.com/investing/2026/05/14/elon-musks-119-billion-gambit-the-real-reason-hes-building-the-worlds-largest-chip-plant/",
           "site": "finance",
           "region": "US",
           "lang": "en-US"
         },
         "clickThroughUrl": {
-          "url": "https://finance.yahoo.com/markets/stocks/articles/tesla-extends-china-sales-rebound-130026627.html",
+          "url": "https://finance.yahoo.com/sectors/technology/articles/elon-musk-119-billion-gambit-102820713.html",
           "site": "finance",
           "region": "US",
           "lang": "en-US"
@@ -10417,75 +10494,32 @@
       }
     },
     {
-      "id": "b255736e-e5d0-3f05-a487-6ae1176ca8fe",
+      "id": "394078a6-d43c-354a-8483-43973cfdbee5",
       "content": {
-        "id": "b255736e-e5d0-3f05-a487-6ae1176ca8fe",
+        "id": "394078a6-d43c-354a-8483-43973cfdbee5",
         "contentType": "STORY",
-        "title": "Peace Deal Hopes, Strong Earnings Nudge US Equity Futures Higher Pre-Bell",
+        "title": "European Chip Stocks Gain on Foxconn Results, Trump's China Visit",
         "description": "",
-        "summary": "US equity futures were slightly higher pre-bell Thursday as hopes for a finalized peace deal between",
-        "pubDate": "2026-05-07T12:55:12Z",
-        "displayTime": "2026-05-07T12:55:12Z",
-        "isHosted": true,
-        "bypassModal": false,
-        "previewUrl": null,
-        "thumbnail": null,
-        "provider": {
-          "displayName": "MT Newswires",
-          "url": "https://www.mtnewswires.com/",
-          "sourceId": "mt_newswires_premium_news_706"
-        },
-        "canonicalUrl": {
-          "url": "https://finance.yahoo.com/markets/stocks/articles/peace-deal-hopes-strong-earnings-125512779.html",
-          "site": "finance",
-          "region": "US",
-          "lang": "en-US"
-        },
-        "clickThroughUrl": {
-          "url": "https://finance.yahoo.com/markets/stocks/articles/peace-deal-hopes-strong-earnings-125512779.html",
-          "site": "finance",
-          "region": "US",
-          "lang": "en-US"
-        },
-        "metadata": {
-          "editorsPick": false
-        },
-        "finance": {
-          "premiumFinance": {
-            "isPremiumNews": true,
-            "isPremiumFreeNews": false
-          }
-        },
-        "storyline": null
-      }
-    },
-    {
-      "id": "6385712e-c624-321a-b365-c9a6f4c836e0",
-      "content": {
-        "id": "6385712e-c624-321a-b365-c9a6f4c836e0",
-        "contentType": "STORY",
-        "title": "Tesla Stock Cracks $400. How China Is Helping.",
-        "description": "",
-        "summary": "Tesla  stock is rising again on Thursday, now back above $400 a share.  Shares of the electric vehicle maker were up by 1.8% at $405.70 in premarket trading.  Tesla sold 79,478 vehicles from its Shanghai plant, including exports, in April, up 36% year over year, according to Chinese industry data providers.",
-        "pubDate": "2026-05-07T12:54:00Z",
-        "displayTime": "2026-05-07T12:54:00Z",
+        "summary": "Shares of European semiconductor companies were edging higher after Foxconn reported robust first-quarter revenue and profit and as President Trump brings a delegation of tech CEOs on his trip to China.  Foxconn, which generates a significant share of revenue making AI servers for companies like Nvidia, reported 19% growth in net profit to 49.92 billion New Taiwan dollars and 29% growth in revenue to 2.120 trillion New Taiwan dollars.  Meanwhile, Trump is meeting Chinese leader Xi Jinping in a summit attended by Nvidia's Jensen Huang, Apple's Tim Cook and Tesla's Elon Musk.",
+        "pubDate": "2026-05-14T08:46:21Z",
+        "displayTime": "2026-05-14T08:46:21Z",
         "isHosted": false,
         "bypassModal": false,
-        "previewUrl": "https://finance.yahoo.com/m/6385712e-c624-321a-b365-c9a6f4c836e0/tesla-stock-cracks-400-how.html",
+        "previewUrl": "https://finance.yahoo.com/m/394078a6-d43c-354a-8483-43973cfdbee5/european-chip-stocks-gain-on.html",
         "thumbnail": {
-          "originalUrl": "https://media.zenfs.com/en/Barrons.com/f7d4bcba8e1012d0279bfc5a2b8c5a87",
-          "originalWidth": 1280,
-          "originalHeight": 640,
+          "originalUrl": "https://media.zenfs.com/en/Barrons.com/12ea0f43d8f8307249a68d1cb2e0587e",
+          "originalWidth": 320,
+          "originalHeight": 65,
           "caption": "",
           "resolutions": [
             {
-              "url": "https://s.yimg.com/uu/api/res/1.2/rHHiQVUjEEqvYQlA8PJhTg--~B/aD02NDA7dz0xMjgwO2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/Barrons.com/f7d4bcba8e1012d0279bfc5a2b8c5a87",
-              "width": 1280,
-              "height": 640,
+              "url": "https://s.yimg.com/uu/api/res/1.2/_kc6REYMS1JrAuV5bYtjfA--~B/aD02NTt3PTMyMDthcHBpZD15dGFjaHlvbg--/https://media.zenfs.com/en/Barrons.com/12ea0f43d8f8307249a68d1cb2e0587e",
+              "width": 320,
+              "height": 65,
               "tag": "original"
             },
             {
-              "url": "https://s.yimg.com/uu/api/res/1.2/X_sl7pW8_SR1NJt7fYXipQ--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/Barrons.com/f7d4bcba8e1012d0279bfc5a2b8c5a87",
+              "url": "https://s.yimg.com/uu/api/res/1.2/Eugzn1_7mDocWpeqoc2fFg--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/Barrons.com/12ea0f43d8f8307249a68d1cb2e0587e",
               "width": 170,
               "height": 128,
               "tag": "170x128"
@@ -10498,7 +10532,7 @@
           "sourceId": "Barrons.com"
         },
         "canonicalUrl": {
-          "url": "https://www.barrons.com/articles/tesla-stock-price-china-car-sales-b3f6e475?siteid=yhoof2&yptr=yahoo",
+          "url": "https://www.barrons.com/livecoverage/stock-market-news-today-051426/card/european-chip-stocks-gain-on-foxconn-results-trump-s-china-visit-foW7OC8wJo5ZsUJ5AmFJ?siteid=yhoof2&yptr=yahoo",
           "site": "finance",
           "region": "US",
           "lang": "en-US"
@@ -10517,75 +10551,32 @@
       }
     },
     {
-      "id": "2e0be060-9174-3fed-b1a0-1673d61edf69",
+      "id": "7b240ecb-35d6-3b37-bfda-a52f3e6eb132",
       "content": {
-        "id": "2e0be060-9174-3fed-b1a0-1673d61edf69",
+        "id": "7b240ecb-35d6-3b37-bfda-a52f3e6eb132",
         "contentType": "STORY",
-        "title": "Exchange-Traded Funds, Equity Futures Higher Pre-Bell Thursday Amid Corporate Earnings, Economic Data Deluge",
+        "title": "Space Stock Craze Comes to Europe as One UK Fund Quadruples",
         "description": "",
-        "summary": "The broad market exchange-traded fund SPDR S&P 500 ETF Trust (SPY) was up 0.2% and the actively trad",
-        "pubDate": "2026-05-07T12:50:32Z",
-        "displayTime": "2026-05-07T12:50:32Z",
-        "isHosted": true,
-        "bypassModal": false,
-        "previewUrl": null,
-        "thumbnail": null,
-        "provider": {
-          "displayName": "MT Newswires",
-          "url": "https://www.mtnewswires.com/",
-          "sourceId": "mt_newswires_premium_news_706"
-        },
-        "canonicalUrl": {
-          "url": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-125032677.html",
-          "site": "finance",
-          "region": "US",
-          "lang": "en-US"
-        },
-        "clickThroughUrl": {
-          "url": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-125032677.html",
-          "site": "finance",
-          "region": "US",
-          "lang": "en-US"
-        },
-        "metadata": {
-          "editorsPick": false
-        },
-        "finance": {
-          "premiumFinance": {
-            "isPremiumNews": true,
-            "isPremiumFreeNews": false
-          }
-        },
-        "storyline": null
-      }
-    },
-    {
-      "id": "d109877a-5096-348e-b885-092126909fbe",
-      "content": {
-        "id": "d109877a-5096-348e-b885-092126909fbe",
-        "contentType": "STORY",
-        "title": "Alibaba Group (BABA) Continues To Be A Top Cloud Computing Choice For Investors",
-        "description": "",
-        "summary": "Alibaba Group Holding Limited (NYSE:BABA) is one of the 8 Best Cloud Computing Stocks To Buy In 2026. On April 16, Robin Zhu, an analyst at Bernstein, lowered the firm’s price target on Alibaba Group Holding Limited (NYSE:BABA) from $190 to $180 while maintaining a Buy rating. A day before the price target cut, Bloomberg […]",
-        "pubDate": "2026-05-07T12:11:39Z",
-        "displayTime": "2026-05-07T12:11:39Z",
+        "summary": "(Bloomberg) -- It’s not just US retail investors piling into any asset connected to space exploration. Europeans want in, too.Most Read from BloombergIran’s Kharg Island Oil Jetties Empty Again Yesterday, Satellite ShowsAmbani’s Cola War With Coke, Pepsi Spurs Fridge Bonanza in IndiaTrump Lands in China for Xi Trade Summit With Iran War in LimboNvidia’s CEO Joins Trump in China With AI in the SpotlightShares in British SpaceX supplier Filtronic Plc are up 232% in a year, while German satellite m",
+        "pubDate": "2026-05-14T08:42:07Z",
+        "displayTime": "2026-05-14T08:42:07Z",
         "isHosted": true,
         "bypassModal": false,
         "previewUrl": null,
         "thumbnail": {
-          "originalUrl": "https://media.zenfs.com/en/insidermonkey.com/090170be12ef840f77e8d544392228a0",
-          "originalWidth": 1456,
-          "originalHeight": 816,
-          "caption": "Alibaba Group Holding Limited (NYSE:BABA) is one of the 8 Best Cloud Computing Stocks To Buy In 2026.",
+          "originalUrl": "https://media.zenfs.com/en/bloomberg_holding_pen_162/3d43c54317c68f7d71d20cd22539b48d",
+          "originalWidth": 2010,
+          "originalHeight": 1392,
+          "caption": "",
           "resolutions": [
             {
-              "url": "https://s.yimg.com/uu/api/res/1.2/psAs0pGNqyrt8mJECiI5og--~B/aD04MTY7dz0xNDU2O2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/insidermonkey.com/090170be12ef840f77e8d544392228a0",
-              "width": 1456,
-              "height": 816,
+              "url": "https://s.yimg.com/uu/api/res/1.2/hzFZuwjWVN6Iu_PQ6gBkLA--~B/aD0xMzkyO3c9MjAxMDthcHBpZD15dGFjaHlvbg--/https://media.zenfs.com/en/bloomberg_holding_pen_162/3d43c54317c68f7d71d20cd22539b48d",
+              "width": 2010,
+              "height": 1392,
               "tag": "original"
             },
             {
-              "url": "https://s.yimg.com/uu/api/res/1.2/HHEIlT7dQsZE36Et8Yp86w--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/insidermonkey.com/090170be12ef840f77e8d544392228a0",
+              "url": "https://s.yimg.com/uu/api/res/1.2/s5rQ0qINda2sQW_Y.81Q6Q--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/bloomberg_holding_pen_162/3d43c54317c68f7d71d20cd22539b48d",
               "width": 170,
               "height": 128,
               "tag": "170x128"
@@ -10593,18 +10584,18 @@
           ]
         },
         "provider": {
-          "displayName": "Insider Monkey",
-          "url": "http://www.insidermonkey.com",
-          "sourceId": "insidermonkey.com"
+          "displayName": "Bloomberg",
+          "url": "https://www.bloomberg.com/company",
+          "sourceId": "bloomberg_holding_pen_162"
         },
         "canonicalUrl": {
-          "url": "https://finance.yahoo.com/sectors/technology/articles/alibaba-group-baba-continues-top-121139051.html",
+          "url": "https://finance.yahoo.com/markets/stocks/articles/space-stock-craze-comes-europe-051500382.html",
           "site": "finance",
           "region": "US",
           "lang": "en-US"
         },
         "clickThroughUrl": {
-          "url": "https://finance.yahoo.com/sectors/technology/articles/alibaba-group-baba-continues-top-121139051.html",
+          "url": "https://finance.yahoo.com/markets/stocks/articles/space-stock-craze-comes-europe-051500382.html",
           "site": "finance",
           "region": "US",
           "lang": "en-US"
@@ -10622,32 +10613,32 @@
       }
     },
     {
-      "id": "130013ff-6358-38f6-9716-85ae5158d682",
+      "id": "e713f1e0-e827-373e-9ee8-8a949275aff2",
       "content": {
-        "id": "130013ff-6358-38f6-9716-85ae5158d682",
+        "id": "e713f1e0-e827-373e-9ee8-8a949275aff2",
         "contentType": "STORY",
-        "title": "Latest News In Energy Transition - Transformers Market Growth Driven By Grid Modernization And Innovation",
+        "title": "U.S. Futures, European Markets Rise on Nvidia-Led Rally; Trump, Xi Summit Eyed",
         "description": "",
-        "summary": "The global transformers market is poised for significant growth, anticipated to reach USD 113.0 billion by 2036, up from USD 62.2 billion in 2026, driven by a compound annual growth rate (CAGR) of 6.2%. This expansion is fueled by key developments in grid modernization, renewable energy advancements, and the burgeoning demand for electric vehicle charging infrastructure. With Asia-Pacific currently leading the market due to extensive industrialization, regions like North America are expected...",
-        "pubDate": "2026-05-07T11:37:47Z",
-        "displayTime": "2026-05-07T11:37:47Z",
-        "isHosted": true,
+        "summary": "Futures for the main U.S. indexes were building on gains from the previous session as the tech stock rally continues.",
+        "pubDate": "2026-05-14T08:14:00Z",
+        "displayTime": "2026-05-14T08:14:00Z",
+        "isHosted": false,
         "bypassModal": false,
-        "previewUrl": null,
+        "previewUrl": "https://finance.yahoo.com/m/e713f1e0-e827-373e-9ee8-8a949275aff2/u-s-futures-european.html",
         "thumbnail": {
-          "originalUrl": "https://media.zenfs.com/en/simply_wall_st__316/ed4196a3e5d347f9099ba2d6552cadc1",
-          "originalWidth": 1194,
-          "originalHeight": 432,
+          "originalUrl": "https://media.zenfs.com/en/wsj.com/123cf96d93b7926c8c6eed10a48a1f3a",
+          "originalWidth": 1280,
+          "originalHeight": 640,
           "caption": "",
           "resolutions": [
             {
-              "url": "https://s.yimg.com/uu/api/res/1.2/ODlYi3nHktkFW50mOSNHFw--~B/aD00MzI7dz0xMTk0O2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/simply_wall_st__316/ed4196a3e5d347f9099ba2d6552cadc1",
-              "width": 1194,
-              "height": 432,
+              "url": "https://s.yimg.com/uu/api/res/1.2/N831fzS.q.kZHRq4ghsxEA--~B/aD02NDA7dz0xMjgwO2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/wsj.com/123cf96d93b7926c8c6eed10a48a1f3a",
+              "width": 1280,
+              "height": 640,
               "tag": "original"
             },
             {
-              "url": "https://s.yimg.com/uu/api/res/1.2/yPBOQTg31bGRcz2Ne5m3kQ--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/simply_wall_st__316/ed4196a3e5d347f9099ba2d6552cadc1",
+              "url": "https://s.yimg.com/uu/api/res/1.2/4cIfIy9THfvwHxpNegYJqQ--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/wsj.com/123cf96d93b7926c8c6eed10a48a1f3a",
               "width": 170,
               "height": 128,
               "tag": "170x128"
@@ -10655,18 +10646,199 @@
           ]
         },
         "provider": {
-          "displayName": "Simply Wall St.",
-          "url": "https://simplywall.st/",
-          "sourceId": "simply_wall_st__316"
+          "displayName": "The Wall Street Journal",
+          "url": "http://www.wsj.com/",
+          "sourceId": "wsj.com"
         },
         "canonicalUrl": {
-          "url": "https://finance.yahoo.com/sectors/energy/articles/latest-news-energy-transition-transformers-113747322.html",
+          "url": "https://www.wsj.com/finance/u-s-futures-european-markets-rise-on-nvidia-led-rally-trump-xi-summit-eyed-992bf06e?siteid=yhoof2&yptr=yahoo",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "clickThroughUrl": null,
+        "metadata": {
+          "editorsPick": false
+        },
+        "finance": {
+          "premiumFinance": {
+            "isPremiumNews": false,
+            "isPremiumFreeNews": false
+          }
+        },
+        "storyline": null
+      }
+    },
+    {
+      "id": "207a1d7a-efab-3906-8c47-bdd7e052d7b2",
+      "content": {
+        "id": "207a1d7a-efab-3906-8c47-bdd7e052d7b2",
+        "contentType": "STORY",
+        "title": "Xi Tells US CEOs Accompanying Trump That China Will Open Up More",
+        "description": "",
+        "summary": "(Bloomberg) -- Xi Jinping signaled China is moving toward greater openness, striking an upbeat note during his meeting with US business leaders accompanying Donald Trump as the two presidents wrapped up morning talks that featured more divisive issues like trade and Taiwan.Most Read from BloombergIran’s Kharg Island Oil Jetties Empty Again Yesterday, Satellite ShowsAmbani’s Cola War With Coke, Pepsi Spurs Fridge Bonanza in IndiaTrump Lands in China for Xi Trade Summit With Iran War in LimboNvidi",
+        "pubDate": "2026-05-14T07:02:13Z",
+        "displayTime": "2026-05-14T07:02:13Z",
+        "isHosted": true,
+        "bypassModal": false,
+        "previewUrl": null,
+        "thumbnail": {
+          "originalUrl": "https://media.zenfs.com/en/bloomberg_holding_pen_162/b72a1f0879766cd8ec0d7d29e6e3ed4e",
+          "originalWidth": 2010,
+          "originalHeight": 1431,
+          "caption": "",
+          "resolutions": [
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/V5zcoMYusiPeM4PTAIGCvw--~B/aD0xNDMxO3c9MjAxMDthcHBpZD15dGFjaHlvbg--/https://media.zenfs.com/en/bloomberg_holding_pen_162/b72a1f0879766cd8ec0d7d29e6e3ed4e",
+              "width": 2010,
+              "height": 1431,
+              "tag": "original"
+            },
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/zXGA0GbjRsZU4wGIRbhLag--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/bloomberg_holding_pen_162/b72a1f0879766cd8ec0d7d29e6e3ed4e",
+              "width": 170,
+              "height": 128,
+              "tag": "170x128"
+            }
+          ]
+        },
+        "provider": {
+          "displayName": "Bloomberg",
+          "url": "https://www.bloomberg.com/company",
+          "sourceId": "bloomberg_holding_pen_162"
+        },
+        "canonicalUrl": {
+          "url": "https://finance.yahoo.com/economy/policy/articles/xi-tells-us-ceos-accompanying-070213545.html",
           "site": "finance",
           "region": "US",
           "lang": "en-US"
         },
         "clickThroughUrl": {
-          "url": "https://finance.yahoo.com/sectors/energy/articles/latest-news-energy-transition-transformers-113747322.html",
+          "url": "https://finance.yahoo.com/economy/policy/articles/xi-tells-us-ceos-accompanying-070213545.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "metadata": {
+          "editorsPick": false
+        },
+        "finance": {
+          "premiumFinance": {
+            "isPremiumNews": false,
+            "isPremiumFreeNews": false
+          }
+        },
+        "storyline": null
+      }
+    },
+    {
+      "id": "ebd516be-eb22-305d-beb1-07c26084462a",
+      "content": {
+        "id": "ebd516be-eb22-305d-beb1-07c26084462a",
+        "contentType": "STORY",
+        "title": "Elon Musk Accused Of Building 'Most Management-Favorable' IPO Structure At SpaceX: Report",
+        "description": "",
+        "summary": "Top Pension officials from New York and California have written to SpaceX CEO Elon Musk, expressing concern over the “extreme” governance structure of the commercial space flight company ahead of its public listing. Comptrollers Express Concern New York State Comptroller Thomas DiNapoli, as well as New York City Comptroller Mark Levine and California Public Employees’ Retirement System (CalPERS) CEO Marcie Frost, wrote a letter to Musk, accessed by Reuters on Wednesday. Notably, CalPERS had also",
+        "pubDate": "2026-05-14T06:53:25Z",
+        "displayTime": "2026-05-14T06:53:25Z",
+        "isHosted": true,
+        "bypassModal": false,
+        "previewUrl": null,
+        "thumbnail": {
+          "originalUrl": "https://media.zenfs.com/en/Benzinga/a79b4c4c240b71f253d895d54e21181a",
+          "originalWidth": 1024,
+          "originalHeight": 576,
+          "caption": "",
+          "resolutions": [
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/8bIKCuc6Hsw9k0jsSp6WGw--~B/aD01NzY7dz0xMDI0O2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/Benzinga/a79b4c4c240b71f253d895d54e21181a",
+              "width": 1024,
+              "height": 576,
+              "tag": "original"
+            },
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/lFWTIdV.RjkuzmRVX6904g--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/Benzinga/a79b4c4c240b71f253d895d54e21181a",
+              "width": 170,
+              "height": 128,
+              "tag": "170x128"
+            }
+          ]
+        },
+        "provider": {
+          "displayName": "Benzinga",
+          "url": "http://www.benzinga.com/",
+          "sourceId": "Benzinga"
+        },
+        "canonicalUrl": {
+          "url": "https://finance.yahoo.com/markets/stocks/articles/elon-musk-accused-building-most-065325673.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "clickThroughUrl": {
+          "url": "https://finance.yahoo.com/markets/stocks/articles/elon-musk-accused-building-most-065325673.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "metadata": {
+          "editorsPick": false
+        },
+        "finance": {
+          "premiumFinance": {
+            "isPremiumNews": false,
+            "isPremiumFreeNews": false
+          }
+        },
+        "storyline": null
+      }
+    },
+    {
+      "id": "394f5eaf-07d8-38ee-9cf6-562395fe33aa",
+      "content": {
+        "id": "394f5eaf-07d8-38ee-9cf6-562395fe33aa",
+        "contentType": "STORY",
+        "title": "Ron DeSantis Admits Tesla's Are Undeniably 'Top-Notch Products' But Rejects The Idea That 'EVs Will Save The World'",
+        "description": "",
+        "summary": "Florida Gov. Ron DeSantis (R) said Tuesday that he remains opposed to electric vehicle mandates but praised Tesla Inc.'s (NASDAQ:TSLA) vehicles as \"absolutely top-notch products,\" crediting the company's technology and performance for building a loyal customer base. DeSantis Praises Tesla While Rejecting Mandates DeSantis made the comments in an exchange on X after a user responded to an earlier post about Tesla's autonomous technology. \"I've always opposed EV mandates, rejected the idea that EV",
+        "pubDate": "2026-05-14T06:33:00Z",
+        "displayTime": "2026-05-14T06:33:00Z",
+        "isHosted": true,
+        "bypassModal": false,
+        "previewUrl": null,
+        "thumbnail": {
+          "originalUrl": "https://media.zenfs.com/en/Benzinga/f5b660a2b387b498324ecc10ff1c46e4",
+          "originalWidth": 1024,
+          "originalHeight": 720,
+          "caption": "",
+          "resolutions": [
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/Z0_Rig.YeilcMYJrreebIQ--~B/aD03MjA7dz0xMDI0O2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/Benzinga/f5b660a2b387b498324ecc10ff1c46e4",
+              "width": 1024,
+              "height": 720,
+              "tag": "original"
+            },
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/zUZikJodWK1afBRlqtSdLQ--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/Benzinga/f5b660a2b387b498324ecc10ff1c46e4",
+              "width": 170,
+              "height": 128,
+              "tag": "170x128"
+            }
+          ]
+        },
+        "provider": {
+          "displayName": "Benzinga",
+          "url": "http://www.benzinga.com/",
+          "sourceId": "Benzinga"
+        },
+        "canonicalUrl": {
+          "url": "https://finance.yahoo.com/sectors/technology/articles/ron-desantis-admits-teslas-undeniably-063300164.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "clickThroughUrl": {
+          "url": "https://finance.yahoo.com/sectors/technology/articles/ron-desantis-admits-teslas-undeniably-063300164.html",
           "site": "finance",
           "region": "US",
           "lang": "en-US"
@@ -10690,10 +10862,10 @@
     ],
     "Earnings High": 0.59,
     "Earnings Low": 0.26483,
-    "Earnings Average": 0.4523,
+    "Earnings Average": 0.45438,
     "Revenue High": 26059000000,
     "Revenue Low": 22543000000,
-    "Revenue Average": 24579058380
+    "Revenue Average": 24620391710
   },
   "earnings_dates": {
     "__error__": "ImportError: `Import lxml` failed.  Use pip or conda to install the lxml package."
@@ -10702,20 +10874,20 @@
     {
       "index": 0,
       "Date Reported": "2025-12-31T00:00:00",
-      "Holder": "Vanguard Group Inc",
-      "pctHeld": 0.0689,
-      "Shares": 258925024,
-      "Value": 105832988075,
-      "pctChange": 0.025899999
-    },
-    {
-      "index": 1,
-      "Date Reported": "2025-12-31T00:00:00",
       "Holder": "Blackrock Inc.",
       "pctHeld": 0.0558,
       "Shares": 209563808,
-      "Value": 85657089649,
+      "Value": 93312474485,
       "pctChange": 0.0137
+    },
+    {
+      "index": 1,
+      "Date Reported": "2026-03-31T00:00:00",
+      "Holder": "Vanguard Capital Management LLC",
+      "pctHeld": 0.048699997,
+      "Shares": 182850783,
+      "Value": 81417966137,
+      "pctChange": 1.0
     },
     {
       "index": 2,
@@ -10723,7 +10895,7 @@
       "Holder": "State Street Corporation",
       "pctHeld": 0.0306,
       "Shares": 114842934,
-      "Value": 46940889207,
+      "Value": 51136111960,
       "pctChange": 0.0095
     },
     {
@@ -10732,44 +10904,44 @@
       "Holder": "Geode Capital Management, LLC",
       "pctHeld": 0.0175,
       "Shares": 65700975,
-      "Value": 26854609864,
+      "Value": 29254672416,
       "pctChange": 0.0058
     },
     {
       "index": 4,
-      "Date Reported": "2025-12-31T00:00:00",
-      "Holder": "JPMORGAN CHASE & CO",
-      "pctHeld": 0.0119,
-      "Shares": 44591616,
-      "Value": 18226372605,
-      "pctChange": -0.50049996
+      "Date Reported": "2026-03-31T00:00:00",
+      "Holder": "Vanguard Portfolio Management LLC",
+      "pctHeld": 0.013099999,
+      "Shares": 49252925,
+      "Value": 21930849373,
+      "pctChange": 1.0
     },
     {
       "index": 5,
       "Date Reported": "2025-12-31T00:00:00",
-      "Holder": "Capital World Investors",
-      "pctHeld": 0.0113,
-      "Shares": 42484452,
-      "Value": 17365090606,
-      "pctChange": -0.0352
+      "Holder": "JPMORGAN CHASE & CO",
+      "pctHeld": 0.0119,
+      "Shares": 44591616,
+      "Value": 19855308366,
+      "pctChange": -0.50049996
     },
     {
       "index": 6,
       "Date Reported": "2025-12-31T00:00:00",
-      "Holder": "FMR, LLC",
-      "pctHeld": 0.0105,
-      "Shares": 39484462,
-      "Value": 16138874997,
-      "pctChange": 0.094
+      "Holder": "Capital World Investors",
+      "pctHeld": 0.0113,
+      "Shares": 42484452,
+      "Value": 18917051475,
+      "pctChange": -0.0352
     },
     {
       "index": 7,
       "Date Reported": "2025-12-31T00:00:00",
-      "Holder": "NORGES BANK",
-      "pctHeld": 0.0101,
-      "Shares": 38086143,
-      "Value": 15567326230,
-      "pctChange": 0.0218
+      "Holder": "FMR, LLC",
+      "pctHeld": 0.0105,
+      "Shares": 39484462,
+      "Value": 17581245960,
+      "pctChange": 0.094
     },
     {
       "index": 8,
@@ -10777,7 +10949,7 @@
       "Holder": "Morgan Stanley",
       "pctHeld": 0.0095,
       "Shares": 35783015,
-      "Value": 14625945925,
+      "Value": 15933102695,
       "pctChange": -0.0101
     },
     {
@@ -10786,26 +10958,26 @@
       "Holder": "Goldman Sachs Group Inc",
       "pctHeld": 0.0073,
       "Shares": 27419658,
-      "Value": 11207508232,
+      "Value": 12209150816,
       "pctChange": -0.0825
     }
   ],
   "major_holders": [
     {
       "index": "insidersPercentHeld",
-      "Value": 0.11121
+      "Value": 0.111099996
     },
     {
       "index": "institutionsPercentHeld",
-      "Value": 0.44737
+      "Value": 0.44684
     },
     {
       "index": "institutionsFloatPercentHeld",
-      "Value": 0.50334
+      "Value": 0.50269
     },
     {
       "index": "institutionsCount",
-      "Value": 5230.0
+      "Value": 5225.0
     }
   ]
 }

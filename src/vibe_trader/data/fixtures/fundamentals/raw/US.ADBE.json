@@ -1,7 +1,7 @@
 {
   "ticker": "ADBE",
   "code": "US.ADBE",
-  "fetched_at": "2026-05-07T15:29:39.183309+00:00",
+  "fetched_at": "2026-05-14T10:48:41.569232+00:00",
   "info": {
     "address1": "345 Park Avenue",
     "city": "San Jose",
@@ -133,76 +133,76 @@
     "executiveTeam": [],
     "maxAge": 86400,
     "priceHint": 2,
-    "previousClose": 250.17,
-    "open": 252.88,
-    "dayLow": 252.88,
-    "dayHigh": 259.43,
-    "regularMarketPreviousClose": 250.17,
-    "regularMarketOpen": 252.88,
-    "regularMarketDayLow": 252.88,
-    "regularMarketDayHigh": 259.43,
+    "previousClose": 240.83,
+    "open": 238.54,
+    "dayLow": 232.84,
+    "dayHigh": 239.05,
+    "regularMarketPreviousClose": 240.83,
+    "regularMarketOpen": 238.54,
+    "regularMarketDayLow": 232.84,
+    "regularMarketDayHigh": 239.05,
     "exDividendDate": 1111622400,
     "payoutRatio": 0.0,
     "fiveYearAvgDividendYield": 0.12,
     "beta": 1.417,
-    "trailingPE": 15.051866,
-    "forwardPE": 9.788788,
-    "volume": 1855081,
-    "regularMarketVolume": 1855081,
-    "averageVolume": 5856219,
-    "averageVolume10days": 5261940,
-    "averageDailyVolume10Day": 5261940,
-    "bid": 256.06,
-    "ask": 260.0,
-    "bidSize": 1,
+    "trailingPE": 13.756993,
+    "forwardPE": 8.946783,
+    "volume": 3794898,
+    "regularMarketVolume": 3794898,
+    "averageVolume": 5564027,
+    "averageVolume10days": 4261340,
+    "averageDailyVolume10Day": 4261340,
+    "bid": 235.98,
+    "ask": 237.05,
+    "bidSize": 3,
     "askSize": 3,
-    "marketCap": 104400822272,
-    "nonDilutedMarketCap": 102650632000,
+    "marketCap": 95419498496,
+    "nonDilutedMarketCap": 102278768000,
     "fiftyTwoWeekLow": 224.13,
     "fiftyTwoWeekHigh": 422.95,
     "allTimeHigh": 699.54,
     "allTimeLow": 0.207031,
-    "priceToSalesTrailing12Months": 4.2694488,
-    "fiftyDayAverage": 250.5036,
-    "twoHundredDayAverage": 312.54205,
+    "priceToSalesTrailing12Months": 3.9021592,
+    "fiftyDayAverage": 248.933,
+    "twoHundredDayAverage": 309.4189,
     "trailingAnnualDividendRate": 0.0,
     "trailingAnnualDividendYield": 0.0,
     "currency": "USD",
     "tradeable": false,
-    "enterpriseValue": 100889714688,
+    "enterpriseValue": 95190491136,
     "profitMargins": 0.29477,
     "floatShares": 402967190,
     "sharesOutstanding": 404200000,
-    "sharesShort": 14737592,
-    "sharesShortPriorMonth": 13194456,
-    "sharesShortPreviousMonthDate": 1773360000,
-    "dateShortInterest": 1776211200,
-    "sharesPercentSharesOut": 0.0365,
-    "heldPercentInsiders": 0.00253,
-    "heldPercentInstitutions": 0.87104,
-    "shortRatio": 2.67,
-    "shortPercentOfFloat": 0.040700004,
+    "sharesShort": 17391686,
+    "sharesShortPriorMonth": 12196046,
+    "sharesShortPreviousMonthDate": 1774915200,
+    "dateShortInterest": 1777507200,
+    "sharesPercentSharesOut": 0.043,
+    "heldPercentInsiders": 0.00224,
+    "heldPercentInstitutions": 0.86822,
+    "shortRatio": 3.35,
+    "shortPercentOfFloat": 0.048,
     "impliedSharesOutstanding": 404200000,
     "bookValue": 28.16,
-    "priceToBook": 9.172231,
+    "priceToBook": 8.383168,
     "lastFiscalYearEnd": 1764288000,
     "nextFiscalYearEnd": 1795824000,
     "mostRecentQuarter": 1772150400,
     "earningsQuarterlyGrowth": 0.043,
     "netIncomeToCommon": 7208000000,
     "trailingEps": 17.16,
-    "forwardEps": 26.38631,
-    "pegRatio": 0.71,
+    "forwardEps": 26.38602,
+    "pegRatio": 0.68,
     "lastSplitFactor": "2:1",
     "lastSplitDate": 1116892800,
-    "enterpriseToRevenue": 4.126,
-    "enterpriseToEbitda": 10.602,
-    "52WeekChange": -0.34849864,
-    "SandP52WeekChange": 0.3003528,
+    "enterpriseToRevenue": 3.893,
+    "enterpriseToEbitda": 10.003,
+    "52WeekChange": -0.4166646,
+    "SandP52WeekChange": 0.2581271,
     "lastDividendValue": 0.0065,
     "lastDividendDate": 1111622400,
     "quoteType": "EQUITY",
-    "currentPrice": 258.29,
+    "currentPrice": 236.07,
     "targetHighPrice": 487.0,
     "targetLowPrice": 220.0,
     "targetMeanPrice": 327.955,
@@ -237,39 +237,22 @@
     "quoteSourceName": "Nasdaq Real Time Price",
     "triggerable": true,
     "customPriceAlertConfidence": "HIGH",
-    "fiftyTwoWeekChangePercent": -34.849865,
-    "earningsTimestamp": 1781208000,
-    "earningsTimestampStart": 1781208000,
-    "earningsTimestampEnd": 1781208000,
-    "earningsCallTimestampStart": 1781211600,
-    "earningsCallTimestampEnd": 1781211600,
-    "isEarningsDateEstimate": false,
-    "epsTrailingTwelveMonths": 17.16,
-    "epsForward": 26.38631,
-    "epsCurrentYear": 23.48771,
-    "priceEpsCurrentYear": 10.996815,
-    "fiftyDayAverageChange": 7.7864075,
-    "fiftyDayAverageChangePercent": 0.031083016,
-    "twoHundredDayAverageChange": -54.252045,
-    "twoHundredDayAverageChangePercent": -0.17358318,
+    "marketState": "PRE",
+    "fiftyDayAverageChange": -12.862991,
+    "fiftyDayAverageChangePercent": -0.051672503,
+    "twoHundredDayAverageChange": -73.34891,
+    "twoHundredDayAverageChangePercent": -0.23705372,
     "sourceInterval": 15,
     "exchangeDataDelayedBy": 0,
     "averageAnalystRating": "2.5 - Buy",
     "cryptoTradeable": false,
-    "hasPrePostMarketData": true,
-    "firstTradeDateMilliseconds": 524323800000,
-    "regularMarketChange": 8.12001,
-    "regularMarketDayRange": "252.88 - 259.43",
-    "fullExchangeName": "NasdaqGS",
-    "averageDailyVolume3Month": 5856219,
-    "fiftyTwoWeekLowChange": 34.160004,
-    "fiftyTwoWeekLowChangePercent": 0.15241157,
-    "fiftyTwoWeekRange": "224.13 - 422.95",
-    "fiftyTwoWeekHighChange": -164.66,
-    "fiftyTwoWeekHighChangePercent": -0.38931316,
-    "marketState": "REGULAR",
     "corporateActions": [],
-    "regularMarketTime": 1778167776,
+    "preMarketTime": 1778755714,
+    "regularMarketTime": 1778702401,
+    "regularMarketChangePercent": -1.9765,
+    "regularMarketPrice": 236.07,
+    "shortName": "Adobe Inc.",
+    "longName": "Adobe Inc.",
     "exchange": "NMS",
     "messageBoardId": "finmb_24321",
     "exchangeTimezoneName": "America/New_York",
@@ -277,12 +260,33 @@
     "gmtOffSetMilliseconds": -14400000,
     "market": "us_market",
     "esgPopulated": false,
-    "regularMarketChangePercent": 3.245797,
-    "regularMarketPrice": 258.29,
-    "shortName": "Adobe Inc.",
-    "longName": "Adobe Inc.",
+    "hasPrePostMarketData": true,
+    "firstTradeDateMilliseconds": 524323800000,
+    "preMarketChange": 2.449997,
+    "preMarketChangePercent": 1.0378264,
+    "preMarketPrice": 238.52,
+    "regularMarketChange": -4.75999,
+    "regularMarketDayRange": "232.84 - 239.05",
+    "fullExchangeName": "NasdaqGS",
+    "averageDailyVolume3Month": 5564027,
+    "fiftyTwoWeekLowChange": 11.940002,
+    "fiftyTwoWeekLowChangePercent": 0.053272665,
+    "fiftyTwoWeekRange": "224.13 - 422.95",
+    "fiftyTwoWeekHighChange": -186.88,
+    "fiftyTwoWeekHighChangePercent": -0.4418489,
+    "fiftyTwoWeekChangePercent": -41.66646,
+    "earningsTimestamp": 1781208000,
+    "earningsTimestampStart": 1781208000,
+    "earningsTimestampEnd": 1781208000,
+    "earningsCallTimestampStart": 1781211600,
+    "earningsCallTimestampEnd": 1781211600,
+    "isEarningsDateEstimate": false,
+    "epsTrailingTwelveMonths": 17.16,
+    "epsForward": 26.38602,
+    "epsCurrentYear": 23.54855,
+    "priceEpsCurrentYear": 10.024821,
     "displayName": "Adobe",
-    "trailingPegRatio": 0.7211
+    "trailingPegRatio": 0.7185
   },
   "recommendations": [
     {
@@ -7263,7 +7267,7 @@
     }
   ],
   "analyst_price_targets": {
-    "current": 258.29,
+    "current": 236.07,
     "high": 487.0,
     "low": 220.0,
     "mean": 327.955,
@@ -7271,77 +7275,15 @@
   },
   "news": [
     {
-      "id": "32062cf4-379a-3f1a-bbeb-e230b6f40c80",
+      "id": "a19e8077-6689-3984-b280-6879d17bd6a3",
       "content": {
-        "id": "32062cf4-379a-3f1a-bbeb-e230b6f40c80",
+        "id": "a19e8077-6689-3984-b280-6879d17bd6a3",
         "contentType": "STORY",
-        "title": "Snowflake Is Up 9% Today: Is It Outperforming Other Cloud Stocks Like ServiceNow?",
+        "title": "Adobe Taps Semrush Lovable AI Link As Search Data Joins App Design",
         "description": "",
-        "summary": "Shares of Snowflake (NYSE:SNOW) are climbing in early Thursday trading, jumping roughly 9% intraday to around $152. The data cloud platform is leading enterprise software higher and outpacing peer ServiceNow (NYSE:NOW), which is also green but rising at a slower clip. ServiceNow stock is trading 5% higher to around $94, a respectable bounce in its ... Snowflake Is Up 9% Today: Is It Outperforming Other Cloud Stocks Like ServiceNow?",
-        "pubDate": "2026-05-07T14:20:56Z",
-        "displayTime": "2026-05-07T14:20:56Z",
-        "isHosted": true,
-        "bypassModal": false,
-        "previewUrl": null,
-        "thumbnail": {
-          "originalUrl": "https://media.zenfs.com/en/24_7_wall_st__718/e1486861c59cdac511655ea7d59b1e4b",
-          "originalWidth": 1500,
-          "originalHeight": 843,
-          "caption": "",
-          "resolutions": [
-            {
-              "url": "https://s.yimg.com/uu/api/res/1.2/9RFK.D4V2l4_acxBe3z4mw--~B/aD04NDM7dz0xNTAwO2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/24_7_wall_st__718/e1486861c59cdac511655ea7d59b1e4b",
-              "width": 1500,
-              "height": 843,
-              "tag": "original"
-            },
-            {
-              "url": "https://s.yimg.com/uu/api/res/1.2/jAC1bQ_HqMe43Gng67qDhA--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/24_7_wall_st__718/e1486861c59cdac511655ea7d59b1e4b",
-              "width": 170,
-              "height": 128,
-              "tag": "170x128"
-            }
-          ]
-        },
-        "provider": {
-          "displayName": "24/7 Wall St.",
-          "url": "https://247wallst.com/",
-          "sourceId": "24_7_wall_st__718"
-        },
-        "canonicalUrl": {
-          "url": "https://247wallst.com/investing/2026/05/07/snowflake-is-up-9-today-is-it-outperforming-other-cloud-stocks-like-servicenow/",
-          "site": "finance",
-          "region": "US",
-          "lang": "en-US"
-        },
-        "clickThroughUrl": {
-          "url": "https://finance.yahoo.com/markets/stocks/articles/snowflake-9-today-outperforming-other-142056626.html",
-          "site": "finance",
-          "region": "US",
-          "lang": "en-US"
-        },
-        "metadata": {
-          "editorsPick": false
-        },
-        "finance": {
-          "premiumFinance": {
-            "isPremiumNews": false,
-            "isPremiumFreeNews": false
-          }
-        },
-        "storyline": null
-      }
-    },
-    {
-      "id": "5b28cac3-15f1-3a30-b1c0-628b4d4e265b",
-      "content": {
-        "id": "5b28cac3-15f1-3a30-b1c0-628b4d4e265b",
-        "contentType": "STORY",
-        "title": "E-Commerce Update - Shopify's Impressive Growth Fueled By Strategic Investments",
-        "description": "",
-        "summary": "E-commerce platform Shopify reported significant milestones for the first quarter of 2026, with merchants on its platform generating over $100 billion in Gross Merchandise Volume (GMV). The company's financial performance sees a notable 34% revenue growth alongside consistent free cash flow margins. These results highlight broad-based growth across different geographies, merchant sizes, and channels, underscoring Shopify's strategic investments in enhancing merchant tools and internal...",
-        "pubDate": "2026-05-07T12:38:28Z",
-        "displayTime": "2026-05-07T12:38:28Z",
+        "summary": "Semrush, an Adobe company, has launched an AI search intelligence partnership with Lovable. The collaboration lets Lovable users access Semrush’s search dataset natively inside Lovable’s AI-driven app building tools. The move reflects Adobe’s effort to link its assets to AI and SaaS platforms beyond its core creative software portfolio. For Adobe (NasdaqGS:ADBE), this tie up sits at the intersection of search data, AI tools, and software for developers and brands. Semrush’s dataset plugged...",
+        "pubDate": "2026-05-13T17:26:24Z",
+        "displayTime": "2026-05-13T17:26:24Z",
         "isHosted": true,
         "bypassModal": false,
         "previewUrl": null,
@@ -7371,13 +7313,13 @@
           "sourceId": "simply_wall_st__316"
         },
         "canonicalUrl": {
-          "url": "https://finance.yahoo.com/markets/stocks/articles/e-commerce-shopifys-impressive-growth-123828872.html",
+          "url": "https://finance.yahoo.com/news/adobe-taps-semrush-lovable-ai-172624577.html",
           "site": "finance",
           "region": "US",
           "lang": "en-US"
         },
         "clickThroughUrl": {
-          "url": "https://finance.yahoo.com/markets/stocks/articles/e-commerce-shopifys-impressive-growth-123828872.html",
+          "url": "https://finance.yahoo.com/news/adobe-taps-semrush-lovable-ai-172624577.html",
           "site": "finance",
           "region": "US",
           "lang": "en-US"
@@ -7395,244 +7337,15 @@
       }
     },
     {
-      "id": "514e0b1a-e093-36f5-8c19-3f1de01856cf",
+      "id": "b63359f3-e112-3551-a4ab-b6b3cd080a43",
       "content": {
-        "id": "514e0b1a-e093-36f5-8c19-3f1de01856cf",
+        "id": "b63359f3-e112-3551-a4ab-b6b3cd080a43",
         "contentType": "STORY",
-        "title": "Will Adobe's (ADBE) US$25 Billion Buyback and New AI Agent Reshape Its Investment Narrative",
+        "title": "Price Prediction: Adobe Is Poised For A Strong Rebound",
         "description": "",
-        "summary": "In late April 2026, Adobe announced a new productivity agent that unifies Acrobat’s document intelligence and powers interactive PDF Spaces, while also authorizing a US$25.00 billion share repurchase program and filing a US$102.19 million employee stock offering shelf registration for 427,000 common shares. Together with its acquisition of Semrush Holdings and a healthcare-focused collaboration with Alluvium, Adobe is reinforcing its push to embed AI across customer experience, productivity,...",
-        "pubDate": "2026-05-07T07:09:36Z",
-        "displayTime": "2026-05-07T07:09:36Z",
-        "isHosted": true,
-        "bypassModal": false,
-        "previewUrl": null,
-        "thumbnail": {
-          "originalUrl": "https://media.zenfs.com/en/simply_wall_st__316/d0bd720f24381ca758d4adc12e9dc4d5",
-          "originalWidth": 1194,
-          "originalHeight": 432,
-          "caption": "",
-          "resolutions": [
-            {
-              "url": "https://s.yimg.com/uu/api/res/1.2/hQ28Z7lPPHayzwICr6TD1Q--~B/aD00MzI7dz0xMTk0O2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/simply_wall_st__316/d0bd720f24381ca758d4adc12e9dc4d5",
-              "width": 1194,
-              "height": 432,
-              "tag": "original"
-            },
-            {
-              "url": "https://s.yimg.com/uu/api/res/1.2/MGzVhOG_S8oB_qoTWj6s0w--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/simply_wall_st__316/d0bd720f24381ca758d4adc12e9dc4d5",
-              "width": 170,
-              "height": 128,
-              "tag": "170x128"
-            }
-          ]
-        },
-        "provider": {
-          "displayName": "Simply Wall St.",
-          "url": "https://simplywall.st/",
-          "sourceId": "simply_wall_st__316"
-        },
-        "canonicalUrl": {
-          "url": "https://finance.yahoo.com/markets/stocks/articles/adobes-adbe-us-25-billion-070936407.html",
-          "site": "finance",
-          "region": "US",
-          "lang": "en-US"
-        },
-        "clickThroughUrl": {
-          "url": "https://finance.yahoo.com/markets/stocks/articles/adobes-adbe-us-25-billion-070936407.html",
-          "site": "finance",
-          "region": "US",
-          "lang": "en-US"
-        },
-        "metadata": {
-          "editorsPick": false
-        },
-        "finance": {
-          "premiumFinance": {
-            "isPremiumNews": false,
-            "isPremiumFreeNews": false
-          }
-        },
-        "storyline": null
-      }
-    },
-    {
-      "id": "450c2439-1993-3444-a924-66bb39874487",
-      "content": {
-        "id": "450c2439-1993-3444-a924-66bb39874487",
-        "contentType": "STORY",
-        "title": "Adobe Systems (ADBE) Stock Sinks As Market Gains: Here's Why",
-        "description": "",
-        "summary": "Adobe Systems (ADBE) closed at $250.23 in the latest trading session, marking a -2.11% move from the prior day.",
-        "pubDate": "2026-05-06T21:45:03Z",
-        "displayTime": "2026-05-06T21:45:03Z",
-        "isHosted": true,
-        "bypassModal": false,
-        "previewUrl": null,
-        "thumbnail": {
-          "originalUrl": "https://media.zenfs.com/en/zacks.com/17a4db66bb13bdabcbf848550a6ea15a",
-          "originalWidth": 900,
-          "originalHeight": 587,
-          "caption": "",
-          "resolutions": [
-            {
-              "url": "https://s.yimg.com/uu/api/res/1.2/aMCT_Lh5K9xNn9.QUdX03w--~B/aD01ODc7dz05MDA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/zacks.com/17a4db66bb13bdabcbf848550a6ea15a",
-              "width": 900,
-              "height": 587,
-              "tag": "original"
-            },
-            {
-              "url": "https://s.yimg.com/uu/api/res/1.2/PzpA3zQ5.H.JCR52WP7cJw--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/zacks.com/17a4db66bb13bdabcbf848550a6ea15a",
-              "width": 170,
-              "height": 128,
-              "tag": "170x128"
-            }
-          ]
-        },
-        "provider": {
-          "displayName": "Zacks",
-          "url": "http://www.zacks.com/",
-          "sourceId": "zacks.com"
-        },
-        "canonicalUrl": {
-          "url": "https://finance.yahoo.com/markets/stocks/articles/adobe-systems-adbe-stock-sinks-214503921.html",
-          "site": "finance",
-          "region": "US",
-          "lang": "en-US"
-        },
-        "clickThroughUrl": {
-          "url": "https://finance.yahoo.com/markets/stocks/articles/adobe-systems-adbe-stock-sinks-214503921.html",
-          "site": "finance",
-          "region": "US",
-          "lang": "en-US"
-        },
-        "metadata": {
-          "editorsPick": false
-        },
-        "finance": {
-          "premiumFinance": {
-            "isPremiumNews": false,
-            "isPremiumFreeNews": false
-          }
-        },
-        "storyline": null
-      }
-    },
-    {
-      "id": "b872acb6-d80f-313a-809e-bcb77996bbcf",
-      "content": {
-        "id": "b872acb6-d80f-313a-809e-bcb77996bbcf",
-        "contentType": "STORY",
-        "title": "The Best AI Stocks Wall Street Is Sleeping On in 2026",
-        "description": "",
-        "summary": "These stocks have struggled but could see a recovery as more investors recognize their value proposition.",
-        "pubDate": "2026-05-06T15:43:00Z",
-        "displayTime": "2026-05-06T15:43:00Z",
-        "isHosted": true,
-        "bypassModal": false,
-        "previewUrl": null,
-        "thumbnail": {
-          "originalUrl": "https://media.zenfs.com/en/motleyfool.com/c6db6f5a0e304d17a3d9d68f58a10519",
-          "originalWidth": 1400,
-          "originalHeight": 933,
-          "caption": "An investor examines stock charts while exercising.",
-          "resolutions": [
-            {
-              "url": "https://s.yimg.com/uu/api/res/1.2/9L15FbA2qyhwKUc2ww6vUQ--~B/aD05MzM7dz0xNDAwO2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/motleyfool.com/c6db6f5a0e304d17a3d9d68f58a10519",
-              "width": 1400,
-              "height": 933,
-              "tag": "original"
-            },
-            {
-              "url": "https://s.yimg.com/uu/api/res/1.2/FRPL4uN69YMJU0tqQRhqdw--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/motleyfool.com/c6db6f5a0e304d17a3d9d68f58a10519",
-              "width": 170,
-              "height": 128,
-              "tag": "170x128"
-            }
-          ]
-        },
-        "provider": {
-          "displayName": "Motley Fool",
-          "url": "http://www.fool.com/",
-          "sourceId": "motleyfool.com"
-        },
-        "canonicalUrl": {
-          "url": "https://www.fool.com/investing/2026/05/06/best-ai-stocks-wall-street-is-sleeping-on-in-2026/",
-          "site": "finance",
-          "region": "US",
-          "lang": "en-US"
-        },
-        "clickThroughUrl": {
-          "url": "https://finance.yahoo.com/markets/stocks/articles/best-ai-stocks-wall-street-154300883.html",
-          "site": "finance",
-          "region": "US",
-          "lang": "en-US"
-        },
-        "metadata": {
-          "editorsPick": false
-        },
-        "finance": {
-          "premiumFinance": {
-            "isPremiumNews": false,
-            "isPremiumFreeNews": false
-          }
-        },
-        "storyline": null
-      }
-    },
-    {
-      "id": "ef6bc1d8-9e80-3bae-95e0-85d8e5d41695",
-      "content": {
-        "id": "ef6bc1d8-9e80-3bae-95e0-85d8e5d41695",
-        "contentType": "STORY",
-        "title": "OpenAI opens ChatGPT self-serve ad platform to U.S. businesses",
-        "description": "",
-        "summary": "The company dropped its $50,000 minimum spend requirement and added cost-per-click pricing as it expands beyond its pilot partners",
-        "pubDate": "2026-05-06T13:19:04Z",
-        "displayTime": "2026-05-06T13:19:04Z",
-        "isHosted": true,
-        "bypassModal": false,
-        "previewUrl": null,
-        "thumbnail": null,
-        "provider": {
-          "displayName": "Quartz",
-          "url": "https://qz.com/",
-          "sourceId": "quartz_855"
-        },
-        "canonicalUrl": {
-          "url": "https://qz.com/openai-chatgpt-ads-manager-self-serve-us-businesses-050626",
-          "site": "finance",
-          "region": "US",
-          "lang": "en-US"
-        },
-        "clickThroughUrl": {
-          "url": "https://finance.yahoo.com/sectors/technology/articles/openai-opens-chatgpt-self-serve-131904332.html",
-          "site": "finance",
-          "region": "US",
-          "lang": "en-US"
-        },
-        "metadata": {
-          "editorsPick": false
-        },
-        "finance": {
-          "premiumFinance": {
-            "isPremiumNews": false,
-            "isPremiumFreeNews": false
-          }
-        },
-        "storyline": null
-      }
-    },
-    {
-      "id": "deffa1fd-f8ba-3c44-8291-aabf7c2cf503",
-      "content": {
-        "id": "deffa1fd-f8ba-3c44-8291-aabf7c2cf503",
-        "contentType": "STORY",
-        "title": "The Same AI Wave Crushing SaaS Stocks May Be About to Rescue These 3 Names",
-        "description": "",
-        "summary": "The SaaS-pocalypse has caused quite a violent reset in the valuations of many software stocks. And while the disruptive wave of AI might not yet be done marking down prices across the SaaS scene, I do think that it makes sense to at least check out the prices on merchandise, which some folks might see ... The Same AI Wave Crushing SaaS Stocks May Be About to Rescue These 3 Names",
-        "pubDate": "2026-05-06T13:12:45Z",
-        "displayTime": "2026-05-06T13:12:45Z",
+        "summary": "Adobe (NASDAQ:ADBE) has had a brutal year, but our model sees a meaningful recovery ahead. The stock currently trades at $240.83, down 39.18% over the past year. Our 24/7 Wall St. price target for Adobe is $326.26, implying 35.47% upside over the next 12 months. Our model carries a 90% confidence level on the target. The ... Price Prediction: Adobe Is Poised For A Strong Rebound",
+        "pubDate": "2026-05-13T15:53:36Z",
+        "displayTime": "2026-05-13T15:53:36Z",
         "isHosted": true,
         "bypassModal": false,
         "previewUrl": null,
@@ -7662,13 +7375,13 @@
           "sourceId": "24_7_wall_st__718"
         },
         "canonicalUrl": {
-          "url": "https://247wallst.com/investing/2026/05/06/the-same-ai-wave-crushing-saas-stocks-may-be-about-to-rescue-these-3-names/",
+          "url": "https://247wallst.com/investing/2026/05/13/price-prediction-adobe-is-poised-for-a-strong-rebound/",
           "site": "finance",
           "region": "US",
           "lang": "en-US"
         },
         "clickThroughUrl": {
-          "url": "https://finance.yahoo.com/markets/stocks/articles/same-ai-wave-crushing-saas-131245545.html",
+          "url": "https://finance.yahoo.com/news/price-prediction-adobe-poised-strong-155336697.html",
           "site": "finance",
           "region": "US",
           "lang": "en-US"
@@ -7686,94 +7399,32 @@
       }
     },
     {
-      "id": "1eef943a-4f4d-3e53-b26f-885f4127c136",
+      "id": "d180a65b-f14d-3ae4-bbb9-702b0388dcd6",
       "content": {
-        "id": "1eef943a-4f4d-3e53-b26f-885f4127c136",
+        "id": "d180a65b-f14d-3ae4-bbb9-702b0388dcd6",
         "contentType": "STORY",
-        "title": "Adobe's $25 Billion Buyback Sends a Clear Signal. Yet Shares Remain Dirt Cheap.",
+        "title": "Jim Cramer Calls Figma an “Eclectic Design Distributor That’s Made Life Difficult for Adobe”",
         "description": "",
-        "summary": "The creative software giant is using its enormous cash flow to scoop up its own beaten-down shares -- and the stock still looks unusually cheap.",
-        "pubDate": "2026-05-05T20:51:00Z",
-        "displayTime": "2026-05-05T20:51:00Z",
+        "summary": "Figma, Inc. (NYSE:FIG) was among Jim Cramer’s stock calls on Mad Money as he discussed how semiconductor and AI infrastructure stocks are driving the market higher. Cramer discussed the stock ahead of the company’s earnings, as he remarked: Thursday, we’re going to get the latest from Figma. Okay, now this is an eclectic design distributor […]",
+        "pubDate": "2026-05-13T14:28:37Z",
+        "displayTime": "2026-05-13T14:28:37Z",
         "isHosted": true,
         "bypassModal": false,
         "previewUrl": null,
         "thumbnail": {
-          "originalUrl": "https://media.zenfs.com/en/motleyfool.com/4d909ec24b2f4de2a0eadd1375605b90",
-          "originalWidth": 1200,
-          "originalHeight": 800,
-          "caption": "The Adobe logo.",
+          "originalUrl": "https://media.zenfs.com/en/insidermonkey.com/e333aa5b72577d2e050d3c5b0c90bb89",
+          "originalWidth": 1920,
+          "originalHeight": 1084,
+          "caption": "",
           "resolutions": [
             {
-              "url": "https://s.yimg.com/uu/api/res/1.2/XbiI_fpurO3yLhk1AbiG8g--~B/aD04MDA7dz0xMjAwO2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/motleyfool.com/4d909ec24b2f4de2a0eadd1375605b90",
-              "width": 1200,
-              "height": 800,
+              "url": "https://s.yimg.com/uu/api/res/1.2/ZTbAeqpvM9B52rEI3x81Bw--~B/aD0xMDg0O3c9MTkyMDthcHBpZD15dGFjaHlvbg--/https://media.zenfs.com/en/insidermonkey.com/e333aa5b72577d2e050d3c5b0c90bb89",
+              "width": 1920,
+              "height": 1084,
               "tag": "original"
             },
             {
-              "url": "https://s.yimg.com/uu/api/res/1.2/EW.cCuevMIPCX6Uv5msMLg--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/motleyfool.com/4d909ec24b2f4de2a0eadd1375605b90",
-              "width": 170,
-              "height": 128,
-              "tag": "170x128"
-            }
-          ]
-        },
-        "provider": {
-          "displayName": "Motley Fool",
-          "url": "http://www.fool.com/",
-          "sourceId": "motleyfool.com"
-        },
-        "canonicalUrl": {
-          "url": "https://www.fool.com/investing/2026/05/05/adobes-25-billion-buyback-sends-a-clear-signal-yet/",
-          "site": "finance",
-          "region": "US",
-          "lang": "en-US"
-        },
-        "clickThroughUrl": {
-          "url": "https://finance.yahoo.com/markets/stocks/articles/adobes-25-billion-buyback-sends-205100758.html",
-          "site": "finance",
-          "region": "US",
-          "lang": "en-US"
-        },
-        "metadata": {
-          "editorsPick": false
-        },
-        "finance": {
-          "premiumFinance": {
-            "isPremiumNews": false,
-            "isPremiumFreeNews": false
-          }
-        },
-        "storyline": null
-      }
-    },
-    {
-      "id": "6678f6e0-87c0-3f74-949e-8ebb932a18e0",
-      "content": {
-        "id": "6678f6e0-87c0-3f74-949e-8ebb932a18e0",
-        "contentType": "STORY",
-        "title": "Adobe (ADBE) Finalizes Acquisition of Semrush Holdings to Power Agentic AI Brand Visibility",
-        "description": "",
-        "summary": "Adobe Inc (NASDAQ:ADBE) is one of the best enterprise software stocks to buy right now. On April 28, Adobe finalized its acquisition of Semrush Holdings, a strategic move aimed at supporting its “Adobe CX Enterprise” agentic AI system. By integrating Semrush’s brand visibility and search intelligence with Adobe’s customer experience tools, the company aims to […]",
-        "pubDate": "2026-05-05T14:17:54Z",
-        "displayTime": "2026-05-05T14:17:54Z",
-        "isHosted": true,
-        "bypassModal": false,
-        "previewUrl": null,
-        "thumbnail": {
-          "originalUrl": "https://media.zenfs.com/en/insidermonkey.com/30564276c6a36d9f637a0920cfd8e42a",
-          "originalWidth": 768,
-          "originalHeight": 512,
-          "caption": "Adobe (ADBE) Finalizes Acquisition of Semrush Holdings to Power Agentic AI Brand Visibility",
-          "resolutions": [
-            {
-              "url": "https://s.yimg.com/uu/api/res/1.2/j6Adagrov4xRRzXYclW48A--~B/aD01MTI7dz03Njg7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/insidermonkey.com/30564276c6a36d9f637a0920cfd8e42a",
-              "width": 768,
-              "height": 512,
-              "tag": "original"
-            },
-            {
-              "url": "https://s.yimg.com/uu/api/res/1.2/i8BWKtBSHTi6W82rabMlbA--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/insidermonkey.com/30564276c6a36d9f637a0920cfd8e42a",
+              "url": "https://s.yimg.com/uu/api/res/1.2/WhlvQL5U2exdlavBj57TFQ--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/insidermonkey.com/e333aa5b72577d2e050d3c5b0c90bb89",
               "width": 170,
               "height": 128,
               "tag": "170x128"
@@ -7786,13 +7437,13 @@
           "sourceId": "insidermonkey.com"
         },
         "canonicalUrl": {
-          "url": "https://finance.yahoo.com/markets/stocks/articles/adobe-adbe-finalizes-acquisition-semrush-141754350.html",
+          "url": "https://finance.yahoo.com/news/jim-cramer-calls-figma-eclectic-142837990.html",
           "site": "finance",
           "region": "US",
           "lang": "en-US"
         },
         "clickThroughUrl": {
-          "url": "https://finance.yahoo.com/markets/stocks/articles/adobe-adbe-finalizes-acquisition-semrush-141754350.html",
+          "url": "https://finance.yahoo.com/news/jim-cramer-calls-figma-eclectic-142837990.html",
           "site": "finance",
           "region": "US",
           "lang": "en-US"
@@ -7810,32 +7461,32 @@
       }
     },
     {
-      "id": "63647cc4-3605-32a5-a845-f93ff00a635c",
+      "id": "a39b9534-7974-3b96-920f-cb4641a4f020",
       "content": {
-        "id": "63647cc4-3605-32a5-a845-f93ff00a635c",
+        "id": "a39b9534-7974-3b96-920f-cb4641a4f020",
         "contentType": "STORY",
-        "title": "I Helped Grow a Startup to a $1.8 Billion Acquisition by Adobe — Here’s the Secret to Scaling Successfully",
+        "title": "Boxes, Subscriptions, and Beyond: The Evolution of Software Pricing",
         "description": "",
-        "summary": "Here are five things I've learned about when and how to rebuild your business to get to the next stage.",
-        "pubDate": "2026-05-05T14:00:00Z",
-        "displayTime": "2026-05-05T14:00:00Z",
+        "summary": "Why do software companies keep changing their pricing models? The answer reveals a lot about where the industry is headed.",
+        "pubDate": "2026-05-13T11:21:00Z",
+        "displayTime": "2026-05-13T11:21:00Z",
         "isHosted": true,
         "bypassModal": false,
         "previewUrl": null,
         "thumbnail": {
-          "originalUrl": "https://media.zenfs.com/en/entrepreneur_869/ccb53e19d86bee71226753d52ccc23a1",
-          "originalWidth": 2000,
-          "originalHeight": 1333,
-          "caption": "",
+          "originalUrl": "https://media.zenfs.com/en/motleyfool.com/10e751ed9b29b91a993aeef36f03acbf",
+          "originalWidth": 1400,
+          "originalHeight": 931,
+          "caption": "A person views several screens full of financial data.",
           "resolutions": [
             {
-              "url": "https://s.yimg.com/uu/api/res/1.2/GP6_NjCsKyD.ansaA4iRuQ--~B/aD0xMzMzO3c9MjAwMDthcHBpZD15dGFjaHlvbg--/https://media.zenfs.com/en/entrepreneur_869/ccb53e19d86bee71226753d52ccc23a1",
-              "width": 2000,
-              "height": 1333,
+              "url": "https://s.yimg.com/uu/api/res/1.2/xs6TKrIpNHtfQsPrIYm5vQ--~B/aD05MzE7dz0xNDAwO2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/motleyfool.com/10e751ed9b29b91a993aeef36f03acbf",
+              "width": 1400,
+              "height": 931,
               "tag": "original"
             },
             {
-              "url": "https://s.yimg.com/uu/api/res/1.2/amPU4WLJxEzl37AsJi_c9w--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/entrepreneur_869/ccb53e19d86bee71226753d52ccc23a1",
+              "url": "https://s.yimg.com/uu/api/res/1.2/Gm0F667vtcOzP5yuc.G48Q--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/motleyfool.com/10e751ed9b29b91a993aeef36f03acbf",
               "width": 170,
               "height": 128,
               "tag": "170x128"
@@ -7843,18 +7494,390 @@
           ]
         },
         "provider": {
-          "displayName": "Entrepreneur",
-          "url": "http://www.entrepreneur.com",
-          "sourceId": "entrepreneur_869"
+          "displayName": "Motley Fool",
+          "url": "http://www.fool.com/",
+          "sourceId": "motleyfool.com"
         },
         "canonicalUrl": {
-          "url": "https://www.entrepreneur.com/growing-a-business/this-is-the-real-secret-to-scaling-successfully-from-an/503841",
+          "url": "https://www.fool.com/investing/2026/05/13/software-boxes-subscriptions-and-beyond/",
           "site": "finance",
           "region": "US",
           "lang": "en-US"
         },
         "clickThroughUrl": {
-          "url": "https://finance.yahoo.com/sectors/technology/articles/helped-grow-startup-1-8-140000825.html",
+          "url": "https://finance.yahoo.com/news/boxes-subscriptions-beyond-evolution-software-112100219.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "metadata": {
+          "editorsPick": false
+        },
+        "finance": {
+          "premiumFinance": {
+            "isPremiumNews": false,
+            "isPremiumFreeNews": false
+          }
+        },
+        "storyline": null
+      }
+    },
+    {
+      "id": "276bae37-0fb0-352a-b673-52edb4365fa1",
+      "content": {
+        "id": "276bae37-0fb0-352a-b673-52edb4365fa1",
+        "contentType": "STORY",
+        "title": "Is There Now An Opportunity In Adobe Inc. (NASDAQ:ADBE)?",
+        "description": "",
+        "summary": "Let's talk about the popular Adobe Inc. ( NASDAQ:ADBE ). The company's shares saw significant share price movement...",
+        "pubDate": "2026-05-13T11:00:14Z",
+        "displayTime": "2026-05-13T11:00:14Z",
+        "isHosted": true,
+        "bypassModal": false,
+        "previewUrl": null,
+        "thumbnail": {
+          "originalUrl": "https://media.zenfs.com/en/simply_wall_st__316/d0bd720f24381ca758d4adc12e9dc4d5",
+          "originalWidth": 1194,
+          "originalHeight": 432,
+          "caption": "",
+          "resolutions": [
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/hQ28Z7lPPHayzwICr6TD1Q--~B/aD00MzI7dz0xMTk0O2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/simply_wall_st__316/d0bd720f24381ca758d4adc12e9dc4d5",
+              "width": 1194,
+              "height": 432,
+              "tag": "original"
+            },
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/MGzVhOG_S8oB_qoTWj6s0w--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/simply_wall_st__316/d0bd720f24381ca758d4adc12e9dc4d5",
+              "width": 170,
+              "height": 128,
+              "tag": "170x128"
+            }
+          ]
+        },
+        "provider": {
+          "displayName": "Simply Wall St.",
+          "url": "https://simplywall.st/",
+          "sourceId": "simply_wall_st__316"
+        },
+        "canonicalUrl": {
+          "url": "https://finance.yahoo.com/news/now-opportunity-adobe-inc-nasdaq-110014737.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "clickThroughUrl": {
+          "url": "https://finance.yahoo.com/news/now-opportunity-adobe-inc-nasdaq-110014737.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "metadata": {
+          "editorsPick": false
+        },
+        "finance": {
+          "premiumFinance": {
+            "isPremiumNews": false,
+            "isPremiumFreeNews": false
+          }
+        },
+        "storyline": null
+      }
+    },
+    {
+      "id": "32a9ae44-4c33-3856-a75b-5a7807eedc16",
+      "content": {
+        "id": "32a9ae44-4c33-3856-a75b-5a7807eedc16",
+        "contentType": "STORY",
+        "title": "Adobe Systems (ADBE) Declines More Than Market: Some Information for Investors",
+        "description": "",
+        "summary": "Adobe Systems (ADBE) concluded the recent trading session at $240.83, signifying a -2.16% move from its prior day's close.",
+        "pubDate": "2026-05-12T21:45:03Z",
+        "displayTime": "2026-05-12T21:45:03Z",
+        "isHosted": true,
+        "bypassModal": false,
+        "previewUrl": null,
+        "thumbnail": {
+          "originalUrl": "https://media.zenfs.com/en/zacks.com/1154d43aaeb65735a640003549116295",
+          "originalWidth": 900,
+          "originalHeight": 506,
+          "caption": "",
+          "resolutions": [
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/wbCMwMtKIoXj_iQA0ego4g--~B/aD01MDY7dz05MDA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/zacks.com/1154d43aaeb65735a640003549116295",
+              "width": 900,
+              "height": 506,
+              "tag": "original"
+            },
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/42pZWjS9iYkwe9U3zMypmA--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/zacks.com/1154d43aaeb65735a640003549116295",
+              "width": 170,
+              "height": 128,
+              "tag": "170x128"
+            }
+          ]
+        },
+        "provider": {
+          "displayName": "Zacks",
+          "url": "http://www.zacks.com/",
+          "sourceId": "zacks.com"
+        },
+        "canonicalUrl": {
+          "url": "https://finance.yahoo.com/news/adobe-systems-adbe-declines-more-214503635.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "clickThroughUrl": {
+          "url": "https://finance.yahoo.com/news/adobe-systems-adbe-declines-more-214503635.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "metadata": {
+          "editorsPick": false
+        },
+        "finance": {
+          "premiumFinance": {
+            "isPremiumNews": false,
+            "isPremiumFreeNews": false
+          }
+        },
+        "storyline": null
+      }
+    },
+    {
+      "id": "6616818c-a7d7-33d1-abf4-f46e47c95940",
+      "content": {
+        "id": "6616818c-a7d7-33d1-abf4-f46e47c95940",
+        "contentType": "STORY",
+        "title": "Burry Is Backing Adobe Inc (ADBE) Despite Analyst Downgrades",
+        "description": "",
+        "summary": "Adobe Inc. (NASDAQ:ADBE) is one of the 9 Stocks Big Short’s Michael Burry Is Betting On. On April 27, Mizuho analyst Gregg Moskowitz set a target price of $270 for Adobe Inc. (NASDAQ:ADBE) and downgraded it to Neutral from Outperform. This reflects an upside of 7.9% from here on. This is a significantly bearish stance […]",
+        "pubDate": "2026-05-12T18:53:48Z",
+        "displayTime": "2026-05-12T18:53:48Z",
+        "isHosted": true,
+        "bypassModal": false,
+        "previewUrl": null,
+        "thumbnail": {
+          "originalUrl": "https://media.zenfs.com/en/insidermonkey.com/6f4d0438b76af3198f528a295ebb225b",
+          "originalWidth": 1456,
+          "originalHeight": 816,
+          "caption": "Adobe Inc. (NASDAQ:ADBE) is one of the 9 Stocks Big Short’s Michael Burry Is Betting On.",
+          "resolutions": [
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/3DHh10ESfBv8gwzXb.e88g--~B/aD04MTY7dz0xNDU2O2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/insidermonkey.com/6f4d0438b76af3198f528a295ebb225b",
+              "width": 1456,
+              "height": 816,
+              "tag": "original"
+            },
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/Sl1AuZ8zKiY0F.TIDqwHgA--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/insidermonkey.com/6f4d0438b76af3198f528a295ebb225b",
+              "width": 170,
+              "height": 128,
+              "tag": "170x128"
+            }
+          ]
+        },
+        "provider": {
+          "displayName": "Insider Monkey",
+          "url": "http://www.insidermonkey.com",
+          "sourceId": "insidermonkey.com"
+        },
+        "canonicalUrl": {
+          "url": "https://finance.yahoo.com/markets/stocks/articles/burry-backing-adobe-inc-adbe-185348499.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "clickThroughUrl": {
+          "url": "https://finance.yahoo.com/markets/stocks/articles/burry-backing-adobe-inc-adbe-185348499.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "metadata": {
+          "editorsPick": false
+        },
+        "finance": {
+          "premiumFinance": {
+            "isPremiumNews": false,
+            "isPremiumFreeNews": false
+          }
+        },
+        "storyline": null
+      }
+    },
+    {
+      "id": "318f0ddb-97ee-3390-a242-48921b52a76c",
+      "content": {
+        "id": "318f0ddb-97ee-3390-a242-48921b52a76c",
+        "contentType": "STORY",
+        "title": "Here’s What the Street Thinks About Adobe (ADBE)",
+        "description": "",
+        "summary": "​Adobe Inc. (NASDAQ:ADBE) currently trades at a forward price to earnings ratio of 10.81, significantly lower than the sector average of 24.07. Wall Street also expects around 24% upside from the current level over the next 12-months. The stock ranks among our Most Undervalued High Quality Stocks to Buy Now. Recently, analysts have differing views […]",
+        "pubDate": "2026-05-10T15:52:18Z",
+        "displayTime": "2026-05-10T15:52:18Z",
+        "isHosted": true,
+        "bypassModal": false,
+        "previewUrl": null,
+        "thumbnail": {
+          "originalUrl": "https://media.zenfs.com/en/insidermonkey.com/af623a51fc528f2e3f68bea67c99a30b",
+          "originalWidth": 1456,
+          "originalHeight": 816,
+          "caption": "",
+          "resolutions": [
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/S7OUVFsjx5VG70fJD8DSfQ--~B/aD04MTY7dz0xNDU2O2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/insidermonkey.com/af623a51fc528f2e3f68bea67c99a30b",
+              "width": 1456,
+              "height": 816,
+              "tag": "original"
+            },
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/PvyGk0ikoGagqYLEEdXQrA--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/insidermonkey.com/af623a51fc528f2e3f68bea67c99a30b",
+              "width": 170,
+              "height": 128,
+              "tag": "170x128"
+            }
+          ]
+        },
+        "provider": {
+          "displayName": "Insider Monkey",
+          "url": "http://www.insidermonkey.com",
+          "sourceId": "insidermonkey.com"
+        },
+        "canonicalUrl": {
+          "url": "https://finance.yahoo.com/markets/stocks/articles/street-thinks-adobe-adbe-155218636.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "clickThroughUrl": {
+          "url": "https://finance.yahoo.com/markets/stocks/articles/street-thinks-adobe-adbe-155218636.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "metadata": {
+          "editorsPick": false
+        },
+        "finance": {
+          "premiumFinance": {
+            "isPremiumNews": false,
+            "isPremiumFreeNews": false
+          }
+        },
+        "storyline": null
+      }
+    },
+    {
+      "id": "da681f40-f8cb-3a04-bad1-26f0d871b302",
+      "content": {
+        "id": "da681f40-f8cb-3a04-bad1-26f0d871b302",
+        "contentType": "STORY",
+        "title": "Adobe (ADBE) Valuation Check As New AI Productivity Agent Targets Document Workflows",
+        "description": "",
+        "summary": "Adobe (ADBE) just introduced a new productivity agent built on Acrobat’s document intelligence, giving users AI tools for richer content creation and interactive PDF Spaces, while investors weigh what this means for document workflows and customer engagement. See our latest analysis for Adobe. Despite the new productivity agent launch and recent moves such as the Semrush acquisition and the Alluvium partnership in healthcare, sentiment around Adobe has been mixed. A 6.82% 1 month share price...",
+        "pubDate": "2026-05-09T23:13:54Z",
+        "displayTime": "2026-05-09T23:13:54Z",
+        "isHosted": true,
+        "bypassModal": false,
+        "previewUrl": null,
+        "thumbnail": {
+          "originalUrl": "https://media.zenfs.com/en/simply_wall_st__316/d0bd720f24381ca758d4adc12e9dc4d5",
+          "originalWidth": 1194,
+          "originalHeight": 432,
+          "caption": "",
+          "resolutions": [
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/hQ28Z7lPPHayzwICr6TD1Q--~B/aD00MzI7dz0xMTk0O2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/simply_wall_st__316/d0bd720f24381ca758d4adc12e9dc4d5",
+              "width": 1194,
+              "height": 432,
+              "tag": "original"
+            },
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/MGzVhOG_S8oB_qoTWj6s0w--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/simply_wall_st__316/d0bd720f24381ca758d4adc12e9dc4d5",
+              "width": 170,
+              "height": 128,
+              "tag": "170x128"
+            }
+          ]
+        },
+        "provider": {
+          "displayName": "Simply Wall St.",
+          "url": "https://simplywall.st/",
+          "sourceId": "simply_wall_st__316"
+        },
+        "canonicalUrl": {
+          "url": "https://finance.yahoo.com/markets/stocks/articles/adobe-adbe-valuation-check-ai-231354608.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "clickThroughUrl": {
+          "url": "https://finance.yahoo.com/markets/stocks/articles/adobe-adbe-valuation-check-ai-231354608.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "metadata": {
+          "editorsPick": false
+        },
+        "finance": {
+          "premiumFinance": {
+            "isPremiumNews": false,
+            "isPremiumFreeNews": false
+          }
+        },
+        "storyline": null
+      }
+    },
+    {
+      "id": "59349d4f-eb67-370e-b1d5-b88919748af2",
+      "content": {
+        "id": "59349d4f-eb67-370e-b1d5-b88919748af2",
+        "contentType": "STORY",
+        "title": "Jim Cramer on Salesforce: “It’s Tough Because the Market Hates Software”",
+        "description": "",
+        "summary": "Salesforce, Inc. (NYSE:CRM) is one of the stocks Jim Cramer shared his thoughts on as he discussed Big Tech’s AI spending. When a caller asked about the stock during the episode, Cramer said: Okay, CRM’s very tough. It’s one of my smallest positions. It’s tough because the market hates software, whether it be Palantir, whether […]",
+        "pubDate": "2026-05-09T18:36:38Z",
+        "displayTime": "2026-05-09T18:36:38Z",
+        "isHosted": true,
+        "bypassModal": false,
+        "previewUrl": null,
+        "thumbnail": {
+          "originalUrl": "https://media.zenfs.com/en/insidermonkey.com/e333aa5b72577d2e050d3c5b0c90bb89",
+          "originalWidth": 1920,
+          "originalHeight": 1084,
+          "caption": "",
+          "resolutions": [
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/ZTbAeqpvM9B52rEI3x81Bw--~B/aD0xMDg0O3c9MTkyMDthcHBpZD15dGFjaHlvbg--/https://media.zenfs.com/en/insidermonkey.com/e333aa5b72577d2e050d3c5b0c90bb89",
+              "width": 1920,
+              "height": 1084,
+              "tag": "original"
+            },
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/WhlvQL5U2exdlavBj57TFQ--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/insidermonkey.com/e333aa5b72577d2e050d3c5b0c90bb89",
+              "width": 170,
+              "height": 128,
+              "tag": "170x128"
+            }
+          ]
+        },
+        "provider": {
+          "displayName": "Insider Monkey",
+          "url": "http://www.insidermonkey.com",
+          "sourceId": "insidermonkey.com"
+        },
+        "canonicalUrl": {
+          "url": "https://finance.yahoo.com/markets/stocks/articles/jim-cramer-salesforce-tough-because-183638905.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "clickThroughUrl": {
+          "url": "https://finance.yahoo.com/markets/stocks/articles/jim-cramer-salesforce-tough-because-183638905.html",
           "site": "finance",
           "region": "US",
           "lang": "en-US"
@@ -7891,20 +7914,20 @@
     {
       "index": 0,
       "Date Reported": "2025-12-31T00:00:00",
-      "Holder": "Vanguard Group Inc",
-      "pctHeld": 0.1021,
-      "Shares": 41283446,
-      "Value": 10663101620,
-      "pctChange": -0.0021
-    },
-    {
-      "index": 1,
-      "Date Reported": "2025-12-31T00:00:00",
       "Holder": "Blackrock Inc.",
       "pctHeld": 0.1,
       "Shares": 40430222,
-      "Value": 10442722385,
+      "Value": 9544362803,
       "pctChange": -0.0023
+    },
+    {
+      "index": 1,
+      "Date Reported": "2026-03-31T00:00:00",
+      "Holder": "Vanguard Capital Management LLC",
+      "pctHeld": 0.066,
+      "Shares": 26679971,
+      "Value": 6298340949,
+      "pctChange": 1.0
     },
     {
       "index": 2,
@@ -7912,7 +7935,7 @@
       "Holder": "State Street Corporation",
       "pctHeld": 0.0507,
       "Shares": 20473733,
-      "Value": 5288160671,
+      "Value": 4833234299,
       "pctChange": -0.0077
     },
     {
@@ -7921,17 +7944,17 @@
       "Holder": "Geode Capital Management, LLC",
       "pctHeld": 0.028499998,
       "Shares": 11531678,
-      "Value": 2978517209,
+      "Value": 2722283309,
       "pctChange": 0.0372
     },
     {
       "index": 4,
-      "Date Reported": "2025-12-31T00:00:00",
-      "Holder": "NORGES BANK",
-      "pctHeld": 0.0161,
-      "Shares": 6500657,
-      "Value": 1679054752,
-      "pctChange": 0.23889999
+      "Date Reported": "2026-03-31T00:00:00",
+      "Holder": "Vanguard Portfolio Management LLC",
+      "pctHeld": 0.0247,
+      "Shares": 9972632,
+      "Value": 2354239309,
+      "pctChange": 1.0
     },
     {
       "index": 5,
@@ -7939,7 +7962,7 @@
       "Holder": "Arrowstreet Capital, Limited Partnership",
       "pctHeld": 0.0154,
       "Shares": 6228503,
-      "Value": 1608760093,
+      "Value": 1470362748,
       "pctChange": 0.1088
     },
     {
@@ -7948,26 +7971,26 @@
       "Holder": "Morgan Stanley",
       "pctHeld": 0.0153,
       "Shares": 6195038,
-      "Value": 1600116417,
+      "Value": 1462462666,
       "pctChange": -0.1039
     },
     {
       "index": 7,
       "Date Reported": "2026-03-31T00:00:00",
-      "Holder": "Bank Of New York Mellon Corporation",
-      "pctHeld": 0.0128999995,
-      "Shares": 5206791,
-      "Value": 1344862091,
-      "pctChange": -0.0679
+      "Holder": "Invesco Ltd.",
+      "pctHeld": 0.0138,
+      "Shares": 5571545,
+      "Value": 1315274668,
+      "pctChange": 0.0884
     },
     {
       "index": 8,
-      "Date Reported": "2025-12-31T00:00:00",
-      "Holder": "Invesco Ltd.",
-      "pctHeld": 0.0127,
-      "Shares": 5119025,
-      "Value": 1322193010,
-      "pctChange": 0.0617
+      "Date Reported": "2026-03-31T00:00:00",
+      "Holder": "Bank Of New York Mellon Corporation",
+      "pctHeld": 0.0128999995,
+      "Shares": 5206791,
+      "Value": 1229167189,
+      "pctChange": -0.0679
     },
     {
       "index": 9,
@@ -7975,26 +7998,26 @@
       "Holder": "UBS AM, a distinct business unit of UBS ASSET MANAGEMENT AMERICAS LLC",
       "pctHeld": 0.0126,
       "Shares": 5083365,
-      "Value": 1312982389,
+      "Value": 1200030012,
       "pctChange": -0.0171
     }
   ],
   "major_holders": [
     {
       "index": "insidersPercentHeld",
-      "Value": 0.00253
+      "Value": 0.00224
     },
     {
       "index": "institutionsPercentHeld",
-      "Value": 0.87104
+      "Value": 0.86822
     },
     {
       "index": "institutionsFloatPercentHeld",
-      "Value": 0.87324995
+      "Value": 0.87017
     },
     {
       "index": "institutionsCount",
-      "Value": 3291.0
+      "Value": 3218.0
     }
   ]
 }

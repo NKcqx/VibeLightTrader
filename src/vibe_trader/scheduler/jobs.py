@@ -5,6 +5,10 @@ from collections.abc import Callable
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Literal
+from zoneinfo import ZoneInfo
+
+
+_TZ_ET = ZoneInfo("America/New_York")
 
 import structlog
 from sqlalchemy.dialects.sqlite import insert as sqlite_insert
@@ -1377,17 +1381,61 @@ def _build_pnl_lines(
     return lines
 
 
-def _aggregate_signal_count(session, sym_id: int, since: datetime) -> int:
-    return (
+def _format_brief_kind(now_utc: datetime) -> str:
+    """Brief card title generated from the actual trigger time.
+
+    Anchored to US market hours (9:30 ET open / 16:00 ET close). Designed so
+    that the cron-scheduled jobs keep their familiar brand labels:
+
+      * ``morning_brief`` cron (10:30 ET) → "开盘后 1.0h 盘点"
+      * ``closing_brief`` cron (16:30 ET) → "收盘盘点"
+
+    Manual ``vibe-trader once --job ...`` invocations and any other off-hour
+    triggers get a label that reflects when they actually fired (e.g.
+    "开盘后 3.2h 盘点", "盘前 45min 快照", "收盘后 2.5h 盘点"), so the card
+    no longer misleads with a stale "开盘后1h盘点" headline.
+    """
+    et = now_utc.astimezone(_TZ_ET)
+    open_t = et.replace(hour=9, minute=30, second=0, microsecond=0)
+    close_t = et.replace(hour=16, minute=0, second=0, microsecond=0)
+
+    if et < open_t:
+        mins = int((open_t - et).total_seconds() / 60)
+        return f"盘前 {mins}min 快照" if mins < 60 else "盘前快照"
+    if et < close_t:
+        delta_h = (et - open_t).total_seconds() / 3600
+        if delta_h < 1:
+            return f"开盘后 {int(delta_h * 60)}min 盘点"
+        return f"开盘后 {delta_h:.1f}h 盘点"
+    delta_h = (et - close_t).total_seconds() / 3600
+    if delta_h < 1:
+        return "收盘盘点"
+    return f"收盘后 {delta_h:.1f}h 盘点"
+
+
+def _load_today_signals(
+    session, sym_id: int, since: datetime
+) -> list[dict[str, Any]]:
+    """Today's triggered signals for one symbol (list of plain dicts).
+
+    Returns lightweight ``{signal_type, severity, ts}`` dicts so callers can
+    render them safely after the session closes.
+    """
+    rows = (
         session.query(SignalRow)
         .filter(SignalRow.symbol_id == sym_id, SignalRow.ts >= since)
-        .count()
+        .order_by(SignalRow.ts.asc())
+        .all()
     )
+    return [
+        {"signal_type": r.signal_type, "severity": r.severity, "ts": r.ts}
+        for r in rows
+    ]
 
 
 def run_brief(
     *,
-    kind: str,
+    kind: str | None = None,
     client: FutuClient,
     factory: sessionmaker,
     cfg: AppConfig,
@@ -1397,10 +1445,19 @@ def run_brief(
 ) -> dict[str, int]:
     """Render and push a daily brief Lark card.
 
-    `kind` is the human-readable label ("开盘后1h盘点" / "收盘盘点").
-    Aggregates today's signal count per symbol from DB.
+    ``kind`` is the human-readable card title. When ``None`` (the production
+    path) it's derived from ``now_utc`` via :func:`_format_brief_kind` so the
+    headline always reflects when the card actually fired — cron jobs keep
+    their familiar "开盘后1h盘点" / "收盘盘点" labels because they fire at the
+    matching ET clock times, while manual ``once`` invocations get an honest
+    label like "开盘后 3.2h 盘点". Pass an explicit string only when you want
+    to override the auto-derived label (rare; mainly tests).
     """
+    from vibe_trader.events.enrich import build_indicator_reading
+
     now_utc = now_utc or datetime.now(tz=timezone.utc)
+    if kind is None:
+        kind = _format_brief_kind(now_utc)
     codes = [s.code for s in watchlist.symbols]
 
     snaps = {s.code: s for s in client.snapshot(codes)}
@@ -1424,15 +1481,17 @@ def run_brief(
                 .filter(Symbol.code == sc.code)
                 .one_or_none()
             )
-            sig_count = (
-                _aggregate_signal_count(session, sym.id, today_start) if sym else 0
+            today_signals = (
+                _load_today_signals(session, sym.id, today_start) if sym else []
             )
+            indicator = build_indicator_reading(client, sc.code, cfg)
             rows.append(
                 {
                     "code": sc.code,
                     "close": snap.last_price,
                     "change_pct": change_pct,
-                    "signal_count": sig_count,
+                    "indicator": indicator,
+                    "today_signals": today_signals,
                 }
             )
 
@@ -1471,11 +1530,13 @@ def run_brief(
 
 
 def run_morning_brief(**kw: Any) -> dict[str, int]:
-    return run_brief(kind="开盘后1h盘点", **kw)
+    """CLI / cron entrypoint; title is auto-derived from trigger time."""
+    return run_brief(**kw)
 
 
 def run_closing_brief(**kw: Any) -> dict[str, int]:
-    return run_brief(kind="收盘盘点", **kw)
+    """CLI / cron entrypoint; title is auto-derived from trigger time."""
+    return run_brief(**kw)
 
 
 def run_refresh_fundamentals(

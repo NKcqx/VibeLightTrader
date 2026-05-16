@@ -1,7 +1,7 @@
 {
   "ticker": "TSM",
   "code": "US.TSM",
-  "fetched_at": "2026-05-07T15:29:31.790824+00:00",
+  "fetched_at": "2026-05-14T10:48:34.346678+00:00",
   "info": {
     "address1": "Hsinchu Science Park",
     "address2": "No. 8, Li-Hsin Road 6",
@@ -25,7 +25,7 @@
         "name": "Dr. C. C.  Wei Ph.D.",
         "title": "Chairman & CEO",
         "fiscalYear": 2025,
-        "totalPay": 65100852,
+        "totalPay": 65193354,
         "exercisedValue": 0,
         "unexercisedValue": 0
       },
@@ -34,7 +34,7 @@
         "name": "Mr. Jen-Chau  Huang",
         "title": "Senior VP & CFO",
         "fiscalYear": 2025,
-        "totalPay": 9431326,
+        "totalPay": 9444727,
         "exercisedValue": 0,
         "unexercisedValue": 0
       },
@@ -108,84 +108,83 @@
     "executiveTeam": [],
     "maxAge": 86400,
     "priceHint": 2,
-    "previousClose": 419.5,
-    "open": 418.09,
-    "dayLow": 414.0201,
-    "dayHigh": 420.0,
-    "regularMarketPreviousClose": 419.5,
-    "regularMarketOpen": 418.09,
-    "regularMarketDayLow": 414.0201,
-    "regularMarketDayHigh": 420.0,
-    "dividendRate": 3.51,
-    "dividendYield": 0.84,
+    "previousClose": 397.28,
+    "open": 398.265,
+    "dayLow": 391.47,
+    "dayHigh": 404.6799,
+    "regularMarketPreviousClose": 397.28,
+    "regularMarketOpen": 398.265,
+    "regularMarketDayLow": 391.47,
+    "regularMarketDayHigh": 404.6799,
+    "dividendRate": 3.8,
+    "dividendYield": 0.95,
     "exDividendDate": 1781136000,
     "payoutRatio": 0.2793,
     "fiveYearAvgDividendYield": 1.59,
     "beta": 1.264,
-    "trailingPE": 35.78045,
-    "forwardPE": 21.625343,
-    "volume": 5611145,
-    "regularMarketVolume": 5611145,
-    "averageVolume": 13464703,
-    "averageVolume10days": 14038380,
-    "averageDailyVolume10Day": 14038380,
-    "bid": 416.55,
-    "ask": 416.69,
-    "bidSize": 120,
-    "askSize": 80,
-    "marketCap": 2163766198272,
-    "nonDilutedMarketCap": 1847856724359,
-    "fiftyTwoWeekLow": 173.66,
+    "trailingPE": 34.141758,
+    "forwardPE": 20.723423,
+    "volume": 13063563,
+    "regularMarketVolume": 13063563,
+    "averageVolume": 13508988,
+    "averageVolume10days": 14283860,
+    "averageDailyVolume10Day": 14283860,
+    "bid": 406.01,
+    "ask": 0.0,
+    "bidSize": 40,
+    "askSize": 40,
+    "marketCap": 2073522733056,
+    "nonDilutedMarketCap": 1889888963500,
+    "fiftyTwoWeekLow": 188.81,
     "fiftyTwoWeekHigh": 420.0,
-    "allTimeHigh": 419.7,
+    "allTimeHigh": 420.0,
     "allTimeLow": 2.842947,
-    "priceToSalesTrailing12Months": 0.5272459,
-    "fiftyDayAverage": 362.0554,
-    "twoHundredDayAverage": 307.92935,
+    "priceToSalesTrailing12Months": 0.50525624,
+    "fiftyDayAverage": 365.3772,
+    "twoHundredDayAverage": 312.0422,
     "trailingAnnualDividendRate": 17.0,
-    "trailingAnnualDividendYield": 0.040524434,
+    "trailingAnnualDividendYield": 0.04279098,
     "currency": "USD",
     "tradeable": false,
-    "enterpriseValue": 8552789835776,
+    "enterpriseValue": 8041919414272,
     "profitMargins": 0.46505,
-    "floatShares": 23639052052,
+    "floatShares": 23638014751,
     "sharesOutstanding": 5186400000,
-    "sharesShort": 25635323,
-    "sharesShortPriorMonth": 20816498,
-    "sharesShortPreviousMonthDate": 1773360000,
-    "dateShortInterest": 1776211200,
-    "sharesPercentSharesOut": 0.0049,
-    "heldPercentInsiders": 0.0005,
-    "heldPercentInstitutions": 0.15742,
-    "shortRatio": 2.0,
-    "shortPercentOfFloat": 0.0053,
+    "sharesShort": 26712803,
+    "sharesShortPriorMonth": 22458282,
+    "sharesShortPreviousMonthDate": 1774915200,
+    "dateShortInterest": 1777507200,
+    "sharesPercentSharesOut": 0.0052,
+    "heldPercentInsiders": 0.00041,
+    "heldPercentInstitutions": 0.15589,
+    "shortRatio": 1.93,
+    "shortPercentOfFloat": 0.0055,
     "impliedSharesOutstanding": 5186400000,
     "bookValue": 6.5373535,
-    "priceToBook": 63.817875,
+    "priceToBook": 61.156242,
     "lastFiscalYearEnd": 1767139200,
     "nextFiscalYearEnd": 1798675200,
     "mostRecentQuarter": 1774915200,
     "earningsQuarterlyGrowth": 0.583,
     "netIncomeToCommon": 1908519993344,
-    "trailingEps": 11.66,
+    "trailingEps": 11.71,
     "forwardEps": 19.29218,
-    "pegRatio": 1.31,
+    "pegRatio": 1.23,
     "lastSplitFactor": "1005:1000",
     "lastSplitDate": 1247616000,
-    "enterpriseToRevenue": 2.084,
-    "enterpriseToEbitda": 2.994,
-    "52WeekChange": 1.3941331,
-    "SandP52WeekChange": 0.3003528,
+    "enterpriseToRevenue": 1.96,
+    "enterpriseToEbitda": 2.815,
+    "52WeekChange": 1.0584903,
+    "SandP52WeekChange": 0.2581271,
     "lastDividendValue": 0.956,
     "lastDividendDate": 1773705600,
     "quoteType": "EQUITY",
-    "currentPrice": 417.2,
+    "currentPrice": 399.8,
     "targetHighPrice": 600.0,
     "targetLowPrice": 351.0,
     "targetMeanPrice": 463.4514,
     "targetMedianPrice": 472.5,
-    "recommendationMean": 1.47368,
-    "recommendationKey": "strong_buy",
+    "recommendationKey": "none",
     "numberOfAnalystOpinions": 18,
     "totalCash": 3383600873472,
     "totalCashPerShare": 130.477,
@@ -214,53 +213,66 @@
     "quoteSourceName": "Nasdaq Real Time Price",
     "triggerable": true,
     "customPriceAlertConfidence": "HIGH",
-    "corporateActions": [],
-    "regularMarketTime": 1778167771,
-    "priceEpsCurrentYear": 27.002712,
-    "fiftyDayAverageChange": 55.144623,
-    "fiftyDayAverageChangePercent": 0.15230991,
-    "twoHundredDayAverageChange": 109.27066,
-    "twoHundredDayAverageChangePercent": 0.35485625,
-    "sourceInterval": 15,
-    "exchangeDataDelayedBy": 0,
-    "averageAnalystRating": "1.5 - Strong Buy",
-    "shortName": "Taiwan Semiconductor Manufactur",
-    "longName": "Taiwan Semiconductor Manufacturing Company Limited",
-    "marketState": "REGULAR",
-    "regularMarketChangePercent": -0.54826885,
-    "regularMarketPrice": 417.2,
-    "exchange": "NYQ",
-    "messageBoardId": "finmb_380075",
-    "exchangeTimezoneName": "America/New_York",
-    "exchangeTimezoneShortName": "EDT",
-    "gmtOffSetMilliseconds": -14400000,
-    "market": "us_market",
-    "esgPopulated": false,
-    "cryptoTradeable": false,
     "hasPrePostMarketData": true,
     "firstTradeDateMilliseconds": 876403800000,
-    "regularMarketChange": -2.2999878,
-    "regularMarketDayRange": "414.0201 - 420.0",
+    "preMarketChange": 5.244995,
+    "preMarketChangePercent": 1.3120524,
+    "preMarketPrice": 405.0,
+    "regularMarketChange": 2.51999,
+    "regularMarketDayRange": "391.47 - 404.6799",
     "fullExchangeName": "NYSE",
-    "averageDailyVolume3Month": 13464703,
-    "fiftyTwoWeekLowChange": 243.54001,
-    "fiftyTwoWeekLowChangePercent": 1.4023955,
-    "fiftyTwoWeekRange": "173.66 - 420.0",
-    "fiftyTwoWeekHighChange": -2.7999878,
-    "fiftyTwoWeekHighChangePercent": -0.0066666375,
-    "fiftyTwoWeekChangePercent": 139.41331,
+    "averageDailyVolume3Month": 13508988,
+    "fiftyTwoWeekLowChange": 210.98999,
+    "fiftyTwoWeekLowChangePercent": 1.1174725,
+    "fiftyTwoWeekRange": "188.81 - 420.0",
+    "fiftyTwoWeekHighChange": -20.200012,
+    "fiftyTwoWeekHighChangePercent": -0.048095267,
+    "fiftyTwoWeekChangePercent": 105.84903,
     "dividendDate": 1783555200,
+    "cryptoTradeable": false,
+    "market": "us_market",
+    "esgPopulated": false,
+    "regularMarketChangePercent": 0.634311,
+    "regularMarketPrice": 399.8,
+    "shortName": "Taiwan Semiconductor Manufactur",
+    "longName": "Taiwan Semiconductor Manufacturing Company Limited",
     "earningsTimestamp": 1776342600,
     "earningsTimestampStart": 1784205000,
     "earningsTimestampEnd": 1784205000,
     "earningsCallTimestampStart": 1776319200,
     "earningsCallTimestampEnd": 1776319200,
     "isEarningsDateEstimate": true,
-    "epsTrailingTwelveMonths": 11.66,
+    "epsTrailingTwelveMonths": 11.71,
     "epsForward": 19.29218,
     "epsCurrentYear": 15.4503,
+    "priceEpsCurrentYear": 25.876518,
+    "fiftyDayAverageChange": 34.42279,
+    "fiftyDayAverageChangePercent": 0.09421165,
+    "twoHundredDayAverageChange": 87.75778,
+    "twoHundredDayAverageChangePercent": 0.2812369,
+    "sourceInterval": 15,
+    "exchangeDataDelayedBy": 0,
+    "corporateActions": [
+      {
+        "header": "Dividend",
+        "message": "TSM announced a cash dividend of $0.95 with an ex-date of Jun. 11, 2026",
+        "meta": {
+          "eventType": "DIVIDEND",
+          "dateEpochMs": 1781150400000,
+          "amount": "0.95"
+        }
+      }
+    ],
+    "preMarketTime": 1778755683,
+    "regularMarketTime": 1778702402,
+    "exchange": "NYQ",
+    "messageBoardId": "finmb_380075",
+    "exchangeTimezoneName": "America/New_York",
+    "exchangeTimezoneShortName": "EDT",
+    "gmtOffSetMilliseconds": -14400000,
+    "marketState": "PRE",
     "displayName": "Taiwan Semiconductor Manufacturing Company",
-    "trailingPegRatio": 1.3054
+    "trailingPegRatio": 1.2762
   },
   "recommendations": [
     {
@@ -1253,7 +1265,7 @@
     }
   ],
   "analyst_price_targets": {
-    "current": 417.34,
+    "current": 399.8,
     "high": 600.0,
     "low": 351.0,
     "mean": 463.4514,
@@ -1261,32 +1273,32 @@
   },
   "news": [
     {
-      "id": "be2d2cfd-b21c-412d-99d8-e4584ac8d080",
+      "id": "13365d3c-dd45-3bb7-9fc3-f3ed04d1be01",
       "content": {
-        "id": "be2d2cfd-b21c-412d-99d8-e4584ac8d080",
-        "contentType": "VIDEO",
-        "title": "Elon Musk's SpaceX submits plans for $55B Terafab chip facility",
-        "description": "<p>Elon Musk's SpaceX (<a target=\"_blank\" rel=\"\" class=\"link\" href=\"https://finance.yahoo.com/quote/SPAX.PVT/\" data-i13n=\"cpos:1;pos:1\">SPAX.PVT</a>) has filed plans to invest $55 billion into building a Terafab facility in Texas, which will allow the company to produce in-house chips for its AI and robotics projects.</p>\n<p>Yahoo Finance Senior Autos Reporter Pras Subramanian dives into the details.</p>",
-        "summary": "Elon Musk's SpaceX (SPAX.PVT) has filed plans to invest $55 billion into building a Terafab facility in Texas, which will allow the company to produce in-house chips for its AI and robotics projects. Yahoo Finance Senior Autos Reporter Pras Subramanian dives into the details.",
-        "pubDate": "2026-05-06T20:41:47Z",
-        "displayTime": "",
+        "id": "13365d3c-dd45-3bb7-9fc3-f3ed04d1be01",
+        "contentType": "STORY",
+        "title": "TSMC raises global chip market forecast to $1.5 trillion as AI demand surges",
+        "description": "",
+        "summary": "Taiwan Semiconductor Manufacturing Co (ADR) (NYSE:TSM), the world's largest contract chipmaker, now expects the global semiconductor market to exceed $1.5 trillion by 2030, a 50% upgrade on its previous forecast of $1 trillion, driven by surging demand for artificial intelligence and...",
+        "pubDate": "2026-05-14T07:30:00Z",
+        "displayTime": "2026-05-14T07:30:00Z",
         "isHosted": true,
         "bypassModal": false,
         "previewUrl": null,
         "thumbnail": {
-          "originalUrl": "https://s.yimg.com/uu/api/res/1.2/ng1lJuwEsdrbAHwMUM0x7Q--~B/aD0xMjQxO3c9MjIwNjthcHBpZD15dGFjaHlvbg--/https://d29szjachogqwa.cloudfront.net/images/user-uploaded/7260d2f0-7f3f-11ef-bb3e-9b3d023c94d9_0c0c923811c2bf82cf1bca274b62d515b7409befaa040dd7d8aedd750683dcd4.com/creatr-uploaded-images/2024-09/7260d2f0-7f3f-11ef-bb3e-9b3d023c94d9",
-          "originalWidth": 2206,
-          "originalHeight": 1241,
-          "caption": "",
+          "originalUrl": "https://media.zenfs.com/en/proactive_us_504/5f78c0f23fbc18de5c49df3ce8d03dff",
+          "originalWidth": 1241,
+          "originalHeight": 720,
+          "caption": "TSMC raises global chip market forecast to $1.5 trillion as AI demand surges",
           "resolutions": [
             {
-              "url": "https://s.yimg.com/uu/api/res/1.2/ng1lJuwEsdrbAHwMUM0x7Q--~B/aD0xMjQxO3c9MjIwNjthcHBpZD15dGFjaHlvbg--/https://d29szjachogqwa.cloudfront.net/images/user-uploaded/7260d2f0-7f3f-11ef-bb3e-9b3d023c94d9_0c0c923811c2bf82cf1bca274b62d515b7409befaa040dd7d8aedd750683dcd4.com/creatr-uploaded-images/2024-09/7260d2f0-7f3f-11ef-bb3e-9b3d023c94d9",
-              "width": 2206,
-              "height": 1241,
+              "url": "https://s.yimg.com/uu/api/res/1.2/AlavZxQbeVqdiEiX4BFI1g--~B/aD03MjA7dz0xMjQxO2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/proactive_us_504/5f78c0f23fbc18de5c49df3ce8d03dff",
+              "width": 1241,
+              "height": 720,
               "tag": "original"
             },
             {
-              "url": "https://s.yimg.com/uu/api/res/1.2/OQBoggkp8PtOSYDJOFGdKA--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://d29szjachogqwa.cloudfront.net/images/user-uploaded/7260d2f0-7f3f-11ef-bb3e-9b3d023c94d9_0c0c923811c2bf82cf1bca274b62d515b7409befaa040dd7d8aedd750683dcd4.com/creatr-uploaded-images/2024-09/7260d2f0-7f3f-11ef-bb3e-9b3d023c94d9",
+              "url": "https://s.yimg.com/uu/api/res/1.2/b5KF8PSmpe5mgwv057cPtQ--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/proactive_us_504/5f78c0f23fbc18de5c49df3ce8d03dff",
               "width": 170,
               "height": 128,
               "tag": "170x128"
@@ -1294,24 +1306,24 @@
           ]
         },
         "provider": {
-          "displayName": "Yahoo Finance Video",
-          "url": "https://finance.yahoo.com/",
-          "sourceId": "video.yahoofinance.com"
+          "displayName": "Proactive",
+          "url": "https://www.proactiveinvestors.com/",
+          "sourceId": "proactive_us_504"
         },
         "canonicalUrl": {
-          "url": "https://finance.yahoo.com/video/elon-musks-spacex-submits-plans-for-55b-terafab-chip-facility-204147527.html",
+          "url": "https://www.proactiveinvestors.com/companies/news/1092274/tsmc-raises-global-chip-market-forecast-to-1-5-trillion-as-ai-demand-surges-1092274.html",
           "site": "finance",
           "region": "US",
           "lang": "en-US"
         },
         "clickThroughUrl": {
-          "url": "https://finance.yahoo.com/video/elon-musks-spacex-submits-plans-for-55b-terafab-chip-facility-204147527.html",
+          "url": "https://finance.yahoo.com/sectors/technology/articles/tsmc-raises-global-chip-market-073000195.html",
           "site": "finance",
           "region": "US",
           "lang": "en-US"
         },
         "metadata": {
-          "editorsPick": true
+          "editorsPick": false
         },
         "finance": {
           "premiumFinance": {
@@ -1323,32 +1335,366 @@
       }
     },
     {
-      "id": "075fb943-8918-3237-a816-6e5b1efe45b5",
+      "id": "ab6f2d44-ad90-378c-b6ad-85175edbbba7",
       "content": {
-        "id": "075fb943-8918-3237-a816-6e5b1efe45b5",
+        "id": "ab6f2d44-ad90-378c-b6ad-85175edbbba7",
         "contentType": "STORY",
-        "title": "Apple Stock Notches Record High Ahead Of WWDC News",
+        "title": "Applied Materials Rides AI Wave Into Critical Earnings Report",
         "description": "",
-        "summary": "Apple stock on Thursday cleared a five-month consolidation pattern and hit a record high.  In morning trades on the stock market today, Apple hit an all-time high of 292.13.  In recent trades, Apple stock rose more than 1% to 290.91.",
-        "pubDate": "2026-05-07T14:32:41Z",
-        "displayTime": "2026-05-07T14:32:41Z",
-        "isHosted": false,
+        "summary": "Applied Materials Stock in Focus Ahead of Key AI-Driven Earnings Test",
+        "pubDate": "2026-05-14T03:56:46Z",
+        "displayTime": "2026-05-14T03:56:46Z",
+        "isHosted": true,
         "bypassModal": false,
-        "previewUrl": "https://finance.yahoo.com/m/075fb943-8918-3237-a816-6e5b1efe45b5/apple-stock-notches-record.html",
+        "previewUrl": null,
+        "thumbnail": null,
+        "provider": {
+          "displayName": "GuruFocus.com",
+          "url": "http://www.gurufocus.com/",
+          "sourceId": "us.finance.gurufocus"
+        },
+        "canonicalUrl": {
+          "url": "https://finance.yahoo.com/markets/stocks/articles/applied-materials-rides-ai-wave-035646192.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "clickThroughUrl": {
+          "url": "https://finance.yahoo.com/markets/stocks/articles/applied-materials-rides-ai-wave-035646192.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "metadata": {
+          "editorsPick": false
+        },
+        "finance": {
+          "premiumFinance": {
+            "isPremiumNews": false,
+            "isPremiumFreeNews": false
+          }
+        },
+        "storyline": null
+      }
+    },
+    {
+      "id": "27522dae-7d36-3860-9c4e-296a27d1fd06",
+      "content": {
+        "id": "27522dae-7d36-3860-9c4e-296a27d1fd06",
+        "contentType": "STORY",
+        "title": "AI boom puts SK Hynix on cusp of $1 trillion market value",
+        "description": "",
+        "summary": "SK Hynix is on the verge of topping a $1 trillion market value, just weeks after Samsung Electronics crossed the milestone, as ‌strong demand for artificial intelligence places South Korea at the heart of Asia's AI boom.  SK Hynix ‌shares have risen more than 200% this year, after rising an eye-watering 274% in 2025, driven by AI-related demand for both conventional memory ​chips and high-bandwidth memory (HBM) chips used in AI servers.",
+        "pubDate": "2026-05-14T02:48:30Z",
+        "displayTime": "2026-05-14T02:48:30Z",
+        "isHosted": true,
+        "bypassModal": false,
+        "previewUrl": null,
         "thumbnail": {
-          "originalUrl": "https://media.zenfs.com/en/ibd.com/ec536e5f5e284e091623a459aa169386",
-          "originalWidth": 1000,
-          "originalHeight": 511,
-          "caption": "",
+          "originalUrl": "https://media.zenfs.com/en/reuters-finance.com/1c8d4be1b9f1a5d8af3fcef2439b11b3",
+          "originalWidth": 800,
+          "originalHeight": 533,
+          "caption": "A highest-capacity, high-bandwidth 16-High HBM3E memory chip from SK Hynix is seen at this studio photograph in San Francisco",
           "resolutions": [
             {
-              "url": "https://s.yimg.com/uu/api/res/1.2/e76E.d7_jEwUf1JJfqvp6g--~B/aD01MTE7dz0xMDAwO2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/ibd.com/ec536e5f5e284e091623a459aa169386",
-              "width": 1000,
-              "height": 511,
+              "url": "https://s.yimg.com/uu/api/res/1.2/_omUaRDohYWna_boSw4bRg--~B/aD01MzM7dz04MDA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/reuters-finance.com/1c8d4be1b9f1a5d8af3fcef2439b11b3",
+              "width": 800,
+              "height": 533,
               "tag": "original"
             },
             {
-              "url": "https://s.yimg.com/uu/api/res/1.2/I14Pu8w0BAcL28VzwAVWAA--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/ibd.com/ec536e5f5e284e091623a459aa169386",
+              "url": "https://s.yimg.com/uu/api/res/1.2/wfZWfCSTdnBnGYzMM3adYA--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/reuters-finance.com/1c8d4be1b9f1a5d8af3fcef2439b11b3",
+              "width": 170,
+              "height": 128,
+              "tag": "170x128"
+            }
+          ]
+        },
+        "provider": {
+          "displayName": "Reuters",
+          "url": "http://www.reuters.com/",
+          "sourceId": "reuters-finance.com"
+        },
+        "canonicalUrl": {
+          "url": "https://finance.yahoo.com/markets/stocks/articles/ai-boom-puts-sk-hynix-024830771.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "clickThroughUrl": {
+          "url": "https://finance.yahoo.com/markets/stocks/articles/ai-boom-puts-sk-hynix-024830771.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "metadata": {
+          "editorsPick": false
+        },
+        "finance": {
+          "premiumFinance": {
+            "isPremiumNews": false,
+            "isPremiumFreeNews": false
+          }
+        },
+        "storyline": null
+      }
+    },
+    {
+      "id": "fb9a35af-2912-3282-b832-097f2bed2cfa",
+      "content": {
+        "id": "fb9a35af-2912-3282-b832-097f2bed2cfa",
+        "contentType": "STORY",
+        "title": "TSMC says global chip market to hit $1.5 trillion by 2030 as AI drives growth",
+        "description": "",
+        "summary": "TSMC, the world's largest contract chipmaker, expects the global semiconductor market to exceed $1.5 trillion by 2030, topping ‌its previous forecast of $1 trillion, according to its presentation materials ahead of a tech ‌symposium on Thursday.  • AI and high-performance computing are expected to account for 55% of ​the $1.5 trillion market, followed by smartphones with 20%, and automotive applications with 10%, according to TSMC.  • TSMC said it has been expanding capacity at a faster pace in 2025 and 2026 and plans to build nine phases of wafer fabs and advanced packaging facilities ‌in 2026.",
+        "pubDate": "2026-05-14T02:06:30Z",
+        "displayTime": "2026-05-14T02:06:30Z",
+        "isHosted": true,
+        "bypassModal": false,
+        "previewUrl": null,
+        "thumbnail": {
+          "originalUrl": "https://s.yimg.com/uu/api/res/1.2/i3FYtIHG3EOd8yKNvAe.eA--~B/aD00MTk1O3c9NzQ1ODthcHBpZD15dGFjaHlvbg--/https://d29szjachogqwa.cloudfront.net/images/user-uploaded/9931ad7c-66d1-4452-b999-1f0eba4f516d_f8fa839607cf2431131c470ede0581d0c7d14b060dc7adb07cf0f64670e5163f.net/images/2026-05/9931ad7c-66d1-4452-b999-1f0eba4f516d",
+          "originalWidth": 7458,
+          "originalHeight": 4195,
+          "caption": "",
+          "resolutions": [
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/i3FYtIHG3EOd8yKNvAe.eA--~B/aD00MTk1O3c9NzQ1ODthcHBpZD15dGFjaHlvbg--/https://d29szjachogqwa.cloudfront.net/images/user-uploaded/9931ad7c-66d1-4452-b999-1f0eba4f516d_f8fa839607cf2431131c470ede0581d0c7d14b060dc7adb07cf0f64670e5163f.net/images/2026-05/9931ad7c-66d1-4452-b999-1f0eba4f516d",
+              "width": 7458,
+              "height": 4195,
+              "tag": "original"
+            },
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/WiGd37AWWr_ZJgJvCYQO7g--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://d29szjachogqwa.cloudfront.net/images/user-uploaded/9931ad7c-66d1-4452-b999-1f0eba4f516d_f8fa839607cf2431131c470ede0581d0c7d14b060dc7adb07cf0f64670e5163f.net/images/2026-05/9931ad7c-66d1-4452-b999-1f0eba4f516d",
+              "width": 170,
+              "height": 128,
+              "tag": "170x128"
+            }
+          ]
+        },
+        "provider": {
+          "displayName": "Reuters",
+          "url": "http://www.reuters.com/",
+          "sourceId": "reuters-finance.com"
+        },
+        "canonicalUrl": {
+          "url": "https://finance.yahoo.com/sectors/technology/articles/tsmc-says-global-chip-market-to-hit-15-trillion-by-2030-as-ai-drives-growth-020630755.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "clickThroughUrl": {
+          "url": "https://finance.yahoo.com/sectors/technology/articles/tsmc-says-global-chip-market-to-hit-15-trillion-by-2030-as-ai-drives-growth-020630755.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "metadata": {
+          "editorsPick": false
+        },
+        "finance": {
+          "premiumFinance": {
+            "isPremiumNews": false,
+            "isPremiumFreeNews": false
+          }
+        },
+        "storyline": null
+      }
+    },
+    {
+      "id": "eec86d32-7428-3b70-8656-0e282060e3f7",
+      "content": {
+        "id": "eec86d32-7428-3b70-8656-0e282060e3f7",
+        "contentType": "STORY",
+        "title": "If You Invested $100 In Taiwan Semiconductor Stock 10 Years Ago, You Would Have This Much Today",
+        "description": "",
+        "summary": "Taiwan Semiconductor (NYSE:TSM) has outperformed the market over the past 10 years by 19.34% on an annualized basis producing an average annual return of 33.08%. Currently, Taiwan Semiconductor has a market capitalization of $2.08 trillion. Buying $100 In TSM: If an investor had bought $100 of TSM stock 10 years ago, it would be worth $1,729.99 today based on a price of $401.79 for TSM at the time of writing. Taiwan Semiconductor's Performance Over Last 10 Years Finally -- what's the point of al",
+        "pubDate": "2026-05-13T23:45:22Z",
+        "displayTime": "2026-05-13T23:45:22Z",
+        "isHosted": true,
+        "bypassModal": false,
+        "previewUrl": null,
+        "thumbnail": null,
+        "provider": {
+          "displayName": "Benzinga",
+          "url": "http://www.benzinga.com/",
+          "sourceId": "Benzinga"
+        },
+        "canonicalUrl": {
+          "url": "https://finance.yahoo.com/markets/stocks/articles/invested-100-taiwan-semiconductor-stock-234522321.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "clickThroughUrl": {
+          "url": "https://finance.yahoo.com/markets/stocks/articles/invested-100-taiwan-semiconductor-stock-234522321.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "metadata": {
+          "editorsPick": false
+        },
+        "finance": {
+          "premiumFinance": {
+            "isPremiumNews": false,
+            "isPremiumFreeNews": false
+          }
+        },
+        "storyline": null
+      }
+    },
+    {
+      "id": "52f51b2e-4ba5-3f29-8c2e-fc0eaa71142c",
+      "content": {
+        "id": "52f51b2e-4ba5-3f29-8c2e-fc0eaa71142c",
+        "contentType": "STORY",
+        "title": "My Top 3 AI Infrastructure Stocks to Buy for May 2026",
+        "description": "",
+        "summary": "These companies' central positions in the artificial intelligence megatrend look secure.",
+        "pubDate": "2026-05-13T23:29:00Z",
+        "displayTime": "2026-05-13T23:29:00Z",
+        "isHosted": true,
+        "bypassModal": false,
+        "previewUrl": null,
+        "thumbnail": {
+          "originalUrl": "https://media.zenfs.com/en/motleyfool.com/89b9b3fa5c2b55f046fbead66075de66",
+          "originalWidth": 1400,
+          "originalHeight": 787,
+          "caption": "Person standing in a data center holding a laptop.",
+          "resolutions": [
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/Ua9IfNJna2JNVih8YLk6hw--~B/aD03ODc7dz0xNDAwO2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/motleyfool.com/89b9b3fa5c2b55f046fbead66075de66",
+              "width": 1400,
+              "height": 787,
+              "tag": "original"
+            },
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/g1oUfN78DqG74QMhpYTYgw--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/motleyfool.com/89b9b3fa5c2b55f046fbead66075de66",
+              "width": 170,
+              "height": 128,
+              "tag": "170x128"
+            }
+          ]
+        },
+        "provider": {
+          "displayName": "Motley Fool",
+          "url": "http://www.fool.com/",
+          "sourceId": "motleyfool.com"
+        },
+        "canonicalUrl": {
+          "url": "https://www.fool.com/investing/2026/05/13/my-top-3-ai-infrastructure-stocks-to-buy-for-may-2/",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "clickThroughUrl": {
+          "url": "https://finance.yahoo.com/sectors/technology/articles/top-3-ai-infrastructure-stocks-232900457.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "metadata": {
+          "editorsPick": false
+        },
+        "finance": {
+          "premiumFinance": {
+            "isPremiumNews": false,
+            "isPremiumFreeNews": false
+          }
+        },
+        "storyline": null
+      }
+    },
+    {
+      "id": "20564d5e-a0c6-326a-a022-1813fe188b28",
+      "content": {
+        "id": "20564d5e-a0c6-326a-a022-1813fe188b28",
+        "contentType": "STORY",
+        "title": "Better Buy: Taiwan Semiconductor vs. Micron Stock",
+        "description": "",
+        "summary": "These two chipmakers have two different investment profiles.",
+        "pubDate": "2026-05-13T20:43:00Z",
+        "displayTime": "2026-05-13T20:43:00Z",
+        "isHosted": true,
+        "bypassModal": false,
+        "previewUrl": null,
+        "thumbnail": {
+          "originalUrl": "https://media.zenfs.com/en/motleyfool.com/033af7fd8f20091b8fa8f0bfe240402b",
+          "originalWidth": 1400,
+          "originalHeight": 934,
+          "caption": "Inspector holding up a chip.",
+          "resolutions": [
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/Trs1VOm8WOUrDY8ri.AFPA--~B/aD05MzQ7dz0xNDAwO2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/motleyfool.com/033af7fd8f20091b8fa8f0bfe240402b",
+              "width": 1400,
+              "height": 934,
+              "tag": "original"
+            },
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/AkWhoNPMgB0e1Javya0tXA--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/motleyfool.com/033af7fd8f20091b8fa8f0bfe240402b",
+              "width": 170,
+              "height": 128,
+              "tag": "170x128"
+            }
+          ]
+        },
+        "provider": {
+          "displayName": "Motley Fool",
+          "url": "http://www.fool.com/",
+          "sourceId": "motleyfool.com"
+        },
+        "canonicalUrl": {
+          "url": "https://www.fool.com/investing/2026/05/13/better-buy-taiwan-semiconductor-vs-micron-stock/",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "clickThroughUrl": {
+          "url": "https://finance.yahoo.com/news/better-buy-taiwan-semiconductor-vs-204300097.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "metadata": {
+          "editorsPick": false
+        },
+        "finance": {
+          "premiumFinance": {
+            "isPremiumNews": false,
+            "isPremiumFreeNews": false
+          }
+        },
+        "storyline": null
+      }
+    },
+    {
+      "id": "c11ca482-e0bd-3c6b-a4bc-74d079814f59",
+      "content": {
+        "id": "c11ca482-e0bd-3c6b-a4bc-74d079814f59",
+        "contentType": "STORY",
+        "title": "Truly Unique AI Powerhouse Etches Buy Zone. Now Comes This Test.",
+        "description": "",
+        "summary": "ASML is the sole provider of EUV lithography machines vital to advanced AI chips from Nvidia and more. ASML stock has jumped back into buy range.",
+        "pubDate": "2026-05-13T20:09:20Z",
+        "displayTime": "2026-05-13T20:09:20Z",
+        "isHosted": false,
+        "bypassModal": false,
+        "previewUrl": "https://finance.yahoo.com/m/c11ca482-e0bd-3c6b-a4bc-74d079814f59/truly-unique-ai-powerhouse.html",
+        "thumbnail": {
+          "originalUrl": "https://media.zenfs.com/en/ibd.com/ee547d649bfe056a95f51e05a20d92bf",
+          "originalWidth": 1000,
+          "originalHeight": 563,
+          "caption": "",
+          "resolutions": [
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/0Q6r0f4Is9VTXLWpfFovKQ--~B/aD01NjM7dz0xMDAwO2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/ibd.com/ee547d649bfe056a95f51e05a20d92bf",
+              "width": 1000,
+              "height": 563,
+              "tag": "original"
+            },
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/nqaPz1Y1EBWwIMVu9yCXaA--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/ibd.com/ee547d649bfe056a95f51e05a20d92bf",
               "width": 170,
               "height": 128,
               "tag": "170x128"
@@ -1361,7 +1707,7 @@
           "sourceId": "ibd.com"
         },
         "canonicalUrl": {
-          "url": "https://www.investors.com/news/technology/apple-stock-notches-record-high-ahead-of-wwdc-2026/?src=A00220&yptr=yahoo",
+          "url": "https://www.investors.com/research/breakout-stocks-technical-analysis/asml-stock-taiwan-semi-intel-samsung-euv-lithography/?src=A00220&yptr=yahoo",
           "site": "finance",
           "region": "US",
           "lang": "en-US"
@@ -1380,32 +1726,32 @@
       }
     },
     {
-      "id": "97756bd7-72fe-3280-b310-a4c4fadf2b65",
+      "id": "e8722d26-63a7-3892-9c8b-b2efa6ceaf91",
       "content": {
-        "id": "97756bd7-72fe-3280-b310-a4c4fadf2b65",
+        "id": "e8722d26-63a7-3892-9c8b-b2efa6ceaf91",
         "contentType": "STORY",
-        "title": "The Next Phase of the AI Boom Could Be Even Kinder to the Pick-and-Shovel Plays",
+        "title": "AI Gold Rush or Earnings Trap: Buy Applied Materials Stock as its Q2 Results Approach?",
         "description": "",
-        "summary": "The first wave of the AI boom rewarded the most obvious names. The next wave spreads wealth across the entire infrastructure stack: foundries, custom silicon, networking fabric, and enterprise deployment tools. Hyperscaler CapEx is climbing, agentic AI drives inference loads that dwarf training, and every gigawatt of new compute pulls dollars through a long supply ... The Next Phase of the AI Boom Could Be Even Kinder to the Pick-and-Shovel Plays",
-        "pubDate": "2026-05-07T11:30:59Z",
-        "displayTime": "2026-05-07T11:30:59Z",
+        "summary": "With results for its fiscal second quarter approaching after-market hours on Thursday, May 14, Applied Materials has quietly become one of Wall Street's hottest AI infrastructure plays.",
+        "pubDate": "2026-05-13T18:41:00Z",
+        "displayTime": "2026-05-13T18:41:00Z",
         "isHosted": true,
         "bypassModal": false,
         "previewUrl": null,
         "thumbnail": {
-          "originalUrl": "https://media.zenfs.com/en/24_7_wall_st__718/eb55e61477c4bf32f41dccfaec8b9e16",
-          "originalWidth": 1920,
-          "originalHeight": 1080,
+          "originalUrl": "https://media.zenfs.com/en/zacks.com/bac08ef8632114fd437291c460f11cf4",
+          "originalWidth": 635,
+          "originalHeight": 400,
           "caption": "",
           "resolutions": [
             {
-              "url": "https://s.yimg.com/uu/api/res/1.2/wDWkHOkefClZUXpUmgZDmw--~B/aD0xMDgwO3c9MTkyMDthcHBpZD15dGFjaHlvbg--/https://media.zenfs.com/en/24_7_wall_st__718/eb55e61477c4bf32f41dccfaec8b9e16",
-              "width": 1920,
-              "height": 1080,
+              "url": "https://s.yimg.com/uu/api/res/1.2/_e.wCX2kzGmDlUEWKL5A5g--~B/aD00MDA7dz02MzU7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/zacks.com/bac08ef8632114fd437291c460f11cf4",
+              "width": 635,
+              "height": 400,
               "tag": "original"
             },
             {
-              "url": "https://s.yimg.com/uu/api/res/1.2/GxTajwO6F4nqq4u2G1LrJg--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/24_7_wall_st__718/eb55e61477c4bf32f41dccfaec8b9e16",
+              "url": "https://s.yimg.com/uu/api/res/1.2/m3T3CJXjDPHXfRFGlfpFZA--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/zacks.com/bac08ef8632114fd437291c460f11cf4",
               "width": 170,
               "height": 128,
               "tag": "170x128"
@@ -1413,18 +1759,18 @@
           ]
         },
         "provider": {
-          "displayName": "24/7 Wall St.",
-          "url": "https://247wallst.com/",
-          "sourceId": "24_7_wall_st__718"
+          "displayName": "Zacks",
+          "url": "http://www.zacks.com/",
+          "sourceId": "zacks.com"
         },
         "canonicalUrl": {
-          "url": "https://247wallst.com/investing/2026/05/07/the-next-phase-of-the-ai-boom-could-be-even-kinder-to-the-pick-and-shovel-plays/",
+          "url": "https://finance.yahoo.com/news/ai-gold-rush-earnings-trap-184100363.html",
           "site": "finance",
           "region": "US",
           "lang": "en-US"
         },
         "clickThroughUrl": {
-          "url": "https://finance.yahoo.com/sectors/technology/articles/next-phase-ai-boom-could-113059083.html",
+          "url": "https://finance.yahoo.com/news/ai-gold-rush-earnings-trap-184100363.html",
           "site": "finance",
           "region": "US",
           "lang": "en-US"
@@ -1442,332 +1788,32 @@
       }
     },
     {
-      "id": "05ef26c1-c77f-3823-a8f8-9eff0e99e69c",
+      "id": "7ffdf2b9-d8df-3a8f-942e-6dfe9c12f765",
       "content": {
-        "id": "05ef26c1-c77f-3823-a8f8-9eff0e99e69c",
+        "id": "7ffdf2b9-d8df-3a8f-942e-6dfe9c12f765",
         "contentType": "STORY",
-        "title": "The 1 Thing Tech Investors Aren't Ready For -- but OpenAI Just Proved",
+        "title": "Taiwan Semiconductor Manufacturing Company Limited (TSM): Top AI Stock to Buy According to Billionaire David Tepper on Robust Revenue Growth",
         "description": "",
-        "summary": "OpenAI's IPO is still months away, but its influence over artificial intelligence (AI) stocks is already taking shape.",
-        "pubDate": "2026-05-07T08:20:00Z",
-        "displayTime": "2026-05-07T08:20:00Z",
+        "summary": "Taiwan Semiconductor Manufacturing Company Limited (NYSE:TSM) is one of the best AI stocks to buy for 2026, according to billionaire David Tepper. On May 8, Taiwan Semiconductor Manufacturing Company Limited (NYSE:TSM) delivered April revenue figures that affirmed strong demand for artificial intelligence chips. The company’s April revenue was up 17.5% year over year to $13.08 […]",
+        "pubDate": "2026-05-13T17:02:42Z",
+        "displayTime": "2026-05-13T17:02:42Z",
         "isHosted": true,
         "bypassModal": false,
         "previewUrl": null,
         "thumbnail": {
-          "originalUrl": "https://media.zenfs.com/en/motleyfool.com/f671786d3b11139fb3b26bccbc3ee163",
-          "originalWidth": 1201,
-          "originalHeight": 686,
-          "caption": "A light bulb with AI on it on top of a semiconductor.",
+          "originalUrl": "https://media.zenfs.com/en/insidermonkey.com/dc08536c2ac54769f2925fe03dad5f5e",
+          "originalWidth": 750,
+          "originalHeight": 500,
+          "caption": "Taiwan Semiconductor Manufacturing Company Limited (TSM): Top AI Stock to Buy According to Billionaire David Tepper on Robust Revenue Growth",
           "resolutions": [
             {
-              "url": "https://s.yimg.com/uu/api/res/1.2/e6XqdLLI47ANQQkpJ5tAhA--~B/aD02ODY7dz0xMjAxO2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/motleyfool.com/f671786d3b11139fb3b26bccbc3ee163",
-              "width": 1201,
-              "height": 686,
+              "url": "https://s.yimg.com/uu/api/res/1.2/5ym0NVhvxgcPSD6ljRvaCg--~B/aD01MDA7dz03NTA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/insidermonkey.com/dc08536c2ac54769f2925fe03dad5f5e",
+              "width": 750,
+              "height": 500,
               "tag": "original"
             },
             {
-              "url": "https://s.yimg.com/uu/api/res/1.2/sbl9QdraAYiop4CIALPkfg--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/motleyfool.com/f671786d3b11139fb3b26bccbc3ee163",
-              "width": 170,
-              "height": 128,
-              "tag": "170x128"
-            }
-          ]
-        },
-        "provider": {
-          "displayName": "Motley Fool",
-          "url": "http://www.fool.com/",
-          "sourceId": "motleyfool.com"
-        },
-        "canonicalUrl": {
-          "url": "https://www.fool.com/investing/2026/05/07/the-1-thing-tech-investors-arent-ready-for-but-ope/",
-          "site": "finance",
-          "region": "US",
-          "lang": "en-US"
-        },
-        "clickThroughUrl": {
-          "url": "https://finance.yahoo.com/markets/stocks/articles/1-thing-tech-investors-arent-082000104.html",
-          "site": "finance",
-          "region": "US",
-          "lang": "en-US"
-        },
-        "metadata": {
-          "editorsPick": false
-        },
-        "finance": {
-          "premiumFinance": {
-            "isPremiumNews": false,
-            "isPremiumFreeNews": false
-          }
-        },
-        "storyline": null
-      }
-    },
-    {
-      "id": "98b3e29d-265e-32e2-8b8d-69845af538ce",
-      "content": {
-        "id": "98b3e29d-265e-32e2-8b8d-69845af538ce",
-        "contentType": "STORY",
-        "title": "More Record Highs — Heard on the Street Wednesday Recap",
-        "description": "",
-        "summary": "Oil prices fell and stocks rose on rising optimism about an end to Middle East hostilities.  Iran and the U.S. are working with mediators on a one-page framework to restart negotiations aimed at ending the conflict and opening the Strait of Hormuz, with talks potentially beginning next week in Islamabad.  Semiconductor stocks extended their rally.",
-        "pubDate": "2026-05-07T07:54:49Z",
-        "displayTime": "2026-05-07T07:54:49Z",
-        "isHosted": false,
-        "bypassModal": false,
-        "previewUrl": "https://finance.yahoo.com/m/98b3e29d-265e-32e2-8b8d-69845af538ce/more-record-highs-%E2%80%94-heard-on.html",
-        "thumbnail": {
-          "originalUrl": "https://media.zenfs.com/en/wsj.com/7b2c285183be07ca3c4e8242b25a59a8",
-          "originalWidth": 1200,
-          "originalHeight": 630,
-          "caption": "",
-          "resolutions": [
-            {
-              "url": "https://s.yimg.com/uu/api/res/1.2/Fwf5HL4GsEGPbDfR3MJBPg--~B/aD02MzA7dz0xMjAwO2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/wsj.com/7b2c285183be07ca3c4e8242b25a59a8",
-              "width": 1200,
-              "height": 630,
-              "tag": "original"
-            },
-            {
-              "url": "https://s.yimg.com/uu/api/res/1.2/c34MZxHLZOfDYN2BBjM9ww--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/wsj.com/7b2c285183be07ca3c4e8242b25a59a8",
-              "width": 170,
-              "height": 128,
-              "tag": "170x128"
-            }
-          ]
-        },
-        "provider": {
-          "displayName": "The Wall Street Journal",
-          "url": "http://www.wsj.com/",
-          "sourceId": "wsj.com"
-        },
-        "canonicalUrl": {
-          "url": "https://www.wsj.com/livecoverage/stock-market-today-dow-sp-500-nasdaq-05-07-2026/card/more-record-highs-heard-on-the-street-wednesday-recap-GrQIPw4fB4oJb2eiAh1E?siteid=yhoof2&yptr=yahoo",
-          "site": "finance",
-          "region": "US",
-          "lang": "en-US"
-        },
-        "clickThroughUrl": null,
-        "metadata": {
-          "editorsPick": false
-        },
-        "finance": {
-          "premiumFinance": {
-            "isPremiumNews": false,
-            "isPremiumFreeNews": false
-          }
-        },
-        "storyline": null
-      }
-    },
-    {
-      "id": "71c9e255-d999-3611-bf66-7f7a65442b96",
-      "content": {
-        "id": "71c9e255-d999-3611-bf66-7f7a65442b96",
-        "contentType": "STORY",
-        "title": "Emerging Market Stocks Are Outperforming the S&P 500. How to Play the Rally.",
-        "description": "",
-        "summary": "Emerging market stocks are hitting new highs, driven by Asian AI firms and Latin American commodity exporters.",
-        "pubDate": "2026-05-07T06:00:00Z",
-        "displayTime": "2026-05-07T06:00:00Z",
-        "isHosted": false,
-        "bypassModal": false,
-        "previewUrl": "https://finance.yahoo.com/m/71c9e255-d999-3611-bf66-7f7a65442b96/emerging-market-stocks-are.html",
-        "thumbnail": {
-          "originalUrl": "https://media.zenfs.com/en/Barrons.com/c1fc6a013f4b77f7027732fe9a4466b9",
-          "originalWidth": 1280,
-          "originalHeight": 640,
-          "caption": "",
-          "resolutions": [
-            {
-              "url": "https://s.yimg.com/uu/api/res/1.2/ztc5_5DZB2NHkS_.kq31tQ--~B/aD02NDA7dz0xMjgwO2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/Barrons.com/c1fc6a013f4b77f7027732fe9a4466b9",
-              "width": 1280,
-              "height": 640,
-              "tag": "original"
-            },
-            {
-              "url": "https://s.yimg.com/uu/api/res/1.2/a5KP._J2GtcAo9nEcvO8Ug--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/Barrons.com/c1fc6a013f4b77f7027732fe9a4466b9",
-              "width": 170,
-              "height": 128,
-              "tag": "170x128"
-            }
-          ]
-        },
-        "provider": {
-          "displayName": "Barrons.com",
-          "url": "http://www.barrons.com/",
-          "sourceId": "Barrons.com"
-        },
-        "canonicalUrl": {
-          "url": "https://www.barrons.com/articles/emerging-market-stocks-how-to-play-the-rally-2d6c7e7f?siteid=yhoof2&yptr=yahoo",
-          "site": "finance",
-          "region": "US",
-          "lang": "en-US"
-        },
-        "clickThroughUrl": null,
-        "metadata": {
-          "editorsPick": false
-        },
-        "finance": {
-          "premiumFinance": {
-            "isPremiumNews": false,
-            "isPremiumFreeNews": false
-          }
-        },
-        "storyline": null
-      }
-    },
-    {
-      "id": "450edb92-4f98-3186-816c-535a2b9cb292",
-      "content": {
-        "id": "450edb92-4f98-3186-816c-535a2b9cb292",
-        "contentType": "STORY",
-        "title": "What Apple (AAPL)'s Massive Buyback And Chip Shift Means For Shareholders",
-        "description": "",
-        "summary": "In late April 2026, Apple reported second‑quarter results showing revenue of US$111.18 billion and net income of US$29.58 billion, alongside a 4% dividend increase and board approval of a new US$100 billion share repurchase program. At the same time, Apple began early discussions with Intel and Samsung about diversifying chip production away from sole reliance on TSMC, while managing legal settlements and supply constraints tied to rising AI-related memory demand. We’ll now examine how...",
-        "pubDate": "2026-05-06T19:28:48Z",
-        "displayTime": "2026-05-06T19:28:48Z",
-        "isHosted": true,
-        "bypassModal": false,
-        "previewUrl": null,
-        "thumbnail": {
-          "originalUrl": "https://media.zenfs.com/en/simply_wall_st__316/69084628647944e382f8e555f97913e8",
-          "originalWidth": 1194,
-          "originalHeight": 432,
-          "caption": "",
-          "resolutions": [
-            {
-              "url": "https://s.yimg.com/uu/api/res/1.2/fBnY8upz5XxbZDDWlufZ9w--~B/aD00MzI7dz0xMTk0O2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/simply_wall_st__316/69084628647944e382f8e555f97913e8",
-              "width": 1194,
-              "height": 432,
-              "tag": "original"
-            },
-            {
-              "url": "https://s.yimg.com/uu/api/res/1.2/bU5AIomYRBg3WBNqAswADg--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/simply_wall_st__316/69084628647944e382f8e555f97913e8",
-              "width": 170,
-              "height": 128,
-              "tag": "170x128"
-            }
-          ]
-        },
-        "provider": {
-          "displayName": "Simply Wall St.",
-          "url": "https://simplywall.st/",
-          "sourceId": "simply_wall_st__316"
-        },
-        "canonicalUrl": {
-          "url": "https://finance.yahoo.com/markets/stocks/articles/apple-aapl-massive-buyback-chip-192848921.html",
-          "site": "finance",
-          "region": "US",
-          "lang": "en-US"
-        },
-        "clickThroughUrl": {
-          "url": "https://finance.yahoo.com/markets/stocks/articles/apple-aapl-massive-buyback-chip-192848921.html",
-          "site": "finance",
-          "region": "US",
-          "lang": "en-US"
-        },
-        "metadata": {
-          "editorsPick": false
-        },
-        "finance": {
-          "premiumFinance": {
-            "isPremiumNews": false,
-            "isPremiumFreeNews": false
-          }
-        },
-        "storyline": null
-      }
-    },
-    {
-      "id": "45770b4c-5828-326a-ab18-98475e73fb7b",
-      "content": {
-        "id": "45770b4c-5828-326a-ab18-98475e73fb7b",
-        "contentType": "STORY",
-        "title": "The Unintended Consequence the War in the Middle East Could Have on Taiwan Semiconductor Manufacturing Company's Business",
-        "description": "",
-        "summary": "Luckily, it shouldn't slow down the chipmaker's momentum.",
-        "pubDate": "2026-05-06T19:08:00Z",
-        "displayTime": "2026-05-06T19:08:00Z",
-        "isHosted": true,
-        "bypassModal": false,
-        "previewUrl": null,
-        "thumbnail": {
-          "originalUrl": "https://media.zenfs.com/en/motleyfool.com/9153c50f8e736ab6e6ef1af8e8c99da9",
-          "originalWidth": 1200,
-          "originalHeight": 800,
-          "caption": "TSMC logo overlaid on a red shadowy background.",
-          "resolutions": [
-            {
-              "url": "https://s.yimg.com/uu/api/res/1.2/usIAUvsD7ep8tdqd5zFpPA--~B/aD04MDA7dz0xMjAwO2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/motleyfool.com/9153c50f8e736ab6e6ef1af8e8c99da9",
-              "width": 1200,
-              "height": 800,
-              "tag": "original"
-            },
-            {
-              "url": "https://s.yimg.com/uu/api/res/1.2/_UtiVaeT4N6w_5jB5SwCwg--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/motleyfool.com/9153c50f8e736ab6e6ef1af8e8c99da9",
-              "width": 170,
-              "height": 128,
-              "tag": "170x128"
-            }
-          ]
-        },
-        "provider": {
-          "displayName": "Motley Fool",
-          "url": "http://www.fool.com/",
-          "sourceId": "motleyfool.com"
-        },
-        "canonicalUrl": {
-          "url": "https://www.fool.com/investing/2026/05/06/the-unintended-consequence-the-war-in-the-middle-e/",
-          "site": "finance",
-          "region": "US",
-          "lang": "en-US"
-        },
-        "clickThroughUrl": {
-          "url": "https://finance.yahoo.com/sectors/technology/articles/unintended-consequence-war-middle-east-190800460.html",
-          "site": "finance",
-          "region": "US",
-          "lang": "en-US"
-        },
-        "metadata": {
-          "editorsPick": false
-        },
-        "finance": {
-          "premiumFinance": {
-            "isPremiumNews": false,
-            "isPremiumFreeNews": false
-          }
-        },
-        "storyline": null
-      }
-    },
-    {
-      "id": "e5f0a0e1-9935-3b00-9105-599393f0af56",
-      "content": {
-        "id": "e5f0a0e1-9935-3b00-9105-599393f0af56",
-        "contentType": "STORY",
-        "title": "A Step Forward That TSMC (TSM) Stock Investors Shouldn’t Miss",
-        "description": "",
-        "summary": "Taiwan Semiconductor Manufacturing Company Limited (NYSE:TSM) is one of the best stocks to buy in 2026 according to billionaire George Soros. TSM stock has climbed around 30% over the past six months and soared more than 120% over the past 12 months. The Street believes the stock has more room to go up. On April […]",
-        "pubDate": "2026-05-06T19:02:10Z",
-        "displayTime": "2026-05-06T19:02:10Z",
-        "isHosted": true,
-        "bypassModal": false,
-        "previewUrl": null,
-        "thumbnail": {
-          "originalUrl": "https://media.zenfs.com/en/insidermonkey.com/dcf08a9dbb7c3de961dd78d32a01adf8",
-          "originalWidth": 640,
-          "originalHeight": 427,
-          "caption": "A Step Forward That TSMC (TSM) Stock Investors Shouldn’t Miss",
-          "resolutions": [
-            {
-              "url": "https://s.yimg.com/uu/api/res/1.2/e7a64amZgU6zo5vKEMKUDA--~B/aD00Mjc7dz02NDA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/insidermonkey.com/dcf08a9dbb7c3de961dd78d32a01adf8",
-              "width": 640,
-              "height": 427,
-              "tag": "original"
-            },
-            {
-              "url": "https://s.yimg.com/uu/api/res/1.2/QHTdCkG5iu.7ozintGjK4g--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/insidermonkey.com/dcf08a9dbb7c3de961dd78d32a01adf8",
+              "url": "https://s.yimg.com/uu/api/res/1.2/3CybxwlBwTF5WdAnwlxM5w--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/insidermonkey.com/dc08536c2ac54769f2925fe03dad5f5e",
               "width": 170,
               "height": 128,
               "tag": "170x128"
@@ -1780,75 +1826,13 @@
           "sourceId": "insidermonkey.com"
         },
         "canonicalUrl": {
-          "url": "https://finance.yahoo.com/markets/stocks/articles/step-forward-tsmc-tsm-stock-190210693.html",
+          "url": "https://finance.yahoo.com/news/taiwan-semiconductor-manufacturing-company-limited-170242427.html",
           "site": "finance",
           "region": "US",
           "lang": "en-US"
         },
         "clickThroughUrl": {
-          "url": "https://finance.yahoo.com/markets/stocks/articles/step-forward-tsmc-tsm-stock-190210693.html",
-          "site": "finance",
-          "region": "US",
-          "lang": "en-US"
-        },
-        "metadata": {
-          "editorsPick": false
-        },
-        "finance": {
-          "premiumFinance": {
-            "isPremiumNews": false,
-            "isPremiumFreeNews": false
-          }
-        },
-        "storyline": null
-      }
-    },
-    {
-      "id": "2c692fbd-58f5-340f-95e1-984dd19cb06b",
-      "content": {
-        "id": "2c692fbd-58f5-340f-95e1-984dd19cb06b",
-        "contentType": "STORY",
-        "title": "Semiconductor Leaders SOXX, SMH, and FTXL Are Crushing It on AI Infrastructure Demand",
-        "description": "",
-        "summary": "The semiconductor sector continues to absorb capital at a pace tied to the AI infrastructure buildout, and three exchange-traded funds offer distinct angles on it: iShares Semiconductor ETF (NASDAQ:SOXX), VanEck Semiconductor ETF (NASDAQ:SMH), and First Trust Nasdaq Semiconductor ETF (NASDAQ:FTXL). Each holds Advanced Micro Devices (NASDAQ:AMD), whose Q1 earnings report, released today, reinforces what the ... Semiconductor Leaders SOXX, SMH, and FTXL Are Crushing It on AI Infrastructure Demand",
-        "pubDate": "2026-05-06T18:54:40Z",
-        "displayTime": "2026-05-06T18:54:40Z",
-        "isHosted": true,
-        "bypassModal": false,
-        "previewUrl": null,
-        "thumbnail": {
-          "originalUrl": "https://media.zenfs.com/en/24_7_wall_st__718/115c82074b909c1335df4e84ce78a241",
-          "originalWidth": 1366,
-          "originalHeight": 767,
-          "caption": "",
-          "resolutions": [
-            {
-              "url": "https://s.yimg.com/uu/api/res/1.2/kHL8tGoIOTOqK_3.GI.hpA--~B/aD03Njc7dz0xMzY2O2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/24_7_wall_st__718/115c82074b909c1335df4e84ce78a241",
-              "width": 1366,
-              "height": 767,
-              "tag": "original"
-            },
-            {
-              "url": "https://s.yimg.com/uu/api/res/1.2/Rgb7M3vevc4acdrSX1AELg--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/24_7_wall_st__718/115c82074b909c1335df4e84ce78a241",
-              "width": 170,
-              "height": 128,
-              "tag": "170x128"
-            }
-          ]
-        },
-        "provider": {
-          "displayName": "24/7 Wall St.",
-          "url": "https://247wallst.com/",
-          "sourceId": "24_7_wall_st__718"
-        },
-        "canonicalUrl": {
-          "url": "https://247wallst.com/investing/2026/05/06/semiconductor-leaders-soxx-smh-and-ftxl-are-crushing-it-on-ai-infrastructure-demand/",
-          "site": "finance",
-          "region": "US",
-          "lang": "en-US"
-        },
-        "clickThroughUrl": {
-          "url": "https://finance.yahoo.com/sectors/technology/articles/semiconductor-leaders-soxx-smh-ftxl-185440404.html",
+          "url": "https://finance.yahoo.com/news/taiwan-semiconductor-manufacturing-company-limited-170242427.html",
           "site": "finance",
           "region": "US",
           "lang": "en-US"
@@ -1889,7 +1873,7 @@
       "Holder": "FMR, LLC",
       "pctHeld": 0.0117999995,
       "Shares": 61131828,
-      "Value": 25509395070,
+      "Value": 24440504088,
       "pctChange": -0.16469999
     },
     {
@@ -1898,7 +1882,7 @@
       "Holder": "Sanders Capital, LLC",
       "pctHeld": 0.0062,
       "Shares": 31958360,
-      "Value": 13335744369,
+      "Value": 12776951937,
       "pctChange": -0.01
     },
     {
@@ -1907,7 +1891,7 @@
       "Holder": "Capital World Investors",
       "pctHeld": 0.0053,
       "Shares": 27404289,
-      "Value": 11435398835,
+      "Value": 10956234407,
       "pctChange": -0.0121
     },
     {
@@ -1916,7 +1900,7 @@
       "Holder": "Capital International Investors",
       "pctHeld": 0.0049,
       "Shares": 25658661,
-      "Value": 10706974449,
+      "Value": 10258332354,
       "pctChange": 0.00059999997
     },
     {
@@ -1925,7 +1909,7 @@
       "Holder": "JPMORGAN CHASE & CO",
       "pctHeld": 0.0049,
       "Shares": 25182540,
-      "Value": 10508296296,
+      "Value": 10067979184,
       "pctChange": -0.4859
     },
     {
@@ -1934,7 +1918,7 @@
       "Holder": "Fisher Asset Management, LLC",
       "pctHeld": 0.0036000002,
       "Shares": 18617691,
-      "Value": 7768883257,
+      "Value": 7443352634,
       "pctChange": 0.025899999
     },
     {
@@ -1943,7 +1927,7 @@
       "Holder": "Van Eck Associates Corporation",
       "pctHeld": 0.0034,
       "Shares": 17464962,
-      "Value": 7287866732,
+      "Value": 6982491594,
       "pctChange": 0.1114
     },
     {
@@ -1952,7 +1936,7 @@
       "Holder": "Blackrock Inc.",
       "pctHeld": 0.0032,
       "Shares": 16481878,
-      "Value": 6877640521,
+      "Value": 6589454623,
       "pctChange": -0.040700004
     },
     {
@@ -1961,7 +1945,7 @@
       "Holder": "Bank of America Corporation",
       "pctHeld": 0.0031,
       "Shares": 15902819,
-      "Value": 6636007884,
+      "Value": 6357946842,
       "pctChange": 0.0647
     },
     {
@@ -1970,26 +1954,26 @@
       "Holder": "Morgan Stanley",
       "pctHeld": 0.0026,
       "Shares": 13513371,
-      "Value": 5638927067,
+      "Value": 5402645560,
       "pctChange": -0.1046
     }
   ],
   "major_holders": [
     {
       "index": "insidersPercentHeld",
-      "Value": 0.0005
+      "Value": 0.00041
     },
     {
       "index": "institutionsPercentHeld",
-      "Value": 0.15742
+      "Value": 0.15589
     },
     {
       "index": "institutionsFloatPercentHeld",
-      "Value": 0.1575
+      "Value": 0.15596
     },
     {
       "index": "institutionsCount",
-      "Value": 4190.0
+      "Value": 4233.0
     }
   ]
 }

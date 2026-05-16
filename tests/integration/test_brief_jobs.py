@@ -51,18 +51,21 @@ def test_morning_brief_pushes_card(
         sent.append(card)
         return "om_test"
 
+    # Pin the trigger time to ET 10:30 (the morning_brief cron slot) so the
+    # auto-derived title becomes the familiar "开盘后 1.0h 盘点".
     out = run_morning_brief(
         client=fake_futu,
         factory=factory,
         cfg=app_cfg,
         watchlist=watchlist,
         send_card_fn=fake_sender,
+        now_utc=datetime(2026, 5, 4, 14, 30, tzinfo=timezone.utc),  # 10:30 EDT
     )
     assert out["rows"] == 1
     assert out["pushed"] == 1
     assert "US.AAPL" in str(sent[0])
     title = sent[0]["header"]["title"]["content"]
-    assert "开盘后1h盘点" in title
+    assert "开盘后 1.0h 盘点" in title
 
 
 @pytest.mark.integration
@@ -82,12 +85,16 @@ def test_closing_brief_uses_correct_label(
         sent.append(card)
         return "om_close"
 
+    # Pin to ET 16:30 (the closing_brief cron slot) so the auto-derived
+    # title resolves to the familiar "收盘盘点" brand label (within 1h
+    # post-close window).
     out = run_closing_brief(
         client=fake_futu,
         factory=factory,
         cfg=app_cfg,
         watchlist=watchlist,
         send_card_fn=sender,
+        now_utc=datetime(2026, 5, 4, 20, 30, tzinfo=timezone.utc),  # 16:30 EDT
     )
     assert out["pushed"] == 1
     assert "收盘盘点" in sent[0]["header"]["title"]["content"]

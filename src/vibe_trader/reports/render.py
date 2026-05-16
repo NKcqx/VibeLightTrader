@@ -47,6 +47,63 @@ _SIGNAL_NAME = {
 }
 
 
+_BRIEF_SIGNAL_NAME = {
+    "rsi_overbought": "RSI超买",
+    "rsi_oversold": "RSI超卖",
+    "macd_golden_cross": "MACD金叉",
+    "macd_death_cross": "MACD死叉",
+    "boll_upper_break": "突破布林上轨",
+    "boll_lower_break": "跌破布林下轨",
+    "threshold_breach_upper": "穿越上限阈值",
+    "threshold_breach_lower": "穿越下限阈值",
+}
+
+
+_BRIEF_SEVERITY_DOT = {
+    "INFO": "ℹ️",
+    "WARN": "⚠️",
+    "CRITICAL": "🔴",
+}
+
+
+_BRIEF_SEVERITY_RANK = {"CRITICAL": 2, "WARN": 1, "INFO": 0}
+
+
+def _format_today_signals(
+    signals: Sequence[dict[str, Any]],
+    *,
+    max_show: int = 3,
+) -> str:
+    """Format the per-symbol "今日信号" line for the daily brief card.
+
+    Each item must be a dict with at least ``signal_type`` and ``severity``;
+    optional ``ts`` is used as a tiebreaker. Empty list renders as "✨ 平静".
+    Up to ``max_show`` are listed inline (highest severity first); any
+    remainder is summarised as "(+N)".
+    """
+    if not signals:
+        return "✨ 平静"
+    sorted_sigs = sorted(
+        signals,
+        key=lambda s: (
+            -_BRIEF_SEVERITY_RANK.get(str(s.get("severity", "INFO")), 0),
+            str(s.get("ts", "")),
+        ),
+    )
+    shown = sorted_sigs[:max_show]
+    parts: list[str] = []
+    for s in shown:
+        sig_type = str(s.get("signal_type", "?"))
+        name = _BRIEF_SIGNAL_NAME.get(sig_type, sig_type)
+        emoji = _BRIEF_SEVERITY_DOT.get(str(s.get("severity", "INFO")), "ℹ️")
+        parts.append(f"{emoji}{name}")
+    line = " · ".join(parts)
+    extra = len(sorted_sigs) - len(shown)
+    if extra > 0:
+        line += f" (+{extra})"
+    return line
+
+
 # Each entry: (header_template, meaning_string).
 # `header_template` may use {close}, {upper}, {lower}, {rsi}, {boll_upper},
 # {boll_lower} placeholders; missing payload keys render as "n/a".
@@ -273,22 +330,56 @@ def render_daily_brief(
 ) -> dict[str, Any]:
     """Render the morning/closing brief card.
 
-    Each row dict supports the following optional fields beyond the basics:
-        analysis (str): indicator interpretation line
-        pnl_str  (str): per-symbol position + unrealized P&L summary
+    Each row dict supports these optional fields beyond ``code/close/change_pct``:
+        indicator     (IndicatorReading): latest tech indicators; renders the
+            "📊 指标" line via :func:`interpret_indicators`. Falls back to the
+            free-form ``analysis`` string when absent.
+        analysis      (str): legacy free-form indicator interpretation.
+        today_signals (list[dict]): today's triggered signals; each must carry
+            ``signal_type`` and ``severity``. Renders the "🔔 今日信号" line.
+            Pass an empty list to explicitly show "✨ 平静"; omit the field to
+            suppress the line entirely.
+        pnl_str       (str): per-symbol position + unrealized P&L summary.
 
-    `pnl_lines` (P2 aggregate): if non-empty, appended as a "纸面盘 P&L" section.
+    The legacy ``signal_count`` field is intentionally ignored — a bare
+    "信号:N" number proved meaningless in practice; pass ``today_signals``
+    instead to surface what actually fired.
+
+    ``pnl_lines`` (P2 aggregate): if non-empty, appended as a "纸面盘 P&L"
+    section at the bottom of the card.
     """
     rows_md_lines: list[str] = []
     for r in rows:
         change_arrow = "▲" if r["change_pct"] >= 0 else "▼"
-        head = (
+        rows_md_lines.append(
             f"**[{r['code']}]** **${r['close']:.2f}**  "
-            f"{change_arrow} {r['change_pct']:+.2%}  信号:{r.get('signal_count', 0)}"
+            f"{change_arrow} {r['change_pct']:+.2%}"
         )
-        rows_md_lines.append(head)
-        if r.get("analysis"):
-            rows_md_lines.append(f"  📊 {r['analysis']}")
+        # 📊 指标 — prefer rich IndicatorReading over the legacy free-form string.
+        ind_line = ""
+        ind = r.get("indicator")
+        if ind is not None:
+            ind_line = interpret_indicators(
+                close=ind.close,
+                rsi=ind.rsi_14,
+                macd=ind.macd,
+                macd_signal=ind.macd_signal,
+                macd_hist=ind.macd_hist,
+                boll_upper=ind.boll_upper,
+                boll_mid=ind.boll_mid,
+                boll_lower=ind.boll_lower,
+            )
+        elif r.get("analysis"):
+            ind_line = str(r["analysis"])
+        if ind_line:
+            rows_md_lines.append(f"  📊 指标: {ind_line}")
+        # 🔔 今日信号 — only emitted when the caller passes the field. This
+        # avoids the meaningless "信号:0" fallback that used to render
+        # unconditionally.
+        if "today_signals" in r:
+            rows_md_lines.append(
+                f"  🔔 今日信号: {_format_today_signals(r['today_signals'])}"
+            )
         if r.get("pnl_str"):
             rows_md_lines.append(f"  💰 {r['pnl_str']}")
     rows_md = "\n".join(rows_md_lines)

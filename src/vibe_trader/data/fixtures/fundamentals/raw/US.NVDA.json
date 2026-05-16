@@ -1,7 +1,7 @@
 {
   "ticker": "NVDA",
   "code": "US.NVDA",
-  "fetched_at": "2026-05-07T14:11:46.740213+00:00",
+  "fetched_at": "2026-05-14T10:48:18.682677+00:00",
   "info": {
     "address1": "2788 San Tomas Expressway",
     "city": "Santa Clara",
@@ -16,7 +16,7 @@
     "sector": "Technology",
     "sectorKey": "technology",
     "sectorDisp": "Technology",
-    "longBusinessSummary": "NVIDIA Corporation operates as a data center scale AI infrastructure company. The company operates through two segments, Compute & Networking, and Graphics segments. The Compute & Networking segment provides data center accelerated computing and networking platforms and artificial intelligence solutions and software, and automotive platforms and autonomous and electric vehicle solutions, including software. The Graphics segment offers GeForce GPUs for gaming and PCs; Quadro/NVIDIA RTX GPUs for enterprise workstation graphics. The company's products are used in gaming, professional visualization, data center, and automotive markets. The company sells its products to original equipment manufacturers, original device manufacturers, system integrators and distributors, independent software vendors, cloud service providers, add-in board manufacturers, distributors, automotive manufacturers and tier-1 automotive suppliers, and other ecosystem participants worldwide. It has a collaboration with Tech Mahindra Limited to develop artificial intelligence powered telco network operations reasoning agent. The company has a strategic partnership with Lumentum Holdings Inc. to develop optics technologies for AI and data centers. It also has a strategic partnership with Nebius Group N.V. to develop and deploy hyperscale cloud for the artificial intelligence market. NVIDIA Corporation was incorporated in 1993 and is headquartered in Santa Clara, California.",
+    "longBusinessSummary": "NVIDIA Corporation operates as a data center scale AI infrastructure company. The company operates through two segments, Compute & Networking, and Graphics segments. The Compute & Networking segment provides data center accelerated computing and networking platforms and artificial intelligence solutions and software, and automotive platforms and autonomous and electric vehicle solutions, including software. The Graphics segment offers GeForce GPUs for gaming and PCs; Quadro/NVIDIA RTX GPUs for enterprise workstation graphics. The company's products are used in gaming, professional visualization, data center, and automotive markets. The company sells its products to original equipment manufacturers, original device manufacturers, system integrators and distributors, independent software vendors, cloud service providers, add-in board manufacturers, distributors, automotive manufacturers and tier-1 automotive suppliers, and other ecosystem participants worldwide. It has a collaboration with Tech Mahindra Limited to develop artificial intelligence powered telco network operations reasoning agent. The company has a strategic partnership with Lumentum Holdings Inc. to develop optics technologies for AI and data centers. It also has a strategic partnership with Nebius Group N.V. to develop and deploy hyperscale cloud for the artificial intelligence market; and has a strategic partnership with IREN Limited to accelerate deployment of up to 5 gigawatts of infrastructure. NVIDIA Corporation was incorporated in 1993 and is headquartered in Santa Clara, California.",
     "fullTimeEmployees": 42000,
     "companyOfficers": [
       {
@@ -26,7 +26,7 @@
         "title": "Co-Founder, CEO & Director",
         "yearBorn": 1963,
         "fiscalYear": 2025,
-        "totalPay": 11054945,
+        "totalPay": 11543318,
         "exercisedValue": 0,
         "unexercisedValue": 0
       },
@@ -37,7 +37,7 @@
         "title": "Executive VP & CFO",
         "yearBorn": 1967,
         "fiscalYear": 2025,
-        "totalPay": 1512641,
+        "totalPay": 1514979,
         "exercisedValue": 0,
         "unexercisedValue": 0
       },
@@ -48,7 +48,7 @@
         "title": "Executive Vice President of Operations",
         "yearBorn": 1955,
         "fiscalYear": 2025,
-        "totalPay": 1379071,
+        "totalPay": 1382223,
         "exercisedValue": 0,
         "unexercisedValue": 0
       },
@@ -59,7 +59,7 @@
         "title": "Executive VP, General Counsel & Secretary",
         "yearBorn": 1967,
         "fiscalYear": 2025,
-        "totalPay": 1362989,
+        "totalPay": 1363896,
         "exercisedValue": 0,
         "unexercisedValue": 0
       },
@@ -70,7 +70,7 @@
         "title": "Executive Vice President of Worldwide Field Operations",
         "yearBorn": 1955,
         "fiscalYear": 2025,
-        "totalPay": 2313851,
+        "totalPay": 2298337,
         "exercisedValue": 0,
         "unexercisedValue": 0
       },
@@ -80,6 +80,16 @@
         "title": "Co-Founder",
         "fiscalYear": 2025,
         "totalPay": 320000,
+        "exercisedValue": 0,
+        "unexercisedValue": 0
+      },
+      {
+        "maxAge": 1,
+        "name": "Mr. Scott C. Gawel",
+        "age": 54,
+        "title": "Chief Accounting Officer",
+        "yearBorn": 1971,
+        "fiscalYear": 2025,
         "exercisedValue": 0,
         "unexercisedValue": 0
       },
@@ -108,16 +118,6 @@
         "fiscalYear": 2025,
         "exercisedValue": 0,
         "unexercisedValue": 0
-      },
-      {
-        "maxAge": 1,
-        "name": "Ms. Alison Berkley Wagonfeld",
-        "age": 54,
-        "title": "Chief Marketing Officer",
-        "yearBorn": 1971,
-        "fiscalYear": 2025,
-        "exercisedValue": 0,
-        "unexercisedValue": 0
       }
     ],
     "auditRisk": 5,
@@ -131,81 +131,81 @@
     "executiveTeam": [],
     "maxAge": 86400,
     "priceHint": 2,
-    "previousClose": 207.665,
-    "open": 208.315,
-    "dayLow": 206.5,
-    "dayHigh": 213.04,
-    "regularMarketPreviousClose": 207.665,
-    "regularMarketOpen": 208.315,
-    "regularMarketDayLow": 206.5,
-    "regularMarketDayHigh": 213.04,
+    "previousClose": 220.78,
+    "open": 224.93,
+    "dayLow": 221.5653,
+    "dayHigh": 227.84,
+    "regularMarketPreviousClose": 220.78,
+    "regularMarketOpen": 224.93,
+    "regularMarketDayLow": 221.5653,
+    "regularMarketDayHigh": 227.84,
     "dividendRate": 0.04,
     "dividendYield": 0.02,
     "exDividendDate": 1773187200,
     "payoutRatio": 0.0082,
     "fiveYearAvgDividendYield": 0.05,
     "beta": 2.244,
-    "trailingPE": 43.475468,
-    "forwardPE": 18.954212,
-    "volume": 39378798,
-    "regularMarketVolume": 39378798,
-    "averageVolume": 171193800,
-    "averageVolume10days": 159925920,
-    "averageDailyVolume10Day": 159925920,
-    "bid": 212.52,
-    "ask": 213.25,
-    "bidSize": 2,
-    "askSize": 1,
-    "marketCap": 5177689505792,
-    "nonDilutedMarketCap": 4774950000000,
-    "fiftyTwoWeekLow": 115.21,
-    "fiftyTwoWeekHigh": 216.83,
-    "allTimeHigh": 216.83,
+    "trailingPE": 46.087753,
+    "forwardPE": 19.865026,
+    "volume": 142422903,
+    "regularMarketVolume": 142422903,
+    "averageVolume": 170298113,
+    "averageVolume10days": 155493190,
+    "averageDailyVolume10Day": 155493190,
+    "bid": 225.86,
+    "ask": 226.33,
+    "bidSize": 30,
+    "askSize": 2,
+    "marketCap": 5469721067520,
+    "nonDilutedMarketCap": 5229360000000,
+    "fiftyTwoWeekLow": 129.16,
+    "fiftyTwoWeekHigh": 227.84,
+    "allTimeHigh": 227.84,
     "allTimeLow": 0.033333,
-    "priceToSalesTrailing12Months": 23.977667,
-    "fiftyDayAverage": 187.726,
-    "twoHundredDayAverage": 184.2864,
+    "priceToSalesTrailing12Months": 25.330053,
+    "fiftyDayAverage": 191.1776,
+    "twoHundredDayAverage": 185.44115,
     "trailingAnnualDividendRate": 0.04,
-    "trailingAnnualDividendYield": 0.00019261792,
+    "trailingAnnualDividendYield": 0.00018117583,
     "currency": "USD",
     "tradeable": false,
-    "enterpriseValue": 4999124877312,
+    "enterpriseValue": 5436525248512,
     "profitMargins": 0.55603004,
     "floatShares": 23321682000,
-    "sharesOutstanding": 24300000000,
-    "sharesShort": 283335701,
-    "sharesShortPriorMonth": 229241850,
-    "sharesShortPreviousMonthDate": 1773360000,
-    "dateShortInterest": 1776211200,
-    "sharesPercentSharesOut": 0.0117,
-    "heldPercentInsiders": 0.042090002,
-    "heldPercentInstitutions": 0.68154997,
-    "shortRatio": 1.68,
+    "sharesOutstanding": 24220525225,
+    "sharesShort": 282926089,
+    "sharesShortPriorMonth": 280872588,
+    "sharesShortPreviousMonthDate": 1774915200,
+    "dateShortInterest": 1777507200,
+    "sharesPercentSharesOut": 0.0116,
+    "heldPercentInsiders": 0.03979,
+    "heldPercentInstitutions": 0.70155,
+    "shortRatio": 1.84,
     "shortPercentOfFloat": 0.012200001,
-    "impliedSharesOutstanding": 24305000000,
+    "impliedSharesOutstanding": 24220525225,
     "bookValue": 6.472,
-    "priceToBook": 32.915604,
+    "priceToBook": 34.893387,
     "lastFiscalYearEnd": 1769299200,
     "nextFiscalYearEnd": 1800835200,
     "mostRecentQuarter": 1769299200,
     "earningsQuarterlyGrowth": 0.945,
     "netIncomeToCommon": 120066998272,
     "trailingEps": 4.9,
-    "forwardEps": 11.23918,
-    "pegRatio": 0.66,
+    "forwardEps": 11.36822,
+    "pegRatio": 0.7,
     "lastSplitFactor": "10:1",
     "lastSplitDate": 1717977600,
-    "enterpriseToRevenue": 23.151,
-    "enterpriseToEbitda": 37.523,
-    "52WeekChange": 0.770725,
-    "SandP52WeekChange": 0.3003528,
+    "enterpriseToRevenue": 25.176,
+    "enterpriseToEbitda": 40.806,
+    "52WeekChange": 0.674924,
+    "SandP52WeekChange": 0.2581271,
     "lastDividendValue": 0.01,
     "lastDividendDate": 1773187200,
     "quoteType": "EQUITY",
-    "currentPrice": 213.0298,
+    "currentPrice": 225.83,
     "targetHighPrice": 380.0,
     "targetLowPrice": 140.0,
-    "targetMeanPrice": 269.16544,
+    "targetMeanPrice": 269.9549,
     "targetMedianPrice": 265.0,
     "recommendationMean": 1.28333,
     "recommendationKey": "strong_buy",
@@ -237,41 +237,22 @@
     "quoteSourceName": "Nasdaq Real Time Price",
     "triggerable": true,
     "customPriceAlertConfidence": "HIGH",
-    "fiftyDayAverageChange": 25.303802,
-    "fiftyDayAverageChangePercent": 0.13479115,
-    "twoHundredDayAverageChange": 28.743393,
-    "twoHundredDayAverageChangePercent": 0.15597132,
-    "sourceInterval": 15,
-    "exchangeDataDelayedBy": 0,
-    "prevName": "Usual Stablecoin",
-    "nameChangeDate": "2026-05-07",
-    "averageAnalystRating": "1.3 - Strong Buy",
-    "cryptoTradeable": false,
-    "shortName": "NVIDIA Corporation",
-    "longName": "NVIDIA Corporation",
-    "corporateActions": [],
-    "regularMarketTime": 1778163108,
-    "exchange": "NMS",
-    "messageBoardId": "finmb_32307",
-    "exchangeTimezoneName": "America/New_York",
-    "exchangeTimezoneShortName": "EDT",
-    "gmtOffSetMilliseconds": -14400000,
-    "market": "us_market",
-    "esgPopulated": false,
     "hasPrePostMarketData": true,
     "firstTradeDateMilliseconds": 917015400000,
-    "regularMarketChangePercent": 2.583395,
-    "regularMarketPrice": 213.0298,
-    "regularMarketChange": 5.364807,
-    "regularMarketDayRange": "206.5 - 213.04",
+    "preMarketChange": 4.2400055,
+    "preMarketChangePercent": 1.8775209,
+    "preMarketPrice": 230.07,
+    "regularMarketChange": 5.05,
+    "regularMarketDayRange": "221.5653 - 227.84",
+    "marketState": "PRE",
     "fullExchangeName": "NasdaqGS",
-    "averageDailyVolume3Month": 171193800,
-    "fiftyTwoWeekLowChange": 97.8198,
-    "fiftyTwoWeekLowChangePercent": 0.84905654,
-    "fiftyTwoWeekRange": "115.21 - 216.83",
-    "fiftyTwoWeekHighChange": -3.8002014,
-    "fiftyTwoWeekHighChangePercent": -0.01752618,
-    "fiftyTwoWeekChangePercent": 77.0725,
+    "averageDailyVolume3Month": 170298113,
+    "fiftyTwoWeekLowChange": 96.67,
+    "fiftyTwoWeekLowChangePercent": 0.7484515,
+    "fiftyTwoWeekRange": "129.16 - 227.84",
+    "fiftyTwoWeekHighChange": -2.0099945,
+    "fiftyTwoWeekHighChangePercent": -0.008821957,
+    "fiftyTwoWeekChangePercent": 67.4924,
     "dividendDate": 1775001600,
     "earningsTimestamp": 1779307200,
     "earningsTimestampStart": 1779307200,
@@ -280,12 +261,35 @@
     "earningsCallTimestampEnd": 1779310800,
     "isEarningsDateEstimate": false,
     "epsTrailingTwelveMonths": 4.9,
-    "epsForward": 11.23918,
-    "epsCurrentYear": 8.34076,
-    "priceEpsCurrentYear": 25.540813,
-    "marketState": "REGULAR",
+    "epsForward": 11.36822,
+    "epsCurrentYear": 8.36114,
+    "priceEpsCurrentYear": 27.009474,
+    "fiftyDayAverageChange": 34.652405,
+    "fiftyDayAverageChangePercent": 0.18125767,
+    "twoHundredDayAverageChange": 40.388855,
+    "twoHundredDayAverageChangePercent": 0.21779878,
+    "sourceInterval": 15,
+    "exchangeDataDelayedBy": 0,
+    "prevName": "Usual Stablecoin",
+    "nameChangeDate": "2026-05-13",
+    "averageAnalystRating": "1.3 - Strong Buy",
+    "cryptoTradeable": false,
+    "shortName": "NVIDIA Corporation",
+    "longName": "NVIDIA Corporation",
+    "corporateActions": [],
+    "preMarketTime": 1778755699,
+    "regularMarketTime": 1778702401,
+    "exchange": "NMS",
+    "messageBoardId": "finmb_32307",
+    "exchangeTimezoneName": "America/New_York",
+    "exchangeTimezoneShortName": "EDT",
+    "gmtOffSetMilliseconds": -14400000,
+    "market": "us_market",
+    "esgPopulated": false,
+    "regularMarketChangePercent": 2.28735,
+    "regularMarketPrice": 225.83,
     "displayName": "NVIDIA",
-    "trailingPegRatio": 0.6237
+    "trailingPegRatio": 0.6831
   },
   "recommendations": [
     {
@@ -364,6 +368,16 @@
     }
   ],
   "upgrades_downgrades": [
+    {
+      "GradeDate": "2026-05-12T13:35:32",
+      "Firm": "Wells Fargo",
+      "ToGrade": "Overweight",
+      "FromGrade": "Overweight",
+      "Action": "main",
+      "priceTargetAction": "Raises",
+      "currentPriceTarget": 315.0,
+      "priorPriceTarget": 265.0
+    },
     {
       "GradeDate": "2026-03-31T05:55:57",
       "Firm": "Benchmark",
@@ -10176,40 +10190,278 @@
     }
   ],
   "analyst_price_targets": {
-    "current": 213.035,
+    "current": 225.83,
     "high": 380.0,
     "low": 140.0,
-    "mean": 269.16544,
+    "mean": 269.9549,
     "median": 265.0
   },
   "news": [
     {
-      "id": "f70b7925-cc03-4edf-abcb-fe082de6d288",
+      "id": "a235ba5d-fb5a-470f-8c1b-835b86a767b9",
       "content": {
-        "id": "f70b7925-cc03-4edf-abcb-fe082de6d288",
-        "contentType": "STORY",
-        "title": "The stock market's semi-charmed life: Morning Brief",
-        "description": "",
-        "summary": "The stock market has soared to record highs in recent weeks, and one sector has been doing a lot of the work.",
-        "pubDate": "2026-05-07T10:00:00Z",
-        "displayTime": "2026-05-07T10:00:00Z",
+        "id": "a235ba5d-fb5a-470f-8c1b-835b86a767b9",
+        "contentType": "VIDEO",
+        "title": "Photonics is 'phase 3' of AI infrastructure build. But what is photonics?",
+        "description": "<p>The Nasdaq Composite (<a target=\"_blank\" rel=\"\" class=\"link\" href=\"https://finance.yahoo.com/quote/%5EIXIC?p=%5EIXIC&.tsrc=fin-srch\" data-i13n=\"slk:^IXIC;cpos:1;pos:1\">^IXIC</a>) leads Wednesday's stock gains alongside the S&P 500 (<a target=\"_blank\" rel=\"\" class=\"link\" href=\"https://finance.yahoo.com/quote/%5EGSPC?p=%5EGSPC&.tsrc=fin-srch\" data-i13n=\"slk:^GSPC;cpos:2;pos:1\">^GSPC</a>), the former ending the trading day 1.2% higher as the sector rallied.</p>\n<p>IDX Advisors CIO Ben McMillan comes on Market Domination Overtime to explain the demand for photonics technology — or the use of laser and light to transmit data — that could be the next phase of the AI Revolution.</p>",
+        "summary": "The Nasdaq Composite (^IXIC) leads Wednesday's stock gains alongside the S&P 500 (^GSPC), the former ending the trading day 1.2% higher as the sector rallied. IDX Advisors CIO Ben McMillan comes on Market Domination Overtime to explain the demand for photonics technology — or the use of laser and light to transmit data — that could be the next phase of the AI Revolution.",
+        "pubDate": "2026-05-14T10:30:00Z",
+        "displayTime": "",
         "isHosted": true,
         "bypassModal": false,
         "previewUrl": null,
         "thumbnail": {
-          "originalUrl": "https://s.yimg.com/uu/api/res/1.2/d35FXVDYRR0HDbw8yPTfOg--~B/aD00NjU2O3c9Njk4NDthcHBpZD15dGFjaHlvbg--/https://d29szjachogqwa.cloudfront.net/images/2026-04/cea9c5c3-9735-4b5b-8b4f-6ea5312a4f36",
-          "originalWidth": 6984,
-          "originalHeight": 4656,
+          "originalUrl": "https://s.yimg.com/uu/api/res/1.2/PmAY5Jb_ehrpDb4As1_7fg--~B/aD0zNjgwO3c9NjU0MzthcHBpZD15dGFjaHlvbg--/https://d29szjachogqwa.cloudfront.net/images/user-uploaded/45424012-9fd9-4728-b7e2-11bb739e6eb2_19d456cba0a5c509b4df445b84237521ebb7a27f45f1d19b49f89e33cbb2ab6c.jpg",
+          "originalWidth": 6543,
+          "originalHeight": 3680,
           "caption": "",
           "resolutions": [
             {
-              "url": "https://s.yimg.com/uu/api/res/1.2/d35FXVDYRR0HDbw8yPTfOg--~B/aD00NjU2O3c9Njk4NDthcHBpZD15dGFjaHlvbg--/https://d29szjachogqwa.cloudfront.net/images/2026-04/cea9c5c3-9735-4b5b-8b4f-6ea5312a4f36",
-              "width": 6984,
-              "height": 4656,
+              "url": "https://s.yimg.com/uu/api/res/1.2/PmAY5Jb_ehrpDb4As1_7fg--~B/aD0zNjgwO3c9NjU0MzthcHBpZD15dGFjaHlvbg--/https://d29szjachogqwa.cloudfront.net/images/user-uploaded/45424012-9fd9-4728-b7e2-11bb739e6eb2_19d456cba0a5c509b4df445b84237521ebb7a27f45f1d19b49f89e33cbb2ab6c.jpg",
+              "width": 6543,
+              "height": 3680,
               "tag": "original"
             },
             {
-              "url": "https://s.yimg.com/uu/api/res/1.2/Cq17DYMDVph2Mubg9Mwz6g--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://d29szjachogqwa.cloudfront.net/images/2026-04/cea9c5c3-9735-4b5b-8b4f-6ea5312a4f36",
+              "url": "https://s.yimg.com/uu/api/res/1.2/wdIQbSVZDyQ6FDUlcSMalQ--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://d29szjachogqwa.cloudfront.net/images/user-uploaded/45424012-9fd9-4728-b7e2-11bb739e6eb2_19d456cba0a5c509b4df445b84237521ebb7a27f45f1d19b49f89e33cbb2ab6c.jpg",
+              "width": 170,
+              "height": 128,
+              "tag": "170x128"
+            }
+          ]
+        },
+        "provider": {
+          "displayName": "Yahoo Finance Video",
+          "url": "https://finance.yahoo.com/",
+          "sourceId": "video.yahoofinance.com"
+        },
+        "canonicalUrl": {
+          "url": "https://finance.yahoo.com/video/photonics-phase-3-ai-infrastructure-103000049.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "clickThroughUrl": {
+          "url": "https://finance.yahoo.com/video/photonics-phase-3-ai-infrastructure-103000049.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "metadata": {
+          "editorsPick": true
+        },
+        "finance": {
+          "premiumFinance": {
+            "isPremiumNews": false,
+            "isPremiumFreeNews": false
+          }
+        },
+        "storyline": {
+          "storylineItems": [
+            {
+              "content": {
+                "id": "d692d73b-124b-4d18-9198-596144d3dba0",
+                "contentType": "STORY",
+                "isHosted": true,
+                "title": "Tech stocks today: Cerebras to stage blockbuster IPO, tech stocks climb as Cook, Musk, and Huang join Trump for China trip",
+                "thumbnail": {
+                  "originalUrl": "https://s.yimg.com/uu/api/res/1.2/7.DYK5M10Ip559Sr3JJoKQ--~B/aD0xNTY2O3c9MzAwMDthcHBpZD15dGFjaHlvbg--/https://d29szjachogqwa.cloudfront.net/images/2026-05/fd27c14a-3dcf-4203-b525-d1c9dfaabf85",
+                  "originalWidth": 3000,
+                  "originalHeight": 1566,
+                  "caption": "",
+                  "resolutions": null
+                },
+                "provider": {
+                  "displayName": "Yahoo Finance",
+                  "sourceId": "yahoofinance.com"
+                },
+                "previewUrl": null,
+                "providerContentUrl": "",
+                "canonicalUrl": {
+                  "url": "https://finance.yahoo.com/sectors/technology/live/tech-stocks-today-cerebras-to-stage-blockbuster-ipo-tech-stocks-climb-as-cook-musk-and-huang-join-trump-for-china-trip-100000399.html"
+                },
+                "clickThroughUrl": {
+                  "url": "https://finance.yahoo.com/sectors/technology/live/tech-stocks-today-cerebras-to-stage-blockbuster-ipo-tech-stocks-climb-as-cook-musk-and-huang-join-trump-for-china-trip-100000399.html"
+                }
+              }
+            },
+            {
+              "content": {
+                "id": "798b5891-2efc-47be-8d76-8a38e63fe2d5",
+                "contentType": "VIDEO",
+                "isHosted": true,
+                "title": "What Elon Musk hopes to gain from joining Trump's China visit",
+                "thumbnail": {
+                  "originalUrl": "https://s.yimg.com/uu/api/res/1.2/axo2DVR0AunuV3bGQFKWpA--~B/aD0xNTE1O3c9MjY5NTthcHBpZD15dGFjaHlvbg--/https://d29szjachogqwa.cloudfront.net/images/user-uploaded/b4c46001-d7ce-4772-b8bb-76f237b8ab9f_03381245a9f402f8f840dad666e16fce14104b35e2659db1359b4e0fc12c507b.jpg",
+                  "originalWidth": 2695,
+                  "originalHeight": 1515,
+                  "caption": "",
+                  "resolutions": null
+                },
+                "provider": {
+                  "displayName": "Yahoo Finance Video",
+                  "sourceId": "video.yahoofinance.com"
+                },
+                "previewUrl": null,
+                "providerContentUrl": "",
+                "canonicalUrl": {
+                  "url": "https://finance.yahoo.com/video/what-elon-musk-hopes-to-gain-from-joining-trumps-china-visit-203340603.html"
+                },
+                "clickThroughUrl": {
+                  "url": "https://finance.yahoo.com/video/what-elon-musk-hopes-to-gain-from-joining-trumps-china-visit-203340603.html"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "d923cb2a-226f-4c18-9d43-e612f3540978",
+      "content": {
+        "id": "d923cb2a-226f-4c18-9d43-e612f3540978",
+        "contentType": "VIDEO",
+        "title": "Why Elon Musk's SpaceX is a 'three-engine empire' ahead of IPO",
+        "description": "<p>Elon Musk's private space venture, SpaceX (<a target=\"_blank\" rel=\"\" class=\"link\" href=\"https://finance.yahoo.com/quote/SPAX.PVT/\" data-i13n=\"cpos:1;pos:1\">SPAX.PVT</a>), is valued at over $1.5 trillion as investors await its mega-IPO in 2026.</p>\n<p>ER Shares COO and chief investment strategist Eva Ados explains why her firm is calling SpaceX a \"three-engine empire,\" identifying its space infrastructure development, Starlink satellite, and possible space-based AI data centers as the company's core components and biggest drivers.</p>",
+        "summary": "Elon Musk's private space venture, SpaceX (SPAX.PVT), is valued at over $1.5 trillion as investors await its mega-IPO in 2026. ER Shares COO and chief investment strategist Eva Ados explains why her firm is calling SpaceX a \"three-engine empire,\" identifying its space infrastructure development, Starlink satellite, and possible space-based AI data centers as the company's core components and biggest drivers.",
+        "pubDate": "2026-05-13T20:31:12Z",
+        "displayTime": "",
+        "isHosted": true,
+        "bypassModal": false,
+        "previewUrl": null,
+        "thumbnail": {
+          "originalUrl": "https://s.yimg.com/uu/api/res/1.2/XypB4rS3bO96kjl5GQM5RQ--~B/aD0yNzQ2O3c9NDg4MjthcHBpZD15dGFjaHlvbg--/https://d29szjachogqwa.cloudfront.net/images/user-uploaded/49593bef-f491-4461-9098-4dadfb16ea46_a81bf64b4485495d5f0969db6165fab0ff00ab86024a64c39f9330826387d7f5.jpg",
+          "originalWidth": 4882,
+          "originalHeight": 2746,
+          "caption": "",
+          "resolutions": [
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/XypB4rS3bO96kjl5GQM5RQ--~B/aD0yNzQ2O3c9NDg4MjthcHBpZD15dGFjaHlvbg--/https://d29szjachogqwa.cloudfront.net/images/user-uploaded/49593bef-f491-4461-9098-4dadfb16ea46_a81bf64b4485495d5f0969db6165fab0ff00ab86024a64c39f9330826387d7f5.jpg",
+              "width": 4882,
+              "height": 2746,
+              "tag": "original"
+            },
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/H_aMzPhPFHpVB6KVB8YSvg--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://d29szjachogqwa.cloudfront.net/images/user-uploaded/49593bef-f491-4461-9098-4dadfb16ea46_a81bf64b4485495d5f0969db6165fab0ff00ab86024a64c39f9330826387d7f5.jpg",
+              "width": 170,
+              "height": 128,
+              "tag": "170x128"
+            }
+          ]
+        },
+        "provider": {
+          "displayName": "Yahoo Finance Video",
+          "url": "https://finance.yahoo.com/",
+          "sourceId": "video.yahoofinance.com"
+        },
+        "canonicalUrl": {
+          "url": "https://finance.yahoo.com/video/why-elon-musks-spacex-is-a-three-engine-empire-ahead-of-ipo-203112587.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "clickThroughUrl": {
+          "url": "https://finance.yahoo.com/video/why-elon-musks-spacex-is-a-three-engine-empire-ahead-of-ipo-203112587.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "metadata": {
+          "editorsPick": true
+        },
+        "finance": {
+          "premiumFinance": {
+            "isPremiumNews": false,
+            "isPremiumFreeNews": false
+          }
+        },
+        "storyline": {
+          "storylineItems": [
+            {
+              "content": {
+                "id": "46ec1b84-e3a3-4b8d-a8ed-18bea82c093e",
+                "contentType": "STORY",
+                "isHosted": true,
+                "title": "Nebius stock soars as revenue jumps 684% on booming data center demand",
+                "thumbnail": {
+                  "originalUrl": "https://s.yimg.com/uu/api/res/1.2/4H9bDDrNYYz6I5duHNw_hg--~B/aD0zMzkwO3c9NTAwMDthcHBpZD15dGFjaHlvbg--/https://d29szjachogqwa.cloudfront.net/images/2026-05/a30d206c-9724-4480-b6d1-901694b2dbf3",
+                  "originalWidth": 5000,
+                  "originalHeight": 3390,
+                  "caption": "",
+                  "resolutions": null
+                },
+                "provider": {
+                  "displayName": "Yahoo Finance",
+                  "sourceId": "yahoofinance.com"
+                },
+                "previewUrl": null,
+                "providerContentUrl": "",
+                "canonicalUrl": {
+                  "url": "https://finance.yahoo.com/markets/article/nebius-stock-soars-as-revenue-jumps-684-on-booming-data-center-demand-152316937.html"
+                },
+                "clickThroughUrl": {
+                  "url": "https://finance.yahoo.com/markets/article/nebius-stock-soars-as-revenue-jumps-684-on-booming-data-center-demand-152316937.html"
+                }
+              }
+            },
+            {
+              "content": {
+                "id": "1d153070-2fac-4750-a47a-89168ed504ed",
+                "contentType": "VIDEO",
+                "isHosted": true,
+                "title": "Why criticism of ARKK's Cathie Wood might be a bit 'harsh'",
+                "thumbnail": {
+                  "originalUrl": "https://s.yimg.com/uu/api/res/1.2/exKGRf.w9V6MDSQoMxq7dw--~B/aD0zMzc1O3c9NjAwMDthcHBpZD15dGFjaHlvbg--/https://d29szjachogqwa.cloudfront.net/images/user-uploaded/9d408ec0-f613-11ef-9fed-dff65c605a70_fdae045b7ca85390a17bfad386cec0e4f735e15e8fd3d3c113a28cfa2c8e55a8.jpg",
+                  "originalWidth": 6000,
+                  "originalHeight": 3375,
+                  "caption": "",
+                  "resolutions": null
+                },
+                "provider": {
+                  "displayName": "Yahoo Finance Video",
+                  "sourceId": "video.yahoofinance.com"
+                },
+                "previewUrl": null,
+                "providerContentUrl": "",
+                "canonicalUrl": {
+                  "url": "https://finance.yahoo.com/video/why-criticism-of-arkks-cathie-wood-might-be-a-bit-harsh-200603491.html"
+                },
+                "clickThroughUrl": {
+                  "url": "https://finance.yahoo.com/video/why-criticism-of-arkks-cathie-wood-might-be-a-bit-harsh-200603491.html"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "8d4c0f74-0716-4b6b-b695-4922be57ae4a",
+      "content": {
+        "id": "8d4c0f74-0716-4b6b-b695-4922be57ae4a",
+        "contentType": "STORY",
+        "title": "Nvidia to report Q1 earnings as chip stocks soar on AI strength",
+        "description": "",
+        "summary": "AI heavyweight Nvidia will report its first quarter results on May 20, in what is easily one of the most anticipated announcements of the earnings season.",
+        "pubDate": "2026-05-13T19:12:00Z",
+        "displayTime": "2026-05-13T19:12:00Z",
+        "isHosted": true,
+        "bypassModal": false,
+        "previewUrl": null,
+        "thumbnail": {
+          "originalUrl": "https://s.yimg.com/uu/api/res/1.2/TBpgkcMoWL.FoCaM.FVEjw--~B/aD0xODE0O3c9MzIyNTthcHBpZD15dGFjaHlvbg--/https://d29szjachogqwa.cloudfront.net/images/user-uploaded/8f328e5c-1ec6-4d49-bbc7-3034e1c8ad11_6f239ba8e1af3e9b08a6c6efa64bb8522a49c1717a7a401d5d084f8732689614.jpg",
+          "originalWidth": 3225,
+          "originalHeight": 1814,
+          "caption": "",
+          "resolutions": [
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/TBpgkcMoWL.FoCaM.FVEjw--~B/aD0xODE0O3c9MzIyNTthcHBpZD15dGFjaHlvbg--/https://d29szjachogqwa.cloudfront.net/images/user-uploaded/8f328e5c-1ec6-4d49-bbc7-3034e1c8ad11_6f239ba8e1af3e9b08a6c6efa64bb8522a49c1717a7a401d5d084f8732689614.jpg",
+              "width": 3225,
+              "height": 1814,
+              "tag": "original"
+            },
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/xyAS22RFb9k8dfZg9PBijA--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://d29szjachogqwa.cloudfront.net/images/user-uploaded/8f328e5c-1ec6-4d49-bbc7-3034e1c8ad11_6f239ba8e1af3e9b08a6c6efa64bb8522a49c1717a7a401d5d084f8732689614.jpg",
               "width": 170,
               "height": 128,
               "tag": "170x128"
@@ -10222,13 +10474,13 @@
           "sourceId": "yahoofinance.com"
         },
         "canonicalUrl": {
-          "url": "https://finance.yahoo.com/markets/article/the-stock-markets-semi-charmed-life-morning-brief-100000617.html",
+          "url": "https://finance.yahoo.com/markets/stocks/article/nvidia-to-report-q1-earnings-as-chip-stocks-soar-on-ai-strength-191200180.html",
           "site": "finance",
           "region": "US",
           "lang": "en-US"
         },
         "clickThroughUrl": {
-          "url": "https://finance.yahoo.com/markets/article/the-stock-markets-semi-charmed-life-morning-brief-100000617.html",
+          "url": "https://finance.yahoo.com/markets/stocks/article/nvidia-to-report-q1-earnings-as-chip-stocks-soar-on-ai-strength-191200180.html",
           "site": "finance",
           "region": "US",
           "lang": "en-US"
@@ -10246,14 +10498,14 @@
           "storylineItems": [
             {
               "content": {
-                "id": "6e06c3b4-e3b9-463f-be60-afc3e01a9aa8",
+                "id": "3d3cce0d-bb69-4f3a-8fd8-fa76d839d62f",
                 "contentType": "VIDEO",
                 "isHosted": true,
-                "title": "'Uber won': Why Instacart might not stand a chance",
+                "title": "Nvidia CEO Jensen Huang joins Trump delegation on China trip",
                 "thumbnail": {
-                  "originalUrl": "https://s.yimg.com/uu/api/res/1.2/.GEZmLC_ryieCZ6qViWFzg--~B/aD0yMjQ5O3c9NDAwMDthcHBpZD15dGFjaHlvbg--/https://d29szjachogqwa.cloudfront.net/images/user-uploaded/b577de1f-7775-428a-b566-0b96889ecea6_7180ed71df07b0167cc17ce01e49da7c957bdadc0a184a1c2c8b264503fa4696.net/images/2026-05/b577de1f-7775-428a-b566-0b96889ecea6",
-                  "originalWidth": 4000,
-                  "originalHeight": 2249,
+                  "originalUrl": "https://s.yimg.com/uu/api/res/1.2/TBpgkcMoWL.FoCaM.FVEjw--~B/aD0xODE0O3c9MzIyNTthcHBpZD15dGFjaHlvbg--/https://d29szjachogqwa.cloudfront.net/images/user-uploaded/8f328e5c-1ec6-4d49-bbc7-3034e1c8ad11_6f239ba8e1af3e9b08a6c6efa64bb8522a49c1717a7a401d5d084f8732689614.jpg",
+                  "originalWidth": 3225,
+                  "originalHeight": 1814,
                   "caption": "",
                   "resolutions": null
                 },
@@ -10264,115 +10516,23 @@
                 "previewUrl": null,
                 "providerContentUrl": "",
                 "canonicalUrl": {
-                  "url": "https://finance.yahoo.com/video/uber-won-why-instacart-might-not-stand-a-chance-204139211.html"
+                  "url": "https://finance.yahoo.com/video/nvidia-ceo-jensen-huang-joins-140000639.html"
                 },
                 "clickThroughUrl": {
-                  "url": "https://finance.yahoo.com/video/uber-won-why-instacart-might-not-stand-a-chance-204139211.html"
+                  "url": "https://finance.yahoo.com/video/nvidia-ceo-jensen-huang-joins-140000639.html"
                 }
               }
             },
             {
               "content": {
-                "id": "efc8d8b7-dda9-40bd-a7bd-84a481168b21",
-                "contentType": "VIDEO",
-                "isHosted": true,
-                "title": "Anthropic CEO warns software companies can 'go bust' without AI",
-                "thumbnail": {
-                  "originalUrl": "https://s.yimg.com/uu/api/res/1.2/EnV6zwaWlciZJFclcVxtcQ--~B/aD0yODUwO3c9NTA2NzthcHBpZD15dGFjaHlvbg--/https://d29szjachogqwa.cloudfront.net/images/user-uploaded/8d8736d0-d75b-11f0-b277-c2557773ba89_357a070b5c946f4c58080b09b0ad297ee014b9ec2958b7d5747bf485fd700b7b.com/creatr-uploaded-images/2025-12/8d8736d0-d75b-11f0-b277-c2557773ba89",
-                  "originalWidth": 5067,
-                  "originalHeight": 2850,
-                  "caption": "",
-                  "resolutions": null
-                },
-                "provider": {
-                  "displayName": "Yahoo Finance Video",
-                  "sourceId": "video.yahoofinance.com"
-                },
-                "previewUrl": null,
-                "providerContentUrl": "",
-                "canonicalUrl": {
-                  "url": "https://finance.yahoo.com/video/anthropic-ceo-warns-software-companies-can-go-bust-without-ai-153000062.html"
-                },
-                "clickThroughUrl": {
-                  "url": "https://finance.yahoo.com/video/anthropic-ceo-warns-software-companies-can-go-bust-without-ai-153000062.html"
-                }
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "id": "cb55fd1f-42e8-4ce2-ba45-62c890c6cf92",
-      "content": {
-        "id": "cb55fd1f-42e8-4ce2-ba45-62c890c6cf92",
-        "contentType": "VIDEO",
-        "title": "AMD stock surges as the chipmaker forecasts continued AI growth",
-        "description": "<p>Advanced Micro Devices (<a target=\"_blank\" rel=\"\" class=\"link\" href=\"https://finance.yahoo.com/quote/AMD/\" data-i13n=\"slk:AMD;cpos:1;pos:1\">AMD</a>) <a target=\"_blank\" rel=\"\" class=\"link\" href=\"https://finance.yahoo.com/sectors/technology/article/amd-stock-soars-on-q1-earnings-beat-better-than-expected-outlook-amid-strong-ai-chip-demand-195252267.html\" data-i13n=\"slk:stock surges higher on Wednesday;cpos:2;pos:1\">stock surges higher on Wednesday</a> after blowing past first quarter earnings estimates and second quarter guidance forecasts.</p>\n<p>Market Domination Host Josh Lipton and Yahoo Finance Tech Editor Dan Howley sit down to take a closer look at AMD's growth outlook as AI demand pushes chip stocks higher.</p>",
-        "summary": "Advanced Micro Devices (AMD) stock surges higher on Wednesday after blowing past first quarter earnings estimates and second quarter guidance forecasts. Market Domination Host Josh Lipton and Yahoo Finance Tech Editor Dan Howley sit down to take a closer look at AMD's growth outlook as AI demand pushes chip stocks higher.",
-        "pubDate": "2026-05-06T20:05:00Z",
-        "displayTime": "",
-        "isHosted": true,
-        "bypassModal": false,
-        "previewUrl": null,
-        "thumbnail": {
-          "originalUrl": "https://s.yimg.com/uu/api/res/1.2/cczzczwrl2nvmXqAJIdi0w--~B/aD0zMDc2O3c9NTQ2OTthcHBpZD15dGFjaHlvbg--/https://d29szjachogqwa.cloudfront.net/images/user-uploaded/image_5897.png_11310cd4b3d628a7bdbf9482c30b767e2cbaa74e2f90a144ab7cf3fa4ef095e8.png",
-          "originalWidth": 5469,
-          "originalHeight": 3076,
-          "caption": "",
-          "resolutions": [
-            {
-              "url": "https://s.yimg.com/uu/api/res/1.2/cczzczwrl2nvmXqAJIdi0w--~B/aD0zMDc2O3c9NTQ2OTthcHBpZD15dGFjaHlvbg--/https://d29szjachogqwa.cloudfront.net/images/user-uploaded/image_5897.png_11310cd4b3d628a7bdbf9482c30b767e2cbaa74e2f90a144ab7cf3fa4ef095e8.png",
-              "width": 5469,
-              "height": 3076,
-              "tag": "original"
-            },
-            {
-              "url": "https://s.yimg.com/uu/api/res/1.2/SwGLy2DDDzOtf7_5Qv9U8Q--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://d29szjachogqwa.cloudfront.net/images/user-uploaded/image_5897.png_11310cd4b3d628a7bdbf9482c30b767e2cbaa74e2f90a144ab7cf3fa4ef095e8.png",
-              "width": 170,
-              "height": 128,
-              "tag": "170x128"
-            }
-          ]
-        },
-        "provider": {
-          "displayName": "Yahoo Finance Video",
-          "url": "https://finance.yahoo.com/",
-          "sourceId": "video.yahoofinance.com"
-        },
-        "canonicalUrl": {
-          "url": "https://finance.yahoo.com/video/amd-stock-surges-chipmaker-forecasts-200500779.html",
-          "site": "finance",
-          "region": "US",
-          "lang": "en-US"
-        },
-        "clickThroughUrl": {
-          "url": "https://finance.yahoo.com/video/amd-stock-surges-chipmaker-forecasts-200500779.html",
-          "site": "finance",
-          "region": "US",
-          "lang": "en-US"
-        },
-        "metadata": {
-          "editorsPick": true
-        },
-        "finance": {
-          "premiumFinance": {
-            "isPremiumNews": false,
-            "isPremiumFreeNews": false
-          }
-        },
-        "storyline": {
-          "storylineItems": [
-            {
-              "content": {
-                "id": "0ec8c400-e6a7-493f-894c-e2d0c1f0014f",
+                "id": "421bac1e-301a-4bbf-972a-c9652a799ae1",
                 "contentType": "STORY",
                 "isHosted": true,
-                "title": "Anthropic to rent all AI capacity at SpaceX's Colossus data center",
+                "title": "Nvidia's Jensen Huang is a late addition to Trump's China trip, joining Elon Musk, Tim Cook, and others",
                 "thumbnail": {
-                  "originalUrl": "https://s.yimg.com/uu/api/res/1.2/khh8b1rmeDrKrQ.eg86RRg--~B/aD01MjI5O3c9Nzg0MzthcHBpZD15dGFjaHlvbg--/https://d29szjachogqwa.cloudfront.net/images/2026-05/35abe817-e7b4-407e-9360-d8ffcef85703",
-                  "originalWidth": 7843,
-                  "originalHeight": 5229,
+                  "originalUrl": "https://s.yimg.com/os/creatr-uploaded-images/2026-05/9d3115e0-4e86-11f1-97f7-8ffbad7cb620",
+                  "originalWidth": 3313,
+                  "originalHeight": 2262,
                   "caption": "",
                   "resolutions": null
                 },
@@ -10383,37 +10543,10 @@
                 "previewUrl": null,
                 "providerContentUrl": "",
                 "canonicalUrl": {
-                  "url": "https://finance.yahoo.com/news/anthropic-to-rent-all-ai-capacity-at-spacexs-colossus-data-center-180327774.html"
+                  "url": "https://finance.yahoo.com/economy/policy/article/nvidias-jensen-huang-is-a-late-addition-to-trumps-china-trip-joining-elon-musk-tim-cook-and-others-201120985.html"
                 },
                 "clickThroughUrl": {
-                  "url": "https://finance.yahoo.com/news/anthropic-to-rent-all-ai-capacity-at-spacexs-colossus-data-center-180327774.html"
-                }
-              }
-            },
-            {
-              "content": {
-                "id": "2d096627-2294-4794-988b-d51152c5e987",
-                "contentType": "STORY",
-                "isHosted": true,
-                "title": "Supermicro stock soars on strong margin, revenue forecast",
-                "thumbnail": {
-                  "originalUrl": "https://s.yimg.com/uu/api/res/1.2/HhIS3BbZKzlH_d3NNvNkHg--~B/aD0yNjY4O3c9NDAwMDthcHBpZD15dGFjaHlvbg--/https://d29szjachogqwa.cloudfront.net/images/user-uploaded/gettyimages-2263993183_6851.jpg",
-                  "originalWidth": 4000,
-                  "originalHeight": 2668,
-                  "caption": "",
-                  "resolutions": null
-                },
-                "provider": {
-                  "displayName": "Yahoo Finance",
-                  "sourceId": "yahoofinance.com"
-                },
-                "previewUrl": null,
-                "providerContentUrl": "",
-                "canonicalUrl": {
-                  "url": "https://finance.yahoo.com/markets/stocks/article/supermicro-stock-soars-on-strong-margin-revenue-forecast-121430095.html"
-                },
-                "clickThroughUrl": {
-                  "url": "https://finance.yahoo.com/markets/stocks/article/supermicro-stock-soars-on-strong-margin-revenue-forecast-121430095.html"
+                  "url": "https://finance.yahoo.com/economy/policy/article/nvidias-jensen-huang-is-a-late-addition-to-trumps-china-trip-joining-elon-musk-tim-cook-and-others-201120985.html"
                 }
               }
             }
@@ -10422,151 +10555,94 @@
       }
     },
     {
-      "id": "25d4af04-17c3-4aed-9cba-2652163caff2",
+      "id": "df9cc2cb-6243-3aaf-ad98-09141d05b5c4",
       "content": {
-        "id": "25d4af04-17c3-4aed-9cba-2652163caff2",
-        "contentType": "VIDEO",
-        "title": "The space ETFs prepping for liftoff ahead of SpaceX IPO",
-        "description": "<p>Space-related funds are seeing a surge of inflows as investors eagerly await the IPO of Elon Musk's SpaceX (<a target=\"_blank\" rel=\"\" class=\"link\" href=\"https://finance.yahoo.com/quote/SPAX.PVT/\" data-i13n=\"cpos:1;pos:1\">SPAX.PVT</a>).</p>\n<p>In the latest installment of Yahoo Finance's <a target=\"_blank\" rel=\"\" class=\"link\" href=\"https://finance.yahoo.com/topic/etf-report/\" data-i13n=\"slk:ETF Report;cpos:2;pos:1\">ETF Report</a>, TMX VettaFi head of research Todd Rosenbluth to talk about the ETFs that could draw in the most investors — like the Procure Space ETF (<a target=\"_blank\" rel=\"\" class=\"link\" href=\"https://finance.yahoo.com/quote/UFO/\" data-i13n=\"cpos:3;pos:1\">UFO</a>) — as interest in the broader space economy grows.</p>\n<p>Rosenbluth goes on to weigh in on prediction market ETFs that are set to launch.</p>",
-        "summary": "Space-related funds are seeing a surge of inflows as investors eagerly await the IPO of Elon Musk's SpaceX (SPAX.PVT). In the latest installment of Yahoo Finance's ETF Report, TMX VettaFi head of research Todd Rosenbluth to talk about the ETFs that could draw in the most investors — like the Procure Space ETF (UFO) — as interest in the broader space economy grows. Rosenbluth goes on to weigh in on prediction market ETFs that are set to launch.",
-        "pubDate": "2026-05-06T16:15:00Z",
-        "displayTime": "",
-        "isHosted": true,
-        "bypassModal": false,
-        "previewUrl": null,
-        "thumbnail": {
-          "originalUrl": "https://s.yimg.com/uu/api/res/1.2/A8S8r52NGbNNcOwJCA2Yxg--~B/aD0xNzExO3c9MzA0MjthcHBpZD15dGFjaHlvbg--/https://d29szjachogqwa.cloudfront.net/images/user-uploaded/a0c41ab0-2f58-11f1-ab98-597e3fcf13ce_ea0d55abb3aaac892959942e459989914399e30f77b6c950c09f21e61b5d99e1.com/creatr-uploaded-images/2026-04/a0c41ab0-2f58-11f1-ab98-597e3fcf13ce",
-          "originalWidth": 3042,
-          "originalHeight": 1711,
-          "caption": "",
-          "resolutions": [
-            {
-              "url": "https://s.yimg.com/uu/api/res/1.2/A8S8r52NGbNNcOwJCA2Yxg--~B/aD0xNzExO3c9MzA0MjthcHBpZD15dGFjaHlvbg--/https://d29szjachogqwa.cloudfront.net/images/user-uploaded/a0c41ab0-2f58-11f1-ab98-597e3fcf13ce_ea0d55abb3aaac892959942e459989914399e30f77b6c950c09f21e61b5d99e1.com/creatr-uploaded-images/2026-04/a0c41ab0-2f58-11f1-ab98-597e3fcf13ce",
-              "width": 3042,
-              "height": 1711,
-              "tag": "original"
-            },
-            {
-              "url": "https://s.yimg.com/uu/api/res/1.2/rTL0bHC4goMYax3GiInzHQ--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://d29szjachogqwa.cloudfront.net/images/user-uploaded/a0c41ab0-2f58-11f1-ab98-597e3fcf13ce_ea0d55abb3aaac892959942e459989914399e30f77b6c950c09f21e61b5d99e1.com/creatr-uploaded-images/2026-04/a0c41ab0-2f58-11f1-ab98-597e3fcf13ce",
-              "width": 170,
-              "height": 128,
-              "tag": "170x128"
-            }
-          ]
-        },
-        "provider": {
-          "displayName": "Yahoo Finance Video",
-          "url": "https://finance.yahoo.com/",
-          "sourceId": "video.yahoofinance.com"
-        },
-        "canonicalUrl": {
-          "url": "https://finance.yahoo.com/video/space-etfs-prepping-liftoff-ahead-161500971.html",
-          "site": "finance",
-          "region": "US",
-          "lang": "en-US"
-        },
-        "clickThroughUrl": {
-          "url": "https://finance.yahoo.com/video/space-etfs-prepping-liftoff-ahead-161500971.html",
-          "site": "finance",
-          "region": "US",
-          "lang": "en-US"
-        },
-        "metadata": {
-          "editorsPick": true
-        },
-        "finance": {
-          "premiumFinance": {
-            "isPremiumNews": false,
-            "isPremiumFreeNews": false
-          }
-        },
-        "storyline": {
-          "storylineItems": [
-            {
-              "content": {
-                "id": "a122a67d-b572-4ce8-bea2-cbe3edd6479d",
-                "contentType": "VIDEO",
-                "isHosted": true,
-                "title": "What Micron & Sandisk's stock moves say about the chip sector",
-                "thumbnail": {
-                  "originalUrl": "https://s.yimg.com/uu/api/res/1.2/binHPp4Zw_dL9gLrU.BuAw--~B/aD0zMjY4O3c9NTgxMTthcHBpZD15dGFjaHlvbg--/https://d29szjachogqwa.cloudfront.net/images/user-uploaded/cfacb250-5b68-4da4-9288-be4ae62c9cc2_7dc0fdec023ebc9f21e2faccf4d444c2b940fd08f5fc6a1b2de9779aa0df13ea.net/images/2026-04/cfacb250-5b68-4da4-9288-be4ae62c9cc2",
-                  "originalWidth": 5811,
-                  "originalHeight": 3268,
-                  "caption": "",
-                  "resolutions": null
-                },
-                "provider": {
-                  "displayName": "Yahoo Finance Video",
-                  "sourceId": "video.yahoofinance.com"
-                },
-                "previewUrl": null,
-                "providerContentUrl": "",
-                "canonicalUrl": {
-                  "url": "https://finance.yahoo.com/video/what-micron--sandisks-stock-moves-say-about-the-chip-sector-145357365.html"
-                },
-                "clickThroughUrl": {
-                  "url": "https://finance.yahoo.com/video/what-micron--sandisks-stock-moves-say-about-the-chip-sector-145357365.html"
-                }
-              }
-            },
-            {
-              "content": {
-                "id": "72f99b43-f56e-4330-8ca1-f0b36f3b605a",
-                "contentType": "STORY",
-                "isHosted": true,
-                "title": "Corning stock surges to intraday high after company lands $500 million Nvidia deal",
-                "thumbnail": {
-                  "originalUrl": "https://s.yimg.com/uu/api/res/1.2/L8soj3PVzCw1kc69tWT1jw--~B/aD0zMzQ2O3c9NTA4MzthcHBpZD15dGFjaHlvbg--/https://d29szjachogqwa.cloudfront.net/images/2026-05/4a97ea9f-a5de-4a2e-806b-066da0cfe94d",
-                  "originalWidth": 5083,
-                  "originalHeight": 3346,
-                  "caption": "",
-                  "resolutions": null
-                },
-                "provider": {
-                  "displayName": "Yahoo Finance",
-                  "sourceId": "yahoofinance.com"
-                },
-                "previewUrl": null,
-                "providerContentUrl": "",
-                "canonicalUrl": {
-                  "url": "https://finance.yahoo.com/markets/stocks/article/corning-stock-surges-to-intraday-high-after-company-lands-500-million-nvidia-deal-144931492.html"
-                },
-                "clickThroughUrl": {
-                  "url": "https://finance.yahoo.com/markets/stocks/article/corning-stock-surges-to-intraday-high-after-company-lands-500-million-nvidia-deal-144931492.html"
-                }
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "id": "f42bf5a2-bda6-3df7-a49f-2ae0089c31c0",
-      "content": {
-        "id": "f42bf5a2-bda6-3df7-a49f-2ae0089c31c0",
+        "id": "df9cc2cb-6243-3aaf-ad98-09141d05b5c4",
         "contentType": "STORY",
-        "title": "Is Intuitive Machines Stock a Buy After Once Capital Initiated a New Position?",
+        "title": "Cerebras set for debut in stock market gripped by AI mania",
         "description": "",
-        "summary": "Intuitive Machines delivers lunar access and space infrastructure solutions for government and commercial clients worldwide.",
-        "pubDate": "2026-05-07T13:59:01Z",
-        "displayTime": "2026-05-07T13:59:01Z",
+        "summary": "Chipmaker Cerebras is set to make its U.S. market debut later on Thursday, as it looks to ride a wave of investor euphoria for companies that ‌are at the heart of the artificial intelligence boom.  The firm's IPO is the largest this year ‌and comes as AI-linked stocks push broader markets to record highs despite challenges to global growth stemming from the Middle East conflict.  The ​Sunnyvale, California-based chipmaker, which is a competitor to industry juggernaut Nvidia, raised $5.55 billion in an upsized offering, implying a valuation of $56.43 billion on a fully diluted basis.",
+        "pubDate": "2026-05-14T10:38:18Z",
+        "displayTime": "2026-05-14T10:38:18Z",
         "isHosted": true,
         "bypassModal": false,
         "previewUrl": null,
         "thumbnail": {
-          "originalUrl": "https://media.zenfs.com/en/motleyfool.com/e94f43d893313752c1e779ea6526f14a",
+          "originalUrl": "https://media.zenfs.com/en/reuters-finance.com/4d120b544ed2a9d08ce4b3e5b48152cf",
           "originalWidth": 800,
-          "originalHeight": 714,
-          "caption": "",
+          "originalHeight": 524,
+          "caption": "FILE PHOTO: Illustration shows Cerebras Systems logo",
           "resolutions": [
             {
-              "url": "https://s.yimg.com/uu/api/res/1.2/7jOoQF35AlsOWdU1v.lfOA--~B/aD03MTQ7dz04MDA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/motleyfool.com/e94f43d893313752c1e779ea6526f14a",
+              "url": "https://s.yimg.com/uu/api/res/1.2/tuTtRCRgVc9KAV9M.qO_LQ--~B/aD01MjQ7dz04MDA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/reuters-finance.com/4d120b544ed2a9d08ce4b3e5b48152cf",
               "width": 800,
-              "height": 714,
+              "height": 524,
               "tag": "original"
             },
             {
-              "url": "https://s.yimg.com/uu/api/res/1.2/A2MhuMvthDrGYI_BkwWpUA--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/motleyfool.com/e94f43d893313752c1e779ea6526f14a",
+              "url": "https://s.yimg.com/uu/api/res/1.2/be.ZWfhAPTHZoa6dYoOaJw--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/reuters-finance.com/4d120b544ed2a9d08ce4b3e5b48152cf",
+              "width": 170,
+              "height": 128,
+              "tag": "170x128"
+            }
+          ]
+        },
+        "provider": {
+          "displayName": "Reuters",
+          "url": "http://www.reuters.com/",
+          "sourceId": "reuters-finance.com"
+        },
+        "canonicalUrl": {
+          "url": "https://finance.yahoo.com/markets/stocks/articles/cerebras-set-debut-stock-market-103818589.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "clickThroughUrl": {
+          "url": "https://finance.yahoo.com/markets/stocks/articles/cerebras-set-debut-stock-market-103818589.html",
+          "site": "finance",
+          "region": "US",
+          "lang": "en-US"
+        },
+        "metadata": {
+          "editorsPick": false
+        },
+        "finance": {
+          "premiumFinance": {
+            "isPremiumNews": false,
+            "isPremiumFreeNews": false
+          }
+        },
+        "storyline": null
+      }
+    },
+    {
+      "id": "0cf9362b-0fd2-3622-9969-2cffca465a1c",
+      "content": {
+        "id": "0cf9362b-0fd2-3622-9969-2cffca465a1c",
+        "contentType": "STORY",
+        "title": "Canopy Growth Is One of the Market's Most Polarizing Stocks: 3 Scenarios for the Next 12 Months",
+        "description": "",
+        "summary": "After years of heavy losses and repeated restructurings, Canopy Growth is showing early signs of stabilization.",
+        "pubDate": "2026-05-14T10:35:00Z",
+        "displayTime": "2026-05-14T10:35:00Z",
+        "isHosted": true,
+        "bypassModal": false,
+        "previewUrl": null,
+        "thumbnail": {
+          "originalUrl": "https://media.zenfs.com/en/motleyfool.com/27c13d8f5ad01ea0666bb91bd4013d9e",
+          "originalWidth": 1400,
+          "originalHeight": 933,
+          "caption": "Cannabis grower with a plant.",
+          "resolutions": [
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/I5i6CC52kDkXHpiIhlvUgw--~B/aD05MzM7dz0xNDAwO2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/motleyfool.com/27c13d8f5ad01ea0666bb91bd4013d9e",
+              "width": 1400,
+              "height": 933,
+              "tag": "original"
+            },
+            {
+              "url": "https://s.yimg.com/uu/api/res/1.2/jh69atqZ79TmzGBX83.2kA--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/motleyfool.com/27c13d8f5ad01ea0666bb91bd4013d9e",
               "width": 170,
               "height": 128,
               "tag": "170x128"
@@ -10579,13 +10655,13 @@
           "sourceId": "motleyfool.com"
         },
         "canonicalUrl": {
-          "url": "https://www.fool.com/coverage/filings/2026/05/07/is-intuitive-machines-stock-a-buy-after-once-capital-initiated-a-new-position/",
+          "url": "https://www.fool.com/investing/2026/05/14/canopy-growth-is-one-of-the-markets-most-polarizin/",
           "site": "finance",
           "region": "US",
           "lang": "en-US"
         },
         "clickThroughUrl": {
-          "url": "https://finance.yahoo.com/markets/stocks/articles/intuitive-machines-stock-buy-once-135901367.html",
+          "url": "https://finance.yahoo.com/markets/stocks/articles/canopy-growth-one-markets-most-103500661.html",
           "site": "finance",
           "region": "US",
           "lang": "en-US"
@@ -10603,32 +10679,32 @@
       }
     },
     {
-      "id": "9e2bb09b-5842-31a8-8274-425a5860027e",
+      "id": "e39ba5a8-068b-3622-91de-00f0c0ad3991",
       "content": {
-        "id": "9e2bb09b-5842-31a8-8274-425a5860027e",
+        "id": "e39ba5a8-068b-3622-91de-00f0c0ad3991",
         "contentType": "STORY",
-        "title": "Robinhood Is Down 30% in 2026 While Interactive Brokers Is Up 35%: Here’s Why",
+        "title": "S&P 500, Nasdaq futures rise to new highs as Nvidia jumps",
         "description": "",
-        "summary": "The brokerage sector is producing one of the widest divergences of 2026 so far. Robinhood Markets (NASDAQ:HOOD) is down 30% year to date (YTD), while Interactive Brokers Group (NASDAQ:IBKR) is up 36% YTD. That roughly 65-point spread heading into mid-May tells a revealing story about customer mix and revenue durability. HOOD stock closed at $79.05 ... Robinhood Is Down 30% in 2026 While Interactive Brokers Is Up 35%: Here’s Why",
-        "pubDate": "2026-05-07T13:48:19Z",
-        "displayTime": "2026-05-07T13:48:19Z",
+        "summary": "May 14 (Reuters) - Futures tracking the S&P 500 and the Nasdaq rose to record highs on Thursday as Nvidia's shares jumped, while investors watched developments around the high-stakes U.S.-China summit",
+        "pubDate": "2026-05-14T10:07:21Z",
+        "displayTime": "2026-05-14T10:07:21Z",
         "isHosted": true,
         "bypassModal": false,
         "previewUrl": null,
         "thumbnail": {
-          "originalUrl": "https://media.zenfs.com/en/24_7_wall_st__718/cfa75911375aa63f06adc2bdeca04920",
-          "originalWidth": 2560,
-          "originalHeight": 1707,
-          "caption": "",
+          "originalUrl": "https://media.zenfs.com/en/reuters.com/c61469fb206a6c627c09fd2def6cf9cc",
+          "originalWidth": 800,
+          "originalHeight": 533,
+          "caption": "FILE PHOTO: Secretary General of the French Presidency Emmanuel Moulin walks with France's President Emmanuel Macron as they attend a summit on New Caledonia at the Elysee Palace in Paris on July 2, 2025. LUDOVIC MARIN/Pool via REUTERS/File Photo",
           "resolutions": [
             {
-              "url": "https://s.yimg.com/uu/api/res/1.2/C0V0F6sEfHDb05TJa6c92g--~B/aD0xNzA3O3c9MjU2MDthcHBpZD15dGFjaHlvbg--/https://media.zenfs.com/en/24_7_wall_st__718/cfa75911375aa63f06adc2bdeca04920",
-              "width": 2560,
-              "height": 1707,
+              "url": "https://s.yimg.com/uu/api/res/1.2/QvNgBnC.dtToGvwgxRVTbA--~B/aD01MzM7dz04MDA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/reuters.com/c61469fb206a6c627c09fd2def6cf9cc",
+              "width": 800,
+              "height": 533,
               "tag": "original"
             },
             {
-              "url": "https://s.yimg.com/uu/api/res/1.2/qnQJenXV0ZHtotxLrAePfA--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/24_7_wall_st__718/cfa75911375aa63f06adc2bdeca04920",
+              "url": "https://s.yimg.com/uu/api/res/1.2/A8Db1HtMlSvRSoLxxbISnA--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/reuters.com/c61469fb206a6c627c09fd2def6cf9cc",
               "width": 170,
               "height": 128,
               "tag": "170x128"
@@ -10636,18 +10712,18 @@
           ]
         },
         "provider": {
-          "displayName": "24/7 Wall St.",
-          "url": "https://247wallst.com/",
-          "sourceId": "24_7_wall_st__718"
+          "displayName": "Reuters",
+          "url": "https://www.reuters.com/",
+          "sourceId": "reuters.com"
         },
         "canonicalUrl": {
-          "url": "https://247wallst.com/investing/2026/05/07/robinhood-is-down-30-in-2026-while-interactive-brokers-is-up-35-heres-why/",
+          "url": "https://finance.yahoo.com/markets/stocks/articles/p-500-nasdaq-futures-rise-100721449.html",
           "site": "finance",
           "region": "US",
           "lang": "en-US"
         },
         "clickThroughUrl": {
-          "url": "https://finance.yahoo.com/markets/stocks/articles/robinhood-down-30-2026-while-134819485.html",
+          "url": "https://finance.yahoo.com/markets/stocks/articles/p-500-nasdaq-futures-rise-100721449.html",
           "site": "finance",
           "region": "US",
           "lang": "en-US"
@@ -10665,94 +10741,32 @@
       }
     },
     {
-      "id": "7900eb5b-2350-38e9-b362-d613c77f6e26",
+      "id": "609f799d-d80a-3752-b5e8-015d53563c09",
       "content": {
-        "id": "7900eb5b-2350-38e9-b362-d613c77f6e26",
+        "id": "609f799d-d80a-3752-b5e8-015d53563c09",
         "contentType": "STORY",
-        "title": "Stars Align for Nasdaq Composite as Chip Stocks Roar and Oil Pulls Back",
+        "title": "These Stocks Are Today’s Movers: Cisco, Micron, Nvidia, Fervo, Doximity, StubHub, and More",
         "description": "",
-        "summary": "The Nasdaq Composite (^IXIC) etched a fresh all-time high and shows little sign of slowing down, with the tech-heavy benchmark up roughly 14% over the past month alone. Semiconductors have carried much of the load: the Philadelphia Semiconductor Index (^SOX) has surged around 60% year-to-date. Right now the stars are aligning: cooling oil prices, a ... Stars Align for Nasdaq Composite as Chip Stocks Roar and Oil Pulls Back",
-        "pubDate": "2026-05-07T13:46:42Z",
-        "displayTime": "2026-05-07T13:46:42Z",
-        "isHosted": true,
-        "bypassModal": false,
-        "previewUrl": null,
-        "thumbnail": {
-          "originalUrl": "https://media.zenfs.com/en/24_7_wall_st__718/449ccbdbe959e04c02c3094edfe26724",
-          "originalWidth": 1838,
-          "originalHeight": 866,
-          "caption": "",
-          "resolutions": [
-            {
-              "url": "https://s.yimg.com/uu/api/res/1.2/P.VbnWrlU70LZWvXQf_nHg--~B/aD04NjY7dz0xODM4O2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/24_7_wall_st__718/449ccbdbe959e04c02c3094edfe26724",
-              "width": 1838,
-              "height": 866,
-              "tag": "original"
-            },
-            {
-              "url": "https://s.yimg.com/uu/api/res/1.2/q29mcGaVwWRvevKOlBCnVw--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/24_7_wall_st__718/449ccbdbe959e04c02c3094edfe26724",
-              "width": 170,
-              "height": 128,
-              "tag": "170x128"
-            }
-          ]
-        },
-        "provider": {
-          "displayName": "24/7 Wall St.",
-          "url": "https://247wallst.com/",
-          "sourceId": "24_7_wall_st__718"
-        },
-        "canonicalUrl": {
-          "url": "https://247wallst.com/investing/2026/05/07/stars-align-for-nasdaq-composite-as-chip-stocks-roar-and-oil-pulls-back/",
-          "site": "finance",
-          "region": "US",
-          "lang": "en-US"
-        },
-        "clickThroughUrl": {
-          "url": "https://finance.yahoo.com/markets/stocks/articles/stars-align-nasdaq-composite-chip-134642282.html",
-          "site": "finance",
-          "region": "US",
-          "lang": "en-US"
-        },
-        "metadata": {
-          "editorsPick": false
-        },
-        "finance": {
-          "premiumFinance": {
-            "isPremiumNews": false,
-            "isPremiumFreeNews": false
-          }
-        },
-        "storyline": null
-      }
-    },
-    {
-      "id": "5f695c14-bc91-363c-995e-e994c1f0807e",
-      "content": {
-        "id": "5f695c14-bc91-363c-995e-e994c1f0807e",
-        "contentType": "STORY",
-        "title": "These Are The 5 Best Stocks To Buy Or Watch Now",
-        "description": "",
-        "summary": "Buying a stock is easy, but buying the right stock without a good strategy is incredibly hard. Here are five top-performing stocks to buy now or put on a watchlist.",
-        "pubDate": "2026-05-07T13:44:14Z",
-        "displayTime": "2026-05-07T13:44:14Z",
+        "summary": "Cisco shares rise after the dot-com darling shows off its AI credentials, while Micron declines following the memory-chip maker’s stellar rally.",
+        "pubDate": "2026-05-14T09:58:00Z",
+        "displayTime": "2026-05-14T09:58:00Z",
         "isHosted": false,
         "bypassModal": false,
-        "previewUrl": "https://finance.yahoo.com/m/5f695c14-bc91-363c-995e-e994c1f0807e/these-are-the-5-best-stocks.html",
+        "previewUrl": "https://finance.yahoo.com/m/609f799d-d80a-3752-b5e8-015d53563c09/these-stocks-are-today%E2%80%99s.html",
         "thumbnail": {
-          "originalUrl": "https://media.zenfs.com/en/ibd.com/d286311e6de86e24602ae294b1416a97",
-          "originalWidth": 1000,
-          "originalHeight": 565,
+          "originalUrl": "https://media.zenfs.com/en/Barrons.com/793129f64eb055497dd497d4774cd954",
+          "originalWidth": 1280,
+          "originalHeight": 640,
           "caption": "",
           "resolutions": [
             {
-              "url": "https://s.yimg.com/uu/api/res/1.2/CnP2jdOEWBJtUq5bgefK.A--~B/aD01NjU7dz0xMDAwO2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/ibd.com/d286311e6de86e24602ae294b1416a97",
-              "width": 1000,
-              "height": 565,
+              "url": "https://s.yimg.com/uu/api/res/1.2/8NRwRiWNM49lABN7TtmMXg--~B/aD02NDA7dz0xMjgwO2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/Barrons.com/793129f64eb055497dd497d4774cd954",
+              "width": 1280,
+              "height": 640,
               "tag": "original"
             },
             {
-              "url": "https://s.yimg.com/uu/api/res/1.2/r4hto1YddsTx6maqnzG_kQ--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/ibd.com/d286311e6de86e24602ae294b1416a97",
+              "url": "https://s.yimg.com/uu/api/res/1.2/HeYuCTGxR0_vAEQJFEEC3A--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/Barrons.com/793129f64eb055497dd497d4774cd954",
               "width": 170,
               "height": 128,
               "tag": "170x128"
@@ -10760,12 +10774,12 @@
           ]
         },
         "provider": {
-          "displayName": "Investor's Business Daily",
-          "url": "http://www.investors.com/",
-          "sourceId": "ibd.com"
+          "displayName": "Barrons.com",
+          "url": "http://www.barrons.com/",
+          "sourceId": "Barrons.com"
         },
         "canonicalUrl": {
-          "url": "https://www.investors.com/research/best-stocks-to-buy-now/?src=A00220&yptr=yahoo",
+          "url": "https://www.barrons.com/articles/stock-movers-a757a73a?siteid=yhoof2&yptr=yahoo",
           "site": "finance",
           "region": "US",
           "lang": "en-US"
@@ -10784,32 +10798,32 @@
       }
     },
     {
-      "id": "a4973c29-6246-3283-9e58-c32f61087c3f",
+      "id": "03d89f5c-dab2-37ea-a7b4-c1e7c5639521",
       "content": {
-        "id": "a4973c29-6246-3283-9e58-c32f61087c3f",
+        "id": "03d89f5c-dab2-37ea-a7b4-c1e7c5639521",
         "contentType": "STORY",
-        "title": "Alphabet Can Become the Most Valuable Company Thanks to Google Cloud",
+        "title": "My Top 3 Altcoins for May 2026",
         "description": "",
-        "summary": "The Google parent has a real shot at surpassing Nvidia this year.",
-        "pubDate": "2026-05-07T13:40:00Z",
-        "displayTime": "2026-05-07T13:40:00Z",
+        "summary": "As crypto prices show signs of recovery, Solana, Chainlink, and Cardano all have long-term potential.",
+        "pubDate": "2026-05-14T09:50:00Z",
+        "displayTime": "2026-05-14T09:50:00Z",
         "isHosted": true,
         "bypassModal": false,
         "previewUrl": null,
         "thumbnail": {
-          "originalUrl": "https://media.zenfs.com/en/motleyfool.com/51ad7bb6ac7eb55d70c96a14854af685",
-          "originalWidth": 1200,
-          "originalHeight": 800,
-          "caption": "Google headquarters.",
+          "originalUrl": "https://media.zenfs.com/en/motleyfool.com/a4f05baf829b7610ce35ee1b381ee624",
+          "originalWidth": 1400,
+          "originalHeight": 934,
+          "caption": "Woman at desk looks at investment performance on screens.",
           "resolutions": [
             {
-              "url": "https://s.yimg.com/uu/api/res/1.2/Sl.YPQANF0ESnoEY12x_OQ--~B/aD04MDA7dz0xMjAwO2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/motleyfool.com/51ad7bb6ac7eb55d70c96a14854af685",
-              "width": 1200,
-              "height": 800,
+              "url": "https://s.yimg.com/uu/api/res/1.2/jYhAdfdSQ3s2IUOkQzkMWQ--~B/aD05MzQ7dz0xNDAwO2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/motleyfool.com/a4f05baf829b7610ce35ee1b381ee624",
+              "width": 1400,
+              "height": 934,
               "tag": "original"
             },
             {
-              "url": "https://s.yimg.com/uu/api/res/1.2/0Zk9dMntH63GQdg2QRy5Zw--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/motleyfool.com/51ad7bb6ac7eb55d70c96a14854af685",
+              "url": "https://s.yimg.com/uu/api/res/1.2/W0otqK9gwJErZZtyjHsfaw--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/motleyfool.com/a4f05baf829b7610ce35ee1b381ee624",
               "width": 170,
               "height": 128,
               "tag": "170x128"
@@ -10822,13 +10836,13 @@
           "sourceId": "motleyfool.com"
         },
         "canonicalUrl": {
-          "url": "https://www.fool.com/investing/2026/05/07/alphabet-can-become-the-most-valuable-company-than/",
+          "url": "https://www.fool.com/investing/2026/05/14/my-top-3-altcoins-for-may-2026/",
           "site": "finance",
           "region": "US",
           "lang": "en-US"
         },
         "clickThroughUrl": {
-          "url": "https://finance.yahoo.com/markets/stocks/articles/alphabet-become-most-valuable-company-134000398.html",
+          "url": "https://finance.yahoo.com/markets/crypto/articles/top-3-altcoins-may-2026-095000244.html",
           "site": "finance",
           "region": "US",
           "lang": "en-US"
@@ -10846,32 +10860,32 @@
       }
     },
     {
-      "id": "899fb3a1-3174-3273-ac20-ef1ec91748df",
+      "id": "6138cab8-8e61-37be-9565-9c015e0e98ed",
       "content": {
-        "id": "899fb3a1-3174-3273-ac20-ef1ec91748df",
+        "id": "6138cab8-8e61-37be-9565-9c015e0e98ed",
         "contentType": "STORY",
-        "title": "Deere Keeps Paying Out, but Is That Dividend Safe?",
+        "title": "Trump-Xi Summit and Cisco’s AI Restructuring Drive Market Focus: Dow Jones, S&P, Nasdaq, Wall Street Futures",
         "description": "",
-        "summary": "Deere (NYSE: DE), widely considered the world’s largest maker of agricultural equipment, pays its next quarterly dividend of $1.62 per share on May 8, 2026. With the payout held flat at $1.62 across the past several quarters and the ag cycle bottoming, income-focused investors want to know if the dividend is secure. Let’s find out. Dividend ... Deere Keeps Paying Out, but Is That Dividend Safe?",
-        "pubDate": "2026-05-07T13:35:17Z",
-        "displayTime": "2026-05-07T13:35:17Z",
+        "summary": "U. S. equity futures moved higher on Thursday as investors balanced renewed enthusiasm for artificial intelligence against geopolitical uncertainty surrounding the summit between Donald Trump and Xi Jinping.",
+        "pubDate": "2026-05-14T09:43:53Z",
+        "displayTime": "2026-05-14T09:43:53Z",
         "isHosted": true,
         "bypassModal": false,
         "previewUrl": null,
         "thumbnail": {
-          "originalUrl": "https://media.zenfs.com/en/24_7_wall_st__718/12666fc33dea956f69ee71b98084f6f3",
-          "originalWidth": 1366,
-          "originalHeight": 768,
-          "caption": "",
+          "originalUrl": "https://media.zenfs.com/en/investorshub_458/92ebf50652cdfdabddfde93bc490fd2f",
+          "originalWidth": 640,
+          "originalHeight": 351,
+          "caption": "USA China ©iHub",
           "resolutions": [
             {
-              "url": "https://s.yimg.com/uu/api/res/1.2/9frgIugRxH5uqiU9D7H0cw--~B/aD03Njg7dz0xMzY2O2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/24_7_wall_st__718/12666fc33dea956f69ee71b98084f6f3",
-              "width": 1366,
-              "height": 768,
+              "url": "https://s.yimg.com/uu/api/res/1.2/t5ExHCs5I3in6tqn_NvH7w--~B/aD0zNTE7dz02NDA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/investorshub_458/92ebf50652cdfdabddfde93bc490fd2f",
+              "width": 640,
+              "height": 351,
               "tag": "original"
             },
             {
-              "url": "https://s.yimg.com/uu/api/res/1.2/VoWrrDV6tbCY5MizxcPzqg--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/24_7_wall_st__718/12666fc33dea956f69ee71b98084f6f3",
+              "url": "https://s.yimg.com/uu/api/res/1.2/HeiInpuQqVxsMC1suU2kzg--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/investorshub_458/92ebf50652cdfdabddfde93bc490fd2f",
               "width": 170,
               "height": 128,
               "tag": "170x128"
@@ -10879,18 +10893,18 @@
           ]
         },
         "provider": {
-          "displayName": "24/7 Wall St.",
-          "url": "https://247wallst.com/",
-          "sourceId": "24_7_wall_st__718"
+          "displayName": "InvestorsHub",
+          "url": "https://investorshub.advfn.com/",
+          "sourceId": "investorshub_458"
         },
         "canonicalUrl": {
-          "url": "https://247wallst.com/investing/2026/05/07/deere-keeps-paying-out-but-is-that-dividend-safe/",
+          "url": "https://investorshub.advfn.com/market-news/article/28355/trump-xi-summit-and-ciscos-ai-restructuring-drive-market-focus-dow-jones-sp-nasdaq-wall-street-futures",
           "site": "finance",
           "region": "US",
           "lang": "en-US"
         },
         "clickThroughUrl": {
-          "url": "https://finance.yahoo.com/markets/stocks/articles/deere-keeps-paying-dividend-safe-133517000.html",
+          "url": "https://finance.yahoo.com/markets/stocks/articles/trump-xi-summit-cisco-ai-094353746.html",
           "site": "finance",
           "region": "US",
           "lang": "en-US"
@@ -10908,32 +10922,32 @@
       }
     },
     {
-      "id": "9413c7ec-c766-35c0-acfb-74f02c9e65cb",
+      "id": "b5a7402c-b6d9-35cd-89b2-8280d738868c",
       "content": {
-        "id": "9413c7ec-c766-35c0-acfb-74f02c9e65cb",
+        "id": "b5a7402c-b6d9-35cd-89b2-8280d738868c",
         "contentType": "STORY",
-        "title": "Here's Why Vertiv Shares Popped Higher in April",
+        "title": "Warren Buffett Says This Investment Is \"The Best Thing\" -- and It Could Turn $200 per Month Into $1 Million",
         "description": "",
-        "summary": "The company's improving growth outlook and its relationship with Nvidia continues to power the stock higher in 2026.",
-        "pubDate": "2026-05-07T13:34:00Z",
-        "displayTime": "2026-05-07T13:34:00Z",
+        "summary": "It's simpler than you might think to build wealth in the stock market.",
+        "pubDate": "2026-05-14T09:20:00Z",
+        "displayTime": "2026-05-14T09:20:00Z",
         "isHosted": true,
         "bypassModal": false,
         "previewUrl": null,
         "thumbnail": {
-          "originalUrl": "https://media.zenfs.com/en/motleyfool.com/c2a46d9c8819f31db76219abf59fdb34",
-          "originalWidth": 1199,
-          "originalHeight": 675,
-          "caption": "An AI chip",
+          "originalUrl": "https://media.zenfs.com/en/motleyfool.com/5097d8c12240c8f666ed5deee816b2cb",
+          "originalWidth": 1400,
+          "originalHeight": 933,
+          "caption": "Closeup shot of Warren Buffett at an event.",
           "resolutions": [
             {
-              "url": "https://s.yimg.com/uu/api/res/1.2/KNzlKRPouqN5YmFOOQ0qaw--~B/aD02NzU7dz0xMTk5O2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/motleyfool.com/c2a46d9c8819f31db76219abf59fdb34",
-              "width": 1199,
-              "height": 675,
+              "url": "https://s.yimg.com/uu/api/res/1.2/OUyuwy2mmegpoM8K7PpSzw--~B/aD05MzM7dz0xNDAwO2FwcGlkPXl0YWNoeW9u/https://media.zenfs.com/en/motleyfool.com/5097d8c12240c8f666ed5deee816b2cb",
+              "width": 1400,
+              "height": 933,
               "tag": "original"
             },
             {
-              "url": "https://s.yimg.com/uu/api/res/1.2/KkgF8LlxT11w1B.mUJZVHQ--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/motleyfool.com/c2a46d9c8819f31db76219abf59fdb34",
+              "url": "https://s.yimg.com/uu/api/res/1.2/xrr8BwCFoo8f8nIPN7sOtQ--~B/Zmk9c3RyaW07aD0xMjg7dz0xNzA7YXBwaWQ9eXRhY2h5b24-/https://media.zenfs.com/en/motleyfool.com/5097d8c12240c8f666ed5deee816b2cb",
               "width": 170,
               "height": 128,
               "tag": "170x128"
@@ -10946,13 +10960,13 @@
           "sourceId": "motleyfool.com"
         },
         "canonicalUrl": {
-          "url": "https://www.fool.com/investing/2026/05/07/heres-why-vertiv-shares-popped-higher-in-april/",
+          "url": "https://www.fool.com/investing/2026/05/14/warren-buffett-says-this-investment-is-the-best-th/",
           "site": "finance",
           "region": "US",
           "lang": "en-US"
         },
         "clickThroughUrl": {
-          "url": "https://finance.yahoo.com/markets/stocks/articles/heres-why-vertiv-shares-popped-133400410.html",
+          "url": "https://finance.yahoo.com/markets/stocks/articles/warren-buffett-says-investment-best-092000510.html",
           "site": "finance",
           "region": "US",
           "lang": "en-US"
@@ -10978,10 +10992,10 @@
     ],
     "Earnings High": 1.99,
     "Earnings Low": 1.69,
-    "Earnings Average": 1.77461,
+    "Earnings Average": 1.77593,
     "Revenue High": 85512000000,
     "Revenue Low": 77896000000,
-    "Revenue Average": 78785307760
+    "Revenue Average": 78979992050
   },
   "earnings_dates": {
     "__error__": "ImportError: `Import lxml` failed.  Use pip or conda to install the lxml package."
@@ -10990,20 +11004,20 @@
     {
       "index": 0,
       "Date Reported": "2025-12-31T00:00:00",
-      "Holder": "Vanguard Group Inc",
-      "pctHeld": 0.0933,
-      "Shares": 2266683275,
-      "Value": 482792193090,
-      "pctChange": 0.0194
-    },
-    {
-      "index": 1,
-      "Date Reported": "2025-12-31T00:00:00",
       "Holder": "Blackrock Inc.",
       "pctHeld": 0.08,
       "Shares": 1943812884,
-      "Value": 414022415736,
+      "Value": 438971267152,
       "pctChange": 0.0075
+    },
+    {
+      "index": 1,
+      "Date Reported": "2026-03-31T00:00:00",
+      "Holder": "Vanguard Capital Management LLC",
+      "pctHeld": 0.0633,
+      "Shares": 1538550382,
+      "Value": 347450835584,
+      "pctChange": 1.0
     },
     {
       "index": 2,
@@ -11011,7 +11025,7 @@
       "Holder": "State Street Corporation",
       "pctHeld": 0.040799998,
       "Shares": 991480489,
-      "Value": 211180381913,
+      "Value": 223906040646,
       "pctChange": 0.0117
     },
     {
@@ -11020,7 +11034,7 @@
       "Holder": "FMR, LLC",
       "pctHeld": 0.04,
       "Shares": 971063283,
-      "Value": 206831619221,
+      "Value": 219295222977,
       "pctChange": -0.0117999995
     },
     {
@@ -11029,35 +11043,35 @@
       "Holder": "Geode Capital Management, LLC",
       "pctHeld": 0.0242,
       "Shares": 588803093,
-      "Value": 125412111918,
+      "Value": 132969403570,
       "pctChange": 0.0058
     },
     {
       "index": 5,
-      "Date Reported": "2025-12-31T00:00:00",
-      "Holder": "JPMORGAN CHASE & CO",
-      "pctHeld": 0.0188,
-      "Shares": 456141138,
-      "Value": 97155779461,
-      "pctChange": -0.5332
+      "Date Reported": "2026-03-31T00:00:00",
+      "Holder": "Vanguard Portfolio Management LLC",
+      "pctHeld": 0.021,
+      "Shares": 510126721,
+      "Value": 115201918337,
+      "pctChange": 1.0
     },
     {
       "index": 6,
       "Date Reported": "2025-12-31T00:00:00",
-      "Holder": "Price (T.Rowe) Associates Inc",
-      "pctHeld": 0.0154,
-      "Shares": 373187926,
-      "Value": 79487160476,
-      "pctChange": -0.056999996
+      "Holder": "JPMORGAN CHASE & CO",
+      "pctHeld": 0.0188,
+      "Shares": 456141138,
+      "Value": 103010354029,
+      "pctChange": -0.5332
     },
     {
       "index": 7,
       "Date Reported": "2025-12-31T00:00:00",
-      "Holder": "NORGES BANK",
-      "pctHeld": 0.0137,
-      "Shares": 333748700,
-      "Value": 71086802726,
-      "pctChange": 0.026099999
+      "Holder": "Price (T.Rowe) Associates Inc",
+      "pctHeld": 0.0154,
+      "Shares": 373187926,
+      "Value": 84277030011,
+      "pctChange": -0.056999996
     },
     {
       "index": 8,
@@ -11065,7 +11079,7 @@
       "Holder": "Morgan Stanley",
       "pctHeld": 0.013300001,
       "Shares": 323733984,
-      "Value": 68953718341,
+      "Value": 73108846199,
       "pctChange": 0.0023999999
     },
     {
@@ -11074,26 +11088,26 @@
       "Holder": "Northern Trust Corporation",
       "pctHeld": 0.0104,
       "Shares": 253789803,
-      "Value": 54055957850,
+      "Value": 57313351676,
       "pctChange": -0.0218
     }
   ],
   "major_holders": [
     {
       "index": "insidersPercentHeld",
-      "Value": 0.042090002
+      "Value": 0.03979
     },
     {
       "index": "institutionsPercentHeld",
-      "Value": 0.68154997
+      "Value": 0.70155
     },
     {
       "index": "institutionsFloatPercentHeld",
-      "Value": 0.7115
+      "Value": 0.73063004
     },
     {
       "index": "institutionsCount",
-      "Value": 7407.0
+      "Value": 7435.0
     }
   ]
 }
