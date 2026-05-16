@@ -177,7 +177,9 @@ def main() -> None:
             "code": "US.NVDA",
             "close": 205.10,
             "change_pct": 0.0162,
-            "signal_count": 1,
+            "today_signals": [
+                {"signal_type": "macd_golden_cross", "severity": "WARN"},
+            ],
             "analysis": "RSI 58 (中性) · MACD 多头 · BOLL 中轨上方",
             "pnl_str": "持仓 100 @ $182.40 · 浮盈 +$2,270",
         },
@@ -185,7 +187,9 @@ def main() -> None:
             "code": "US.MSFT",
             "close": 438.20,
             "change_pct": 0.0234,
-            "signal_count": 1,
+            "today_signals": [
+                {"signal_type": "rsi_overbought", "severity": "INFO"},
+            ],
             "analysis": "RSI 72 (超买) · MACD 多头 · BOLL 中轨上方",
             "pnl_str": "无持仓",
         },
@@ -193,7 +197,10 @@ def main() -> None:
             "code": "US.AAPL",
             "close": 164.20,
             "change_pct": -0.0285,
-            "signal_count": 2,
+            "today_signals": [
+                {"signal_type": "rsi_oversold", "severity": "WARN"},
+                {"signal_type": "boll_lower_break", "severity": "CRITICAL"},
+            ],
             "analysis": "RSI 29 (超卖) · MACD 空头 · BOLL 跌破下轨",
             "pnl_str": "持仓 120 @ $172.10 · 浮亏 -$948",
         },

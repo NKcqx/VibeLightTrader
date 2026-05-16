@@ -12,6 +12,11 @@ dist/
 .pytest_cache/
 .ruff_cache/
 .mypy_cache/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+.ipynb_checkpoints/
 
 # --------------------------------------------------------------------------
 # Local config & secrets — NEVER commit anything in this block
@@ -58,13 +63,23 @@ log/
 docs/
 
 # --------------------------------------------------------------------------
-# Per-symbol journals, snapshot PNGs, decision packets, scheduler stdout
+# Per-symbol journals, snapshot PNGs, decision packets
+# (*.log already covered above; no need to enumerate scheduler.log etc.)
 # --------------------------------------------------------------------------
 var/snapshots/*.png
 !var/snapshots/.gitkeep
 var/decisions/
-var/scheduler.log
-var/listener.log
+
+# --------------------------------------------------------------------------
+# Background process artifacts (nohup, pids)
+# --------------------------------------------------------------------------
+nohup.out
+*.pid
+
+# --------------------------------------------------------------------------
+# Node (defensive — for MCP / frontend tooling that may show up later)
+# --------------------------------------------------------------------------
+node_modules/
 
 # --------------------------------------------------------------------------
 # OS / editor noise
@@ -73,4 +88,9 @@ var/listener.log
 .idea/
 .vscode/
 *.swp
+*.swo
+*~
+*.orig
+*.rej
+*.bak
 Thumbs.db
