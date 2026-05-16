@@ -592,3 +592,9 @@ src/vibe_trader/
 ## License
 
 MIT. See [LICENSE](./LICENSE) (TODO: add LICENSE file before public release).
+
+## Buy Me A Coffee ☕️
+
+<p align="center">
+  <img src="https://i.imgs.ovh/2026/05/05/f6269338cd42e4ce5f92f8fb0d882045.png" alt="Buy Me A Coffee" width="280">
+</p>
