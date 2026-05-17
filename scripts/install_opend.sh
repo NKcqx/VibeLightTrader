@@ -24,10 +24,10 @@ cat <<'EOF'
     Confirm the status panel shows: listening on 127.0.0.1:11111.
 
 ==> Step 3: Verify connectivity
-    From within this project (with conda env `fin` activated):
+    From the repo root, with the project's conda env activated
+    (the env you created in Quick Start step 1):
 
-        conda activate fin
-        cd vibe-trader
+        conda activate vibe-trader
         python scripts/check_opend.py
 
     Expected output: "OK: OpenD reachable" plus an AAPL snapshot row.

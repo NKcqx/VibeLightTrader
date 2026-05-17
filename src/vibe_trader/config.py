@@ -51,9 +51,45 @@ class LarkReceiver(BaseModel):
 
 
 class LarkConfig(BaseModel):
-    cli_path: str = "lark-cli"
+    """Lark/Feishu OpenAPI transport.
+
+    The runtime authenticates as a Custom App (open.feishu.cn → 应用配置 →
+    凭证与基础信息). ``app_id`` is committed in YAML; ``app_secret`` is read
+    from the env var named in ``app_secret_env`` so secrets stay out of
+    git. Lark notifications are *opt-in*: leaving ``app_id`` as ``None``
+    keeps the rest of the pipeline running (DB / OpenD / LLM / paper
+    trades) but no cards will be pushed.
+    """
+
+    app_id: str | None = None
+    """Custom App ``app_id`` (e.g. ``cli_a8e94fbcd2f8d...``). When ``None``,
+    Lark transport is disabled and no messages are sent."""
+
+    app_secret_env: str = "LARK_APP_SECRET"
+    """Env var holding the Custom App ``app_secret``. Read at startup; the
+    process refuses to send Lark messages if ``app_id`` is set but the env
+    var is empty."""
+
+    base_url: str = "https://open.feishu.cn"
+    """OpenAPI host. China users keep the default ``open.feishu.cn``;
+    Lark international: ``https://open.larksuite.com``."""
+
     receiver: LarkReceiver
+    """Default recipient for cron-pushed cards (intraday / morning /
+    closing briefs). Two-way listener replies always go back to the
+    sender — this only governs unsolicited pushes."""
+
+    # ---- deprecated knobs (kept so legacy YAML still loads) -----------
+
+    cli_path: str = "lark-cli"
+    """DEPRECATED. Reserved for backwards-compat YAML loading only — no
+    longer consulted at runtime now that the HTTP client supersedes the
+    ``lark-cli`` subprocess shim. Will be removed in a future release."""
+
     identity: Literal["bot", "user"] = "bot"
+    """DEPRECATED. The HTTP transport always sends as the Custom App
+    bot identity; the legacy ``user`` identity (sending as a logged-in
+    human via ``lark-cli auth login``) is no longer supported."""
 
 
 class SignalsConfig(BaseModel):

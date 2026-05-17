@@ -156,10 +156,15 @@ def test_dispatch_sender_failure_returns_none(factory: sessionmaker) -> None:
 
 
 def test_msg_to_event_wraps_text_to_receive_v1_shape() -> None:
-    """Polling-API row → synthetic im.message.receive_v1 event."""
+    """Polling /im/v1/messages row → synthetic im.message.receive_v1 event.
+
+    The Lark OpenAPI returns ``body.content`` already as a JSON-encoded
+    string (e.g. ``'{"text":"/list"}'``); :func:`_msg_to_event` should
+    pass that through verbatim so :func:`_extract_text` can parse it.
+    """
     msg = {
-        "content": "/list",
-        "create_time": "2026-05-02 22:55",
+        "body": {"content": json.dumps({"text": "/list"})},
+        "create_time": "1746235800000",
         "deleted": False,
         "message_id": "om_xx",
         "msg_type": "text",
@@ -173,7 +178,12 @@ def test_msg_to_event_wraps_text_to_receive_v1_shape() -> None:
 
 
 def test_msg_to_event_handles_missing_sender_id() -> None:
-    msg = {"content": "hi", "msg_type": "text", "message_id": "om_x", "sender": {}}
+    msg = {
+        "body": {"content": json.dumps({"text": "hi"})},
+        "msg_type": "text",
+        "message_id": "om_x",
+        "sender": {},
+    }
     ev = _msg_to_event(msg, chat_id="oc_x")
     text, sender = _extract_text(ev)
     assert text == "hi"
@@ -210,7 +220,9 @@ def test_dispatch_requires_either_text_or_reply_fn(factory: sessionmaker) -> Non
 
 
 def test_run_listener_processes_injected_events(factory: sessionmaker) -> None:
-    """End-to-end via injected event iterable (no subprocess)."""
+    """End-to-end via injected event iterable + injected fake LarkHTTPClient."""
+    from unittest.mock import MagicMock
+
     from vibe_trader.config import (
         AppConfig,
         DatabaseConfig,
@@ -228,31 +240,40 @@ def test_run_listener_processes_injected_events(factory: sessionmaker) -> None:
         database=DatabaseConfig(path=":memory:", wal_mode=False),
         scheduler=SchedulerConfig(timezone="UTC", jobs={}),
         lark=LarkConfig(
-            cli_path="lark-cli",
-            identity="bot",
+            app_id="cli_test",
             receiver=LarkReceiver(type="user", open_id="ou_user1"),
         ),
         signals=SignalsConfig(),
         logging=LoggingConfig(),
     )
 
-    sent: list[tuple[str, str]] = []
-    # Monkey-patch make_text_sender to bypass real lark-cli
-    import vibe_trader.events.listener as listener_mod
+    # Inject a fake LarkHTTPClient so we observe outbound calls without
+    # touching the network (or env vars).
+    fake_http = MagicMock()
+    sent_text: list[tuple[str, str]] = []
 
-    listener_mod.make_text_sender = lambda **kw: (
-        lambda t, r: (sent.append((t, r)), "om_x")[1]
-    )  # type: ignore[assignment]
+    def _capture_send_text(text: str, *, receive_id: str, receive_id_type: str = "open_id") -> str:
+        sent_text.append((text, receive_id))
+        return "om_x"
+
+    fake_http.send_text.side_effect = _capture_send_text
 
     events = [
         _evt("添加 US.AAPL 上限200 下限165"),
         _evt("/list"),
     ]
-    # rich_cards=False keeps the test isolated from any live OpenD
-    run_listener(cfg=cfg, factory=factory, events=iter(events), rich_cards=False)
+    # rich_cards=False keeps the test isolated from any live OpenD; the
+    # listener will route every reply through send_text (text-only mode).
+    run_listener(
+        cfg=cfg,
+        factory=factory,
+        events=iter(events),
+        rich_cards=False,
+        http_client=fake_http,
+    )
 
-    assert len(sent) == 2
-    assert "已添加" in sent[0][0]
-    assert "US.AAPL" in sent[1][0]
+    assert len(sent_text) == 2
+    assert "已添加" in sent_text[0][0]
+    assert "US.AAPL" in sent_text[1][0]
     with session_scope(factory) as s:
         assert s.query(Symbol).filter(Symbol.code == "US.AAPL").count() == 1

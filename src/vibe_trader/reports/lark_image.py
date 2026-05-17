@@ -1,30 +1,27 @@
-"""Send a PNG/JPG to Lark via lark-cli (Phase 3 image messages).
+"""Send a PNG/JPG to Lark.
 
-Mirrors the retry / error contract of `reports/lark.py:send_card`. The
-underlying `lark-cli im +messages-send --image <name>` command both
-uploads the file and sends it as a single image message; no separate
-upload/key dance is required at the caller.
+Thin compatibility wrapper around
+:meth:`vibe_trader.lark.LarkHTTPClient.send_image`. The previous build invoked
+``lark-cli im +messages-send --image`` which both uploaded and sent in one
+shot; the HTTP path is two endpoints (``/im/v1/images`` then
+``/im/v1/messages``) but the client hides that from callers.
 
-Note on path handling: lark-cli ≥1.0.23 rejects absolute paths for
-`--image` ("--file must be a relative path within the current directory").
-We work around that by spawning lark-cli with `cwd=path.parent` and
-passing only `path.name` — works regardless of the caller's cwd.
+Same retry contract as :mod:`vibe_trader.reports.lark`.
 """
 
 from __future__ import annotations
 
-import json
-import subprocess
 from pathlib import Path
-from typing import Literal
 
 from tenacity import retry, stop_after_attempt, wait_exponential
 
-from vibe_trader.reports.lark import ReceiverType
+from vibe_trader.lark.client import LarkHTTPClient
+from vibe_trader.lark.errors import LarkAPIError
+from vibe_trader.reports.lark import LarkSendError, ReceiverType, _to_receive_id_type
 
 
 class LarkImageError(RuntimeError):
-    pass
+    """Raised after all retries fail uploading or sending the image."""
 
 
 @retry(
@@ -37,68 +34,28 @@ def send_image(
     *,
     open_id: str,
     receiver_type: ReceiverType = "user",
-    cli_path: str = "lark-cli",
-    identity: Literal["bot", "user"] = "bot",
-    timeout: int = 30,
+    client: LarkHTTPClient,
 ) -> str:
-    """Upload `path` and send it as an image message. Returns the lark message_id.
+    """Upload a local image and send it as an image message.
+
+    Returns:
+        The new message's ``message_id``.
 
     Raises:
-        LarkImageError: if the file is missing, lark-cli exits non-zero,
-            the response is unparseable, or the API returned ok=false.
+        LarkImageError: file missing, upload failed, send failed after all
+            retries, or an unknown ``receiver_type`` was passed in.
     """
     if not path.exists():
         raise LarkImageError(f"file not found: {path}")
-
-    if receiver_type == "user":
-        recipient_flag = "--user-id"
-    elif receiver_type == "chat":
-        recipient_flag = "--chat-id"
-    else:
-        raise LarkImageError(f"unknown receiver_type: {receiver_type!r}")
-
-    abs_path = path.resolve()
-    cmd = [
-        cli_path,
-        "im",
-        "+messages-send",
-        "--as",
-        identity,
-        recipient_flag,
-        open_id,
-        "--image",
-        abs_path.name,
-    ]
-    result = subprocess.run(
-        cmd,
-        capture_output=True,
-        text=True,
-        timeout=timeout,
-        check=False,
-        cwd=str(abs_path.parent),
-    )
-    if result.returncode != 0:
-        raise LarkImageError(
-            f"lark-cli exit={result.returncode}: "
-            f"{result.stderr.strip() or result.stdout.strip()}"
-        )
-
-    out = result.stdout.strip()
     try:
-        parsed = json.loads(out)
-    except json.JSONDecodeError as e:
-        raise LarkImageError(f"non-JSON response from lark-cli: {out[:200]}") from e
-
-    if not parsed.get("ok", False):
-        err = parsed.get("error", {})
-        raise LarkImageError(
-            f"lark-cli failed: {err.get('type', 'unknown')}: "
-            f"{err.get('message', '')}"
+        receive_id_type = _to_receive_id_type(receiver_type)
+    except LarkSendError as e:
+        # Normalise the receiver-type guard error to the image-side type so
+        # callers only need to catch one symbol.
+        raise LarkImageError(str(e)) from e
+    try:
+        return client.send_image(
+            path, receive_id=open_id, receive_id_type=receive_id_type  # type: ignore[arg-type]
         )
-
-    msg_id = parsed.get("data", {}).get("message_id")
-    if not msg_id:
-        raise LarkImageError(
-            f"lark-cli response missing message_id: {out[:200]}"
-        )
-    return str(msg_id)
+    except LarkAPIError as e:
+        raise LarkImageError(str(e)) from e

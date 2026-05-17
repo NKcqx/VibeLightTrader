@@ -82,12 +82,8 @@ def build_scheduler(
         lambda: OpenDClient(cfg.opend.host, cfg.opend.port)
     )
 
-    sender = _make_default_sender(
-        cli_path=cfg.lark.cli_path, identity=cfg.lark.identity
-    )
-    image_sender = _make_default_image_sender(
-        cli_path=cfg.lark.cli_path, identity=cfg.lark.identity
-    )
+    sender = _make_default_sender(cfg)
+    image_sender = _make_default_image_sender(cfg)
 
     def _make_paper_trader() -> Any | None:
         """Build the auto-trade broker, or None if disabled in cfg."""

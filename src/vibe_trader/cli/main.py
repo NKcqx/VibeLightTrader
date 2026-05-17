@@ -38,7 +38,7 @@ from vibe_trader.scheduler.runner import run_forever
 )
 @click.pass_context
 def cli(ctx: click.Context, settings_path: str, watchlist_path: str) -> None:
-    """Vibe Trader — hourly US-equity monitor with Lark alerts."""
+    """VibeLightTrader — hourly US-equity monitor with Lark alerts."""
     ctx.ensure_object(dict)
     # Lazy: store paths only; load configs on first access in subcommand
     # so `--help` works even if config files don't exist yet.
@@ -84,15 +84,13 @@ def run(ctx: click.Context) -> None:
 @click.option(
     "--backend",
     type=click.Choice(["websocket", "polling"]),
-    default="websocket",
+    default="polling",
     show_default=True,
     help=(
-        "websocket = lark-cli event +subscribe long-connection (recommended; "
-        "needs im.message.receive_v1 registered under 事件与回调). "
-        "polling = adaptive p2p chat-history polling (3s after activity, 10s "
-        "idle); fallback when websocket can't be configured. "
-        "Note: only one websocket subscriber per bot — kill stray "
-        "lark-cli event processes first or you'll lose events to round-robin."
+        "polling = adaptive HTTP polling of /im/v1/messages (3s after activity, "
+        "10s idle). websocket is reserved for backwards compatibility — the "
+        "previous lark-cli WS subprocess is gone, so 'websocket' silently "
+        "falls back to 'polling'."
     ),
 )
 @click.option(
@@ -188,7 +186,7 @@ def chart(
 
     from vibe_trader.events.apply import apply_chart
     from vibe_trader.events.grammar import ChartCommand, _normalize_code
-    from vibe_trader.reports.lark_image import send_image
+    from vibe_trader.scheduler.jobs import _make_default_image_sender
     from vibe_trader.trader.reconcile import reconcile_pending_fills
 
     cfg = _get_cfg(ctx)
@@ -234,14 +232,20 @@ def chart(
     click.echo(f"snapshot: {payload.image_path}")
 
     if push:
-        msg_id = send_image(
+        sender = _make_default_image_sender(cfg)
+        msg_id = sender(
             payload.image_path,
-            open_id=cfg.lark.receiver.open_id,
-            receiver_type=cfg.lark.receiver.type,  # type: ignore[arg-type]
-            cli_path=cfg.lark.cli_path,
-            identity=cfg.lark.identity,  # type: ignore[arg-type]
+            cfg.lark.receiver.open_id,
+            cfg.lark.receiver.type,
         )
-        click.echo(f"pushed: {msg_id}")
+        if msg_id:
+            click.echo(f"pushed: {msg_id}")
+        else:
+            click.echo(
+                "skipped push: lark.app_id not set in settings.yaml "
+                "(Lark transport disabled)",
+                err=True,
+            )
 
 
 @cli.command()

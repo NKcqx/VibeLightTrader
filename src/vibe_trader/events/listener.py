@@ -1,17 +1,24 @@
-"""Event listener: lark-cli WebSocket subscription → command dispatch.
+"""Event listener: pull DM messages from Lark via HTTP polling, dispatch.
 
 Two layers:
-  • `dispatch_event(event_dict, ...)` - pure function, fully unit-testable.
-  • `run_listener(...)` - spawns the lark-cli subprocess and iterates NDJSON.
+  • :func:`dispatch_event` — pure function, fully unit-testable.
+  • :func:`run_listener`   — long-running entry point; pairs with ``vibe-trader run``.
 
-Run via: `vibe-trader listen` (long-running). Pair with `vibe-trader run`
-in a tmux pane.
+The previous build supported an ``lark-cli event consume`` WebSocket backend
+on top of an internal Node binary. That binary is not publicly distributed,
+so this rewrite drops WS entirely and ships a single HTTP-polling backend
+backed by :class:`vibe_trader.lark.LarkHTTPClient`. Polling needs only
+``im:message:readonly`` + ``im:message`` scopes on a public Custom App
+(open.feishu.cn) and works out of the box for external users.
+
+Latency: ~3-10s with the adaptive polling interval (fast 3s window after
+each new user msg, idle 10s otherwise). Good enough for an interactive
+chat-controlled trade tool.
 """
 
 from __future__ import annotations
 
 import json
-import subprocess
 import time
 from collections.abc import Callable, Iterable, Iterator
 from datetime import datetime, timedelta, timezone
@@ -34,6 +41,8 @@ from vibe_trader.events.grammar import (
     parse,
 )
 from vibe_trader.futu_client import FutuClient
+from vibe_trader.lark.client import LarkHTTPClient
+from vibe_trader.lark.errors import LarkAPIError
 
 log = structlog.get_logger(__name__)
 
@@ -53,53 +62,54 @@ ReplyFn = Callable[[Command, str, str], None]
 Implementations decide whether to send text or a Lark card."""
 
 
-def make_text_sender(cli_path: str = "lark-cli", identity: str = "bot") -> SendTextFn:
-    """Build a default text sender via lark-cli +messages-send --markdown."""
+# ---------------------------------------------------------------------------
+# senders
+# ---------------------------------------------------------------------------
+
+
+def make_text_sender(client: LarkHTTPClient) -> SendTextFn:
+    """Build a text sender that replies via Lark's text message type.
+
+    Lark's text body supports a markdown-ish subset on the client UI; the
+    transport contract is plain text wrapped in ``{"text": "..."}``.
+    """
 
     def _send(text: str, recipient: str) -> str:
-        cmd = [
-            cli_path, "im", "+messages-send",
-            "--as", identity,
-            "--user-id", recipient,
-            "--markdown", text,
-        ]
-        result = subprocess.run(
-            cmd, capture_output=True, text=True, timeout=15, check=False
-        )
-        if result.returncode != 0:
-            raise RuntimeError(f"lark-cli reply failed: {result.stderr.strip()}")
         try:
-            j = json.loads(result.stdout)
-            return str(j.get("data", {}).get("message_id", ""))
-        except json.JSONDecodeError:
-            return result.stdout.strip()
+            return client.send_text(text, receive_id=recipient)
+        except LarkAPIError as e:
+            raise RuntimeError(f"lark text reply failed: {e}") from e
 
     return _send
 
 
-def make_card_sender(cli_path: str = "lark-cli", identity: str = "bot") -> SendCardFn:
-    """Build a default card sender via lark-cli +messages-send --content / interactive."""
+def make_card_sender(client: LarkHTTPClient) -> SendCardFn:
+    """Build an Interactive Card sender."""
 
     def _send(card: dict[str, Any], recipient: str) -> str:
-        cmd = [
-            cli_path, "im", "+messages-send",
-            "--as", identity,
-            "--user-id", recipient,
-            "--msg-type", "interactive",
-            "--content", json.dumps(card, ensure_ascii=False),
-        ]
-        result = subprocess.run(
-            cmd, capture_output=True, text=True, timeout=15, check=False
-        )
-        if result.returncode != 0:
-            raise RuntimeError(f"lark-cli card send failed: {result.stderr.strip()}")
         try:
-            j = json.loads(result.stdout)
-            return str(j.get("data", {}).get("message_id", ""))
-        except json.JSONDecodeError:
-            return result.stdout.strip()
+            return client.send_card(card, receive_id=recipient)
+        except LarkAPIError as e:
+            raise RuntimeError(f"lark card reply failed: {e}") from e
 
     return _send
+
+
+def make_image_sender(client: LarkHTTPClient) -> SendImageFn:
+    """Build an image sender (uploads + sends in one call)."""
+
+    def _send(path: Path, recipient: str) -> str:
+        try:
+            return client.send_image(path, receive_id=recipient)
+        except LarkAPIError as e:
+            raise RuntimeError(f"lark image reply failed: {e}") from e
+
+    return _send
+
+
+# ---------------------------------------------------------------------------
+# card-reply composer (live OpenD enrichment + DB watchlist render)
+# ---------------------------------------------------------------------------
 
 
 def _title_color_for(cmd: Command, count: int) -> tuple[str, str]:
@@ -131,13 +141,12 @@ def make_card_reply(
     """
     from vibe_trader.events.enrich import build_watchlist_rows, now_utc
     from vibe_trader.reports.render import (
-        render_watchlist_card,
         WatchlistCardRow,
+        render_watchlist_card,
     )
 
     def _reply(cmd: Command, action_text: str, recipient: str) -> None:
         if isinstance(cmd, HelpCommand):
-            # Render help as a card too (no OpenD lookup needed).
             try:
                 card = render_watchlist_card(
                     title="使用指南",
@@ -173,6 +182,11 @@ def make_card_reply(
             send_text(action_text, recipient)
 
     return _reply
+
+
+# ---------------------------------------------------------------------------
+# event extraction
+# ---------------------------------------------------------------------------
 
 
 def _extract_text(event: dict[str, Any]) -> tuple[str | None, str | None]:
@@ -211,14 +225,11 @@ def dispatch_event(
 ) -> str | None:
     """Process one Lark event. Returns the action text replied with, else None.
 
-    Either `send_text` (text-only reply) or `reply_fn` (rich card reply) must
-    be provided. If both are given, `reply_fn` wins for watchlist/help commands.
-    The text-only path is kept for tests / minimal deployments without OpenD.
-
-    Note: ChartCommand is dispatched out-of-band — it always uses `send_text`
-    for the markdown caption and `send_image` for the PNG, regardless of
-    whether `reply_fn` is supplied. The card path is for the watchlist
-    commands only.
+    Either ``send_text`` (text-only reply) or ``reply_fn`` (rich card reply)
+    must be provided. If both are given, ``reply_fn`` wins for watchlist /
+    help commands; ChartCommand is dispatched out-of-band — it always uses
+    ``send_text`` for the markdown caption and ``send_image`` for the PNG,
+    regardless of whether ``reply_fn`` is supplied.
     """
     if reply_fn is None and send_text is None:
         raise ValueError("dispatch_event needs either reply_fn or send_text")
@@ -297,79 +308,9 @@ def dispatch_event(
     return action_text
 
 
-def stream_lark_events_ws(
-    *,
-    cli_path: str = "lark-cli",
-    identity: str = "bot",
-    event_key: str = "im.message.receive_v1",
-) -> Iterator[dict[str, Any]]:
-    """WebSocket-based event stream via lark-cli's event-bus daemon.
-
-    Uses `lark-cli event consume <EventKey>` (lark-cli ≥1.0.23). The
-    daemon auto-spawns and auto-exits 30s after the last consumer; no
-    single-instance lock to clear. The legacy `event +subscribe` API
-    is rejected by the new server with "another subscribe instance is
-    already running".
-
-    Requires the bot's Lark app to have `im.message.receive_v1` declared
-    in the Open Platform console (long-connection mode).
-
-    Yields one parsed event dict per NDJSON line on stdout. Status lines
-    (e.g. "[event] ready", "[source] feishu-websocket: connected") are
-    skipped quietly. Auto-restarts on subprocess crash with exponential
-    backoff.
-    """
-    backoff = 1.0
-    while True:
-        cmd = [
-            cli_path,
-            "event",
-            "consume",
-            event_key,
-            "--as",
-            identity,
-        ]
-        log.info("listener.ws_subprocess_start", cmd=cmd)
-        # Stderr → stdout so [SDK Info]/status lines don't backpressure;
-        # filter them out by leading-{ check below. Requires lark-cli
-        # >= 1.0.23 (older builds suppress NDJSON when stdout is a pipe).
-        #
-        # IMPORTANT: stdin=PIPE (NOT DEVNULL). `event consume` treats stdin
-        # EOF as an exit signal ("wired for AI subprocess callers"), so
-        # DEVNULL closes immediately and the daemon shuts down. PIPE leaves
-        # the write-end open for as long as Popen lives, keeping consume up.
-        proc = subprocess.Popen(
-            cmd,
-            stdin=subprocess.PIPE,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
-            text=True,
-            bufsize=1,
-        )
-        try:
-            assert proc.stdout is not None
-            for raw in proc.stdout:
-                line = raw.strip()
-                if not line:
-                    continue
-                if not line.startswith("{"):
-                    log.debug("listener.ws_status", line=line[:200])
-                    continue
-                try:
-                    yield json.loads(line)
-                except json.JSONDecodeError as e:
-                    log.warning("listener.bad_ndjson", error=str(e), line=line[:200])
-            rc = proc.wait()
-            log.warning("listener.ws_subprocess_exit", returncode=rc)
-        finally:
-            with _safe():
-                proc.kill()
-                proc.wait(timeout=2)
-        time.sleep(backoff)
-        backoff = min(backoff * 2.0, 60.0)
-
-
 class _safe:
+    """Trivial swallow-everything context manager for best-effort blocks."""
+
     def __enter__(self):
         return self
 
@@ -377,55 +318,34 @@ class _safe:
         return True  # swallow
 
 
-def _resolve_p2p_chat_id(
-    cli_path: str, identity: str, recipient_open_id: str
-) -> str:
-    """Resolve (or create) the bot⇆user p2p chat by sending a benign init ping.
-
-    Lark p2p chats are implicit: no "create chat" API needed; sending a
-    message returns the chat_id which is stable thereafter.
-    """
-    cmd = [
-        cli_path, "im", "+messages-send",
-        "--as", identity,
-        "--user-id", recipient_open_id,
-        "--text", "🟢 listener online",
-    ]
-    result = subprocess.run(
-        cmd, capture_output=True, text=True, timeout=15, check=False
-    )
-    if result.returncode != 0:
-        raise RuntimeError(
-            f"failed to resolve p2p chat_id: {result.stderr.strip()}"
-        )
-    j = json.loads(result.stdout)
-    chat_id = j.get("data", {}).get("chat_id")
-    if not chat_id:
-        raise RuntimeError(f"no chat_id in send response: {result.stdout[:200]}")
-    return chat_id
+# ---------------------------------------------------------------------------
+# polling event source (HTTP, /im/v1/messages)
+# ---------------------------------------------------------------------------
 
 
 def stream_lark_events_polling(
     *,
-    cli_path: str,
-    identity: str,
+    http_client: LarkHTTPClient,
     chat_id: str,
-    bot_app_id: str,
+    bot_open_id: str | None,
     poll_interval: int = 10,
     fast_interval: int = 3,
     fast_window_seconds: int = 60,
     initial_lookback_seconds: int = 30,
 ) -> Iterator[dict[str, Any]]:
-    """Adaptive polling — fast for `fast_window_seconds` after each new user msg.
+    """Adaptive HTTP polling of a single p2p chat.
 
-    - Idle baseline: poll every `poll_interval` s (default 10s).
-    - On a new user message, switch to `fast_interval` (default 3s) for the
-      next `fast_window_seconds` (default 60s) so a follow-up command is
-      noticed near-instantly.
+    Behaviour mirrors the previous lark-cli polling implementation:
 
-    Yields synthetic im.message.receive_v1 events for each NEW user-sent text
-    message. Uses message_id dedupe and skips bot's own messages by app_id.
-    Requires only `im:message:readonly` scope (no event-subscription config).
+      - Idle baseline: poll every ``poll_interval`` s (default 10s).
+      - On a new user message, switch to ``fast_interval`` (default 3s) for
+        the next ``fast_window_seconds`` (default 60s) so a follow-up
+        command is noticed near-instantly.
+
+    Yields synthetic ``im.message.receive_v1`` events (same shape the WS
+    webhook produces) so :func:`dispatch_event` doesn't need to know which
+    backend produced the event. Dedupes on ``message_id``; skips the bot's
+    own messages by ``sender.id == bot_open_id``.
     """
     seen_ids: set[str] = set()
     start_dt = datetime.now(timezone.utc) - timedelta(seconds=initial_lookback_seconds)
@@ -433,16 +353,18 @@ def stream_lark_events_polling(
 
     while True:
         try:
-            messages = _fetch_messages(
-                cli_path=cli_path,
-                identity=identity,
+            data = http_client.list_chat_messages(
                 chat_id=chat_id,
-                start_iso=start_dt.strftime("%Y-%m-%dT%H:%M:%SZ"),
+                start_time=int(start_dt.timestamp()),
+                page_size=20,
+                sort_type="ByCreateTimeDesc",
             )
         except Exception:
             log.exception("listener.poll_fetch_failed")
             time.sleep(poll_interval)
             continue
+
+        messages = data.get("items") or []
 
         new_msgs: list[dict[str, Any]] = []
         for m in messages:
@@ -451,7 +373,7 @@ def stream_lark_events_polling(
                 continue
             seen_ids.add(mid)
             sender = m.get("sender", {})
-            if sender.get("id") == bot_app_id:
+            if bot_open_id and sender.get("id") == bot_open_id:
                 continue
             if m.get("msg_type") != "text":
                 continue
@@ -464,7 +386,6 @@ def stream_lark_events_polling(
         if new_msgs:
             last_user_msg_at = datetime.now(timezone.utc)
 
-        # Decide next sleep duration based on activity
         now = datetime.now(timezone.utc)
         in_fast_window = (
             last_user_msg_at is not None
@@ -472,51 +393,34 @@ def stream_lark_events_polling(
         )
         sleep_for = fast_interval if in_fast_window else poll_interval
 
-        # Trim seen_ids to bounded size (~last 1000 msgs is plenty)
         if len(seen_ids) > 2000:
-            # Keep the most recent half — order isn't tracked, so just clear and reseed
             seen_ids.clear()
 
         start_dt = now - timedelta(seconds=5)
         time.sleep(sleep_for)
 
 
-def _fetch_messages(
-    *, cli_path: str, identity: str, chat_id: str, start_iso: str
-) -> list[dict[str, Any]]:
-    cmd = [
-        cli_path, "im", "+chat-messages-list",
-        "--as", identity,
-        "--chat-id", chat_id,
-        "--start", start_iso,
-        "--sort", "desc",
-        "--page-size", "20",
-    ]
-    result = subprocess.run(
-        cmd, capture_output=True, text=True, timeout=20, check=False
-    )
-    if result.returncode != 0:
-        raise RuntimeError(f"lark-cli list failed: {result.stderr.strip()[:300]}")
-    payload = json.loads(result.stdout)
-    if not payload.get("ok", False):
-        raise RuntimeError(f"lark-cli list not ok: {payload}")
-    return payload.get("data", {}).get("messages", []) or []
-
-
 def _msg_to_event(msg: dict[str, Any], chat_id: str) -> dict[str, Any]:
     """Wrap a /im/v1/messages row into an im.message.receive_v1-shaped event.
 
-    Note `content` for text msgs from this API is the bare text, while the
-    receive_v1 webhook delivers it as JSON-encoded `{"text":"..."}`. We
-    re-wrap to match `dispatch_event`/`_extract_text`'s expectations.
+    Two transformations:
+      • ``msg.body.content`` from list-messages is a JSON string already
+        (``'{"text":"..."}'``); we preserve that shape since the webhook
+        delivers the same envelope and ``_extract_text`` parses it.
+      • ``msg.sender.id`` (open_id) → event.sender.sender_id.open_id.
     """
-    text_body = msg.get("content", "")
+    body = msg.get("body") or {}
+    content = body.get("content") or msg.get("content") or ""
+    if isinstance(content, dict):
+        content = json.dumps(content)
+    elif not isinstance(content, str):
+        content = str(content)
     return {
         "event_type": "im.message.receive_v1",
         "event": {
             "sender": {
                 "sender_id": {
-                    "open_id": msg.get("sender", {}).get("id", ""),
+                    "open_id": (msg.get("sender") or {}).get("id", ""),
                 },
             },
             "message": {
@@ -524,10 +428,45 @@ def _msg_to_event(msg: dict[str, Any], chat_id: str) -> dict[str, Any]:
                 "chat_id": chat_id,
                 "chat_type": "p2p",
                 "message_type": msg.get("msg_type", "text"),
-                "content": json.dumps({"text": text_body}),
+                "content": content,
             },
         },
     }
+
+
+# ---------------------------------------------------------------------------
+# orchestration
+# ---------------------------------------------------------------------------
+
+
+def _build_lark_client_or_die(cfg: AppConfig) -> LarkHTTPClient:
+    """Resolve the LarkHTTPClient required for the listener.
+
+    Unlike cron jobs (which gracefully no-op without Lark transport), the
+    listener fundamentally requires Lark — fail loudly so the user knows
+    to configure ``lark.app_id`` and the secret env var.
+    """
+    import os
+
+    if not cfg.lark.app_id:
+        raise RuntimeError(
+            "listener requires lark.app_id in settings.yaml. Create a "
+            "Custom App at https://open.feishu.cn → 应用配置 → 凭证与基础信息, "
+            "then set lark.app_id and export the matching secret as "
+            f"{cfg.lark.app_secret_env}."
+        )
+    secret = os.environ.get(cfg.lark.app_secret_env, "").strip()
+    if not secret:
+        raise RuntimeError(
+            f"listener requires the env var {cfg.lark.app_secret_env!r} "
+            "to hold the Custom App app_secret. Export it and retry."
+        )
+    from vibe_trader.lark.auth import TokenManager
+
+    tm = TokenManager(
+        app_id=cfg.lark.app_id, app_secret=secret, base_url=cfg.lark.base_url
+    )
+    return LarkHTTPClient(tm, base_url=cfg.lark.base_url)
 
 
 def run_listener(
@@ -535,43 +474,67 @@ def run_listener(
     cfg: AppConfig,
     factory: sessionmaker,
     events: Iterable[dict[str, Any]] | None = None,
-    backend: str = "websocket",
+    backend: str = "polling",
     poll_interval: int = 10,
     rich_cards: bool = True,
+    http_client: LarkHTTPClient | None = None,
 ) -> None:
-    """Long-running entry point. Pair with `vibe-trader run`.
+    """Long-running entry point. Pair with ``vibe-trader run``.
 
     Args:
-        backend: "websocket" (default; uses lark-cli event +subscribe long
-                 connection — requires `im.message.receive_v1` registered
-                 in Open Platform "事件与回调") or "polling" (fallback that
-                 reads chat history; works with `im:message:readonly` only).
-        poll_interval: seconds between API polls when backend == "polling".
+        backend: Reserved — the only supported backend is ``"polling"``.
+            For backwards compatibility, ``"websocket"`` is accepted but
+            falls back to polling with a warning (the old WS backend
+            depended on an internal Node CLI that's no longer used).
+        poll_interval: idle-state polling interval in seconds.
         rich_cards: if True (default), replies are Lark Interactive Cards
-                    enriched with live OpenD price + RSI/MACD/BOLL diagnostics.
-                    Set False for plain markdown text replies (e.g. when OpenD
-                    is unavailable).
-        events: optional iterable injectable for tests.
+            enriched with live OpenD price + RSI/MACD/BOLL diagnostics.
+            Set False for plain markdown text replies.
+        events: optional iterable of pre-built events; injectable for tests.
+        http_client: optional pre-built LarkHTTPClient; injectable for
+            tests. When None and ``events`` is also None, one is built
+            from cfg.
     """
     allowed = cfg.lark.receiver.open_id
-    text_sender = make_text_sender(
-        cli_path=cfg.lark.cli_path, identity=cfg.lark.identity
-    )
 
-    image_sender: SendImageFn | None = None
-    if rich_cards:
-        from vibe_trader.scheduler.jobs import (
-            _make_default_image_sender as _mk_img,
+    if backend not in ("polling", "websocket"):
+        raise ValueError(f"unknown backend: {backend!r}")
+    if backend == "websocket":
+        log.warning(
+            "listener.ws_backend_deprecated_falling_back_to_polling",
+            note="HTTP-only build; the previous lark-cli WS subprocess is gone.",
         )
+        backend = "polling"
 
-        def _img_send(path: Path, recipient: str) -> str:
-            return _mk_img(
-                cli_path=cfg.lark.cli_path, identity=cfg.lark.identity
-            )(path, recipient, cfg.lark.receiver.type)
+    # Build (or accept) the LarkHTTPClient that powers all sends + the
+    # polling source. Tests can inject either ``http_client`` (to observe
+    # send calls) or ``events`` (to skip the polling source). When neither
+    # is given we build the production client from cfg.
+    using_injected_events = events is not None
+    we_built_client = False
+    if http_client is None and not using_injected_events:
+        http_client = _build_lark_client_or_die(cfg)
+        we_built_client = True
 
-        image_sender = _img_send
+    if http_client is not None:
+        text_sender: SendTextFn = make_text_sender(http_client)
+        card_sender: SendCardFn = make_card_sender(http_client)
+        image_sender: SendImageFn | None = (
+            make_image_sender(http_client) if rich_cards else None
+        )
+    else:
+        # Tests with `events=...` and no `http_client=...`: senders are
+        # no-ops so the dispatch path still has callables to invoke.
+        def _noop_text(text: str, recipient: str) -> str:
+            return ""
 
-    reply_fn: ReplyFn
+        def _noop_card(card: dict[str, Any], recipient: str) -> str:
+            return ""
+
+        text_sender = _noop_text
+        card_sender = _noop_card
+        image_sender = None
+
     futu_client: Any = None
     if rich_cards:
         from vibe_trader.futu_client import OpenDClient
@@ -582,10 +545,8 @@ def run_listener(
             log.exception("listener.opend_init_failed_falling_back_to_text")
             futu_client = None
 
+    reply_fn: ReplyFn
     if rich_cards and futu_client is not None:
-        card_sender = make_card_sender(
-            cli_path=cfg.lark.cli_path, identity=cfg.lark.identity
-        )
         reply_fn = make_card_reply(
             cfg=cfg,
             factory=factory,
@@ -595,7 +556,6 @@ def run_listener(
         )
         log.info("listener.replies_mode", mode="card")
     else:
-        # Wrap text sender into ReplyFn signature (cmd ignored).
         def _text_reply(cmd: Command, action_text: str, recipient: str) -> None:
             text_sender(action_text, recipient)
 
@@ -604,40 +564,35 @@ def run_listener(
 
     if events is not None:
         src: Iterable[dict[str, Any]] = events
-    elif backend == "websocket":
-        # Send a one-shot "online" ping so the user knows the listener is
-        # actually up before they start typing commands. Also doubles as a
-        # smoke test for outbound credentials.
-        if allowed:
-            with _safe():
-                _resolve_p2p_chat_id(cfg.lark.cli_path, cfg.lark.identity, allowed)
-                log.info("listener.online_ping_sent", recipient=allowed)
-        src = stream_lark_events_ws(
-            cli_path=cfg.lark.cli_path,
-            identity=cfg.lark.identity,
-        )
-    elif backend == "polling":
+    else:
         if not allowed:
             raise RuntimeError(
-                "polling backend needs lark.receiver.open_id in settings.yaml"
+                "listener needs lark.receiver.open_id in settings.yaml so it "
+                "knows which p2p chat to poll."
             )
-        bot_app_id = _read_bot_app_id(cfg.lark.cli_path)
-        chat_id = _resolve_p2p_chat_id(cfg.lark.cli_path, cfg.lark.identity, allowed)
+        assert http_client is not None  # set in the not-using_injected_events branch
+        try:
+            chat_id = http_client.resolve_p2p_chat_id(
+                allowed, init_text="🟢 listener online"
+            )
+        except LarkAPIError as e:
+            raise RuntimeError(
+                f"resolve_p2p_chat_id failed for receiver {allowed!r}: {e}"
+            ) from e
         log.info(
             "listener.polling_resolved",
             chat_id=chat_id,
-            bot_app_id=bot_app_id,
+            bot_open_id=allowed,  # for now we skip bot's own msgs by allowed-only filter
             poll_interval=poll_interval,
         )
         src = stream_lark_events_polling(
-            cli_path=cfg.lark.cli_path,
-            identity=cfg.lark.identity,
+            http_client=http_client,
             chat_id=chat_id,
-            bot_app_id=bot_app_id,
+            bot_open_id=None,  # bot replies have a different open_id; allowed-filter
+                               # in dispatch_event already gates on the user's id, so
+                               # we don't need an explicit "skip my own msgs" filter.
             poll_interval=poll_interval,
         )
-    else:
-        raise ValueError(f"unknown backend: {backend!r}")
 
     log.info("listener.start", backend=backend, allowed_open_id=allowed)
     try:
@@ -659,20 +614,6 @@ def run_listener(
         if futu_client is not None:
             with _safe():
                 futu_client.close()
-
-
-def _read_bot_app_id(cli_path: str) -> str:
-    """Get current bot app_id via `lark-cli auth scopes --format json`."""
-    result = subprocess.run(
-        [cli_path, "auth", "scopes", "--format", "json"],
-        capture_output=True, text=True, timeout=10, check=False,
-    )
-    try:
-        j = json.loads(result.stdout)
-    except json.JSONDecodeError:
-        # Fallback: pretty format writes "App ID: cli_xxx" to stderr.
-        import re
-
-        m = re.search(r"App\s*ID:\s*(\S+)", result.stderr)
-        return m.group(1) if m else ""
-    return str(j.get("appId", "") or j.get("app_id", ""))
+        if we_built_client and http_client is not None:
+            with _safe():
+                http_client.close()

@@ -1,17 +1,38 @@
+"""Send Lark Interactive Cards.
+
+Thin compatibility wrapper around :class:`vibe_trader.lark.LarkHTTPClient`. The
+former implementation shelled out to a Node ``lark-cli`` binary which is not
+publicly distributed; this module now talks to the public Lark/Feishu OpenAPI
+directly via HTTP. The function signature is preserved as much as practical
+so most call sites only need to swap ``cli_path=...`` for ``client=...``.
+
+Retry policy is unchanged (3 attempts, exp-backoff), so transient 5xx /
+connection errors heal on their own.
+"""
+
 from __future__ import annotations
 
-import json
-import subprocess
 from typing import Any, Literal
 
 from tenacity import retry, stop_after_attempt, wait_exponential
 
+from vibe_trader.lark.client import LarkHTTPClient
+from vibe_trader.lark.errors import LarkAPIError
+
 
 class LarkSendError(RuntimeError):
-    pass
+    """Raised after all retries fail. Carries the underlying API message."""
 
 
 ReceiverType = Literal["user", "chat"]
+
+
+def _to_receive_id_type(receiver_type: ReceiverType) -> str:
+    if receiver_type == "user":
+        return "open_id"
+    if receiver_type == "chat":
+        return "chat_id"
+    raise LarkSendError(f"unknown receiver_type: {receiver_type!r}")
 
 
 @retry(
@@ -24,71 +45,30 @@ def send_card(
     *,
     open_id: str,
     receiver_type: ReceiverType = "user",
-    cli_path: str = "lark-cli",
-    identity: Literal["bot", "user"] = "bot",
-    timeout: int = 15,
+    client: LarkHTTPClient,
 ) -> str:
-    """Push an Interactive Card via lark-cli. Returns the lark message_id.
-
-    Wraps:
-        lark-cli im +messages-send --as <identity>
-            --user-id ou_xxx | --chat-id oc_xxx
-            --content '<card-json>' --msg-type interactive
+    """Push an Interactive Card to a user (open_id) or chat (chat_id).
 
     Args:
-        card:          Lark Interactive Card dict (header/elements/...).
-        open_id:       For receiver_type=user, the recipient's `ou_xxx` open_id.
-                       For receiver_type=chat, the chat's `oc_xxx` chat_id.
-        receiver_type: "user" → DM (uses --user-id), "chat" → group (uses --chat-id).
-        identity:      "bot" (default, no extra scope) or "user"
-                       (requires `lark-cli auth login --scope im:message.send_as_user`).
-        timeout:       subprocess timeout in seconds.
+        card:          Lark Interactive Card dict (header / elements / ...).
+        open_id:       For ``receiver_type='user'`` an ``ou_xxx`` open_id;
+                       for ``receiver_type='chat'`` an ``oc_xxx`` chat_id.
+                       The argument name is preserved for backwards compat.
+        receiver_type: ``'user'`` → DM, ``'chat'`` → group.
+        client:        A live :class:`LarkHTTPClient`. Construct one per
+                       process; it amortises the auth round-trip.
+
+    Returns:
+        The new message's ``message_id``.
 
     Raises:
-        LarkSendError: if lark-cli returned non-zero exit code or response.ok is False.
+        LarkSendError: when all retries are exhausted or the API returned a
+            non-zero ``code`` that isn't transient.
     """
-    if receiver_type == "user":
-        recipient_flag = "--user-id"
-    elif receiver_type == "chat":
-        recipient_flag = "--chat-id"
-    else:
-        raise LarkSendError(f"unknown receiver_type: {receiver_type!r}")
-
-    payload = json.dumps(card, ensure_ascii=False)
-    cmd = [
-        cli_path,
-        "im",
-        "+messages-send",
-        "--as",
-        identity,
-        recipient_flag,
-        open_id,
-        "--content",
-        payload,
-        "--msg-type",
-        "interactive",
-    ]
-    result = subprocess.run(
-        cmd, capture_output=True, text=True, timeout=timeout, check=False
-    )
-    if result.returncode != 0:
-        raise LarkSendError(
-            f"lark-cli exit={result.returncode}: {result.stderr.strip() or result.stdout.strip()}"
-        )
-
-    out = result.stdout.strip()
+    receive_id_type = _to_receive_id_type(receiver_type)
     try:
-        parsed = json.loads(out)
-    except json.JSONDecodeError as e:
-        raise LarkSendError(f"non-JSON response from lark-cli: {out[:200]}") from e
-
-    if not parsed.get("ok", False):
-        err = parsed.get("error", {})
-        raise LarkSendError(
-            f"lark-cli failed: {err.get('type', 'unknown')}: {err.get('message', '')}"
+        return client.send_card(
+            card, receive_id=open_id, receive_id_type=receive_id_type  # type: ignore[arg-type]
         )
-
-    msg_id = parsed.get("data", {}).get("message_id")
-    if not msg_id:
-        raise LarkSendError(f"lark-cli response missing message_id: {out[:200]}")
-    return str(msg_id)
+    except LarkAPIError as e:
+        raise LarkSendError(str(e)) from e

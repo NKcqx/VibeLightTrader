@@ -29,12 +29,34 @@ scheduler:
       cron: "0 6 * * *"          # 06:00 ET daily, well before US open
 
 lark:
-  cli_path: lark-cli
-  identity: bot              # "bot" needs no extra scope; "user" requires login --scope im:message.send_as_user
+  # ---- Custom App credentials ---------------------------------------------
+  # Create one at https://open.feishu.cn → 应用管理 → 创建企业自建应用. Copy
+  # `App ID` (cli_xxx) here; export the matching `App Secret` as the env
+  # var named in `app_secret_env` (NEVER commit the secret to YAML).
+  #
+  # Required IM scopes (开发配置 → 权限管理):
+  #   im:message                             — send messages
+  #   im:message:send_as_bot                 — send as the bot identity
+  #   im:resource                            — upload images for /chart
+  #   im:message.group_at_msg / im:message.group_at_msg:readonly  (groups)
+  #   im:message.p2p_msg     / im:message.p2p_msg:readonly         (DM)
+  #
+  # Leave `app_id` as `null` to disable Lark transport entirely (the rest
+  # of the pipeline still runs — quotes / signals / DB / paper trades).
+  app_id: null
+  app_secret_env: LARK_APP_SECRET
+
+  # OpenAPI host. Lark international users: https://open.larksuite.com
+  base_url: https://open.feishu.cn
+
   receiver:
-    type: user                # "user" → DM via --user-id ou_xxx; "chat" → group via --chat-id oc_xxx
-    # Lark/Feishu open_id of the receiver (DM target if type=user, group if type=chat).
-    # Get yours via `lark-cli auth me --as user` (after `lark-cli auth login`).
+    type: user                            # "user" → DM via open_id ou_xxx; "chat" → group via chat_id oc_xxx
+    # Default recipient for cron-pushed cards (intraday / morning / closing
+    # briefs). The two-way listener always replies to the sender, so this
+    # only matters for unsolicited pushes. To find your own open_id:
+    #   1) start `vibe-trader listen`
+    #   2) DM the bot anything
+    #   3) check var/listener.log for `sender=ou_xxxxxx`, copy that here
     open_id: "ou_REPLACE_ME_WITH_YOUR_OPEN_ID"
 
 signals:

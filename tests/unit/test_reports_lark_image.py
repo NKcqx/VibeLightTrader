@@ -1,155 +1,86 @@
+"""Unit tests for the HTTP-backed reports.lark_image facade."""
+
 from __future__ import annotations
 
-import json
-import subprocess
 from pathlib import Path
+from unittest.mock import MagicMock
 
 import pytest
 from tenacity import wait_none
 
+from vibe_trader.lark.errors import LarkAPIError
 from vibe_trader.reports.lark_image import LarkImageError, send_image
 
 
 @pytest.fixture(autouse=True)
 def _no_retry_wait(monkeypatch):
-    """Make tenacity not sleep between retries — matches test_reports_lark.py."""
+    """Make tenacity not sleep between retries."""
     monkeypatch.setattr(send_image.retry, "wait", wait_none())
     yield
 
 
-def test_send_image_invokes_lark_cli_and_returns_msg_id(tmp_path, monkeypatch) -> None:
-    img = tmp_path / "x.png"
-    img.write_bytes(b"\x89PNG\r\n\x1a\n" + b"0" * 64)
-    captured: dict = {}
-
-    class FakeRes:
-        returncode = 0
-        stdout = json.dumps({"ok": True, "data": {"message_id": "om_xxx"}})
-        stderr = ""
-
-    def fake_run(args, **kw):
-        captured["args"] = args
-        captured["kw"] = kw
-        return FakeRes()
-
-    monkeypatch.setattr(subprocess, "run", fake_run)
-    msg_id = send_image(img, open_id="ou_abc", receiver_type="user")
-    assert msg_id == "om_xxx"
-    # Argv must include the lark-cli command, the user-id flag, and --image with
-    # the *basename only* (lark-cli ≥1.0.23 rejects absolute paths for --image).
-    args = captured["args"]
-    assert args[0:3] == ["lark-cli", "im", "+messages-send"]
-    assert "--user-id" in args
-    assert args[args.index("--user-id") + 1] == "ou_abc"
-    assert "--image" in args
-    assert args[args.index("--image") + 1] == img.name
-    assert args[args.index("--image") + 1] != str(img.absolute()), (
-        "must not pass absolute path to --image"
-    )
-    assert "--as" in args
-    assert args[args.index("--as") + 1] == "bot"
-    # subprocess.run must be invoked with cwd=parent so lark-cli sees the file
-    # in the current directory.
-    assert captured["kw"].get("cwd") == str(img.resolve().parent)
+def _client_returning(msg_id: str = "om_img") -> MagicMock:
+    c = MagicMock()
+    c.send_image.return_value = msg_id
+    return c
 
 
-def test_send_image_chat_receiver_uses_chat_id_flag(tmp_path, monkeypatch) -> None:
+def test_send_image_returns_message_id(tmp_path: Path) -> None:
     img = tmp_path / "x.png"
     img.write_bytes(b"\x89PNG")
-    captured: dict = {}
-
-    class FakeRes:
-        returncode = 0
-        stdout = json.dumps({"ok": True, "data": {"message_id": "om_yyy"}})
-        stderr = ""
-
-    monkeypatch.setattr(
-        subprocess,
-        "run",
-        lambda args, **kw: (captured.update(args=args), FakeRes())[1],
-    )
-    msg_id = send_image(img, open_id="oc_xyz", receiver_type="chat")
-    assert msg_id == "om_yyy"
-    args = captured["args"]
-    assert "--chat-id" in args
-    assert args[args.index("--chat-id") + 1] == "oc_xyz"
-    assert "--user-id" not in args
+    client = _client_returning("om_xxx")
+    assert send_image(img, open_id="ou_a", client=client) == "om_xxx"
 
 
-def test_send_image_raises_on_nonzero_rc(tmp_path, monkeypatch) -> None:
+def test_send_image_user_maps_to_open_id_receive_type(tmp_path: Path) -> None:
     img = tmp_path / "x.png"
     img.write_bytes(b"\x89PNG")
-
-    class BadRes:
-        returncode = 7
-        stdout = ""
-        stderr = "boom\n"
-
-    monkeypatch.setattr(subprocess, "run", lambda *a, **kw: BadRes())
-    with pytest.raises(LarkImageError, match="boom"):
-        send_image(img, open_id="ou_abc", receiver_type="user")
+    client = _client_returning()
+    send_image(img, open_id="ou_abc", receiver_type="user", client=client)
+    call = client.send_image.call_args
+    assert call.args[0] == img
+    assert call.kwargs == {"receive_id": "ou_abc", "receive_id_type": "open_id"}
 
 
-def test_send_image_retries_three_times_on_nonzero_rc(tmp_path, monkeypatch) -> None:
+def test_send_image_chat_maps_to_chat_id_receive_type(tmp_path: Path) -> None:
     img = tmp_path / "x.png"
     img.write_bytes(b"\x89PNG")
-    calls = {"n": 0}
-
-    class BadRes:
-        returncode = 7
-        stdout = ""
-        stderr = "boom\n"
-
-    def fake_run(*a, **kw):
-        calls["n"] += 1
-        return BadRes()
-
-    monkeypatch.setattr(subprocess, "run", fake_run)
-    with pytest.raises(LarkImageError):
-        send_image(img, open_id="ou", receiver_type="user")
-    assert calls["n"] == 3, "tenacity should retry exactly stop_after_attempt(3) times"
-
-
-def test_send_image_raises_on_ok_false_response(tmp_path, monkeypatch) -> None:
-    img = tmp_path / "x.png"
-    img.write_bytes(b"\x89PNG")
-
-    class FakeRes:
-        returncode = 0
-        stdout = json.dumps(
-            {
-                "ok": False,
-                "error": {"type": "permission_denied", "message": "missing scope"},
-            }
-        )
-        stderr = ""
-
-    monkeypatch.setattr(subprocess, "run", lambda *a, **kw: FakeRes())
-    with pytest.raises(LarkImageError, match="permission_denied"):
-        send_image(img, open_id="ou_abc", receiver_type="user")
-
-
-def test_send_image_raises_on_unparseable_response(tmp_path, monkeypatch) -> None:
-    img = tmp_path / "x.png"
-    img.write_bytes(b"\x89PNG")
-
-    class FakeRes:
-        returncode = 0
-        stdout = "not-json"
-        stderr = ""
-
-    monkeypatch.setattr(subprocess, "run", lambda *a, **kw: FakeRes())
-    with pytest.raises(LarkImageError, match="non-JSON"):
-        send_image(img, open_id="ou_abc", receiver_type="user")
+    client = _client_returning()
+    send_image(img, open_id="oc_xyz", receiver_type="chat", client=client)
+    call = client.send_image.call_args
+    assert call.kwargs == {"receive_id": "oc_xyz", "receive_id_type": "chat_id"}
 
 
 def test_send_image_raises_on_missing_file() -> None:
+    client = MagicMock()
     with pytest.raises(LarkImageError, match="file not found"):
-        send_image(Path("/tmp/nonexistent_xyz_p3.png"), open_id="ou", receiver_type="user")
+        send_image(
+            Path("/tmp/nonexistent_xyz.png"), open_id="ou", client=client
+        )
 
 
-def test_send_image_raises_on_unknown_receiver_type(tmp_path) -> None:
+def test_send_image_wraps_api_error(tmp_path: Path) -> None:
     img = tmp_path / "x.png"
     img.write_bytes(b"\x89PNG")
+    client = MagicMock()
+    client.send_image.side_effect = LarkAPIError(230020, "permission denied")
+    with pytest.raises(LarkImageError, match="permission denied"):
+        send_image(img, open_id="ou", client=client)
+
+
+def test_send_image_retries_three_times_on_transient_error(tmp_path: Path) -> None:
+    img = tmp_path / "x.png"
+    img.write_bytes(b"\x89PNG")
+    client = MagicMock()
+    client.send_image.side_effect = LarkAPIError(-1, "boom")
+    with pytest.raises(LarkImageError, match="boom"):
+        send_image(img, open_id="ou", client=client)
+    assert client.send_image.call_count == 3
+
+
+def test_send_image_unknown_receiver_type_rejected(tmp_path: Path) -> None:
+    img = tmp_path / "x.png"
+    img.write_bytes(b"\x89PNG")
+    client = MagicMock()
     with pytest.raises(LarkImageError, match="unknown receiver_type"):
-        send_image(img, open_id="x", receiver_type="bogus")  # type: ignore[arg-type]
+        send_image(img, open_id="x", receiver_type="bogus", client=client)  # type: ignore[arg-type]

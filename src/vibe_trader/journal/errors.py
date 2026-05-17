@@ -290,7 +290,7 @@ def _atomic_write_initial(path: Path) -> None:
     """Write the dev log file with its title atomically."""
     fd, tmp = tempfile.mkstemp(prefix=f".{path.name}.", suffix=".tmp", dir=str(path.parent))
     header = (
-        "# Vibe Trader — 开发者日志\n\n"
+        "# VibeLightTrader — 开发者日志\n\n"
         "记录 LLM 调用 / 解析 / 约束失败的事件。每次 cron tick 出错时会追加一条。\n"
         "**不要把这个文件给非技术用户看** — 它是给排障人员的。\n"
     )

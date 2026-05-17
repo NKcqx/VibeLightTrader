@@ -14,7 +14,10 @@ import structlog
 from sqlalchemy.dialects.sqlite import insert as sqlite_insert
 from sqlalchemy.orm import sessionmaker
 
+import os
+
 from vibe_trader.config import AppConfig, WatchlistConfig
+from vibe_trader.lark.client import LarkHTTPClient
 from vibe_trader.data.fundamentals import (
     FundamentalsClient,
     build_fundamentals_client,
@@ -79,49 +82,92 @@ log = structlog.get_logger(__name__)
 
 
 SendCardFn = Callable[[dict[str, Any], str, str], str]
+SendImageFn = Callable[[Path, str, str], str]
 
 
-def _make_default_sender(
-    cli_path: str = "lark-cli", identity: str = "bot"
-) -> SendCardFn:
-    """Build a default sender bound to a specific lark-cli path and identity."""
+# In-process cache of LarkHTTPClient instances keyed by
+# (app_id, base_url) so cron + listener share one auth round-trip and one
+# pool of HTTP connections per process. The token cache lives inside the
+# client's TokenManager.
+_LARK_CLIENT_CACHE: dict[tuple[str, str], LarkHTTPClient] = {}
+
+
+def _build_lark_client(cfg: AppConfig) -> LarkHTTPClient | None:
+    """Resolve a process-wide :class:`LarkHTTPClient` from settings.
+
+    Returns ``None`` when Lark transport is intentionally disabled
+    (``cfg.lark.app_id is None``) — callers downgrade to a no-op sender so
+    the rest of the pipeline still runs. Raises ``RuntimeError`` only when
+    Lark *is* configured but the matching secret env var is empty (a
+    configuration mistake worth surfacing loudly).
+    """
+    if cfg.lark.app_id is None:
+        return None
+    secret = os.environ.get(cfg.lark.app_secret_env, "").strip()
+    if not secret:
+        raise RuntimeError(
+            f"lark.app_id is set but env var {cfg.lark.app_secret_env!r} "
+            "is empty. Either export the secret or remove app_id from "
+            "settings.yaml to disable Lark transport entirely."
+        )
+    key = (cfg.lark.app_id, cfg.lark.base_url)
+    cached = _LARK_CLIENT_CACHE.get(key)
+    if cached is not None:
+        return cached
+    from vibe_trader.lark.auth import TokenManager
+
+    tm = TokenManager(
+        app_id=cfg.lark.app_id, app_secret=secret, base_url=cfg.lark.base_url
+    )
+    client = LarkHTTPClient(tm, base_url=cfg.lark.base_url)
+    _LARK_CLIENT_CACHE[key] = client
+    return client
+
+
+def _make_default_sender(cfg: AppConfig) -> SendCardFn:
+    """Build a card sender bound to ``cfg.lark``.
+
+    When Lark is disabled (no ``app_id``), returns a no-op that logs at
+    DEBUG and returns an empty message_id; cron jobs will count
+    ``pushed=0`` and continue. Callers can detect "transport disabled"
+    by inspecting the returned message_id (empty string).
+    """
+    client = _build_lark_client(cfg)
+    if client is None:
+        def _noop(card: dict[str, Any], open_id: str, receiver_type: str) -> str:
+            log.debug("lark.transport_disabled.skip_card", receiver=open_id)
+            return ""
+        return _noop
 
     def _sender(card: dict[str, Any], open_id: str, receiver_type: str) -> str:
         return send_card(
             card,
             open_id=open_id,
             receiver_type=receiver_type,  # type: ignore[arg-type]
-            cli_path=cli_path,
-            identity=identity,  # type: ignore[arg-type]
+            client=client,
         )
 
     return _sender
 
 
-_default_sender: SendCardFn = _make_default_sender()
-
-
-SendImageFn = Callable[[Path, str, str], str]
-
-
-def _make_default_image_sender(
-    cli_path: str = "lark-cli", identity: str = "bot"
-) -> SendImageFn:
-    """Build a default image sender bound to lark-cli path and identity."""
+def _make_default_image_sender(cfg: AppConfig) -> SendImageFn:
+    """Build an image sender bound to ``cfg.lark``. See :func:`_make_default_sender`."""
+    client = _build_lark_client(cfg)
+    if client is None:
+        def _noop(path: Path, open_id: str, receiver_type: str) -> str:
+            log.debug("lark.transport_disabled.skip_image", receiver=open_id)
+            return ""
+        return _noop
 
     def _sender(path: Path, open_id: str, receiver_type: str) -> str:
         return _send_image(
             path,
             open_id=open_id,
             receiver_type=receiver_type,  # type: ignore[arg-type]
-            cli_path=cli_path,
-            identity=identity,  # type: ignore[arg-type]
+            client=client,
         )
 
     return _sender
-
-
-_default_image_sender: SendImageFn = _make_default_image_sender()
 
 
 def _persist_indicator_row(
@@ -580,7 +626,7 @@ def _build_fundamentals_client(cfg: AppConfig) -> FundamentalsClient | None:
 
 
 def _build_strategy_from_cfg(
-    cfg: AppConfig, *, send_card_fn: SendCardFn = _default_sender
+    cfg: AppConfig, *, send_card_fn: SendCardFn | None = None
 ) -> Strategy:
     """Resolve `cfg.trader.strategy.type` into a concrete Strategy via the
     Registry (see signals/strategy_base.py).
@@ -612,8 +658,9 @@ def _build_strategy_from_cfg(
         from vibe_trader.signals.strategy_hitl import HITLStrategy
 
         if isinstance(strat, HITLStrategy):
+            sender = send_card_fn if send_card_fn is not None else _make_default_sender(cfg)
             recv = cfg.lark.receiver
-            strat.lark_push = lambda md_body: send_card_fn(
+            strat.lark_push = lambda md_body: sender(
                 _hitl_packet_card(md_body), recv.open_id, recv.type
             )
     return strat
@@ -867,7 +914,7 @@ def run_intraday_check(
     cfg: AppConfig,
     watchlist: WatchlistConfig,
     now_utc: datetime | None = None,
-    send_card_fn: SendCardFn = _default_sender,
+    send_card_fn: SendCardFn | None = None,
     send_image_fn: SendImageFn | None = None,
     snapshot_dir: Path | None = None,
     paper_trader: Any | None = None,
@@ -888,6 +935,8 @@ def run_intraday_check(
         now_utc = datetime.now(tz=timezone.utc)
     elif now_utc.tzinfo is None:
         now_utc = now_utc.replace(tzinfo=timezone.utc)
+    if send_card_fn is None:
+        send_card_fn = _make_default_sender(cfg)
     codes = [s.code for s in watchlist.symbols]
 
     # Journal lookup tables: per-code display name + threshold pair, used
@@ -1441,7 +1490,7 @@ def run_brief(
     cfg: AppConfig,
     watchlist: WatchlistConfig,
     now_utc: datetime | None = None,
-    send_card_fn: SendCardFn = _default_sender,
+    send_card_fn: SendCardFn | None = None,
 ) -> dict[str, int]:
     """Render and push a daily brief Lark card.
 
@@ -1458,6 +1507,8 @@ def run_brief(
     now_utc = now_utc or datetime.now(tz=timezone.utc)
     if kind is None:
         kind = _format_brief_kind(now_utc)
+    if send_card_fn is None:
+        send_card_fn = _make_default_sender(cfg)
     codes = [s.code for s in watchlist.symbols]
 
     snaps = {s.code: s for s in client.snapshot(codes)}

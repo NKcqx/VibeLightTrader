@@ -1,7 +1,8 @@
 """Smoke check: confirm OpenD is reachable and quote API works.
 
 Run AFTER OpenD is installed and logged in (see scripts/install_opend.sh).
-Requires `conda activate fin` so futu-api is on PYTHONPATH.
+Requires the project's conda env (e.g. `conda activate vibe-trader`) so
+`futu-api` from `pip install -e .` is importable.
 """
 from __future__ import annotations
 
